@@ -1,4 +1,4 @@
-package com.steelrain.lilac.springboot.web;
+package com.steelrain.springboot.lilac;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
