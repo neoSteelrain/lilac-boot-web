@@ -1,4 +1,4 @@
-package com.steelrain.lilac.springboot.web;
+package com.steelrain.springboot.lilac;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,5 +9,4 @@ class ApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }

@@ -1,0 +1,71 @@
+package com.steelrain.springboot.lilac.datamodel;
+
+import lombok.Data;
+import org.hibernate.validator.constraints.URL;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.sql.Timestamp;
+
+/**
+ * 도서관정보나루 API 중 도서 소장 도서관 조회 를 통해 가져온 도서관정보 DTO
+ *
+ */
+@Data
+public class NaruLibraryDTO {
+    /*
+    id	bigint	NO	PRI
+    lib_code	char(6)	YES
+    name	varchar(100)	YES
+    address	varchar(100)	YES
+    tel	varchar(20)	YES
+    fax	varchar(20)	YES
+    latitude	char(10)	YES
+    longitude	char(10)	YES
+    homepage	varchar(255)	YES
+    closed	varchar(255)	YES
+    operating_time	varchar(50)	YES
+    reg_date	datetime	YES
+    isbn13	char(13)	NO	MUL
+     */
+
+    private Long id;
+
+    @Size(max=6)
+    private String libCode;
+
+    @Size(max=100)
+    private String name;
+
+    @Size(max=100)
+    private String address;
+
+    @Size(max=20)
+    private String tel;
+
+    @Size(max=20)
+    private String fax;
+
+    @Size(max=10)
+    private String latitude;
+
+    @Size(max=10)
+    private String longitude;
+
+    @URL
+    @Size(max=255)
+    private String homepage;
+
+    @Size(max=255)
+    private String closed;
+
+    @Size(max=50)
+    private String operatingTime;
+
+    private Timestamp regDate;
+
+    @NotEmpty
+    @NotNull
+    private String isbn13;
+}
