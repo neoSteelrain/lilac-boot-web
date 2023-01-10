@@ -3,18 +3,17 @@ package com.steelrain.springboot.lilac.datamodel.api;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.util.List;
 
 @Getter
-public class NaruLibrarySearchByBookResponseDTO {
+public class NaruLibSearchByBookResponseDTO {
 
     @JsonProperty("response")
     private Response response;
 
     @Getter
-    public static class Response {
+    public static class Response extends NaruErrorBaseResponseDTO {
         @JsonProperty("libs")
         private List<Libs> libs;
         @JsonProperty("resultNum")
@@ -25,23 +24,16 @@ public class NaruLibrarySearchByBookResponseDTO {
         private String pagesize;
         @JsonProperty("pageNo")
         private String pageno;
-        
-        /*
-        HTTP 200 응답코드이면서 error 필드를 반환하는 경우를 대비하기 위해
-        내가 직접 넣어준 속성
-         */
-        @JsonProperty("error")
-        private String error;
     }
 
     @Getter
     public static class Libs {
         @JsonProperty("lib")
-        private Lib lib;
+        private Library lib;
     }
 
     @Getter
-    public static class Lib {
+    public static class Library {
         @JsonProperty("operatingTime")
         private String operatingtime;
         @JsonProperty("closed")
@@ -62,5 +54,19 @@ public class NaruLibrarySearchByBookResponseDTO {
         private String libname;
         @JsonProperty("libCode")
         private String libcode;
+
+        /*
+        @JsonProperty("loanAvailable")
+        private String loanavailable;
+        @JsonProperty("hasBook")
+        private String hasbook;
+         */
+        @Getter
+        @Setter
+        private String loanAvailable;
+
+        @Getter
+        @Setter
+        private String hasBook;
     }
 }

@@ -1,15 +1,12 @@
 package com.steelrain.springboot.lilac.datamodel.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.List;
 
 @Getter
-public class Documents {
+public class KakaoSearchedBookDTO {
     @JsonProperty("url")
     private String url;
     @JsonProperty("translators")

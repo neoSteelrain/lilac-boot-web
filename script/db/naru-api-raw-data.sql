@@ -316,7 +316,3 @@ INSERT INTO tbl_lib_dtl_region(code, name, detail_name, region_code) VALUES
 
 
 
-
-
-
-

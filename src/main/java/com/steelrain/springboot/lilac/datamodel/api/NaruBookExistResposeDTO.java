@@ -10,18 +10,11 @@ public class NaruBookExistResposeDTO {
     private Response response;
 
     @Getter
-    public static class Response {
+    public static class Response extends NaruErrorBaseResponseDTO {
         @JsonProperty("result")
         private Result result;
         @JsonProperty("request")
         private Request request;
-
-        /*
-        HTTP 200 응답코드이면서 error 필드를 반환하는 경우를 대비하기 위해
-        내가 직접 넣어준 속성
-         */
-        @JsonProperty("error")
-        private String error;
     }
 
     @Getter
