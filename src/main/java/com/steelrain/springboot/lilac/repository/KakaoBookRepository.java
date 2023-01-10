@@ -2,7 +2,7 @@ package com.steelrain.springboot.lilac.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.steelrain.springboot.lilac.config.APIConfig;
-import com.steelrain.springboot.lilac.datamodel.KakaoBookSearchResultDTO;
+import com.steelrain.springboot.lilac.datamodel.api.KakaoBookSearchResultDTO;
 import com.steelrain.springboot.lilac.exception.KakaoBookSearchException;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -31,13 +31,13 @@ public class KakaoBookRepository implements IKaKoBookRepository{
 
     @Override
     public KakaoBookSearchResultDTO searchBookfromKakao(String keyword) {
-        HttpGet httpGet = new HttpGet(m_apiConfig.getKakaoRestUrl());
         List<NameValuePair> params = new ArrayList<>(4);
         params.add(new BasicNameValuePair("query", keyword));
         params.add(new BasicNameValuePair("sort", "accuracy"));
         params.add(new BasicNameValuePair("page", String.valueOf(1)));
         params.add(new BasicNameValuePair("size", String.valueOf(10)));
 
+        HttpGet httpGet = new HttpGet(m_apiConfig.getKakaoRestUrl());
         try{
             URI uri = new URIBuilder(new URI(m_apiConfig.getKakaoRestUrl()))
                     .addParameters(params)
@@ -63,7 +63,7 @@ public class KakaoBookRepository implements IKaKoBookRepository{
     }
 
     /* @Override
-    public KakaoBookSearchResultDTO kakaoTest(String keyword) {
+    public KakaoBookSearchResultDTO searchBookfromKakao(String keyword) {
         DefaultUriBuilderFactory uriBuilderFactory = new DefaultUriBuilderFactory(m_apiConfig.getKakaoRestUrl());
 
         uriBuilderFactory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);

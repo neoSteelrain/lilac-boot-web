@@ -1,10 +1,13 @@
 package com.steelrain.springboot.lilac.datamodel;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 
-@Data
+@Getter
+@Setter
 public class MemberDTO {
     /*
     id	bigint

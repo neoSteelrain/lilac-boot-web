@@ -1,6 +1,7 @@
 package com.steelrain.springboot.lilac.datamodel;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.ISBN;
 import org.hibernate.validator.constraints.URL;
 
@@ -13,7 +14,8 @@ import java.sql.Timestamp;
  * kakao 책검색 API로 가져온 도서정보 DTO
  *
  */
-@Data
+@Getter
+@Setter
 public class KaKaoBookDTO {
     /*
     isbn13	char(13)	NO	PRI

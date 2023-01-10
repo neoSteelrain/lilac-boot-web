@@ -16,9 +16,17 @@ public class APIConfiguration {
     @Value("${kakao-rest-api-key}")
     private String m_KakaoKey;
 
+    @Value("${naru-library-by-book-api-key}")
+    private String m_naruLibraryByBookApiKey;
+
     @Value("${kakao-rest-api-booksearch-url}")
     private String m_kakaoBookSerchUrl;
 
+    @Value("${naru-library-by-book-api-url}")
+    private String m_naruLibraryByBookUrl;
+
+    @Value("${naru-library-book-exist-api-url}")
+    private String m_naruBookExistUrl;
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer(){
@@ -26,7 +34,11 @@ public class APIConfiguration {
     }
 
     @Bean APIConfig apiConfig(){
-        return new APIConfig(m_youtubeKey, m_KakaoKey, m_kakaoBookSerchUrl);
+        return new APIConfig(m_youtubeKey,
+                             m_KakaoKey,
+                             m_kakaoBookSerchUrl,
+                             m_naruLibraryByBookUrl,
+                             m_naruLibraryByBookApiKey,
+                             m_naruBookExistUrl);
     }
-
 }

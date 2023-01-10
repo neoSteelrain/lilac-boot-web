@@ -1,6 +1,8 @@
 package com.steelrain.springboot.lilac.datamodel;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.NotEmpty;
@@ -12,7 +14,8 @@ import java.sql.Timestamp;
  * 도서관정보나루 API 중 도서 소장 도서관 조회 를 통해 가져온 도서관정보 DTO
  *
  */
-@Data
+@Getter
+@Setter
 public class NaruLibraryDTO {
     /*
     id	bigint	NO	PRI
