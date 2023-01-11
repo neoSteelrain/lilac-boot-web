@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.repository;
 
+import com.steelrain.springboot.lilac.datamodel.LicenseDTO;
 import com.steelrain.springboot.lilac.datamodel.api.KakaoBookSearchResultDTO;
 import com.steelrain.springboot.lilac.datamodel.api.LicenseScheduleResponseDTO;
 import com.steelrain.springboot.lilac.datamodel.api.NaruBookExistResposeDTO;
@@ -7,6 +8,7 @@ import com.steelrain.springboot.lilac.datamodel.api.NaruLibSearchByBookResponseD
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -74,10 +76,18 @@ public class RepositoryTesets {
 
     @Test
     public void testLicenseRepository(){
-        List<LicenseScheduleResponseDTO.LicenseSchedule> res = licenseRespository.getLicenseInfo(2290);
+        List<LicenseScheduleResponseDTO.LicenseSchedule> res = licenseRespository.getLicenseSchedule(2290);
 
         assertThat(res != null);
 
         System.out.println("lic size = " + res.size());
+    }
+
+    @Test
+    public void testGetLicenseNama(){
+        LicenseDTO res = licenseRespository.getLicenseInfo(2290);
+        assertThat(res != null && StringUtils.hasText(res.getLicenseName()));
+
+        System.out.println("lic name : " + res.getLicenseName());
     }
 }

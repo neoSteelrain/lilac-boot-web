@@ -3,7 +3,7 @@ package com.steelrain.springboot.lilac.config;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.thymeleaf.util.StringUtils;
+import org.springframework.util.StringUtils;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -24,6 +24,6 @@ public class APIConfigTests {
         System.out.println("youtube : " + youtube);
         System.out.println("kakao : " + kakao);
         System.out.println("kakao-url : " + kakao_url);
-        assertThat(new boolean[]{ !StringUtils.isEmpty(youtube), !StringUtils.isEmpty(kakao), !StringUtils.isEmpty(kakao_url)});
+        assertThat(new boolean[]{ !StringUtils.hasText(youtube), !StringUtils.hasText(kakao), !StringUtils.hasText(kakao_url)});
     }
 }

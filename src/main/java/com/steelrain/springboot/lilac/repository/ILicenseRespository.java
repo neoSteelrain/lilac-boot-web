@@ -10,5 +10,7 @@ import java.util.List;
  * 자격증 시험일정 조회 인터페이스
  */
 public interface ILicenseRespository {
-    public List<LicenseScheduleResponseDTO.LicenseSchedule> getLicenseInfo(int licenseCode);
+    public List<LicenseScheduleResponseDTO.LicenseSchedule> getLicenseSchedule(int licenseCode);
+
+    public LicenseDTO getLicenseInfo(int licenseCode);
 }

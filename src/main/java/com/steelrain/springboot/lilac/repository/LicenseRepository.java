@@ -5,6 +5,7 @@ import com.steelrain.springboot.lilac.config.APIConfig;
 import com.steelrain.springboot.lilac.datamodel.LicenseDTO;
 import com.steelrain.springboot.lilac.datamodel.api.LicenseScheduleResponseDTO;
 import com.steelrain.springboot.lilac.exception.LicenseScheduleException;
+import com.steelrain.springboot.lilac.mapper.LicenseMapper;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
@@ -31,15 +32,25 @@ import java.util.List;
 public class LicenseRepository implements ILicenseRespository{
 
     private final APIConfig m_ApiConfig;
+    private final LicenseMapper m_licenseMapper;
 
-    public LicenseRepository(APIConfig apiConfig){
+
+    public LicenseRepository(APIConfig apiConfig, LicenseMapper licenseMapper){
         this.m_ApiConfig = apiConfig;
+        this.m_licenseMapper = licenseMapper;
     }
 
     @Override
-    public List<LicenseScheduleResponseDTO.LicenseSchedule> getLicenseInfo(int licenseCode){
+    public List<LicenseScheduleResponseDTO.LicenseSchedule> getLicenseSchedule(int licenseCode){
         LicenseScheduleResponseDTO responseDTO = callLicenseScheduleAPI(licenseCode);
         return responseDTO.getBody().getItems();
+    }
+
+    @Override
+    public LicenseDTO getLicenseInfo(int licenseCode) {
+        LicenseDTO licenseDTO = new LicenseDTO();
+        licenseDTO.setLicenseName(this.m_licenseMapper.getLicenseName(licenseCode));
+        return licenseDTO;
     }
 
     private LicenseScheduleResponseDTO callLicenseScheduleAPI(int licenseCode){
