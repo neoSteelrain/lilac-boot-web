@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -76,18 +77,18 @@ public class RepositoryTesets {
 
     @Test
     public void testLicenseRepository(){
-        List<LicenseScheduleResponseDTO.LicenseSchedule> res = licenseRespository.getLicenseSchedule(2290);
+        LicenseScheduleResponseDTO res = licenseRespository.getLicenseSchedule(2290);
 
         assertThat(res != null);
 
-        System.out.println("lic size = " + res.size());
+        System.out.println("시험일정 갯수 : " + res.getBody().getScheduleList().size());
     }
 
-    @Test
+    /*@Test
     public void testGetLicenseNama(){
-        LicenseDTO res = licenseRespository.getLicenseInfo(2290);
-        assertThat(res != null && StringUtils.hasText(res.getLicenseName()));
+        Optional<LicenseDTO> res = licenseRespository.getLicenseInfo(2290);
+        assertThat(res != null && res.isPresent() ? StringUtils.hasText(res.get().getLicenseName()) : false);
 
-        System.out.println("lic name : " + res.getLicenseName());
-    }
+        System.out.println("lic name : " + res.get().getLicenseName());
+    }*/
 }

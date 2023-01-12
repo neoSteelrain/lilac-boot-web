@@ -22,39 +22,39 @@ public class LicenseScheduleResponseDTO {
         @JsonProperty("numOfRows")
         private int numofrows;
         @JsonProperty("items")
-        private List<LicenseSchedule> items;
+        private List<LicenseSchedule> scheduleList;
     }
 
     @Getter
     public static class LicenseSchedule {
         @JsonProperty("pracPassDt")
-        private String pracpassdt;
+        private String pracPassDt;
         @JsonProperty("pracExamEndDt")
-        private String pracexamenddt;
+        private String pracExamEndDt;
         @JsonProperty("pracExamStartDt")
-        private String pracexamstartdt;
+        private String pracExamStartDt;
         @JsonProperty("pracRegEndDt")
-        private String pracregenddt;
+        private String pracRegEndDt;
         @JsonProperty("pracRegStartDt")
-        private String pracregstartdt;
+        private String pracRegStartDt;
         @JsonProperty("docPassDt")
-        private String docpassdt;
+        private String docPassDt;
         @JsonProperty("docExamEndDt")
-        private String docexamenddt;
+        private String docExamEndDt;
         @JsonProperty("docExamStartDt")
-        private String docexamstartdt;
+        private String docExamStartDt;
         @JsonProperty("docRegEndDt")
-        private String docregenddt;
+        private String docRegEndDt;
         @JsonProperty("docRegStartDt")
-        private String docregstartdt;
+        private String docRegStartDt;
         @JsonProperty("description")
         private String description;
         @JsonProperty("qualgbNm")
-        private String qualgbnm;
+        private String qualgbNm;
         @JsonProperty("qualgbCd")
-        private String qualgbcd;
+        private String qualgbCd;
         @JsonProperty("implSeq")
-        private int implseq;
+        private int implSeq;
         @JsonProperty("implYy")
         private String implyy;
     }

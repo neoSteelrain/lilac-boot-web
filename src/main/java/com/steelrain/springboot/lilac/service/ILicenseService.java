@@ -5,5 +5,5 @@ import com.steelrain.springboot.lilac.datamodel.LicenseDTO;
 import java.util.List;
 
 public interface ILicenseService {
-    public List<LicenseDTO> getLicenseSchedulesByCode(int licenseCode);
+    public LicenseDTO getLicenseSchedulesByCode(int licenseCode);
 }

@@ -31,11 +31,16 @@ public class APIConfiguration {
     @Value("${naru.library.book.exist.api.url}")
     private String m_naruBookExistUrl;
 
-    @Value("${license.schd.apikey}")
+    @Value("${license.schd.api.key}")
     private String m_licenseSchdApikey;
 
-    @Value("${licnese.schd.apikey.url}")
+    @Value("${licnese.schd.api.url}")
     private String m_licenseSchdUrl;
+
+    @Value("${license.major.api.key}")
+    private String m_licenseMajorApiKey;
+    @Value("${license.major.api.url}")
+    private String m_licenseMajorApiUrl;
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer(){
@@ -47,9 +52,11 @@ public class APIConfiguration {
                              m_KakaoKey,
                              m_naruLibraryByBookApiKey,
                              m_licenseSchdApikey,
+                             m_licenseMajorApiKey,
                              m_kakaoBookSerchUrl,
                              m_naruLibraryByBookUrl,
                              m_naruBookExistUrl,
-                             m_licenseSchdUrl);
+                             m_licenseSchdUrl,
+                             m_licenseMajorApiUrl);
     }
 }
