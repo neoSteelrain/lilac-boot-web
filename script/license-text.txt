@@ -1,0 +1,30 @@
+<item>
+<career>BODY { FONT-SIZE: 10pt; FONT-FAMILY: Malgun Gothic; COLOR: #000000; MARGIN: 0px}P { MARGIN-BOTTOM: 0px; MARGIN-TOP: 0px; LINE-HEIGHT: 1.2}LI { MARGIN-BOTTOM: 0px; MARGIN-TOP: 0px; LINE-HEIGHT: 1.2}- 기업체 전산실, 소프트웨어 개발업체, SI(system integrated)업체(정보통신, 시스템 구축회사 등), 정부기관, 언론기관, 교육 및 연구기관, 금융기관, 보험업, 병원 등 다양한 기업 및 기관에서 컴퓨터 시스템을 개발 및 운용하거나,네트워크를 이용하여 정보처리를 수행하는 업체에서 활동이 가능하다.- 정보화시대로 다양한 서비스들이 IT 서비스로 제공됨에 따라 다양한 산업에서 소프트웨어의 설계 및 구현, 데이터베이스와 프로그래밍 및 정보시스템 구축관리 등의활용 능력에 대한 수요가 꾸준히 증가할 것으로 보인다.</career>
+<engJmNm>Engineer Information Processing</engJmNm>
+<hist>’74.10.16. 대통령령 제7283호’98.05.09. 대통령령 제15794호현재정보처리기사1급정보처리기사정보처리기사</hist>
+<implNm>한국산업인력공단</implNm>
+<instiNm>과학기술정보통신부</instiNm>
+<jmCd>1320</jmCd>
+<jmNm>정보처리기사</jmNm>
+<job> </job>
+<mdobligFldNm>정보기술</mdobligFldNm>
+<seriesCd>03</seriesCd>
+<seriesNm>기사</seriesNm>
+<summary>BODY { FONT-SIZE: 10pt; FONT-FAMILY: Malgun Gothic; COLOR: #000000; MARGIN: 0px}P { MARGIN-BOTTOM: 0px; MARGIN-TOP: 0px; LINE-HEIGHT: 1.2}LI { MARGIN-BOTTOM: 0px; MARGIN-TOP: 0px; LINE-HEIGHT: 1.2}컴퓨터를 효과적으로 활용하기 위해서 하드웨어뿐만 아니라 정교한 소프트웨어가 필요하다. 이에 따라 우수한 프로그램을 개발하여 업무의 효율성을 높이고, 궁극적으로 국가발전에 이바지하기 위해서 컴퓨터에 관한 전문적인 지식과 기술을 갖춘 사람을 양성할 목적으로 제정됨.</summary>
+<trend>BODY { FONT-SIZE: 10pt; FONT-FAMILY: Malgun Gothic; COLOR: #000000; MARGIN: 0px}P { MARGIN-BOTTOM: 0px; MARGIN-TOP: 0px; LINE-HEIGHT: 1.2}LI { MARGIN-BOTTOM: 0px; MARGIN-TOP: 0px; LINE-HEIGHT: 1.2}&lt;실기시험 출제 경향> 정보시스템 등의 개발 요구 사항을 이해하여 각 업무에 맞는 소프트웨어의 기능에 관한 설계, 구현 및 테스트를 수행에 필요한 1. 현행 시스템 분석 및 요구사항 확인(소프트웨어 공학 기술의 요구사항 분석 기법 활용)2. 데이터 입출력 구현(논리, 물리데이터베이스 설계, 조작 프로시저 등)3. 통합 구현(소프트웨어와 연계 대상 모듈간의 특성 및 연계 모듈 구현 등)4. 서버프로그램 구현(소프트웨어 개발 환경 구축, 형상 관리, 공통 모듈, 테스트 수행 등)5. 인터페이스 구현(소프트웨어 공학 지식, 소프트웨어 인터페이스 설계, 기능 구현, 구현검증 등)6. 화면설계(UI 요구사항 및 설계, 표준 프로토 타입 제작 등)7. 애플리케이션 테스트 (테스트 케이스 설계, 통합 테스트, 성능 개선 등)8. SQL 응용(SQL 작성 등)9. 소프트웨어 개발 보안 구축(SW 개발 보안 설계, SW개발 보안 구현 등)10. 프로그래밍 언어활용(기본 문법 등)11. 응용 SW기초 기술 활용(운영체제, 데이터베이스 활용, 네트워크 활용, 개발환경 구축 등)12. 제품 소프트웨어 패키징(제품 소프트웨어 패키징, 제품소프트웨어 매뉴얼 작성 , 버전 관리등 )&lt;세부 평가 내역>- 필기시험의 내용은 고객지원 > 자료실의 출제기준을 참고 바랍니다. - 실기시험은 필답형을 시행되며 고객지원> 자료실의 출제기준을 참고 바랍니다. 출제기준 참조(www.q-net.or.kr)</trend>
+</item>
+<item>
+<career>BODY { FONT-SIZE: 10pt; FONT-FAMILY: Malgun Gothic; COLOR: #000000; MARGIN: 0px}P { MARGIN-BOTTOM: 0px; MARGIN-TOP: 0px; LINE-HEIGHT: 1.2}LI { MARGIN-BOTTOM: 0px; MARGIN-TOP: 0px; LINE-HEIGHT: 1.2}- 기업체 전산실, 소프트웨어 개발업체, SI(system integrated)업체 (정보통신, 시스템 구축회사 등)정부기관, 언론기관, 교육 및 연구기관, 금융기관, 보험업, 병원 등 기업 및 기관에서 컴퓨터 시스템을 개발 및 운용하거나,네트워크를 이용하여 정보처리를 수행하는 업체에서 활동할 수있다.- 정보화사회에서 다양한 서비스들이 IT서비스로 제공됨에 따라여러 분야의 산업에서정보화시스템에 대한 요구가 급속도로 확대되었다.이는 곧해당 분야의 전문인력에 대한 수요 증가로 이어질 것으로 보인다.</career>
+<engJmNm>Industrial Engineer Information Processing</engJmNm>
+<hist>’74.10.16. 대통령령 제7283호’83.12.20. 대통령령 제11281호’84.11.15.대통령령 제11543호’95.10.16.대통령령 제14783호’98.05.09.대통령령 제15794호’04.12.31.노동부령 제217호현재정보처리기사2급정보처리기사2급정보처리기사2급정보처리기사2급정보처리산업기사정보처리산업기사정보처리산업기사전자계산기조작기능사1급전자계산기조작기능사1급정보처리기능사1급정보처리기능사1급 정보처리기능사1급정보처리기능사1급정보처리기능사1급 정보기술다기능기술자정보기술산업기사</hist>
+<implNm>한국산업인력공단</implNm>
+<instiNm>과학기술정보통신부</instiNm>
+<jmCd>2290</jmCd>
+<jmNm>정보처리산업기사</jmNm>
+<job>정보시스템의 생명주기 전반에 걸친 프로젝트 업무를 수행하는 직무로서 분석, 설계, 구현, 시험, 운영, 유지보수 등의 업무 수행</job>
+<mdobligFldNm>정보기술</mdobligFldNm>
+<seriesCd>03</seriesCd>
+<seriesNm>기사</seriesNm>
+<summary>컴퓨터를 효과적으로 활용하기 위해서 하드웨어뿐만 아니라 정교한 소프트웨어가 필요 하다. 이에 따라 우수한 프로그램을 개발하여 업무의 효율성을 높이고, 궁극적으로 국 가발전에 이바지하기 위해서 컴퓨터에 관한 전문적인 지식과 기술을 갖춘 사람을 양성 할 목적으로 제정됨.</summary>
+<trend>BODY { FONT-SIZE: 10pt; FONT-FAMILY: Malgun Gothic; COLOR: #000000; MARGIN: 0px}P { MARGIN-BOTTOM: 0px; MARGIN-TOP: 0px; LINE-HEIGHT: 1.2}LI { MARGIN-BOTTOM: 0px; MARGIN-TOP: 0px; LINE-HEIGHT: 1.2}&lt;실기시험 출제 경향> 정보시스템 기반 기술을 활용하여 소프트웨어의 기능에 관한 구현 및 테스트를 수행하고 사용자에게 배포하기 위해응용 SW 기초 기술 활용, UI, 애플리케이션 테스트 등의 관련 능력과 실무에서 교육, 활용되는 C, JAVA, Python 등의프로그래밍 언어 활용 능력을 평가- 필기 및 실기시험내용은 출제기준을 참고 바랍니다. - 출제기준은 고객지원> 자료실에서도 확인할 수 있습니다. 출제기준 참조(www.q-net.or.kr)</trend>
+</item>
