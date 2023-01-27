@@ -2242,8 +2242,7 @@ ol {
   font-size: 18px;
   color: #fff;
   font-weight: 500;
-  font-family: 'Jost',
- sans-serif;
+  font-family: 'Jost', sans-serif;
 }
 
 /*======================================
@@ -4013,8 +4012,7 @@ blockquote .shape {
   font-weight: 500;
   padding: 7px 15px;
   border-radius: 6px;
-  font-family: 'Jost',
- sans-serif;
+  font-family: 'Jost', sans-serif;
 }
 
 .items-grid .single-grid .image .item-position {
@@ -4030,8 +4028,7 @@ blockquote .shape {
   top: 15px;
   -webkit-box-shadow: 0 5px 10px rgba(35, 38, 45, 0.14) !important;
           box-shadow: 0 5px 10px rgba(35, 38, 45, 0.14) !important;
-  font-family: 'Jost',
- sans-serif;
+  font-family: 'Jost', sans-serif;
 }
 
 .items-grid .single-grid .image .item-position i {
@@ -4160,8 +4157,7 @@ blockquote .shape {
   position: relative;
   font-weight: 500;
   top: 8px;
-  font-family: 'Jost',
- sans-serif;
+  font-family: 'Jost', sans-serif;
 }
 
 .items-grid .single-grid .content .bottom-content .price span {
@@ -4571,8 +4567,7 @@ blockquote .shape {
   display: block;
   margin-top: 0px;
   font-size: 16px;
-  font-family: 'Jost',
- sans-serif;
+  font-family: 'Jost', sans-serif;
 }
 
 .newsletter .newsletter-form {
@@ -8528,8 +8523,7 @@ blockquote .shape {
 .footer .footer-bottom .copyright-text {
   margin-top: 15px;
   color: #e1e1e1;
-  font-family: 'Jost',
- sans-serif;
+  font-family: 'Jost', sans-serif;
 }
 
 .footer .footer-bottom .copyright-text a {
