@@ -13,14 +13,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
-public class KeywordCategoryManager {
+public class KeywordCategoryCacheService {
 
     private List<SubjectCodeDTO> m_subjectCodeList = null;
     private List<LibraryRegionCodeDTO> m_libRegionCodeList = null;
     private Map<Short, Object> m_libDetailRegionCodeMap = null;
     private final SearchMapper m_searchMapper;
 
-    public KeywordCategoryManager(SearchMapper sm){
+    public KeywordCategoryCacheService(SearchMapper sm){
         this.m_searchMapper = sm;
 
         initKeywordMap();

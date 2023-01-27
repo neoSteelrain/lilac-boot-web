@@ -2,7 +2,6 @@ package com.steelrain.springboot.lilac.service;
 
 import com.steelrain.springboot.lilac.datamodel.LibraryRegionCodeDTO;
 import com.steelrain.springboot.lilac.datamodel.SubjectCodeDTO;
-import com.steelrain.springboot.lilac.mapper.SearchMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +11,10 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
-public class KeywordCategoryManagerTests {
+public class KeywordCategoryCacheServiceTests {
 
     @Autowired
-    private KeywordCategoryManager mgr;
+    private KeywordCategoryCacheService mgr;
 
     @Test
     @DisplayName("주제어코드 초기화 기능 테스트")
