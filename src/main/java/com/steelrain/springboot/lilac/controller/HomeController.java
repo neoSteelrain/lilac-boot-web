@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.controller;
 
+import com.steelrain.springboot.lilac.datamodel.LibraryRegionCodeDTO;
 import com.steelrain.springboot.lilac.datamodel.SubjectCodeDTO;
 import com.steelrain.springboot.lilac.service.ISearchService;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +18,16 @@ public class HomeController {
 
     @GetMapping("/")
     public String index(){
-        //int count = memberMapper.getMemberCount();
         return "index";
     }
 
     @ModelAttribute("subjectCodes")
     public List<SubjectCodeDTO> getSubjectCodes(){
         return m_searchService.getSubjectCodes();
+    }
+
+    @ModelAttribute("libRegionCodes")
+    public List<LibraryRegionCodeDTO> getLibRegionCodes(){
+        return m_searchService.getLibRegionCodes();
     }
 }

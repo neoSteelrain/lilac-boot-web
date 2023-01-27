@@ -11,18 +11,17 @@ import javax.validation.constraints.Size;
  * 예) 종로구, 미추홀구, 용산구
  */
 @Data
-public class LibraryDetailRegionCode {
+public class LibraryDetailRegionCodeDTO {
     /*
-    code	char(5)	NO	PRI
+    code	int	NO	PRI
+    region_code	smallint	NO	PRI
     name	varchar(10)	NO
     detail_name	varchar(10)	NO
-    region_code	char(2)	NO	PRI
      */
 
-    @Size(max=5)
     @NotNull
     @NotEmpty
-    private String code;
+    private Integer code;
 
     @Size(max=10)
     @NotNull

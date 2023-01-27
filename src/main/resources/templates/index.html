@@ -246,36 +246,26 @@
                             <div class="col-12">
                                 <div class="search-input">
                                     <label for="category"><i class="lni lni-grid-alt theme-color"></i></label>
-                                    <select name="category" id="category">
-                                        <option value="none" selected disabled>분류</option>
-                                        <option value="none">정보처리기사</option>
-                                        <option value="none">정보처리산업기사</option>
-                                        <option value="none">정보처리기능사</option>
-                                    </select>
+                                        <select name="category" id="category" th:field="*{subjectCodes}">
+                                            <option value="">--- 분류 선택 ---</option>
+                                            <option th:each="subjectCode : ${subjectCodes}" th:value="${subjectCode.keyWord}" th:text="${subjectCode.name}"></option>
+                                        </select>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="search-input">
                                     <label for="location-main"><i class="lni lni-map-marker theme-color"></i></label>
-                                    <select name="location-main" id="location-main">
-                                        <option value="none" selected disabled>지역정보</option>
-                                        <option value="none">전체</option>
-                                        <option value="none">서울</option>
-                                        <option value="none">부산</option>
-                                        <option value="none">대구</option>
-                                        <option value="none">인천</option>
-                                    </select>
+                                        <select name="location-main" id="location-main" th:field="*{libRegionCodes}" th:onchange="changeLibRegionCode()">
+                                            <option value="">--- 지역정보 ---</option>
+                                            <option th:each="libRegionCode : ${libRegionCodes}" th:value="${libRegionCode.code}" th:text="${libRegionCode.name}"></option>
+                                        </select>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="search-input">
                                     <label for="location-sub"><i class="lni lni-map-marker theme-color"></i></label>
-                                    <select name="location-sub" id="location-sub">
-                                        <option value="none" selected disabled>세부지역</option>
-                                        <option value="none">전체</option>
-                                        <option value="none">ㅇㅇ구</option>
-                                        <option value="none">ㅌㅌ구</option>
-                                        <option value="none">ㅈㅈ구</option>
+                                    <select name="location-sub" id="location-sub" onchange="changeDetailRegionCode()">
+                                        <option value="">--- 세부지역 ---</option>
                                     </select>
                                 </div>
                             </div>
@@ -1454,7 +1444,41 @@
     <script th:src="@{/js/glightbox.min.js}"></script>
     <script th:src="@{/js/count-up.min.js}"></script>
     <script th:src="@{/js/main.js}"></script>
-    <script type="text/javascript">
+    <script th:src="@{/js/jquery.3.6.1.min.js}"></script>
+    <script th:inline="javascript">
+
+        const changeLibRegionCode = () => {
+            const m_selectedRegion = $('#location-main').val();
+            $.ajax({
+                type:"get",
+                url:"/search/dtlRegionCode",
+                dataType:"json",
+                data:{ regionCode: m_selectedRegion },
+                success:(result) => {
+                    initDetailRegionCode(result);
+                },
+                error:(err) => {
+                }
+            });
+        }
+
+        const initDetailRegionCode = (detailRegionCodes) => {
+            /*
+                템플릿 문자열 = 백틱 기호호 감싼다. ``
+                `<option value='세부지역코드'>세부지역명</option>`
+             */
+
+            $("#location-sub").empty();
+            for(const region of detailRegionCodes){
+                //console.log("지역코드 : " + tmp.code + " , " + tmp.detailName);
+                $("#location-sub").append(`<option value=${region.code}>${region.detailName}</option>`);
+            }
+        }
+
+        const changeDetailRegionCode = () => {
+            const m_detailRegion = $('#location-sub').val();
+            console.log("m_detailRegion : " + m_detailRegion);
+        }
         //========= testimonial 
         // tns({
         //     container: '.testimonial-slider',

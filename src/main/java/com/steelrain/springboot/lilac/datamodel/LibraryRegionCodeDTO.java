@@ -11,15 +11,14 @@ import javax.validation.constraints.Size;
  * 예) 서울, 인천, 경기, 제주
  */
 @Data
-public class LibraryRegionCode {
+public class LibraryRegionCodeDTO {
     /*
-    code	char(2)	NO	PRI
+    code	smallint	NO	PRI
     name	char(2)	NO
      */
-    @Size(max=2)
     @NotNull
     @NotEmpty
-    private String code;
+    private Integer code;
 
     @Size(max=2)
     @NotNull
