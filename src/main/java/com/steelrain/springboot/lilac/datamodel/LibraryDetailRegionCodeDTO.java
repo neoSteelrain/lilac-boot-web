@@ -23,6 +23,10 @@ public class LibraryDetailRegionCodeDTO {
     @NotEmpty
     private Integer code;
 
+    @NotNull
+    @NotEmpty
+    private Short regionCode;
+
     @Size(max=10)
     @NotNull
     @NotEmpty

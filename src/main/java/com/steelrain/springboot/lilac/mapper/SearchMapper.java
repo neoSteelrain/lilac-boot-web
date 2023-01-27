@@ -33,4 +33,13 @@ public interface SearchMapper {
             @Result(property = "detailName", column = "detail_name")
     })
     List<LibraryDetailRegionCodeDTO> getLibDetailRegionCodes(int regionCode);
+
+    @Select("SELECT code,region_code,name,detail_name FROM tbl_lib_dtl_region")
+    @Results(id="AllLibDetailRegionCodeMap", value = {
+            @Result(property = "code", column = "code"),
+            @Result(property = "regionCode", column = "region_code"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "detailName", column = "detail_name")
+    })
+    List<LibraryDetailRegionCodeDTO> getAllLibDetailRegionCodes();
 }

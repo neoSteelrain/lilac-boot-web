@@ -29,4 +29,6 @@ public class SearchItemController {
         }
         return m_searchService.getLibDetailRegionCodes(regionCode);
     }
+
+
 }

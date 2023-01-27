@@ -18,7 +18,7 @@ public class LibraryRegionCodeDTO {
      */
     @NotNull
     @NotEmpty
-    private Integer code;
+    private Short code;
 
     @Size(max=2)
     @NotNull

@@ -1469,8 +1469,9 @@
              */
 
             $("#location-sub").empty();
+            $("#location-sub").append('<option value="">--- 세부지역 ---</option>');
             for(const region of detailRegionCodes){
-                //console.log("지역코드 : " + tmp.code + " , " + tmp.detailName);
+                //console.log("지역코드 : " + region.code + " , " + region.detailName);
                 $("#location-sub").append(`<option value=${region.code}>${region.detailName}</option>`);
             }
         }
@@ -1479,6 +1480,8 @@
             const m_detailRegion = $('#location-sub').val();
             console.log("m_detailRegion : " + m_detailRegion);
         }
+
+
         //========= testimonial 
         // tns({
         //     container: '.testimonial-slider',
