@@ -35,7 +35,7 @@ public class KakaoBookRepository implements IKaKoBookRepository{
         params.add(new BasicNameValuePair("query", keyword));
         params.add(new BasicNameValuePair("sort", "accuracy"));
         params.add(new BasicNameValuePair("page", String.valueOf(1)));
-        params.add(new BasicNameValuePair("size", String.valueOf(10)));
+        params.add(new BasicNameValuePair("size", String.valueOf(20)));
 
         HttpGet httpGet = new HttpGet(m_apiConfig.getKakaoRestUrl());
         try{
@@ -47,7 +47,6 @@ public class KakaoBookRepository implements IKaKoBookRepository{
         }catch (URISyntaxException urie){
             throw new KakaoBookSearchException("카카오 책검색 API 호출시 예외발생", urie);
         }
-
         KakaoBookSearchResultDTO result = null;
         try(CloseableHttpClient httpClient = HttpClients.createDefault();
             ClassicHttpResponse response = httpClient.execute(httpGet)){
@@ -55,7 +54,6 @@ public class KakaoBookRepository implements IKaKoBookRepository{
             HttpEntity entity = response.getEntity();
             ObjectMapper objectMapper = new ObjectMapper();
             result = objectMapper.readValue(entity.getContent(), KakaoBookSearchResultDTO.class);
-
         }catch(IOException ex){
             throw new KakaoBookSearchException("카카오 책검색 API 호출시 예외발생", ex);
         }

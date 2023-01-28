@@ -1,9 +1,7 @@
 package com.steelrain.springboot.lilac.service;
 
-import com.steelrain.springboot.lilac.datamodel.LibraryDetailRegionCodeDTO;
-import com.steelrain.springboot.lilac.datamodel.LibraryRegionCodeDTO;
-import com.steelrain.springboot.lilac.datamodel.LicenseDTO;
-import com.steelrain.springboot.lilac.datamodel.SubjectCodeDTO;
+import com.steelrain.springboot.lilac.datamodel.*;
+import com.steelrain.springboot.lilac.event.LicenseBookSearchEvent;
 import com.steelrain.springboot.lilac.event.LicenseSearchEvent;
 import com.steelrain.springboot.lilac.repository.ISearchRepository;
 import lombok.RequiredArgsConstructor;
@@ -41,5 +39,16 @@ public class SearchService implements ISearchService{
                 .build();
         m_appEventPublisher.publishEvent(searchEvent);
         return searchEvent.getLicenseDTO();
+    }
+
+    @Override
+    public List<LicenseBookDTO> getLicenseBookList(String keyword, short region, int detailRegion){
+        LicenseBookSearchEvent searchEvent = LicenseBookSearchEvent.builder()
+                .keyword(keyword)
+                .region(region)
+                .detailRegion(detailRegion)
+                .build();
+        m_appEventPublisher.publishEvent(searchEvent);
+        return searchEvent.getLicenseBookDTOList();
     }
 }

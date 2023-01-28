@@ -1,7 +1,9 @@
 package com.steelrain.springboot.lilac.datamodel;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.validator.constraints.ISBN;
 import org.hibernate.validator.constraints.URL;
 
@@ -16,6 +18,8 @@ import java.sql.Timestamp;
  */
 @Getter
 @Setter
+@Builder
+@ToString
 public class KaKaoBookDTO {
     /*
     isbn13	char(13)	NO	PRI

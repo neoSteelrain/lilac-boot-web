@@ -1,9 +1,6 @@
 package com.steelrain.springboot.lilac.service;
 
-import com.steelrain.springboot.lilac.datamodel.LibraryDetailRegionCodeDTO;
-import com.steelrain.springboot.lilac.datamodel.LibraryRegionCodeDTO;
-import com.steelrain.springboot.lilac.datamodel.LicenseDTO;
-import com.steelrain.springboot.lilac.datamodel.SubjectCodeDTO;
+import com.steelrain.springboot.lilac.datamodel.*;
 
 import java.util.List;
 
@@ -14,4 +11,5 @@ public interface ISearchService {
     List<LibraryDetailRegionCodeDTO> getLibDetailRegionCodes(int regionCode);
 
     LicenseDTO getLicenseInfoByCode(int licenseCode);
+    List<LicenseBookDTO> getLicenseBookList(String keyword, short region, int detailRegion);
 }

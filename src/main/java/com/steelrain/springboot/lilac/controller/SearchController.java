@@ -34,7 +34,18 @@ public class SearchController {
 
     @GetMapping("/licSchd")
     public String getLicenseInfo(@RequestParam("licenseCode") int licenseCode, Model model){
+        if(licenseCode <= 0){
+            log.error(String.format("유효하지 않은 자격증코드 : %d", licenseCode));
+            // TODO : 잘못된 자격증코드에 대한 에러처리가 필요하다
+        }
         model.addAttribute("licenseInfo", m_searchService.getLicenseInfoByCode(licenseCode));
-        return "/license/license-template";
+        return "/search/license-template";
+    }
+
+    @GetMapping("/bookList")
+    public String getBookList(@RequestParam("keyword") String keyword, short region, int detailRegion, Model model){
+
+        model.addAttribute("licenseBookList", m_searchService.getLicenseBookList(keyword, region, detailRegion));
+        return "/search/book-template";
     }
 }

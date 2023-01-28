@@ -1,15 +1,17 @@
 package com.steelrain.springboot.lilac.service;
 
-import com.steelrain.springboot.lilac.datamodel.api.KakaoSearchedBookDTO;
-import com.steelrain.springboot.lilac.datamodel.api.NaruLibSearchByBookResponseDTO;
+import com.steelrain.springboot.lilac.datamodel.LicenseBookDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.StringUtils;
 
-import java.util.Collection;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
+import java.time.temporal.TemporalField;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -21,16 +23,41 @@ public class BookServiceTests {
 
     @Test
     public void testGetKakaoBookLibraryList(){
-        Map<KakaoSearchedBookDTO, List<NaruLibSearchByBookResponseDTO.Library>> res = bookService.getKakaoBookLibraryList("이것이 취업을 위한 코딩 테스트다 with 파이썬", (short)23, 23040);
-        // res.getResponse().getLibs().stream().forEach(lib -> System.out.println(lib.getLib().getLibname()));
-        res.keySet().stream().forEach(book -> System.out.println(book.getTitle()));
-        Collection<List<NaruLibSearchByBookResponseDTO.Library>> libs = res.values();
-        libs.forEach(list -> System.out.println(list.toString()));
 
-        System.out.println("--------------------------");
-        Set<KakaoSearchedBookDTO> tmp = res.keySet();
-        for(KakaoSearchedBookDTO dto : tmp){
-            res.get(dto).stream().forEach(lib -> System.out.println(lib.getLibname() + " : " + lib.getLoanAvailable()));
-        }
+        List<LicenseBookDTO> resultList = bookService.getLicenseBookList("정보처리기사", (short)23, 23040);
+
+        System.out.println("================= 책정보 시작 ====================");
+        resultList.stream().forEach(result ->{
+            System.out.println(result.getKakaoBookDTO().toString());
+        });
+        System.out.println("================= 책정보 끝 ====================");
+        
+        System.out.println("================= 도서관 출력 시작 ====================");
+        resultList.stream().forEach(result -> {
+            System.out.println(String.format("도서관 갯수 : %d", result.getLibraryList().size()));
+            result.getLibraryList().stream().forEach(library ->{
+                System.out.println(String.format("도서관 정보 : %s", library.toString()));
+            });
+        });
+        System.out.println("================= 도서관 출력 끝 ====================");
+        // 2023-01-10T00:00:00.000+09:00
+    }
+
+    @Test
+    public void testTimestamp(){
+        String timeStr = "2023-01-10T00:00:00.000+09:00";
+        ZonedDateTime zt = ZonedDateTime.parse(timeStr);
+        System.out.println(Timestamp.valueOf(zt.toLocalDateTime()));
+    }
+
+    @Test
+    public void testKakaoISBN(){
+        String tmp = "1160503141 9791160503142";
+        // StringUtils.tokenizeToStringArray(tmpIsbn, " ")
+        assertThat(StringUtils.containsWhitespace(tmp));
+
+        String[] strs = StringUtils.tokenizeToStringArray(tmp, " ");
+        assertThat(strs != null).isEqualTo(strs.length == 2);
+        System.out.println(strs);
     }
 }
