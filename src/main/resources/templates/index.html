@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="no-js" lang="kr" xmlns:th="http://www.thymeleaf.org" >
+<html lang="kr" xmlns:th="http://www.thymeleaf.org" >
 
 <head>
     <meta charset="utf-8" />
@@ -7,7 +7,7 @@
     <title>첫화면</title>
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" type="image/x-icon" href="../static/images/favicon.svg" />
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.svg}" />
     <!-- Place favicon.ico in the root directory -->
 
     <!-- Web Font -->
@@ -46,175 +46,8 @@
     </div>
     <!-- /End Preloader -->
 
-    <!-- <nav class="navbar" style="background-color: #e3f2fd;">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Navbar</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Dropdown
-                  </a>
-                  <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                  </ul>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link disabled">Disabled</a>
-                </li>
-              </ul>
-              <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-              </form>
-            </div>
-          </div>
-    </nav> -->
-
     <!-- Start Header Area -->
-    <header class="header navbar-area">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-12">
-                    <div class="nav-inner">
-                        <nav class="navbar navbar-expand-lg">
-                            <a class="navbar-brand" href="index.html">
-                                <!-- <img src="../static/images/logo/logo.svg" alt="Logo"> -->
-                                <h5>사이트 이름</h5>
-                            </a>
-                            <button class="navbar-toggler mobile-menu-btn" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                                aria-expanded="false" aria-label="Toggle navigation">
-                                <span class="toggler-icon"></span>
-                                <span class="toggler-icon"></span>
-                                <span class="toggler-icon"></span>
-                            </button>
-                            <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
-                                <ul id="nav" class="navbar-nav ms-auto">
-                                    <li class="nav-item">
-                                        <a class=" active dd-menu collapsed" href="javascript:void(0)"
-                                            data-bs-toggle="collapse" data-bs-target="#submenu-1-1"
-                                            aria-controls="navbarSupportedContent" aria-expanded="false"
-                                            aria-label="Toggle navigation">첫화면</a>
-                                        <!-- <ul class="sub-menu collapse" id="submenu-1-1">
-                                            <li class="nav-item"><a href="index.html">Home Default</a></li>
-                                            <li class="nav-item active"><a href="index.html">Home Version 2</a></li>
-                                            <li class="nav-item"><a href="index3.html">Home Version 3</a></li>
-                                        </ul> -->
-                                    </li>
-                                    <!-- <li class="nav-item">
-                                        <a href="category.html" aria-label="Toggle navigation">Categories</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class=" dd-menu collapsed" href="javascript:void(0)"
-                                            data-bs-toggle="collapse" data-bs-target="#submenu-1-3"
-                                            aria-controls="navbarSupportedContent" aria-expanded="false"
-                                            aria-label="Toggle navigation">Listings</a>
-                                        <ul class="sub-menu collapse" id="submenu-1-3">
-                                            <li class="nav-item"><a href="item-listing-grid.html">Ad Grid</a></li>
-                                            <li class="nav-item"><a href="item-listing-list.html">Ad Listing</a></li>
-                                            <li class="nav-item"><a href="item-details.html">Ad Details</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class=" dd-menu collapsed" href="javascript:void(0)"
-                                            data-bs-toggle="collapse" data-bs-target="#submenu-1-4"
-                                            aria-controls="navbarSupportedContent" aria-expanded="false"
-                                            aria-label="Toggle navigation">Pages</a>
-                                        <ul class="sub-menu mega-menu collapse" id="submenu-1-4">
-                                            <li class="single-block">
-                                                <ul>
-                                                    <li class="mega-menu-title">Essential Pages</li>
-                                                    <li class="nav-item"><a href="about-us.html">About Us</a></li>
-                                                    <li class="nav-item"><a href="item-details.html">Ads Details</a></li>
-                                                    <li class="nav-item"><a href="post-item.html">Ads Post</a></li>
-                                                    <li class="nav-item"><a href="pricing.html">Pricing Table</a></li>
-                                                    <li class="nav-item"><a href="registration.html">Sign Up</a></li>
-                                                    <li class="nav-item"><a href="login.html">Sign In</a></li>
-                                                    <li class="nav-item"><a href="contact.html">Contact Us</a></li>
-                                                    <li class="nav-item"><a href="faq.html">FAQ</a></li>
-                                                    <li class="nav-item"><a href="404.html">Error Page</a></li>
-                                                    <li class="nav-item"><a href="mail-success.html">Mail Success</a>
-                                                    </li>
-                                                    <li class="nav-item"><a href="coming-soon.html">Comming Soon</a>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li class="single-block">
-                                                <ul>
-                                                    <li class="mega-menu-title">Dashboard</li>
-                                                    <li class="nav-item"><a href="dashboard.html">Account Overview</a>
-                                                    </li>
-                                                    <li class="nav-item"><a href="profile-settings.html">My Profile</a>
-                                                    </li>
-                                                    <li class="nav-item"><a href="my-items.html">My Ads</a></li>
-                                                    <li class="nav-item"><a href="favourite-items.html">Favorite Ads</a>
-                                                    </li>
-                                                    <li class="nav-item"><a href="post-item.html">Ad post</a></li>
-                                                    <li class="nav-item"><a href="bookmarked-items.html">Bookmarked Ad</a>
-                                                    </li>
-                                                    <li class="nav-item"><a href="messages.html">Messages</a></li>
-                                                    <li class="nav-item"><a href="delete-account.html">Close account</a>
-                                                    </li>
-                                                    <li class="nav-item"><a href="invoice.html">Invoice</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class=" dd-menu collapsed" href="javascript:void(0)"
-                                            data-bs-toggle="collapse" data-bs-target="#submenu-1-5"
-                                            aria-controls="navbarSupportedContent" aria-expanded="false"
-                                            aria-label="Toggle navigation">Blog</a>
-                                        <ul class="sub-menu collapse" id="submenu-1-5">
-                                            <li class="nav-item"><a href="blog-grid-sidebar.html">Blog Grid Sidebar</a>
-                                            </li>
-                                            <li class="nav-item"><a href="blog-single.html">Blog Single</a></li>
-                                            <li class="nav-item"><a href="blog-single-sidebar.html">Blog Single
-                                                    Sibebar</a></li>
-                                        </ul>
-                                    </li> -->
-                                </ul>
-                            </div> <!-- navbar collapse -->
-                            <div class="login-button">
-                                <ul>
-                                    <li>
-                                        <a href="login.html"><i class="lni lni-enter"></i> 로그인</a>
-                                    </li>
-                                    <li>
-                                        <a href="registration.html"><i class="lni lni-user"></i> 회원가입</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <!-- <div class="button header-button">
-                                <a href="post-item.html" class="btn">Post an Ad</a>
-                            </div> -->
-                            <div class="dropdown">
-                                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">회원메뉴</button>
-                                <ul class="dropdown-menu">
-                                  <li><button class="dropdown-item" type="button">회원정보</button></li>
-                                  <li><button class="dropdown-item" type="button">강의노트</button></li>
-                                  <li><button class="dropdown-item" type="button">로그아웃</button></li>
-                                </ul>
-                            </div>
-                        </nav> <!-- navbar -->
-                    </div>
-                </div>
-            </div> <!-- row -->
-        </div> <!-- container -->
-    </header>
+    <div th:replace="~{common/header::header}"></div>
     <!-- End Header Area -->
 
     <!-- Start Hero Area -->
@@ -246,9 +79,9 @@
                             <div class="col-12">
                                 <div class="search-input">
                                     <label for="category"><i class="lni lni-grid-alt theme-color"></i></label>
-                                        <select name="category" id="category" th:field="*{subjectCodes}">
-                                            <option value="">--- 분류 선택 ---</option>
-                                            <option th:each="subjectCode : ${subjectCodes}" th:value="${subjectCode.keyWord}" th:text="${subjectCode.name}"></option>
+                                        <select name="category" id="category" th:field="*{licenseCodes}">
+                                            <option value="">--- 자격증 선택 ---</option>
+                                            <option th:each="licenseCode : ${licenseCodes}" th:value="${licenseCode.code}" th:text="${licenseCode.name}"></option>
                                         </select>
                                 </div>
                             </div>
@@ -271,7 +104,7 @@
                             </div>
                             <div class="col-12">
                                 <div class="search-btn button">
-                                    <button class="btn"><i class="lni lni-search-alt"></i> 검색</button>
+                                    <button class="btn" id="search" onclick="searchHandler()"><i class="lni lni-search-alt"></i> 검색</button>
                                 </div>
                             </div>
                         </div>
@@ -283,7 +116,7 @@
     </section>
     <!-- End Hero Area -->
 
-    <!-- Start Categories Area -->
+    <!-- 키워드 목록 시작 -->
     <section class="categories style2">
         <div class="container">
             <div class="cat-inner">
@@ -291,407 +124,597 @@
                     <div class="col-12">
                         <div class="section-title">
                             <h2 class="wow fadeInUp" data-wow-delay=".4s">키워드 목록</h2>
-                            <p class="wow fadeInUp" data-wow-delay=".6s">키워드 설명</p>
+                            <p class="wow fadeInUp" data-wow-delay=".6s">키워드로 빠른 검색</p>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-2 col-md-3 col-12">
-                        <!-- Start Single Category -->
-                        <a href="category.html" class="single-cat wow fadeInUp" data-wow-delay=".2s">
+                    <div th:each="subject : ${subjectCodes}" class="col-lg-2 col-md-3 col-12">
+                        <a href="#" class="single-cat wow fadeInUp" data-wow-delay=".2s">
                             <div class="icon">
-                                <img src="../static/images/categories/car.svg" alt="#">
+                                <img th:src="@{/images/subject/java.png}" alt="#">
                             </div>
-                            <h3>자바</h3>
-                            <h5 class="total">35</h5>
+                            <h3 th:text="${subject.name}"></h3>
+<!--                            <h3>자바</h3>-->
+<!--                            <h5 class="total">35</h5>-->
                         </a>
-                        <!-- End Single Category -->
-                    </div>
-                    <div class="col-lg-2 col-md-3 col-12">
-                        <!-- Start Single Category -->
-                        <a href="category.html" class="single-cat wow fadeInUp" data-wow-delay=".4s">
-                            <div class="icon">
-                                <img src="../static/images/categories/laptop.svg" alt="#">
-                            </div>
-                            <h3>자바스크립트</h3>
-                            <h5 class="total">22</h5>
-                        </a>
-                        <!-- End Single Category -->
-                    </div>
-                    <div class="col-lg-2 col-md-3 col-12">
-                        <!-- Start Single Category -->
-                        <a href="category.html" class="single-cat wow fadeInUp" data-wow-delay=".6s">
-                            <div class="icon">
-                                <img src="../static/images/categories/matrimony.svg" alt="#">
-                            </div>
-                            <h3>스프링</h3>
-                            <h5 class="total">55</h5>
-                        </a>
-                        <!-- End Single Category -->
-                    </div>
-                    <div class="col-lg-2 col-md-3 col-12">
-                        <!-- Start Single Category -->
-                        <a href="category.html" class="single-cat wow fadeInUp" data-wow-delay=".8s">
-                            <div class="icon">
-                                <img src="../static/images/categories/furniture.svg" alt="#">
-                            </div>
-                            <h3>SQL</h3>
-                            <h5 class="total">21</h5>
-                        </a>
-                        <!-- End Single Category -->
-                    </div>
-                    <div class="col-lg-2 col-md-3 col-12">
-                        <!-- Start Single Category -->
-                        <a href="category.html" class="single-cat wow fadeInUp" data-wow-delay="1s">
-                            <div class="icon">
-                                <img src="../static/images/categories/jobs.svg" alt="#">
-                            </div>
-                            <h3>MySQL</h3>
-                            <h5 class="total">44</h5>
-                        </a>
-                        <!-- End Single Category -->
-                    </div>
-                    <div class="col-lg-2 col-md-3 col-12">
-                        <!-- Start Single Category -->
-                        <a href="category.html" class="single-cat wow fadeInUp" data-wow-delay="1.2s">
-                            <div class="icon">
-                                <img src="../static/images/categories/real-estate.svg" alt="#">
-                            </div>
-                            <h3>Real Estate</h3>
-                            <h5 class="total">65</h5>
-                        </a>
-                        <!-- End Single Category -->
-                    </div>
-                    <div class="col-lg-2 col-md-3 col-12">
-                        <!-- Start Single Category -->
-                        <a href="category.html" class="single-cat wow fadeInUp" data-wow-delay=".2s">
-                            <div class="icon">
-                                <img src="../static/images/categories/hospital.svg" alt="#">
-                            </div>
-                            <h3>Health & Beauty</h3>
-                            <h5 class="total">22</h5>
-                        </a>
-                        <!-- End Single Category -->
-                    </div>
-                    <div class="col-lg-2 col-md-3 col-12">
-                        <!-- Start Single Category -->
-                        <a href="category.html" class="single-cat wow fadeInUp" data-wow-delay=".4s">
-                            <div class="icon">
-                                <img src="../static/images/categories/tshirt.svg" alt="#">
-                            </div>
-                            <h3>Fashion</h3>
-                            <h5 class="total">25</h5>
-                        </a>
-                        <!-- End Single Category -->
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- /End Categories Area -->
+    <!-- 키워드 목록 끝 -->
 
-    <!-- Start Achievement Area -->
-    <!-- <section class="our-achievement section">
+    <!-- 자격증 일정 시작 -->
+    <section class="dashboard section" id="section-license">
         <div class="container">
             <div class="row">
-                <div class="col-lg-3 col-md-3 col-12">
-                    <div class="single-achievement wow fadeInUp" data-wow-delay=".2s">
-                        <h3 class="counter"><span id="secondo1" class="countup" cup-end="1250">1250</span>+</h3>
-                        <p>Regular Ads</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-3 col-12">
-                    <div class="single-achievement wow fadeInUp" data-wow-delay=".4s">
-                        <h3 class="counter"><span id="secondo2" class="countup" cup-end="350">350</span>+</h3>
-                        <p>Locations</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-3 col-12">
-                    <div class="single-achievement wow fadeInUp" data-wow-delay=".6s">
-                        <h3 class="counter"><span id="secondo3" class="countup" cup-end="2500">2500</span>+</h3>
-                        <p>Reguler Members</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-3 col-12">
-                    <div class="single-achievement wow fadeInUp" data-wow-delay=".6s">
-                        <h3 class="counter"><span id="secondo3" class="countup" cup-end="250">250</span>+</h3>
-                        <p>Premium Ads</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> -->
-    <!-- End Achievement Area -->
-
-    <!-- Start Items Grid Area -->
-    <section class="items-grid section">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="section-title">
-                        <h2 class="wow fadeInUp" data-wow-delay=".4s">Latest Products</h2>
-                        <p class="wow fadeInUp" data-wow-delay=".6s">There are many variations of passages of Lorem
-                            Ipsum available, but the majority have suffered alteration in some form.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="single-head">
-                <div class="row">
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <!-- Start Single Grid -->
-                        <div class="single-grid wow fadeInUp" data-wow-delay=".2s">
-                            <div class="image">
-                                <a href="item-details.html" class="thumbnail"><img src="https://via.placeholder.com/600x400" alt="#"></a>
-                                <div class="author">
-                                    <div class="author-image">
-                                        <a href="javascript:void(0)"><img src="https://via.placeholder.com/100x100" alt="#">
-                                            <span>Smith jeko</span></a>
+                <div class="col-lg-12 col-md-12 col-12">
+                    <div class="main-content">
+                        <div class="dashboard-block mt-0">
+                            <h3 class="block-title">자격증 시험일정 정보</h3>
+                            <!-- Start Items Area -->
+                            <div class="my-items">
+                                <!-- Start List Title -->
+                                <div class="item-list-title">
+                                    <div class="row align-items-center">
+                                        <div class="col-lg-7 col-md-7 col-12">
+                                            <p>설명</p>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2 col-12">
+                                            <p>진행단계</p>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2 col-12">
+                                            <p>종료일자</p>
+                                        </div>
+                                        <div class="col-lg-1 col-md-1 col-12 align-right">
+                                            <p>강의노트</p>
+                                        </div>
                                     </div>
-                                    <p class="sale">For Sale</p>
+                                </div>
+                                <!-- End List Title -->
+                                <div id="license-div">
                                 </div>
                             </div>
-                            <div class="content">
-                                <div class="top-content">
-                                    <a href="javascript:void(0)" class="tag">Mobile Phones</a>
-                                    <h3 class="title">
-                                        <a href="item-details.html">Apple Iphone X</a>
-                                    </h3>
-                                    <p class="update-time">Last Updated: 1 hours ago</p>
-                                    <ul class="rating">
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><a href="javascript:void(0)">(35)</a></li>
-                                    </ul>
-                                    <ul class="info-list">
-                                        <li><a href="javascript:void(0)"><i class="lni lni-map-marker"></i> New York, US</a></li>
-                                        <li><a href="javascript:void(0)"><i class="lni lni-timer"></i> Feb 18, 2023</a></li>
-                                    </ul>
-                                </div>
-                                <div class="bottom-content">
-                                    <p class="price">Start From: <span>$200.00</span></p>
-                                    <a href="javascript:void(0)" class="like"><i class="lni lni-heart"></i></a>
-                                </div>
-                            </div>
+                            <!-- End Items Area -->
                         </div>
-                        <!-- End Single Grid -->
-                    </div>
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <!-- Start Single Grid -->
-                        <div class="single-grid wow fadeInUp" data-wow-delay=".4s">
-                            <div class="image">
-                                <a href="item-details.html" class="thumbnail"><img src="https://via.placeholder.com/600x400" alt="#"></a>
-                                <div class="author">
-                                    <div class="author-image">
-                                        <a href="javascript:void(0)"><img src="https://via.placeholder.com/100x100" alt="#">
-                                            <span>Alex Jui</span></a>
-                                    </div>
-                                    <p class="sale">For Sale</p>
-                                </div>
-                            </div>
-                            <div class="content">
-                                <div class="top-content">
-                                    <a href="javascript:void(0)" class="tag">Real Estate</a>
-                                    <h3 class="title">
-                                        <a href="item-details.html">Amazing Room for Rent</a>
-                                    </h3>
-                                    <p class="update-time">Last Updated: 2 hours ago</p>
-                                    <ul class="rating">
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><a href="javascript:void(0)">(20)</a></li>
-                                    </ul>
-                                    <ul class="info-list">
-                                        <li><a href="javascript:void(0)"><i class="lni lni-map-marker"></i> Dallas, Washington</a></li>
-                                        <li><a href="javascript:void(0)"><i class="lni lni-timer"></i> Jan 7, 2023</a></li>
-                                    </ul>
-                                </div>
-                                <div class="bottom-content">
-                                    <p class="price">Start From: <span>$450.00</span></p>
-                                    <a href="javascript:void(0)" class="like"><i class="lni lni-heart"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Single Grid -->
-                    </div>
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <!-- Start Single Grid -->
-                        <div class="single-grid wow fadeInUp" data-wow-delay=".6s">
-                            <div class="image">
-                                <a href="item-details.html" class="thumbnail"><img src="https://via.placeholder.com/600x400" alt="#"></a>
-                                <div class="author">
-                                    <div class="author-image">
-                                        <a href="javascript:void(0)"><img src="https://via.placeholder.com/100x100" alt="#">
-                                            <span>Devid Milan</span></a>
-                                    </div>
-                                    <p class="sale">For Sale</p>
-                                </div>
-                                <p class="item-position"><i class="lni lni-bolt"></i> Featured</p>
-                            </div>
-                            <div class="content">
-                                <div class="top-content">
-                                    <a href="javascript:void(0)" class="tag">Mobile Phones</a>
-                                    <h3 class="title">
-                                        <a href="item-details.html">Canon SX Powershot D-SLR</a>
-                                    </h3>
-                                    <p class="update-time">Last Updated: 3 hours ago</p>
-                                    <ul class="rating">
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><a href="javascript:void(0)">(55)</a></li>
-                                    </ul>
-                                    <ul class="info-list">
-                                        <li><a href="javascript:void(0)"><i class="lni lni-map-marker"></i> New York, US</a></li>
-                                        <li><a href="javascript:void(0)"><i class="lni lni-timer"></i> Mar 18, 2023</a></li>
-                                    </ul>
-                                </div>
-                                <div class="bottom-content">
-                                    <p class="price">Start From: <span>$700.00</span></p>
-                                    <a href="javascript:void(0)" class="like"><i class="lni lni-heart"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Single Grid -->
-                    </div>
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <!-- Start Single Grid -->
-                        <div class="single-grid wow fadeInUp" data-wow-delay=".2s">
-                            <div class="image">
-                                <a href="item-details.html" class="thumbnail"><img src="https://via.placeholder.com/600x400" alt="#"></a>
-                                <div class="author">
-                                    <div class="author-image">
-                                        <a href="javascript:void(0)"><img src="https://via.placeholder.com/100x100" alt="#">
-                                            <span>Jesia Jully</span></a>
-                                    </div>
-                                    <p class="sale">For Sale</p>
-                                </div>
-                            </div>
-                            <div class="content">
-                                <div class="top-content">
-                                    <a href="javascript:void(0)" class="tag">Vehicles</a>
-                                    <h3 class="title">
-                                        <a href="item-details.html">BMW 5 Series GT Car</a>
-                                    </h3>
-                                    <p class="update-time">Last Updated: 4 hours ago</p>
-                                    <ul class="rating">
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><a href="javascript:void(0)">(35)</a></li>
-                                    </ul>
-                                    <ul class="info-list">
-                                        <li><a href="javascript:void(0)"><i class="lni lni-map-marker"></i> New York, US</a></li>
-                                        <li><a href="javascript:void(0)"><i class="lni lni-timer"></i> Apr 12, 2023</a></li>
-                                    </ul>
-                                </div>
-                                <div class="bottom-content">
-                                    <p class="price">Start From: <span>$1000.00</span></p>
-                                    <a href="javascript:void(0)" class="like"><i class="lni lni-heart"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Single Grid -->
-                    </div>
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <!-- Start Single Grid -->
-                        <div class="single-grid wow fadeInUp" data-wow-delay=".4s">
-                            <div class="image">
-                                <a href="item-details.html" class="thumbnail"><img src="https://via.placeholder.com/600x400" alt="#"></a>
-                                <div class="author">
-                                    <div class="author-image">
-                                        <a href="javascript:void(0)"><img src="https://via.placeholder.com/100x100" alt="#">
-                                            <span>Thomas Deco</span></a>
-                                    </div>
-                                    <p class="sale">For Sale</p>
-                                </div>
-                                <p class="item-position"><i class="lni lni-bolt"></i> Featured</p>
-                            </div>
-                            <div class="content">
-                                <div class="top-content">
-                                    <a href="javascript:void(0)" class="tag">Apple</a>
-                                    <h3 class="title">
-                                        <a href="item-details.html">Apple Macbook Pro 13 Inch</a>
-                                    </h3>
-                                    <p class="update-time">Last Updated: 5 hours ago</p>
-                                    <ul class="rating">
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><a href="javascript:void(0)">(35)</a></li>
-                                    </ul>
-                                    <ul class="info-list">
-                                        <li><a href="javascript:void(0)"><i class="lni lni-map-marker"></i> Louis, Missouri, US</a></li>
-                                        <li><a href="javascript:void(0)"><i class="lni lni-timer"></i> May 25, 2023</a></li>
-                                    </ul>
-                                </div>
-                                <div class="bottom-content">
-                                    <p class="price">Start From: <span>$550.00</span></p>
-                                    <a href="javascript:void(0)" class="like"><i class="lni lni-heart"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Single Grid -->
-                    </div>
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <!-- Start Single Grid -->
-                        <div class="single-grid wow fadeInUp" data-wow-delay=".6s">
-                            <div class="image">
-                                <a href="item-details.html" class="thumbnail"><img src="https://via.placeholder.com/600x400" alt="#"></a>
-                                <div class="author">
-                                    <div class="author-image">
-                                        <a href="javascript:void(0)"><img src="https://via.placeholder.com/100x100" alt="#">
-                                            <span>Jonson zack</span></a>
-                                    </div>
-                                    <p class="sale">For Sale</p>
-                                </div>
-                            </div>
-                            <div class="content">
-                                <div class="top-content">
-                                    <a href="javascript:void(0)" class="tag">Restaurant</a>
-                                    <h3 class="title">
-                                        <a href="item-details.html">Cream Restaurant</a>
-                                    </h3>
-                                    <p class="update-time">Last Updated: 7 hours ago</p>
-                                    <ul class="rating">
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><a href="javascript:void(0)">(20)</a></li>
-                                    </ul>
-                                    <ul class="info-list">
-                                        <li><a href="javascript:void(0)"><i class="lni lni-map-marker"></i> New York, US</a></li>
-                                        <li><a href="javascript:void(0)"><i class="lni lni-timer"></i> Feb 18, 2023</a></li>
-                                    </ul>
-                                </div>
-                                <div class="bottom-content">
-                                    <p class="price">Start From: <span>$500.00</span></p>
-                                    <a href="javascript:void(0)" class="like"><i class="lni lni-heart"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Single Grid -->
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- /End Items Grid Area -->
+    <!-- 자격증 일정 끝 -->
 
-    <!-- Start Items Tab Area -->
+    <!-- 도서관 정보 시작 -->
+    <section class="category-page section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-4 col-12">
+                    <div class="category-sidebar">
+                        <!-- Start Single Widget -->
+                        <div class="single-widget">
+                            <h3>All Categories</h3>
+                            <ul class="list">
+                                <li>
+                                    <a href="javascript:void(0)"><i class="lni lni-dinner"></i> Hotel & Travels<span>15</span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><i class="lni lni-control-panel"></i> Services <span>20</span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><i class="lni lni-bullhorn"></i> Marketing <span>55</span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><i class="lni lni-home"></i> Real Estate<span>35</span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><i class="lni lni-bolt"></i> Electronics <span>60</span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><i class="lni lni-tshirt"></i> Dress & Clothing <span>55</span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><i class="lni lni-diamond-alt"></i> Jewelry & Accessories
+                                        <span>45</span></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- End Single Widget -->
+                        <!-- Start Single Widget -->
+                        <div class="single-widget range">
+                            <h3>Price Range</h3>
+                            <input type="range" class="form-range" name="range" step="1" min="100" max="10000"
+                                   value="10" onchange="rangePrimary.value=value">
+                            <div class="range-inner">
+                                <label>$</label>
+                                <input type="text" id="rangePrimary" placeholder="100" />
+                            </div>
+                        </div>
+                        <!-- End Single Widget -->
+                        <!-- Start Single Widget -->
+                        <div class="single-widget condition">
+                            <h3>Condition</h3>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1">
+                                <label class="form-check-label" for="flexCheckDefault1">
+                                    All
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault2">
+                                <label class="form-check-label" for="flexCheckDefault2">
+                                    New
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault3">
+                                <label class="form-check-label" for="flexCheckDefault3">
+                                    Used
+                                </label>
+                            </div>
+                        </div>
+                        <!-- End Single Widget -->
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-8 col-12">
+                    <div class="category-grid-list">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="category-grid-topbar">
+                                    <div class="row align-items-center">
+                                        <div class="col-lg-6 col-md-6 col-12">
+                                            <h3 class="title">Showing 1-12 of 21 ads found</h3>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-12">
+                                            <nav>
+                                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                                    <button class="nav-link active" id="nav-grid-tab"
+                                                            data-bs-toggle="tab" data-bs-target="#nav-grid" type="button"
+                                                            role="tab" aria-controls="nav-grid" aria-selected="true"><i
+                                                            class="lni lni-grid-alt"></i></button>
+                                                    <button class="nav-link" id="nav-list-tab" data-bs-toggle="tab"
+                                                            data-bs-target="#nav-list" type="button" role="tab"
+                                                            aria-controls="nav-list" aria-selected="false"><i
+                                                            class="lni lni-list"></i></button>
+                                                </div>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-content" id="nav-tabContent">
+                                    <div class="tab-pane fade show active" id="nav-grid" role="tabpanel"
+                                         aria-labelledby="nav-grid-tab">
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-6 col-12">
+                                                <!-- Start Single Item -->
+                                                <div class="single-item-grid">
+                                                    <div class="image">
+                                                        <a href="item-details.html"><img src="https://via.placeholder.com/600x400" alt="#"></a>
+                                                        <i class=" cross-badge lni lni-bolt"></i>
+                                                        <span class="flat-badge sale">Sale</span>
+                                                    </div>
+                                                    <div class="content">
+                                                        <a href="javascript:void(0)" class="tag">Mobile</a>
+                                                        <h3 class="title">
+                                                            <a href="item-details.html">Apple Iphone X</a>
+                                                        </h3>
+                                                        <p class="location"><a href="javascript:void(0)"><i class="lni lni-map-marker">
+                                                        </i>Boston</a></p>
+                                                        <ul class="info">
+                                                            <li class="price">$890.00</li>
+                                                            <li class="like"><a href="javascript:void(0)"><i
+                                                                    class="lni lni-heart"></i></a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- End Single Item -->
+                                            </div>
+                                            <div class="col-lg-4 col-md-6 col-12">
+                                                <!-- Start Single Item -->
+                                                <div class="single-item-grid">
+                                                    <div class="image">
+                                                        <a href="item-details.html"><img src="https://via.placeholder.com/600x400" alt="#"></a>
+                                                        <i class=" cross-badge lni lni-bolt"></i>
+                                                        <span class="flat-badge sale">Sale</span>
+                                                    </div>
+                                                    <div class="content">
+                                                        <a href="javascript:void(0)" class="tag">Others</a>
+                                                        <h3 class="title">
+                                                            <a href="item-details.html">Travel Kit</a>
+                                                        </h3>
+                                                        <p class="location"><a href="javascript:void(0)"><i class="lni lni-map-marker">
+                                                        </i>San Francisco</a></p>
+                                                        <ul class="info">
+                                                            <li class="price">$580.00</li>
+                                                            <li class="like"><a href="javascript:void(0)"><i
+                                                                    class="lni lni-heart"></i></a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- End Single Item -->
+                                            </div>
+                                            <div class="col-lg-4 col-md-6 col-12">
+                                                <!-- Start Single Item -->
+                                                <div class="single-item-grid">
+                                                    <div class="image">
+                                                        <a href="item-details.html"><img src="https://via.placeholder.com/600x400" alt="#"></a>
+                                                        <i class=" cross-badge lni lni-bolt"></i>
+                                                        <span class="flat-badge sale">Sale</span>
+                                                    </div>
+                                                    <div class="content">
+                                                        <a href="javascript:void(0)" class="tag">Electronic</a>
+                                                        <h3 class="title">
+                                                            <a href="item-details.html">Nikon DSLR Camera</a>
+                                                        </h3>
+                                                        <p class="location"><a href="javascript:void(0)"><i class="lni lni-map-marker">
+                                                        </i>Alaska, USA</a></p>
+                                                        <ul class="info">
+                                                            <li class="price">$560.00</li>
+                                                            <li class="like"><a href="javascript:void(0)"><i
+                                                                    class="lni lni-heart"></i></a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- End Single Item -->
+                                            </div>
+                                            <div class="col-lg-4 col-md-6 col-12">
+                                                <!-- Start Single Item -->
+                                                <div class="single-item-grid">
+                                                    <div class="image">
+                                                        <a href="item-details.html"><img src="https://via.placeholder.com/600x400" alt="#"></a>
+                                                        <i class=" cross-badge lni lni-bolt"></i>
+                                                        <span class="flat-badge sale">Sale</span>
+                                                    </div>
+                                                    <div class="content">
+                                                        <a href="javascript:void(0)" class="tag">Furniture</a>
+                                                        <h3 class="title">
+                                                            <a href="item-details.html">Poster Paint</a>
+                                                        </h3>
+                                                        <p class="location"><a href="javascript:void(0)"><i class="lni lni-map-marker">
+                                                        </i>Las Vegas</a></p>
+                                                        <ul class="info">
+                                                            <li class="price">$85.00</li>
+                                                            <li class="like"><a href="javascript:void(0)"><i
+                                                                    class="lni lni-heart"></i></a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- End Single Item -->
+                                            </div>
+                                            <div class="col-lg-4 col-md-6 col-12">
+                                                <!-- Start Single Item -->
+                                                <div class="single-item-grid">
+                                                    <div class="image">
+                                                        <a href="item-details.html"><img src="https://via.placeholder.com/600x400" alt="#"></a>
+                                                        <i class=" cross-badge lni lni-bolt"></i>
+                                                        <span class="flat-badge sale">Sale</span>
+                                                    </div>
+                                                    <div class="content">
+                                                        <a href="javascript:void(0)" class="tag">Furniture</a>
+                                                        <h3 class="title">
+                                                            <a href="item-details.html">Official Metting Chair</a>
+                                                        </h3>
+                                                        <p class="location"><a href="javascript:void(0)"><i class="lni lni-map-marker">
+                                                        </i>Alaska, USA</a></p>
+                                                        <ul class="info">
+                                                            <li class="price">$750.00</li>
+                                                            <li class="like"><a href="javascript:void(0)"><i
+                                                                    class="lni lni-heart"></i></a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- End Single Item -->
+                                            </div>
+                                            <div class="col-lg-4 col-md-6 col-12">
+                                                <!-- Start Single Item -->
+                                                <div class="single-item-grid">
+                                                    <div class="image">
+                                                        <a href="item-details.html"><img src="https://via.placeholder.com/600x400" alt="#"></a>
+                                                        <i class=" cross-badge lni lni-bolt"></i>
+                                                        <span class="flat-badge rent">Rent</span>
+                                                    </div>
+                                                    <div class="content">
+                                                        <a href="javascript:void(0)" class="tag">Books & Magazine</a>
+                                                        <h3 class="title">
+                                                            <a href="item-details.html">Story Book</a>
+                                                        </h3>
+                                                        <p class="location"><a href="javascript:void(0)"><i class="lni lni-map-marker">
+                                                        </i>New York, USA</a></p>
+                                                        <ul class="info">
+                                                            <li class="price">$120.00</li>
+                                                            <li class="like"><a href="javascript:void(0)"><i
+                                                                    class="lni lni-heart"></i></a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- End Single Item -->
+                                            </div>
+                                            <div class="col-lg-4 col-md-6 col-12">
+                                                <!-- Start Single Item -->
+                                                <div class="single-item-grid">
+                                                    <div class="image">
+                                                        <a href="item-details.html"><img src="https://via.placeholder.com/600x400" alt="#"></a>
+                                                        <i class=" cross-badge lni lni-bolt"></i>
+                                                        <span class="flat-badge sale">Sale</span>
+                                                    </div>
+                                                    <div class="content">
+                                                        <a href="javascript:void(0)" class="tag">Electronic</a>
+                                                        <h3 class="title">
+                                                            <a href="item-details.html">Cctv camera</a>
+                                                        </h3>
+                                                        <p class="location"><a href="javascript:void(0)"><i class="lni lni-map-marker">
+                                                        </i>Delhi, India</a></p>
+                                                        <ul class="info">
+                                                            <li class="price">$350.00</li>
+                                                            <li class="like"><a href="javascript:void(0)"><i class="lni lni-heart"></i></a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- End Single Item -->
+                                            </div>
+                                            <div class="col-lg-4 col-md-6 col-12">
+                                                <!-- Start Single Item -->
+                                                <div class="single-item-grid">
+                                                    <div class="image">
+                                                        <a href="item-details.html"><img src="https://via.placeholder.com/600x400" alt="#"></a>
+                                                        <i class=" cross-badge lni lni-bolt"></i>
+                                                        <span class="flat-badge sale">Sale</span>
+                                                    </div>
+                                                    <div class="content">
+                                                        <a href="javascript:void(0)" class="tag">Mobile</a>
+                                                        <h3 class="title">
+                                                            <a href="item-details.html">Apple Iphone X</a>
+                                                        </h3>
+                                                        <p class="location"><a href="javascript:void(0)"><i class="lni lni-map-marker">
+                                                        </i>Boston</a></p>
+                                                        <ul class="info">
+                                                            <li class="price">$890.00</li>
+                                                            <li class="like"><a href="javascript:void(0)"><i
+                                                                    class="lni lni-heart"></i></a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- End Single Item -->
+                                            </div>
+                                            <div class="col-lg-4 col-md-6 col-12">
+                                                <!-- Start Single Item -->
+                                                <div class="single-item-grid">
+                                                    <div class="image">
+                                                        <a href="item-details.html"><img src="https://via.placeholder.com/600x400" alt="#"></a>
+                                                        <i class=" cross-badge lni lni-bolt"></i>
+                                                        <span class="flat-badge sale">Sale</span>
+                                                    </div>
+                                                    <div class="content">
+                                                        <a href="javascript:void(0)" class="tag">Mobile</a>
+                                                        <h3 class="title">
+                                                            <a href="item-details.html">Samsung Glalaxy S8</a>
+                                                        </h3>
+                                                        <p class="location"><a href="javascript:void(0)"><i class="lni lni-map-marker">
+                                                        </i>Delaware, USA</a></p>
+                                                        <ul class="info">
+                                                            <li class="price">$299.00</li>
+                                                            <li class="like"><a href="javascript:void(0)"><i class="lni lni-heart"></i></a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- End Single Item -->
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <!-- Pagination -->
+                                                <div class="pagination left">
+                                                    <ul class="pagination-list">
+                                                        <li><a href="javascript:void(0)">1</a></li>
+                                                        <li class="active"><a href="javascript:void(0)">2</a></li>
+                                                        <li><a href="javascript:void(0)">3</a></li>
+                                                        <li><a href="javascript:void(0)">4</a></li>
+                                                        <li><a href="javascript:void(0)"><i class="lni lni-chevron-right"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                                <!--/ End Pagination -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="nav-list" role="tabpanel"
+                                         aria-labelledby="nav-list-tab">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 col-12">
+                                                <!-- Start Single Item -->
+                                                <div class="single-item-grid">
+                                                    <div class="row align-items-center">
+                                                        <div class="col-lg-5 col-md-7 col-12">
+                                                            <div class="image">
+                                                                <a href="item-details.html"><img src="https://via.placeholder.com/600x400" alt="#"></a>
+                                                                <i class=" cross-badge lni lni-bolt"></i>
+                                                                <span class="flat-badge sale">Sale</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-7 col-md-5 col-12">
+                                                            <div class="content">
+                                                                <a href="javascript:void(0)" class="tag">Others</a>
+                                                                <h3 class="title">
+                                                                    <a href="item-details.html">Travel Kit</a>
+                                                                </h3>
+                                                                <p class="location"><a href="javascript:void(0)"><i
+                                                                        class="lni lni-map-marker">
+                                                                </i>San Francisco</a></p>
+                                                                <ul class="info">
+                                                                    <li class="price">$580.00</li>
+                                                                    <li class="like"><a href="javascript:void(0)"><i
+                                                                            class="lni lni-heart"></i></a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End Single Item -->
+                                            </div>
+                                            <div class="col-lg-12 col-md-12 col-12">
+                                                <!-- Start Single Item -->
+                                                <div class="single-item-grid">
+                                                    <div class="row align-items-center">
+                                                        <div class="col-lg-5 col-md-7 col-12">
+                                                            <div class="image">
+                                                                <a href="item-details.html"><img src="https://via.placeholder.com/600x400" alt="#"></a>
+                                                                <i class=" cross-badge lni lni-bolt"></i>
+                                                                <span class="flat-badge sale">Sale</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-7 col-md-5 col-12">
+                                                            <div class="content">
+                                                                <a href="javascript:void(0)" class="tag">Electronic</a>
+                                                                <h3 class="title">
+                                                                    <a href="item-details.html">Nikon DSLR Camera</a>
+                                                                </h3>
+                                                                <p class="location"><a href="javascript:void(0)"><i
+                                                                        class="lni lni-map-marker">
+                                                                </i>Alaska, USA</a></p>
+                                                                <ul class="info">
+                                                                    <li class="price">$560.00</li>
+                                                                    <li class="like"><a href="javascript:void(0)"><i
+                                                                            class="lni lni-heart"></i></a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End Single Item -->
+                                            </div>
+                                            <div class="col-lg-12 col-md-12 col-12">
+                                                <!-- Start Single Item -->
+                                                <div class="single-item-grid">
+                                                    <div class="row align-items-center">
+                                                        <div class="col-lg-5 col-md-7 col-12">
+                                                            <div class="image">
+                                                                <a href="item-details.html"><img src="https://via.placeholder.com/600x400" alt="#"></a>
+                                                                <i class=" cross-badge lni lni-bolt"></i>
+                                                                <span class="flat-badge sale">Sale</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-7 col-md-5 col-12">
+                                                            <div class="content">
+                                                                <a href="javascript:void(0)" class="tag">Mobile</a>
+                                                                <h3 class="title">
+                                                                    <a href="item-details.html">Apple Iphone X</a>
+                                                                </h3>
+                                                                <p class="location"><a href="javascript:void(0)"><i
+                                                                        class="lni lni-map-marker">
+                                                                </i>Boston</a></p>
+                                                                <ul class="info">
+                                                                    <li class="price">$890.00</li>
+                                                                    <li class="like"><a href="javascript:void(0)"><i
+                                                                            class="lni lni-heart"></i></a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End Single Item -->
+                                            </div>
+                                            <div class="col-lg-12 col-md-12 col-12">
+                                                <!-- Start Single Item -->
+                                                <div class="single-item-grid">
+                                                    <div class="row align-items-center">
+                                                        <div class="col-lg-5 col-md-7 col-12">
+                                                            <div class="image">
+                                                                <a href="item-details.html"><img src="https://via.placeholder.com/600x400" alt="#"></a>
+                                                                <i class=" cross-badge lni lni-bolt"></i>
+                                                                <span class="flat-badge sale">Sale</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-7 col-md-5 col-12">
+                                                            <div class="content">
+                                                                <a href="javascript:void(0)" class="tag">Furniture</a>
+                                                                <h3 class="title">
+                                                                    <a href="item-details.html">Poster Paint</a>
+                                                                </h3>
+                                                                <p class="location"><a href="javascript:void(0)"><i
+                                                                        class="lni lni-map-marker">
+                                                                </i>Las Vegas</a></p>
+                                                                <ul class="info">
+                                                                    <li class="price">$85.00</li>
+                                                                    <li class="like"><a href="javascript:void(0)"><i
+                                                                            class="lni lni-heart"></i></a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End Single Item -->
+                                            </div>
+                                            <div class="col-lg-12 col-md-12 col-12">
+                                                <!-- Start Single Item -->
+                                                <div class="single-item-grid">
+                                                    <div class="row align-items-center">
+                                                        <div class="col-lg-5 col-md-7 col-12">
+                                                            <div class="image">
+                                                                <a href="item-details.html"><img src="https://via.placeholder.com/600x400" alt="#"></a>
+                                                                <i class=" cross-badge lni lni-bolt"></i>
+                                                                <span class="flat-badge rent">Rent</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-7 col-md-5 col-12">
+                                                            <div class="content">
+                                                                <a href="javascript:void(0)" class="tag">Books & Magazine</a>
+                                                                <h3 class="title">
+                                                                    <a href="item-details.html">Story Book</a>
+                                                                </h3>
+                                                                <p class="location"><a href="javascript:void(0)"><i class="lni lni-map-marker">
+                                                                </i>New York, USA</a></p>
+                                                                <ul class="info">
+                                                                    <li class="price">$120.00</li>
+                                                                    <li class="like"><a href="javascript:void(0)"><i
+                                                                            class="lni lni-heart"></i></a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End Single Item -->
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <!-- Pagination -->
+                                                <div class="pagination left">
+                                                    <ul class="pagination-list">
+                                                        <li><a href="javascript:void(0)">1</a></li>
+                                                        <li class="active"><a href="javascript:void(0)">2</a></li>
+                                                        <li><a href="javascript:void(0)">3</a></li>
+                                                        <li><a href="javascript:void(0)">4</a></li>
+                                                        <li><a href="javascript:void(0)"><i class="lni lni-chevron-right"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                                <!--/ End Pagination -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 도서관 정보 끝 -->
+
+    <!-- 유튜브 정보 시작 -->
     <section class="items-tab section">
         <div class="container">
             <div class="row">
@@ -706,7 +729,7 @@
             <div class="row">
                 <div class="col-12">
                     <nav>
-                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <div class="nav nav-tabs" id="nav-tab-youtube" role="tablist">
                             <button class="nav-link active" id="nav-latest-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-latest" type="button" role="tab" aria-controls="nav-latest"
                                 aria-selected="true">Latest Ads</button>
@@ -718,7 +741,7 @@
                                 aria-selected="false">Random Ads</button>
                         </div>
                     </nav>
-                    <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-content" id="nav-tabContent-youtube">
                         <div class="tab-pane fade show active" id="nav-latest" role="tabpanel"
                             aria-labelledby="nav-latest-tab">
                             <div class="row">
@@ -1313,123 +1336,10 @@
             </div>
         </div>
     </section>
-    <!-- End Items Tab Area -->
+    <!-- 유튜브 정보 끝 -->
 
     <!-- Start Footer Area -->
-    <footer class="footer">
-        <!-- Start Footer Top -->
-        <div class="footer-top">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-3 col-md-6 col-12">
-                        <!-- Single Widget -->
-                        <div class="single-footer mobile-app">
-                            <h3>Mobile Apps</h3>
-                            <div class="app-button">
-                                <a href="javascript:void(0)" class="btn">
-                                    <i class="lni lni-play-store"></i>
-                                    <span class="text">
-                                        <span class="small-text">Get It On</span>
-                                        Google Play
-                                    </span>
-                                </a>
-                                <a href="javascript:void(0)" class="btn">
-                                    <i class="lni lni-apple"></i>
-                                    <span class="text">
-                                        <span class="small-text">Get It On</span>
-                                        App Store
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                        <!-- End Single Widget -->
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-12">
-                        <!-- Single Widget -->
-                        <div class="single-footer f-link">
-                            <h3>Locations</h3>
-                            <div class="row">
-                                <div class="col-lg-6 col-md-6 col-12">
-                                    <ul>
-                                        <li><a href="javascript:void(0)">Chicago</a></li>
-                                        <li><a href="javascript:void(0)">New York City</a></li>
-                                        <li><a href="javascript:void(0)">San Francisco</a></li>
-                                        <li><a href="javascript:void(0)">Washington</a></li>
-                                        <li><a href="javascript:void(0)">Boston</a></li>
-                                    </ul>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-12">
-                                    <ul>
-                                        <li><a href="javascript:void(0)">Los Angeles</a></li>
-                                        <li><a href="javascript:void(0)">Seattle</a></li>
-                                        <li><a href="javascript:void(0)">Las Vegas</a></li>
-                                        <li><a href="javascript:void(0)">San Diego</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Single Widget -->
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-12">
-                        <!-- Single Widget -->
-                        <div class="single-footer f-link">
-                            <h3>Quick Links</h3>
-                            <ul>
-                                <li><a href="javascript:void(0)">About Us</a></li>
-                                <li><a href="javascript:void(0)">How It's Works</a></li>
-                                <li><a href="javascript:void(0)">Login</a></li>
-                                <li><a href="javascript:void(0)">Signup</a></li>
-                                <li><a href="javascript:void(0)">Help & Support</a></li>
-                            </ul>
-                        </div>
-                        <!-- End Single Widget -->
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-12">
-                        <!-- Single Widget -->
-                        <div class="single-footer f-contact">
-                            <h3>Contact</h3>
-                            <ul>
-                                <li>23 New Design Str, Lorem Upsum 10<br> Hudson Yards, USA</li>
-                                <li>Tel. +(123) 1800-567-8990 <br> Mail. support@classigrids.com</li>
-                            </ul>
-                        </div>
-                        <!-- End Single Widget -->
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--/ End Footer Middle -->
-        <!-- Start Footer Bottom -->
-        <div class="footer-bottom">
-            <div class="container">
-                <div class="inner">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="content">
-                                <ul class="footer-bottom-links">
-                                    <li><a href="javascript:void(0)">Terms of use</a></li>
-                                    <li><a href="javascript:void(0)"> Privacy Policy</a></li>
-                                    <li><a href="javascript:void(0)">Advanced Search</a></li>
-                                    <li><a href="javascript:void(0)">Site Map</a></li>
-                                    <li><a href="javascript:void(0)">Information</a></li>
-                                </ul>
-                                <p class="copyright-text">Designed and Developed by <a href="https://graygrids.com/"
-                                        rel="nofollow" target="_blank">GrayGrids</a>
-                                </p>
-                                <ul class="footer-social">
-                                    <li><a href="javascript:void(0)"><i class="lni lni-facebook-filled"></i></a></li>
-                                    <li><a href="javascript:void(0)"><i class="lni lni-twitter-original"></i></a></li>
-                                    <li><a href="javascript:void(0)"><i class="lni lni-youtube"></i></a></li>
-                                    <li><a href="javascript:void(0)"><i class="lni lni-linkedin-original"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End Footer Middle -->
-    </footer>
+    <th:block th:replace="~{common/footer::footer}"></th:block>
     <!--/ End Footer Area -->
 
     <!-- ========================= scroll-top ========================= -->
@@ -1438,13 +1348,13 @@
     </a>
 
     <!-- ========================= JS here ========================= -->
+    <script th:src="@{/js/jquery.3.6.1.min.js}"></script>
     <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
     <script th:src="@{/js/wow.min.js}"></script>
     <script th:src="@{/js/tiny-slider.js}"></script>
     <script th:src="@{/js/glightbox.min.js}"></script>
     <script th:src="@{/js/count-up.min.js}"></script>
     <script th:src="@{/js/main.js}"></script>
-    <script th:src="@{/js/jquery.3.6.1.min.js}"></script>
     <script th:inline="javascript">
 
         const changeLibRegionCode = () => {
@@ -1481,6 +1391,36 @@
             console.log("m_detailRegion : " + m_detailRegion);
         }
 
+        const searchHandler = () => {
+            searchLicenseSchedulesByCategory();
+
+            // 자격증 시험일정 태그로 스크롤 이동
+            let offset = $("#section-license").offset();
+            $("html, body").animate({scrollTop: offset.top}, 500);
+        }
+
+        /**
+         * 사용자가 분류검색을 선택하였을 때 종목코드로 검색하는 함수
+         */
+        const searchLicenseSchedulesByCategory = () => {
+            const m_category = $('#category').val();
+            console.log("m_category : " + m_category);
+            $.ajax({
+                type: "get",
+                url: "/search/licSchd",
+                data: { licenseCode: m_category },
+                dataType: "text",
+                success: (result) => {
+                    console.log(result); // lic-schedule-template
+                    let html = jQuery('<div>').html(result);
+                    let contents = html.find("div#lic-schedule-template").html();
+                    $('#license-div').html(contents);
+                },
+                error: (errMsg) => {
+                    alert(errMsg.toString());
+                }
+            });
+        }
 
         //========= testimonial 
         // tns({

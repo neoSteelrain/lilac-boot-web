@@ -39,6 +39,7 @@ public class LicenseServiceTests {
         assertThat(res != null && StringUtils.hasText(res.getScheduleList().get(0).getCategory()));
 
         System.out.println("자격증 구분 : " + res.getScheduleList().get(0).getCategory());
+        System.out.println("res.toString() : " + res.toString());
     }
 
     @Test

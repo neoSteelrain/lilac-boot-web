@@ -2,6 +2,7 @@ package com.steelrain.springboot.lilac.mapper;
 
 import com.steelrain.springboot.lilac.datamodel.LibraryDetailRegionCodeDTO;
 import com.steelrain.springboot.lilac.datamodel.LibraryRegionCodeDTO;
+import com.steelrain.springboot.lilac.datamodel.LicenseCodeDTO;
 import com.steelrain.springboot.lilac.datamodel.SubjectCodeDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Result;
@@ -42,4 +43,12 @@ public interface SearchMapper {
             @Result(property = "detailName", column = "detail_name")
     })
     List<LibraryDetailRegionCodeDTO> getAllLibDetailRegionCodes();
+
+    @Select("SELECT code,name,key_word FROM tbl_license")
+    @Results(id="LicenseCodeMap", value={
+            @Result(property = "code", column = "code"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "keyWord", column = "key_word")
+    })
+    List<LicenseCodeDTO> getLicenseCodes();
 }

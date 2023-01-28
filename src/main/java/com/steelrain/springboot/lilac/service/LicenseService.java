@@ -24,8 +24,8 @@ public class LicenseService implements ILicenseService{
 
     @Override
     public LicenseDTO getLicenseSchedulesByCode(int licenseCode) {
-        Optional<String> tmpName = m_licenseRespository.getLicenseName(licenseCode);
-        if(tmpName.isEmpty()){
+        Optional<String> licenseName = m_licenseRespository.getLicenseName(licenseCode);
+        if(licenseName.isEmpty()){
             return null;
         }
 
@@ -35,7 +35,8 @@ public class LicenseService implements ILicenseService{
         }
 
         LicenseDTO licenseDTO = new LicenseDTO();
-        licenseDTO.setLicenseName(tmpName.get());
+        licenseDTO.setLicenseCode(licenseCode);
+        licenseDTO.setLicenseName(licenseName.get());
         setCurrentStep(responseDTO, licenseDTO);
         licenseDTO.setScheduleList(parseLicenseScheduleJsonString(responseDTO));
 
@@ -109,18 +110,20 @@ public class LicenseService implements ILicenseService{
             return new ArrayList<>(0);
         }
 
-        // 대부분의 국가시험은 3회정도 치루므로, 리스트의 초기사이즈는 3으로 한다.
-        List<LicenseScheduleDTO> resultList = new ArrayList<>(3);
+        List<LicenseScheduleDTO> resultList = new ArrayList<>(10);
         List<LicenseScheduleResponseDTO.LicenseSchedule> schedules = responseDTO.getBody().getScheduleList();
-        /*for(int i=0, size=schedules.size() ; i <= size ; i++){
-            LicenseScheduleDTO dto = new LicenseScheduleDTO();
-            dto.setCategory(String.format("%s년 정기 %s %d회", schedules.get(i).getImplyy(), getLicenseCategoryName(schedules.get(i).getDescription()), schedules.get(i).getImplSeq()));
-            resultList.add(dto);
-        }*/
+
         for(LicenseScheduleResponseDTO.LicenseSchedule schedule : schedules){
             LicenseScheduleDTO dto = new LicenseScheduleDTO();
             String tmp = String.format("%s년 정기 %s %d회", schedule.getImplyy(), getLicenseCategoryName(schedule.getDescription()), schedule.getImplSeq());
             dto.setCategory(tmp);
+            // TODO : 날짜 포매팅 필요함
+            dto.setDocRegPeriod(schedule.getDocRegStartDt() + " - " + schedule.getDocRegEndDt());
+            dto.setDocExam(schedule.getDocExamStartDt() + " - " + schedule.getDocExamEndDt());
+            dto.setDocPass(schedule.getDocPassDt());
+            dto.setPracReg(schedule.getPracRegStartDt() + " - " + schedule.getPracRegEndDt());
+            dto.setPracExam(schedule.getPracExamStartDt() + " - " + schedule.getPracExamEndDt());
+            dto.setPracPass(schedule.getPracPassDt());
             resultList.add(dto);
         }
         return resultList;

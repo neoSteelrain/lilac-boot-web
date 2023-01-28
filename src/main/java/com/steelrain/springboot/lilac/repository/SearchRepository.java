@@ -2,6 +2,7 @@ package com.steelrain.springboot.lilac.repository;
 
 import com.steelrain.springboot.lilac.datamodel.LibraryDetailRegionCodeDTO;
 import com.steelrain.springboot.lilac.datamodel.LibraryRegionCodeDTO;
+import com.steelrain.springboot.lilac.datamodel.LicenseCodeDTO;
 import com.steelrain.springboot.lilac.datamodel.SubjectCodeDTO;
 import com.steelrain.springboot.lilac.mapper.SearchMapper;
 import lombok.RequiredArgsConstructor;
@@ -28,5 +29,10 @@ public class SearchRepository implements ISearchRepository{
     @Override
     public List<LibraryDetailRegionCodeDTO> getLibDetailRegionCodes(int regionCode) {
         return m_searchMapper.getLibDetailRegionCodes(regionCode);
+    }
+
+    @Override
+    public List<LicenseCodeDTO> getLicenseCodes(){
+        return m_searchMapper.getLicenseCodes();
     }
 }
