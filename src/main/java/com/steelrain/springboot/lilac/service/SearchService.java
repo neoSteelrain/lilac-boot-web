@@ -32,6 +32,13 @@ public class SearchService implements ISearchService{
         return m_searchRepository.getLibDetailRegionCodes(regionCode);
     }
 
+    public LicenseBookDetailDTO getLicenseBookDetail(String isbn, short region, int detailRegion){
+        LicenseBookDetailDTO resultDTO = null;
+
+
+        return resultDTO;
+    }
+
     @Override
     public LicenseDTO getLicenseInfoByCode(int licenseCode) {
         LicenseSearchEvent searchEvent = LicenseSearchEvent.builder()
@@ -42,13 +49,13 @@ public class SearchService implements ISearchService{
     }
 
     @Override
-    public List<LicenseBookDTO> getLicenseBookList(String keyword, short region, int detailRegion){
+    public LicenseBookListDTO getLicenseBookList(String keyword, short region, int detailRegion){
         LicenseBookSearchEvent searchEvent = LicenseBookSearchEvent.builder()
                 .keyword(keyword)
                 .region(region)
                 .detailRegion(detailRegion)
                 .build();
         m_appEventPublisher.publishEvent(searchEvent);
-        return searchEvent.getLicenseBookDTOList();
+        return searchEvent.getLicenseBookListDTO();
     }
 }

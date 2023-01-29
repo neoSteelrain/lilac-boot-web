@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.steelrain.springboot.lilac.config.APIConfig;
 import com.steelrain.springboot.lilac.datamodel.api.NaruBookExistResposeDTO;
 import com.steelrain.springboot.lilac.datamodel.api.NaruLibSearchByBookResponseDTO;
+import com.steelrain.springboot.lilac.datamodel.api.NaruLibSearchByRegionResponseDTO;
 import com.steelrain.springboot.lilac.exception.NaruBookExistException;
 import com.steelrain.springboot.lilac.exception.NaruLibraryByBookException;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
@@ -58,6 +59,36 @@ public class NaruRepository implements INaruRepository{
             result = objectMapper.readValue(entity.getContent(), NaruLibSearchByBookResponseDTO.class);
         }catch (IOException ex){
             throw new NaruLibraryByBookException("나루 소장도서관 검색 예외", ex);
+        }
+        return result;
+    }
+
+    public NaruLibSearchByRegionResponseDTO getLibraryByRegion(short region, int detailRegion){
+        List<NameValuePair> params= new ArrayList<>(6);
+        params.add(new BasicNameValuePair("authKey", m_apiConfig.getNaruLibraryByBookApiKey()));
+        params.add(new BasicNameValuePair("region", String.valueOf(region)));
+        params.add(new BasicNameValuePair("dtl_region", String.valueOf(detailRegion)));
+        params.add(new BasicNameValuePair("pageNo", String.valueOf(1)));
+        params.add(new BasicNameValuePair("pageSize", String.valueOf(20)));
+        params.add(new BasicNameValuePair("format", "json"));
+
+        HttpGet httpGet = new HttpGet(m_apiConfig.getLibraryByRegionUrl());
+        try{
+            URI uri = new URIBuilder(new URI(m_apiConfig.getLibraryByRegionUrl()))
+                    .addParameters(params)
+                    .build();
+            httpGet.setUri(uri);
+        }catch (URISyntaxException urie){
+            throw new NaruLibraryByBookException("나루 정보공개도서관 검색 예외", urie);
+        }
+        NaruLibSearchByRegionResponseDTO result = null;
+        try(CloseableHttpClient httpClient = HttpClients.createDefault();
+            ClassicHttpResponse response = httpClient.execute(httpGet)){
+            HttpEntity entity = response.getEntity();
+            ObjectMapper objectMapper = new ObjectMapper();
+            result = objectMapper.readValue(entity.getContent(), NaruLibSearchByRegionResponseDTO.class);
+        }catch (IOException ex){
+            throw new NaruLibraryByBookException("나루 정보공개도서관 검색 예외", ex);
         }
         return result;
     }

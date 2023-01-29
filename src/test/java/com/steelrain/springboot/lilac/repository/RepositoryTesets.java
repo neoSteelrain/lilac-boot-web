@@ -1,7 +1,7 @@
 package com.steelrain.springboot.lilac.repository;
 
 import com.steelrain.springboot.lilac.datamodel.LicenseDTO;
-import com.steelrain.springboot.lilac.datamodel.api.KakaoBookSearchResultDTO;
+import com.steelrain.springboot.lilac.datamodel.api.KakaoBookSearchResponseDTO;
 import com.steelrain.springboot.lilac.datamodel.api.LicenseScheduleResponseDTO;
 import com.steelrain.springboot.lilac.datamodel.api.NaruBookExistResposeDTO;
 import com.steelrain.springboot.lilac.datamodel.api.NaruLibSearchByBookResponseDTO;
@@ -33,7 +33,7 @@ public class RepositoryTesets {
         char ch = tmp.charAt(50);
         System.out.println("ch : " + ch);*/
 
-        KakaoBookSearchResultDTO res = kaKoBookRepository.searchBookfromKakao("정보처리기사 2022");
+        KakaoBookSearchResponseDTO res = kaKoBookRepository.searchBookfromKakao("정보처리기사 2022");
 
         assertThat(res != null);
 

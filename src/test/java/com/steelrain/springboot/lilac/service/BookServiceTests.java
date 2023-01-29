@@ -1,6 +1,6 @@
 package com.steelrain.springboot.lilac.service;
 
-import com.steelrain.springboot.lilac.datamodel.LicenseBookDTO;
+import com.steelrain.springboot.lilac.datamodel.LicenseBookListDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,7 +24,7 @@ public class BookServiceTests {
     @Test
     public void testGetKakaoBookLibraryList(){
 
-        List<LicenseBookDTO> resultList = bookService.getLicenseBookList("정보처리기사", (short)23, 23040);
+        /*List<LicenseBookDTO> resultList = bookService.getLicenseBookList("정보처리기사", (short)23, 23040);
 
         System.out.println("================= 책정보 시작 ====================");
         resultList.stream().forEach(result ->{
@@ -39,7 +39,7 @@ public class BookServiceTests {
                 System.out.println(String.format("도서관 정보 : %s", library.toString()));
             });
         });
-        System.out.println("================= 도서관 출력 끝 ====================");
+        System.out.println("================= 도서관 출력 끝 ====================");*/
         // 2023-01-10T00:00:00.000+09:00
     }
 

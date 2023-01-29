@@ -5,7 +5,7 @@
     <title></title>
 </head>
 <body>
-<!-- licenseBookList -->
+<!-- licenseBookInfo -->
 <div id="library-book-template">
     <div class="container">
         <div class="row">
@@ -13,10 +13,10 @@
                 <div class="category-sidebar">
                     <!-- Start Single Widget -->
                     <div class="single-widget">
-                        <h3>도서관</h3>
+                        <h3 th:text="${licenseBookInfo.getRegionName()}+'-'+${licenseBookInfo.getDetailRegionName()}+' 도서관목록'"></h3>
                         <ul class="list">
-                            <li>
-                                <a href="javascript:void(0)"><i class="lni lni-library"></i> 도서관1<span>0</span></a>
+                            <li th:each="library : ${licenseBookInfo.libraryList}">
+                                <a href="javascript:void(0)" th:text="${library.name}"><i class="lni lni-library"></i><span>0</span></a>
                             </li>
                         </ul>
                     </div>
@@ -64,7 +64,7 @@
                             <div class="category-grid-topbar">
                                 <div class="row align-items-center">
                                     <div class="col-lg-6 col-md-6 col-12">
-                                        <h3 class="title">키워드로 검색된 책목록</h3>
+                                        <h3 class="title" th:text="${licenseBookInfo.keyword} + ' 키워드로 검색된 책목록'"></h3>
                                     </div>
                                 </div>
                             </div>
@@ -72,26 +72,20 @@
                                 <div class="tab-pane fade show active" id="nav-grid" role="tabpanel"
                                      aria-labelledby="nav-grid-tab">
                                     <div class="row">
-                                        <div class="col-lg-4 col-md-6 col-12" th:each="licenseBook : ${licenseBookList}">
+                                        <div class="col-lg-4 col-md-6 col-12" th:each="kakaoBook : ${licenseBookInfo.kakaoBookList}">
                                             <!-- Start Single Item -->
                                             <div class="single-item-grid">
                                                 <div class="image">
-                                                    <a th:href="${licenseBook.kakaoBookDTO.url}" ><img th:src="${licenseBook.kakaoBookDTO.thumbnail}" alt="#"></a>
-                                                    <!--<i class=" cross-badge lni lni-bolt"></i>
-                                                    <span class="flat-badge sale">Sale</span>-->
+                                                    <a th:href="@{/search/book-detail(isbn=${kakaoBook.isbn13},region=${region},detailRegion=${detailRegion})}" ><img th:src="${kakaoBook.thumbnail}" alt="#"></a>
                                                 </div>
                                                 <div class="content">
-                                                    <a th:href="${licenseBook.kakaoBookDTO.url}" class="tag" th:text="${licenseBook.kakaoBookDTO.authors}"></a>
-                                                    <h6 class="title" th:text="${licenseBook.kakaoBookDTO.title}"></h6>
-                                                    <p class="text" th:text="${licenseBook.kakaoBookDTO.contents}"></p>
-                                                    <!--<a href="javascript:void(0)" class="tag">Mobile</a>
-                                                    <h3 class="title">
-                                                        <a href="item-details.html">Apple Iphone X</a>
-                                                    </h3>
-                                                    <p class="location"><a href="javascript:void(0)"><i class="lni lni-map-marker">
-                                                    </i>Boston</a></p>-->
+                                                    <h6 class="title" th:text="${kakaoBook.title}"></h6>
+                                                    <p class="text" th:text="${kakaoBook.contents}"></p>
                                                     <ul class="info">
-                                                        <li class="price" th:text="${licenseBook.kakaoBookDTO.price}"></li>
+                                                        <li class="info" th:text="${kakaoBook.salePrice}+' 원'"></li>
+                                                        <li class="like"><a th:href="@{kakaoBook.url}"><i
+                                                                class="lni lni-link"></i></a>
+                                                        </li>
                                                         <li class="like"><a href="javascript:void(0)"><i
                                                                 class="lni lni-notepad"></i></a>
                                                         </li>

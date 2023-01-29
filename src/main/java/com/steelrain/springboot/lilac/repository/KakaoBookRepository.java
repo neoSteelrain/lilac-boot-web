@@ -2,7 +2,7 @@ package com.steelrain.springboot.lilac.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.steelrain.springboot.lilac.config.APIConfig;
-import com.steelrain.springboot.lilac.datamodel.api.KakaoBookSearchResultDTO;
+import com.steelrain.springboot.lilac.datamodel.api.KakaoBookSearchResponseDTO;
 import com.steelrain.springboot.lilac.exception.KakaoBookSearchException;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -30,7 +30,7 @@ public class KakaoBookRepository implements IKaKoBookRepository{
     }
 
     @Override
-    public KakaoBookSearchResultDTO searchBookfromKakao(String keyword) {
+    public KakaoBookSearchResponseDTO searchBookfromKakao(String keyword) {
         List<NameValuePair> params = new ArrayList<>(4);
         params.add(new BasicNameValuePair("query", keyword));
         params.add(new BasicNameValuePair("sort", "accuracy"));
@@ -47,42 +47,16 @@ public class KakaoBookRepository implements IKaKoBookRepository{
         }catch (URISyntaxException urie){
             throw new KakaoBookSearchException("카카오 책검색 API 호출시 예외발생", urie);
         }
-        KakaoBookSearchResultDTO result = null;
+        KakaoBookSearchResponseDTO result = null;
         try(CloseableHttpClient httpClient = HttpClients.createDefault();
             ClassicHttpResponse response = httpClient.execute(httpGet)){
 
             HttpEntity entity = response.getEntity();
             ObjectMapper objectMapper = new ObjectMapper();
-            result = objectMapper.readValue(entity.getContent(), KakaoBookSearchResultDTO.class);
+            result = objectMapper.readValue(entity.getContent(), KakaoBookSearchResponseDTO.class);
         }catch(IOException ex){
             throw new KakaoBookSearchException("카카오 책검색 API 호출시 예외발생", ex);
         }
         return result;
     }
-
-    /* @Override
-    public KakaoBookSearchResultDTO searchBookfromKakao(String keyword) {
-        DefaultUriBuilderFactory uriBuilderFactory = new DefaultUriBuilderFactory(m_apiConfig.getKakaoRestUrl());
-
-        uriBuilderFactory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
-        WebClient webClient = WebClient.builder()
-                .uriBuilderFactory(uriBuilderFactory)
-                .baseUrl(m_apiConfig.getKakaoRestUrl())
-                .defaultHeader("Authorization", "KakaoAK " + m_apiConfig.getKakaoRestKey())
-                .build();
-
-        KakaoBookSearchResultDTO result = webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .queryParam("query", keyword)
-                        //.queryParam("sort", "accuracy")
-                        .queryParam("page", String.valueOf(1))
-                        .queryParam("size", String.valueOf(5))
-                        .queryParam("target", "title")
-                        .build())
-                .accept(MediaType.APPLICATION_JSON)
-                .retrieve()
-                .bodyToMono(KakaoBookSearchResultDTO.class)
-                .block();
-        return result;
-    }*/
 }

@@ -1,6 +1,6 @@
 package com.steelrain.springboot.lilac.repository;
 
-import com.steelrain.springboot.lilac.datamodel.api.KakaoBookSearchResultDTO;
+import com.steelrain.springboot.lilac.datamodel.api.KakaoBookSearchResponseDTO;
 
 /**
  * 카카오 REST API 연동을 담당한다
@@ -12,5 +12,5 @@ public interface IKaKoBookRepository {
      * @param keyword 도서제목에 조회할 키워드
      * @return 검색된 도서목록
      */
-    KakaoBookSearchResultDTO searchBookfromKakao(String keyword);
+    KakaoBookSearchResponseDTO searchBookfromKakao(String keyword);
 }

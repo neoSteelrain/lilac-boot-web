@@ -6,7 +6,7 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class KakaoBookSearchResultDTO {
+public class KakaoBookSearchResponseDTO {
 
     @JsonProperty("meta")
     private Meta meta;

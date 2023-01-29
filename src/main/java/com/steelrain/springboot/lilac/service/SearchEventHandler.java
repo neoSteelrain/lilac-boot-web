@@ -21,6 +21,6 @@ public class SearchEventHandler {
 
     @EventListener(LicenseBookSearchEvent.class)
     public void handleLicenseBookSearchEvent(LicenseBookSearchEvent event){
-        event.setLicenseBookDTOList(m_bookService.getLicenseBookList(event.getKeyword(), event.getRegion(), event.getDetailRegion()));
+        event.setLicenseBookListDTO(m_bookService.getLicenseBookList(event.getKeyword(), event.getRegion(), event.getDetailRegion()));
     }
 }

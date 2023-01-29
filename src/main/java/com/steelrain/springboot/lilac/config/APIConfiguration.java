@@ -42,6 +42,9 @@ public class APIConfiguration {
     @Value("${license.major.api.url}")
     private String m_licenseMajorApiUrl;
 
+    @Value("${naru.library.region.api.url}")
+    private String m_libraryByRegionUrl;
+
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer(){
         return new PropertySourcesPlaceholderConfigurer();
@@ -57,6 +60,7 @@ public class APIConfiguration {
                              m_naruLibraryByBookUrl,
                              m_naruBookExistUrl,
                              m_licenseSchdUrl,
-                             m_licenseMajorApiUrl);
+                             m_licenseMajorApiUrl,
+                             m_libraryByRegionUrl);
     }
 }

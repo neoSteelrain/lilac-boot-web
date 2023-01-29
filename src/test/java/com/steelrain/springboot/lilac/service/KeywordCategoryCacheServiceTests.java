@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import static org.assertj.core.api.Assertions.*;
@@ -36,5 +37,21 @@ public class KeywordCategoryCacheServiceTests {
                 System.out.println("dtlCodeDTO : " + dtlCodeDTO.toString());
             });
         });
+    }
+
+    @Test
+    @DisplayName("지역코드로 지역이름 얻어내기")
+    public void testGetRegionName(){
+        String name = mgr.getRegionName((short)11);
+        assertThat(StringUtils.hasText(name));
+        System.out.println(name);
+    }
+    
+    @Test
+    @DisplayName("세부지역코드로 세부지역이름 얻어내기")
+    public void testGetDetailRegion(){
+        String name = mgr.getDetailRegionName((short)11, 11220);
+        assertThat(StringUtils.hasText(name));
+        System.out.println(name);
     }
 }

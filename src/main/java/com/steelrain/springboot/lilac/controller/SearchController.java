@@ -45,7 +45,19 @@ public class SearchController {
     @GetMapping("/bookList")
     public String getBookList(@RequestParam("keyword") String keyword, short region, int detailRegion, Model model){
 
-        model.addAttribute("licenseBookList", m_searchService.getLicenseBookList(keyword, region, detailRegion));
+        model.addAttribute("licenseBookInfo", m_searchService.getLicenseBookList(keyword, region, detailRegion));
+        model.addAttribute("region", region);
+        model.addAttribute("detailRegion", detailRegion);
         return "/search/book-template";
     }
+
+    @GetMapping("/book-detail")
+    public String bookDetailForm(@RequestParam("isbn") String isbn,
+                                 @RequestParam("region") short region,
+                                 @RequestParam("detailRegion") int detailRegion){
+
+        
+        return "/search/book-detail";
+    }
+
 }

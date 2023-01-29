@@ -5,6 +5,7 @@ import com.steelrain.springboot.lilac.datamodel.LibraryRegionCodeDTO;
 import com.steelrain.springboot.lilac.datamodel.LicenseCodeDTO;
 import com.steelrain.springboot.lilac.datamodel.SubjectCodeDTO;
 import com.steelrain.springboot.lilac.mapper.SearchMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class KeywordCategoryCacheService implements ICacheService {
 
@@ -59,6 +61,22 @@ public class KeywordCategoryCacheService implements ICacheService {
             return new ArrayList<>(0);
         }
         return m_licenseCodeList;
+    }
+
+    @Override
+    public String getRegionName(short region) {
+        return m_libRegionCodeList.stream()
+                .filter(regionDTO -> (regionDTO.getCode() == region))
+                .map(LibraryRegionCodeDTO::getName)
+                .collect(Collectors.joining());
+    }
+
+    @Override
+    public String getDetailRegionName(short region, int detailRegion) {
+        return ((List<LibraryDetailRegionCodeDTO>) m_libDetailRegionCodeMap.get(region)).stream()
+                .filter(detailRegionDTO -> (detailRegionDTO.getCode() == detailRegion))
+                .map(LibraryDetailRegionCodeDTO::getDetailName)
+                .collect(Collectors.joining());
     }
 
     private void initKeywordMap(){

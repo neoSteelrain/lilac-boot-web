@@ -18,6 +18,7 @@ public class APIConfig {
     private String licenseSchdUrl;
     private String licenseMajorApiKey;
     private String licenseMajorApiUrl;
+    private String libraryByRegionUrl;
 
     public APIConfig(String youtubeApikey,
                      String kakaoRestApikey,
@@ -28,7 +29,8 @@ public class APIConfig {
                      String naruLibraryByBookUrl,
                      String naruBookExistUrl,
                      String licenseSchdUrl,
-                     String licenseMajorApiUrl){
+                     String licenseMajorApiUrl,
+                     String libraryByRegionUrl){
         this.youtubeKey = youtubeApikey;
         this.kakaoRestKey = kakaoRestApikey;
         this.licenseSchdApikey = licenseSchdApikey;
@@ -39,5 +41,6 @@ public class APIConfig {
         this.naruBookExistUrl = naruBookExistUrl;
         this.licenseSchdUrl = licenseSchdUrl;
         this.licenseMajorApiUrl = licenseMajorApiUrl;
+        this.libraryByRegionUrl = libraryByRegionUrl;
     }
 }

@@ -1,6 +1,6 @@
 package com.steelrain.springboot.lilac.event;
 
-import com.steelrain.springboot.lilac.datamodel.LicenseBookDTO;
+import com.steelrain.springboot.lilac.datamodel.LicenseBookListDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,5 +15,5 @@ public class LicenseBookSearchEvent {
     private int detailRegion;
 
     @Setter
-    private List<LicenseBookDTO> licenseBookDTOList;
+    private LicenseBookListDTO licenseBookListDTO;
 }

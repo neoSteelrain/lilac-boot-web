@@ -11,5 +11,5 @@ public interface ISearchService {
     List<LibraryDetailRegionCodeDTO> getLibDetailRegionCodes(int regionCode);
 
     LicenseDTO getLicenseInfoByCode(int licenseCode);
-    List<LicenseBookDTO> getLicenseBookList(String keyword, short region, int detailRegion);
+    LicenseBookListDTO getLicenseBookList(String keyword, short region, int detailRegion);
 }

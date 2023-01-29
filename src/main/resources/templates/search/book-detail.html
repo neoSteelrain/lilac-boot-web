@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org" >
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>첫화면</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.svg}" />
+  <!-- Place favicon.ico in the root directory -->
+
+  <!-- Web Font -->
+  <link
+          href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+
+  <!-- ========================= CSS here ========================= -->
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+  <link rel="stylesheet" th:href="@{/css/LineIcons.2.0.css}" />
+  <link rel="stylesheet" th:href="@{/css/animate.css}" />
+  <link rel="stylesheet" th:href="@{/css/tiny-slider.css}" />
+  <link rel="stylesheet" th:href="@{/css/glightbox.min.css}" />
+  <link rel="stylesheet" th:href="@{/css/main.css}" />
+</head>
+<body>
+<!--[if lte IE 9]>
+<p class="browserupgrade">
+  You are using an <strong>outdated</strong> browser. Please
+  <a href="https://browsehappy.com/">upgrade your browser</a> to improve
+  your experience and security.
+</p>
+<![endif]-->
+
+<!-- Preloader -->
+<div class="preloader">
+  <div class="preloader-inner">
+    <div class="preloader-icon">
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</div>
+<!-- /End Preloader -->
+
+<!-- Start Header Area -->
+<div th:replace="~{common/header::header}"></div>
+<!-- End Header Area -->
+
+
+<section class="item-details section" style="margin-top:30px">
+  <div class="container">
+    <div class="top-area">
+      <div class="row">
+        <div class="col-lg-6 col-md-12 col-12">
+          <div class="product-images">
+            <main id="gallery">
+              <div class="main-img">
+                <img src="https://via.placeholder.com/1200x900" id="current" alt="#">
+              </div>
+            </main>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-12 col-12">
+          <div class="product-info">
+            <h2 class="title">책제목</h2>
+            <!-- <p class="location"><i class="lni lni-map-marker"></i><a href="javascript:void(0)">New York, USA</a></p> -->
+            <div class="list-info">
+              <table>
+                <tbody>
+                <tr>
+                  <td>저자</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>번역</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>출판</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>ISBN</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>출판일</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>품절 여부</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>도서 정가</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>도서 판매가</td>
+                  <td></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="item-details-blocks">
+      <div class="row">
+        <div class="col-lg-8 col-md-7 col-12">
+          <!-- Start Single Block -->
+          <div class="single-block description">
+            <h3>도서 소개</h3>
+            <p>
+              There are many variations of passages of Lorem Ipsum available, but the majority have
+              suffered alteration in some form, by injected humour, or randomised words which don't
+              look even slightly believable.
+            </p>
+          </div>
+          <!-- End Single Block -->
+          <!-- Start Single Block -->
+          <div class="single-block comments">
+            <h3>도서관 이름</h3>
+            <div class="single-comment">
+              <img src="https://via.placeholder.com/300x300" alt="#">
+              <div class="content">
+                <table>
+                  <tbody>
+                  <tr>
+                    <td>주소</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>전화번호</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>FAX 번호</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>휴관일</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>운영시간</td>
+                    <td></td>
+                  </tr>
+                  </tbody>
+                </table>
+                <a href="javascript:void(0)" class="reply"><i class="lni lni-link"></i> 홈페이지</a>
+              </div>
+            </div>
+            <!-- End Single Comment -->
+          </div>
+          <!-- End Single Block -->
+        </div>
+        <div class="col-lg-4 col-md-5 col-12">
+          <div class="item-details-sidebar">
+            <!-- Start Single Block -->
+            <div class="single-block ">
+              <h3>위치</h3>
+              <div class="mapouter">
+                <div class="gmap_canvas"><iframe width="100%" height="300" id="gmap_canvas"
+                                                 src="https://maps.google.com/maps?q=2880%20Broadway,%20New%20York&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                                                 frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a
+                        href="https://putlocker-is.org"></a><br>
+                  <style>
+                    .mapouter {
+                      position: relative;
+                      text-align: right;
+                      height: 300px;
+                      width: 100%;
+                    }
+                  </style><a href="https://www.embedgooglemap.net">google map code for website</a>
+                  <style>
+                    .gmap_canvas {
+                      overflow: hidden;
+                      background: none !important;
+                      height: 300px;
+                      width: 100%;
+                    }
+                  </style>
+                </div>
+              </div>
+            </div>
+            <!-- End Single Block -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Start Footer Area -->
+<th:block th:replace="~{common/footer::footer}"></th:block>
+<!--/ End Footer Area -->
+
+<!-- ========================= scroll-top ========================= -->
+<a href="#" class="scroll-top btn-hover">
+  <i class="lni lni-chevron-up"></i>
+</a>
+
+<!-- ========================= JS here ========================= -->
+<script th:src="@{/js/jquery.3.6.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/wow.min.js}"></script>
+<script th:src="@{/js/tiny-slider.js}"></script>
+<script th:src="@{/js/glightbox.min.js}"></script>
+<script th:src="@{/js/count-up.min.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:inline="javascript">
+
+</script>
+</body>
+</html>
