@@ -57,47 +57,31 @@
                     <div class="form-head">
                         <h4 class="title">회원가입</h4>
                         <form action="#!" method="post">
-<!--                            <div class="socila-login">-->
-<!--                                <ul>-->
-<!--                                    <li><a href="javascript:void(0)" class="facebook"><i class="lni lni-facebook-original"></i>Import-->
-<!--                                            From Facebook</a></li>-->
-<!--                                    <li><a href="javascript:void(0)" class="google"><i class="lni lni-google"></i>Import From Google-->
-<!--                                            Plus</a>-->
-<!--                                    </li>-->
-<!--                                </ul>-->
-<!--                            </div>-->
-                            <div class="alt-option"></div>
-                            <div class="form-group">
-                                <label>이름</label>
-                                <input name="password" type="text">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="ipt-nickname" min="1" maxlength="20">
+                                <label id="lbl-nickname" for="ipt-nickname">닉네임</label>
+                                <span id="nickNameNotice"></span>
                             </div>
-                            <div class="form-group">
-                                <label>이메일</label>
-                                <input name="email" type="email">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="ipt-email" min="5" maxlength="100" onblur="checkDuplicatedEmail()">
+                                <label for="ipt-email">이메일</label>
+                                <span id="emailNotice"></span>
                             </div>
-                            <div class="form-group">
-                                <label>비밀번호</label>
-                                <input name="password" type="password">
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" id="ipt-password" min="6" maxlength="19"
+                                       placeholder="영문 대소문자 숫자 특수기호 포함 6-19자리">
+                                <label for="ipt-password">비밀번호</label>
+                                <span id="pwNotice"></span>
                             </div>
-                            <div class="form-group">
-                                <label>비밀번호 확인</label>
-                                <input name="password" type="password">
-                            </div>
-                            <!--<div class="check-and-pass">
-                                <div class="row align-items-center">
-                                    <div class="col-12">
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input width-auto"
-                                                id="exampleCheck1">
-                                            <label class="form-check-label">Agree to our <a href="javascript:void(0)">Terms and
-                                                    Conditions</a></label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>-->
-                            <div class="alt-option"></div>
                             <div class="button">
-                                <button type="submit" class="btn">회원가입</button>
+                                <button type="button" id="btn-registration" class="btn">회원가입</button>
+                            </div>
+                            <div class="socila-login" style="margin-top: 10px">
+                                <ul>
+                                    <li><a href="javascript:void(0)" class="google"><i class="lni lni-bitcoin"></i>카카오 로그인</a></li>
+                                    <li><a href="javascript:void(0)" class="google"><i class="lni lni-google"></i>구글 로그인</a>
+                                    </li>
+                                </ul>
                             </div>
                             <p class="outer-link">이미 가입이 되어 있으신가요? <a href="/member/login"> 로그인</a>
                             </p>
@@ -125,5 +109,46 @@
     <script th:src="@{/js/tiny-slider.js}"></script>
     <script th:src="@{/js/glightbox.min.js}"></script>
     <script th:src="@{/js/main.js}"></script>
+    <script th:inline="javascript">
+        const checkDuplicatedEmail = () => {
+            const emailInput = $('#ipt-email').val();
+            const emailNotice = $('#emailNotice');
+            const emailRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}(.[a-zA-Z]{2,3})?$/u;
+            if (emailInput == "") {
+                emailNotice.css('color', 'red');
+                emailNotice.html('이메일 주소는 필수입력입니다')
+                return;
+            }
+            if (!emailRegex.test(emailInput)) {
+                emailNotice.css('color', 'red');
+                emailNotice.html('이메일 주소형식에 어긋납니다')
+                $('#ipt-email').focus();
+                return;
+            }
+            $.ajax({
+                type: "get",
+                url: "/member/duplicated-email/" + emailInput,
+                //datatype: "text",
+                success: function (data, statusText, jqXHR) {
+                    console.log(data);
+                    console.log(statusText);
+                    console.log(jqXHR.responseText);
+                    // if (result == "YES") {
+                    //     emailNotice.css('color', 'red');
+                    //     emailNotice.html('중복된 이메일입니다.')
+                    // } else if (result == "NO") {
+                    //     emailNotice.css('color', 'green');
+                    //     emailNotice.html('사용가능한 이메일입니다.')
+                    // }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR.responseText);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                    //alert('이메일 검증에서 오류가 발생하였습니다');
+                }
+            });
+        }
+    </script>
 </body>
 </html>
