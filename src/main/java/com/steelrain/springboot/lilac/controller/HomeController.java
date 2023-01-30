@@ -22,6 +22,8 @@ public class HomeController {
     @GetMapping("/")
     public String index(){
         return "index";
+
+        // licenseCodes 를 모델에 담아서 보내줘야 할거 같다.
     }
 
 
