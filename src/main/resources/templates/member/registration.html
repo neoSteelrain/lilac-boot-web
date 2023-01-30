@@ -55,11 +55,11 @@
             <div class="row">
                 <div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-12">
                     <div class="form-head">
-                        <h4 class="title">회원가입</h4>
-                        <form action="#!" method="post">
+                        <h6 class="title">회원가입</h6>
+                        <form action="/member/registration" method="post">
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="ipt-nickname" min="1" maxlength="20">
-                                <label id="lbl-nickname" for="ipt-nickname">닉네임</label>
+                                <label for="ipt-nickname">닉네임</label>
                                 <span id="nickNameNotice"></span>
                             </div>
                             <div class="form-floating mb-3">
@@ -73,8 +73,9 @@
                                 <label for="ipt-password">비밀번호</label>
                                 <span id="pwNotice"></span>
                             </div>
+                            <hr class="my-2">
                             <div class="button">
-                                <button type="button" id="btn-registration" class="btn">회원가입</button>
+                                <button type="submit" id="btn-registration" class="btn">회원가입</button>
                             </div>
                             <div class="socila-login" style="margin-top: 10px">
                                 <ul>
@@ -128,24 +129,25 @@
             $.ajax({
                 type: "get",
                 url: "/member/duplicated-email/" + emailInput,
-                //datatype: "text",
-                success: function (data, statusText, jqXHR) {
-                    console.log(data);
-                    console.log(statusText);
-                    console.log(jqXHR.responseText);
-                    // if (result == "YES") {
-                    //     emailNotice.css('color', 'red');
-                    //     emailNotice.html('중복된 이메일입니다.')
-                    // } else if (result == "NO") {
-                    //     emailNotice.css('color', 'green');
-                    //     emailNotice.html('사용가능한 이메일입니다.')
-                    // }
+                statusCode:{
+                    409:function(responseObj, textStatus, jqXHR){
+                        emailNotice.css('color', 'red');
+                        emailNotice.html('중복된 이메일입니다.')
+                    },
+                    400:function (responseObj, textStatus, jqXHR) {
+                        emailNotice.css('color', 'red');
+                        emailNotice.html('이메일 길이는 100자를 넘을 수 없습니다.');
+                    }
+                },
+                success: function (data) {
+                    emailNotice.css('color', 'green');
+                    emailNotice.html('사용가능한 이메일입니다.')
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR.responseText);
-                    console.log(textStatus);
-                    console.log(errorThrown);
-                    //alert('이메일 검증에서 오류가 발생하였습니다');
+                    if(jqXHR.status == 400 || jqXHR.status == 409){
+                        return;
+                    }
+                    alert('이메일 검증에서 오류가 발생하였습니다');
                 }
             });
         }

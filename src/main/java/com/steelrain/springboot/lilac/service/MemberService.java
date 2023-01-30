@@ -18,7 +18,12 @@ public class MemberService implements IMemberService {
     }
 
     @Override
-    public boolean registerMember(MemberDTO memeberDTO) {
-        return m_memberRepository.saveMember(memeberDTO) > 0;
+    public boolean registerMember(MemberDTO memberDTO) {
+        return m_memberRepository.saveMember(memberDTO) > 0;
+    }
+
+    @Override
+    public MemberDTO loginMember(String email, String password) {
+        return null;
     }
 }

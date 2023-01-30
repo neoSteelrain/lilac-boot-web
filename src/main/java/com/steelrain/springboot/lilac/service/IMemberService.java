@@ -4,5 +4,7 @@ import com.steelrain.springboot.lilac.datamodel.MemberDTO;
 
 public interface IMemberService {
     boolean checkDuplicatedEmail(String email);
-    boolean registerMember(MemberDTO memeberDTO);
+    boolean registerMember(MemberDTO memberDTO);
+
+    MemberDTO loginMember(String email, String password);
 }

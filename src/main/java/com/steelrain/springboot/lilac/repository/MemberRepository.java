@@ -18,6 +18,11 @@ public class MemberRepository implements IMemberRepository{
 
     @Override
     public int saveMember(MemberDTO memberDTO) {
-        return 0;
+        return m_memberMapper.saveMember(memberDTO);
+    }
+
+    @Override
+    public MemberDTO loginMember(String email, String password) {
+        return m_memberMapper.findMember(email, password);
     }
 }
