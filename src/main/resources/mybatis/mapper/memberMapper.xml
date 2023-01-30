@@ -6,9 +6,9 @@
         INSERT INTO tbl_member(nickname, email, password) value(#{nickname},#{email},#{password})
     </insert>
 
-    <select id="findMember" parameterType="String" resultType="MemberDTO">
+    <select id="findMember" parameterType="map" resultType="MemberDTO">
         SELECT id,nickname,email,password,description,region,dtl_region,profile_original,profile_save,grade,reg_date
         FROM tbl_member
-        WHERE nickname=#{nickname} AND password=#{password};
+        WHERE email=#{email} AND password=#{password};
     </select>
 </mapper>

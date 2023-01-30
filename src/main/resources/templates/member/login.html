@@ -23,7 +23,6 @@
     <link rel="stylesheet" th:href="@{/css/tiny-slider.css}" />
     <link rel="stylesheet" th:href="@{/css/glightbox.min.css}" />
     <link rel="stylesheet" th:href="@{/css/main.css}" />
-
 </head>
 
 <body>
@@ -56,46 +55,48 @@
             <div class="row">
                 <div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-12">
                     <div class="form-head">
-                        <h4 class="title">Login</h4>
-                        <form action="#!" method="post">
-                            <div class="form-group">
-                                <label>Username or email</label>
-                                <input name="email" type="email">
+                        <h4 class="title">로그인</h4>
+                        <form action="/member/login" method="post">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="ipt-email" name="email" min="5" maxlength="100" placeholder="이메일">
+                                <label for="ipt-email">이메일</label>
+                                <span id="emailNotice"></span>
                             </div>
-                            <div class="form-group">
-                                <label>Password</label>
-                                <input name="password" type="password">
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" id="ipt-password" name="password" min="6" maxlength="19"
+                                       placeholder="영문 대소문자 숫자 특수기호 포함 6-19자리">
+                                <label for="ipt-password">비밀번호</label>
+                                <span id="pwNotice"></span>
                             </div>
                             <div class="check-and-pass">
                                 <div class="row align-items-center">
-                                    <div class="col-lg-6 col-md-6 col-12">
+                                    <!--<div class="col-lg-6 col-md-6 col-12">
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input width-auto"
                                                 id="exampleCheck1">
-                                            <label class="form-check-label">Remember me</label>
+                                            <label class="form-check-label"></label>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-12">
-                                        <a href="javascript:void(0)" class="lost-pass">Lost your password?</a>
+                                    </div>-->
+                                    <div class="col-lg-12 col-md-12 col-12">
+                                        <a href="javascript:void(0)" class="lost-pass">비밀번호를 잊으셨나요?</a>
                                     </div>
                                 </div>
                             </div>
                             <div class="button">
-                                <button type="submit" class="btn">Login Now</button>
+                                <button type="submit" class="btn">로그인</button>
                             </div>
                             <div class="alt-option">
                                 <span>Or</span>
                             </div>
                             <div class="socila-login">
                                 <ul>
-                                    <li><a href="javascript:void(0)" class="facebook"><i class="lni lni-facebook-original"></i>Login With
-                                            Facebook</a></li>
-                                    <li><a href="javascript:void(0)" class="google"><i class="lni lni-google"></i>Login With Google
-                                            Plus</a>
+<!--                                    <li><a href="javascript:void(0)" class="facebook"><i class="lni lni-facebook-original"></i>Login With-->
+<!--                                            Facebook</a></li>-->
+                                    <li><a href="javascript:void(0)" class="google"><i class="lni lni-google"></i>구글계정 로그인</a>
                                     </li>
                                 </ul>
                             </div>
-                            <p class="outer-link">Don't have an account? <a href="registration.html">Register here</a>
+                            <p class="outer-link">회원가입이 안되어 있으신가요? <a href="/member/registration">회원가입</a>
                             </p>
                         </form>
                     </div>

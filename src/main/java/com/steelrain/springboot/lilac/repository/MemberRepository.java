@@ -22,7 +22,7 @@ public class MemberRepository implements IMemberRepository{
     }
 
     @Override
-    public MemberDTO loginMember(String email, String password) {
+    public MemberDTO findMemberByLoginInfo(String email, String password) {
         return m_memberMapper.findMember(email, password);
     }
 }

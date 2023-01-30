@@ -24,6 +24,6 @@ public class MemberService implements IMemberService {
 
     @Override
     public MemberDTO loginMember(String email, String password) {
-        return null;
+        return m_memberRepository.findMemberByLoginInfo(email, password);
     }
 }

@@ -58,12 +58,12 @@
                         <h6 class="title">회원가입</h6>
                         <form action="/member/registration" method="post">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="ipt-nickname" min="1" maxlength="20">
+                                <input type="text" class="form-control" id="ipt-nickname" min="1" maxlength="20" placeholder="닉네임">
                                 <label for="ipt-nickname">닉네임</label>
                                 <span id="nickNameNotice"></span>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="ipt-email" min="5" maxlength="100" onblur="checkDuplicatedEmail()">
+                                <input type="text" class="form-control" id="ipt-email" min="5" maxlength="100" placeholder="이메일" onblur="checkDuplicatedEmail()">
                                 <label for="ipt-email">이메일</label>
                                 <span id="emailNotice"></span>
                             </div>
@@ -79,7 +79,7 @@
                             </div>
                             <div class="socila-login" style="margin-top: 10px">
                                 <ul>
-                                    <li><a href="javascript:void(0)" class="google"><i class="lni lni-bitcoin"></i>카카오 로그인</a></li>
+<!--                                    <li><a href="javascript:void(0)" class="google"><i class="lni lni-bitcoin"></i>카카오 로그인</a></li>-->
                                     <li><a href="javascript:void(0)" class="google"><i class="lni lni-google"></i>구글 로그인</a>
                                     </li>
                                 </ul>

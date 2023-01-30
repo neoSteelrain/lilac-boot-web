@@ -6,5 +6,5 @@ public interface IMemberRepository {
     int findMemberByEmail(String email);
     int saveMember(MemberDTO memberDTO);
 
-    MemberDTO loginMember(String email, String password);
+    MemberDTO findMemberByLoginInfo(String email, String password);
 }

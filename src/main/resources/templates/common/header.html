@@ -131,16 +131,23 @@
             <div class="login-button">
               <ul>
                 <li>
-                  <a href="/member/login"><i class="lni lni-enter"></i> 로그인</a>
+                  <span th:text="${session.LOGIN_MEMBER == null ? '없음' : session.LOGIN_MEMBER.email}"></span>
                 </li>
-                <li>
-                  <a href="/member/registration"><i class="lni lni-user"></i> 회원가입</a>
-                </li>
+                <th:block th:if="${session.LOGIN_MEMBER == null}">
+                  <li>
+                    <a href="/member/login"><i class="lni lni-enter"></i> 로그인</a>
+                  </li>
+                  <li>
+                    <a href="/member/registration"><i class="lni lni-user"></i> 회원가입</a>
+                  </li>
+                </th:block>
+                <th:block th:unless="${session.LOGIN_MEMBER == null}">
+                  <li>
+                    <a href="/member/logout" ><i class="lni lni-exit"> 로그아웃</i></a>
+                  </li>
+                </th:block>
               </ul>
             </div>
-            <!-- <div class="button header-button">
-                <a href="post-item.html" class="btn">Post an Ad</a>
-            </div> -->
             <div class="dropdown">
               <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">회원메뉴</button>
               <ul class="dropdown-menu">

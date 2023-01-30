@@ -20,7 +20,7 @@ public class KeywordCategoryCacheService implements ICacheService {
 
     private List<SubjectCodeDTO> m_subjectCodeList = null;
     private List<LibraryRegionCodeDTO> m_libRegionCodeList = null;
-    private List<LicenseCodeDTO> m_licenseCodeList;
+    private List<LicenseCodeDTO> m_licenseCodeList = null;
     private Map<Short, Object> m_libDetailRegionCodeMap = null;
     private final SearchMapper m_searchMapper;
 
