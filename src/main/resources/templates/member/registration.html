@@ -56,22 +56,22 @@
                 <div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-12">
                     <div class="form-head">
                         <h6 class="title">회원가입</h6>
-                        <form action="/member/registration" method="post">
+                        <form action="/member/registration" th:object="${memberReg}" method="post">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="ipt-nickname" min="1" maxlength="20" placeholder="닉네임">
+                                <input type="text" class="form-control" id="ipt-nickname" th:field="*{nickname}" min="1" maxlength="20" placeholder="닉네임">
                                 <label for="ipt-nickname">닉네임</label>
-                                <span id="nickNameNotice"></span>
+                                <span id="nickNameNotice" class="ui-state-error-text" th:errors="*{nickname}"></span>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="ipt-email" min="5" maxlength="100" placeholder="이메일" onblur="checkDuplicatedEmail()">
+                                <input type="text" class="form-control" id="ipt-email" th:field="*{email}" min="5" maxlength="100" placeholder="이메일" onblur="checkDuplicatedEmail()">
                                 <label for="ipt-email">이메일</label>
-                                <span id="emailNotice"></span>
+                                <span id="emailNotice" th:errors="*{email}"></span>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="password" class="form-control" id="ipt-password" min="6" maxlength="19"
-                                       placeholder="영문 대소문자 숫자 특수기호 포함 6-19자리">
+                                <input type="password" class="form-control" id="ipt-password" th:field="*{password}" min="6" maxlength="19"
+                                       placeholder="password" onblur="checkPassword()">
                                 <label for="ipt-password">비밀번호</label>
-                                <span id="pwNotice"></span>
+                                <span id="pwNotice" th:errors="*{password}"></span>
                             </div>
                             <hr class="my-2">
                             <div class="button">
@@ -97,11 +97,6 @@
     <!-- Start Footer Area -->
     <th:block th:replace="~{common/footer::footer}"></th:block>
     <!--/ End Footer Area -->
-
-    <!-- ========================= scroll-top ========================= -->
-    <a href="#" class="scroll-top btn-hover">
-        <i class="lni lni-chevron-up"></i>
-    </a>
 
     <!-- ========================= JS here ========================= -->
     <script th:src="@{/js/jquery.3.6.1.min.js}"></script>
@@ -150,6 +145,21 @@
                     alert('이메일 검증에서 오류가 발생하였습니다');
                 }
             });
+        }
+        const checkPassword = () => {
+            const pwTag = $('#ipt-password');
+            const pw = $('#ipt-password').val();
+            const pwNotice = $('#pwNotice');
+            const pwRegex = /^[A-Za-z\d\[\]\{\}\/\(\)\.\?\<\>!@#$%^&*=+-]{6,20}$/;
+            if(pw != "" && !pwRegex.test(pw)) {
+                pwNotice.css('color', 'red');
+                pwNotice.html('비밀번호는 영문대,소문자,숫자,특수기호 조합으로 6-20자 입니다.');
+                pwTag.val('');
+                pwTag.focus();
+            }else{
+                pwNotice.css('color', 'red');
+                pwNotice.html('');
+            }
         }
     </script>
 </body>

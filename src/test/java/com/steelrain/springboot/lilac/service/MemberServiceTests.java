@@ -5,10 +5,12 @@ import com.steelrain.springboot.lilac.datamodel.MemberDTO;
 import com.steelrain.springboot.lilac.repository.IMemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -19,36 +21,24 @@ import javax.swing.*;
 import static org.assertj.core.api.Assertions.*;
 
 @Slf4j
-@ExtendWith(SpringExtension.class)
+@SpringBootTest
 public class MemberServiceTests {
-    // TODO 테스트 코드 연습
+
+    @Autowired
     private IMemberService m_memberService;
 
-    @MockBean
-    private IMemberRepository m_memberRepository;
-
-    @BeforeEach
-    void setup(){
-        m_memberService = new MemberService(m_memberRepository);
-    }
 
     @Test
+    @DisplayName("회원가입 테스트")
     public void testRegisterMember(){
 
-        MemberDTO memberDTO1 = new MemberDTO();
-        memberDTO1.setNickname("user2");
-        memberDTO1.setEmail("user1@user.com");
-        memberDTO1.setPassword("1234");
-        memberDTO1.setId(2L);
+        MemberDTO memberDTO1 = MemberDTO.builder()
+                        .nickname("user2")
+                        .email("user2@user.com")
+                        .password("123456yt")
+                        .build();
 
-        Mockito.when(m_memberRepository.saveMember(memberDTO1)).thenReturn(0);
-
-        MemberDTO memberDTO2 = new MemberDTO();
-        memberDTO2.setNickname("user2");
-        memberDTO2.setEmail("user2@user.com");
-        memberDTO2.setPassword("1234");
-
-        boolean res = m_memberService.registerMember(memberDTO2);
+        boolean res = m_memberService.registerMember(memberDTO1);
         assertThat(res);
         log.info("res : " + res);
     }
