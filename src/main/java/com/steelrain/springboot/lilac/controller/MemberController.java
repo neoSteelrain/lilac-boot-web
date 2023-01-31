@@ -1,10 +1,14 @@
 package com.steelrain.springboot.lilac.controller;
 
 import com.steelrain.springboot.lilac.config.SessionKey;
+import com.steelrain.springboot.lilac.datamodel.LibraryRegionCodeDTO;
+import com.steelrain.springboot.lilac.datamodel.LicenseCodeDTO;
+import com.steelrain.springboot.lilac.datamodel.SubjectCodeDTO;
 import com.steelrain.springboot.lilac.datamodel.form.MemberLoginDTO;
 import com.steelrain.springboot.lilac.datamodel.MemberDTO;
 import com.steelrain.springboot.lilac.datamodel.form.MemberRegDTO;
 import com.steelrain.springboot.lilac.service.IMemberService;
+import com.steelrain.springboot.lilac.service.KeywordCategoryCacheService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -25,7 +30,23 @@ import javax.servlet.http.HttpSession;
 public class MemberController {
 
     private final IMemberService m_memberService;
+    private final KeywordCategoryCacheService m_keywordCategoryCacheService;
 
+
+    @ModelAttribute("subjectCodes")
+    public List<SubjectCodeDTO> getSubjectCodes(){
+        return m_keywordCategoryCacheService.getSubjectCodeList();
+    }
+
+    @ModelAttribute("libRegionCodes")
+    public List<LibraryRegionCodeDTO> getLibRegionCodes(){
+        return m_keywordCategoryCacheService.getLibraryRegionCodeList();
+    }
+
+    @ModelAttribute("licenseCodes")
+    public List<LicenseCodeDTO> getLicenseCodes(){
+        return m_keywordCategoryCacheService.getLicenseCodeList();
+    }
 
     @GetMapping("/login")
     public String loginForm(Model model){
@@ -37,6 +58,11 @@ public class MemberController {
     public String registerForm(Model model){
         model.addAttribute("memberReg", new MemberRegDTO());
         return "member/registration";
+    }
+
+    @GetMapping("/profile")
+    public String profileForm(){
+        return "member/profile";
     }
 
     @GetMapping("/duplicated-email/{email}")

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org" >
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>첫화면</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.svg}" />
+  <!-- Place favicon.ico in the root directory -->
+
+  <!-- Web Font -->
+  <link
+          href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+
+  <!-- ========================= CSS here ========================= -->
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+  <link rel="stylesheet" th:href="@{/css/LineIcons.2.0.css}" />
+  <link rel="stylesheet" th:href="@{/css/animate.css}" />
+  <link rel="stylesheet" th:href="@{/css/tiny-slider.css}" />
+  <link rel="stylesheet" th:href="@{/css/glightbox.min.css}" />
+  <link rel="stylesheet" th:href="@{/css/main.css}" />
+</head>
+<body>
+<p class="browserupgrade">
+  You are using an <strong>outdated</strong> browser. Please
+  <a href="https://browsehappy.com/">upgrade your browser</a> to improve
+  your experience and security.
+</p>
+<![endif]-->
+
+<!-- Preloader -->
+<div class="preloader">
+  <div class="preloader-inner">
+    <div class="preloader-icon">
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</div>
+
+<section class="dashboard section" style="margin-top: 30px">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3 col-md-4 col-12">
+        <!-- Start Dashboard Sidebar -->
+        <div class="dashboard-sidebar">
+          <div class="user-image">
+            <img src="https://via.placeholder.com/300x300" alt="#">
+            <h3>회원 닉네임</h3>
+          </div>
+          <div class="dashboard-menu">
+            <ul>
+              <li><a class="active" href="/lecture/lecture-note"><i class="lni lni-dashboard"></i> 강의노트</a></li>
+              <li><a href="/member/profile"><i class="lni lni-pencil-alt"></i> 회원정보</a></li>
+              <li><a href="my-items.html"><i class="lni lni-bolt-alt"></i> 메뉴3</a></li>
+            </ul>
+          </div>
+        </div>
+        <!-- Start Dashboard Sidebar -->
+      </div>
+      <div class="col-lg-9 col-md-8 col-12">
+        <div class="main-content">
+          <!-- Start Details Lists -->
+          <div class="details-lists">
+            <div class="row">
+              <div class="col-lg-4 col-md-4 col-12">
+                <!-- Start Single List -->
+                <div class="single-list">
+                  <div class="list-icon">
+                    <i class="lni lni-checkmark-circle"></i>
+                  </div>
+                  <h3>
+                    340
+                    <span>강의노트 </span>
+                  </h3>
+                </div>
+                <!-- End Single List -->
+              </div>
+              <div class="col-lg-4 col-md-4 col-12">
+                <!-- Start Single List -->
+                <div class="single-list two">
+                  <div class="list-icon">
+                    <i class="lni lni-alarm"></i>
+                  </div>
+                  <h3>
+                    23
+                    <span>진행 중 </span>
+                  </h3>
+                </div>
+                <!-- End Single List -->
+              </div>
+              <div class="col-lg-4 col-md-4 col-12">
+                <!-- Start Single List -->
+                <div class="single-list three">
+                  <div class="list-icon">
+                    <i class="lni lni-alarm"></i>
+                  </div>
+                  <h3>
+                    45
+                    <span>완료된 노트 </span>
+                  </h3>
+                </div>
+                <!-- End Single List -->
+              </div>
+            </div>
+          </div>
+          <!-- End Details Lists -->
+          <div class="row">
+            <div class="col-lg-12 col-md-12 col-12">
+              <!-- Start Activity Log -->
+              <div class="activity-log dashboard-block">
+                <ul>
+                  <li>
+                    <div class="log-icon">
+                      <i class="lni lni-circle-plus"></i>
+                    </div>
+                    <!-- <a href="javascript:void(0)" class="title">강의노트 추가</a> -->
+                    <button class="btn btn-outline-primary">강의노트 추가</button>
+                    <!-- <span class="time">12 Minutes Ago</span> -->
+                  </li>
+                  <li>
+                    <div class="log-icon">
+                      <i class="lni lni-alarm"></i>
+                    </div>
+                    <a href="javascript:void(0)" class="title">Your Profile Updated!</a>
+                    <span class="time">12 Minutes Ago</span>
+                    <span class="remove"><a href="javascript:void(0)"><i class="lni lni-close"></i></a></span>
+                  </li>
+                  <li>
+                    <div class="log-icon">
+                      <i class="lni lni-alarm"></i>
+                    </div>
+                    <a href="javascript:void(0)" class="title">You change your password</a>
+                    <span class="time">59 Minutes Ago</span>
+                    <span class="remove"><a href="javascript:void(0)"><i class="lni lni-close"></i></a></span>
+                  </li>
+                </ul>
+              </div>
+              <!-- End Activity Log -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Start Footer Area -->
+<th:block th:replace="~{common/footer::footer}"></th:block>
+<!--/ End Footer Area -->
+
+<!-- ========================= scroll-top ========================= -->
+<a href="#" class="scroll-top btn-hover">
+  <i class="lni lni-chevron-up"></i>
+</a>
+
+<div th:replace="~{common/header::header}"></div>
+
+<script th:src="@{/js/jquery.3.6.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/wow.min.js}"></script>
+<script th:src="@{/js/tiny-slider.js}"></script>
+<script th:src="@{/js/glightbox.min.js}"></script>
+<script th:src="@{/js/count-up.min.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:inline="javascript">
+
+</script>
+
+</body>
+</html>

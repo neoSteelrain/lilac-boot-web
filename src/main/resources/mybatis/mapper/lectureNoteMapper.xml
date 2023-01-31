@@ -13,8 +13,15 @@
     <delete id="deleteLectureNote" parameterType="java.lang.Long">
         DELETE FROM tbl_lecture WHERE id=#{noteId}
     </delete>
-
+<!--
+private Integer licenseId;
+private Integer subjectId;
+private String title;
+private String description;
+private Timestamp regDate;
+private Integer progress;
+-->
     <update id="updateLectureNote" parameterType="LectureNoteDTO">
-
+        UPDATE tbl_lecture SET license_id=#{licenseId} , subject_id=#{subjectId} , title=#{title} , description=#{description} , progress=#{progress} WHERE id = #{id};
     </update>
 </mapper>

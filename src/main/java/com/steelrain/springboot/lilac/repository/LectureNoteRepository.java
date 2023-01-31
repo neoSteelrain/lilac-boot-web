@@ -5,6 +5,8 @@ import com.steelrain.springboot.lilac.mapper.LectureNoteMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @RequiredArgsConstructor
 public class LectureNoteRepository {
@@ -25,5 +27,9 @@ public class LectureNoteRepository {
 
     public boolean updateLectureNote(LectureNoteDTO lectureNoteDTO) {
         return m_lectureNoteMapper.updateLectureNote(lectureNoteDTO) > 0;
+    }
+
+    public List<LectureNoteDTO> findNoteListByMember(Long memberId) {
+        return m_lectureNoteMapper.findNoteListByMember(memberId);
     }
 }

@@ -10,6 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -46,7 +48,7 @@ public class LectureNoteServiceTests {
     @Rollback
     @DisplayName("강의노트 추가 테스트")
     public void testAddLectureNote(){
-        Long noteId = lectureNoteService.addLectureNote(4L, "1번 강의노트", "첫번째 강의노트 입니다. 열심히 하겠습니다.");
+        Long noteId = lectureNoteService.addLectureNote(1L, "1번 강의노트", "첫번째 강의노트 입니다. 열심히 하겠습니다.");
         assertThat(noteId != null).isTrue();
         log.info("noteId = {}", noteId);
     }
@@ -56,8 +58,34 @@ public class LectureNoteServiceTests {
     @Rollback
     @DisplayName("강의노트 삭제 테스트")
     public void testRemoveLectureNote(){
-        Long noteId = lectureNoteService.addLectureNote(4L, "1번 강의노트", "첫번째 강의노트 입니다. 열심히 하겠습니다.");
-
+        Long noteId = lectureNoteService.addLectureNote(1L, "1번 강의노트", "첫번째 강의노트 입니다. 열심히 하겠습니다.");
+        assertThat(noteId != null);
+        log.info("noteId = {}", noteId);
         lectureNoteService.removeLectureNote(noteId);
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    @DisplayName("강의노트 수정 테스트")
+    public void testModifyLectureNote(){
+        Long noteId = lectureNoteService.addLectureNote(1L, "1번 강의노트", "1번 강의노트 설명");
+        List<LectureNoteDTO> note1 = lectureNoteService.getLectureListByMember(1L);
+        note1.stream().forEach(note -> {
+            log.info("수정 전 강의노트 : {}", note);
+        });
+        log.info("=================== 노트 생성 끝 ================");
+        LectureNoteDTO param = LectureNoteDTO.builder()
+                .id(noteId)
+                .memberId(note1.get(0).getMemberId())
+                .title("1번 강의노트 수정 후")
+                .description("1번 강의노트 설명 수정 후 ㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹ")
+                .build();
+        lectureNoteService.modifyLectureNote(param);
+        List<LectureNoteDTO> note2 = lectureNoteService.getLectureListByMember(1L);
+        note2.stream().forEach(note -> {
+            log.info("수정 후 강의노트 : {}", note);
+        });
+        log.info("=================== 노트 수정 끝 ================");
     }
 }

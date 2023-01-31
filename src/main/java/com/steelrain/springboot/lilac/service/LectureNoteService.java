@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.rmi.server.ExportException;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -46,13 +47,21 @@ public class LectureNoteService {
         }
     }
     
-    public void modifyLectureNote(LectureNoteDTO lectureNoteDTO){
-        try{
+    public void modifyLectureNote(LectureNoteDTO lectureNoteDTO) {
+        try {
             updateLectureNote(lectureNoteDTO);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.error("강의노트 수정 예외 - modifyLectureNote() 예외 발생 - {}", ex);
-            throw new LectureNoteException( String.format("강의노트 삭제 실패 - 강의노트 정보 : %s", lectureNoteDTO.toString()), ex, lectureNoteDTO);
+            throw new LectureNoteException(String.format("강의노트 삭제 실패 - 강의노트 정보 : %s", lectureNoteDTO.toString()), ex, lectureNoteDTO);
         }
+    }
+
+    public List<LectureNoteDTO> getLectureListByMember(Long memberId){
+        return m_lectureNoteRepository.findNoteListByMember(memberId);
+    }
+
+    private List<LectureNoteDTO> findNoteListByMember(Long memberId){
+        return m_lectureNoteRepository.findNoteListByMember(memberId);
     }
 
     private void updateLectureNote(LectureNoteDTO lectureNoteDTO){
