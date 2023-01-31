@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<html lang="kr" xmlns:th="http://www.thymeleaf.org" >
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="x-ua-compatible" content="ie=edge" />
-  <title>Login - ClassiGrids Classified Ads and Listing Website Template</title>
+  <title>회원정보</title>
   <meta name="description" content="" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.svg}" />
@@ -24,7 +24,6 @@
   <link rel="stylesheet" th:href="@{/css/main.css}" />
 </head>
 <body>
-<!--[if lte IE 9]>
 <p class="browserupgrade">
   You are using an <strong>outdated</strong> browser. Please
   <a href="https://browsehappy.com/">upgrade your browser</a> to improve
@@ -41,11 +40,10 @@
     </div>
   </div>
 </div>
-<!-- /End Preloader -->
 
 <div th:replace="~{common/header::header}"></div>
 
-<section class="dashboard section" style="margin-top: 30px">
+<section class="dashboard section">
   <div class="container">
     <div class="row">
       <div class="col-lg-3 col-md-4 col-12">
@@ -58,7 +56,8 @@
           <div class="dashboard-menu">
             <ul>
               <li><a href="/lecture/lecture-note"><i class="lni lni-dashboard"></i> 강의노트</a></li>
-              <li><a class="active" href="/member/profile"><i class="lni lni-pencil-alt"></i> 회원정보</a></li>
+              <li><a class="active" href="/member/profile"><i class="lni lni-pencil-alt"></i> 회원정보</a>
+              </li>
               <li><a href="my-items.html"><i class="lni lni-bolt-alt"></i> 메뉴3</a></li>
             </ul>
           </div>
@@ -93,16 +92,21 @@
                         <div class="col-6">
                           <div class="search-input">
                             <!-- <label for="location-main"><i class="lni lni-map-marker theme-color"></i></label> -->
-                            <select name="location-main" id="location-main" th:field="*{libRegionCodes}" th:onchange="changeLibRegionCode()">
+                            <select name="location-main" id="location-main"
+                                    th:field="*{libRegionCodes}"
+                                    th:onchange="changeLibRegionCode()">
                               <option value="">--- 지역정보 ---</option>
-                              <option th:each="libRegionCode : ${libRegionCodes}" th:value="${libRegionCode.code}" th:text="${libRegionCode.name}"></option>
+                              <option th:each="libRegionCode : ${libRegionCodes}"
+                                      th:value="${libRegionCode.code}"
+                                      th:text="${libRegionCode.name}"></option>
                             </select>
                           </div>
                         </div>
                         <div class="col-6">
                           <div class="search-input">
                             <!-- <label for="location-sub"><i class="lni lni-map-marker theme-color"></i></label> -->
-                            <select name="location-sub" id="location-sub" onchange="changeDetailRegionCode()">
+                            <select name="location-sub" id="location-sub"
+                                    onchange="changeDetailRegionCode()">
                               <option value="">--- 세부지역 ---</option>
                             </select>
                           </div>
@@ -134,40 +138,40 @@
           <!-- End Profile Settings Area -->
           <!-- Start Password Change Area -->
           <!-- <div class="dashboard-block password-change-block">
-              <h3 class="block-title">비밀번호 변경</h3>
-              <div class="inner-block">
-                  <form class="default-form-style" method="post" action="#">
-                      <div class="row">
-                          <div class="col-12">
-                              <div class="form-group">
-                                  <label>Current Password*</label>
-                                  <input name="current-password" type="password"
-                                      placeholder="Enter old password">
-                              </div>
-                          </div>
-                          <div class="col-12">
-                              <div class="form-group">
-                                  <label>New Password*</label>
-                                  <input name="new-password" type="password"
-                                      placeholder="Enter new password">
-                              </div>
-                          </div>
-                          <div class="col-12">
-                              <div class="form-group">
-                                  <label>Retype Password*</label>
-                                  <input name="retype-password" type="password"
-                                      placeholder="Retype password">
-                              </div>
-                          </div>
-                          <div class="col-12">
-                              <div class="form-group button mb-0">
-                                  <button type="submit" class="btn ">Update Password</button>
-                              </div>
-                          </div>
+      <h3 class="block-title">비밀번호 변경</h3>
+      <div class="inner-block">
+          <form class="default-form-style" method="post" action="#">
+              <div class="row">
+                  <div class="col-12">
+                      <div class="form-group">
+                          <label>Current Password*</label>
+                          <input name="current-password" type="password"
+                              placeholder="Enter old password">
                       </div>
-                  </form>
+                  </div>
+                  <div class="col-12">
+                      <div class="form-group">
+                          <label>New Password*</label>
+                          <input name="new-password" type="password"
+                              placeholder="Enter new password">
+                      </div>
+                  </div>
+                  <div class="col-12">
+                      <div class="form-group">
+                          <label>Retype Password*</label>
+                          <input name="retype-password" type="password"
+                              placeholder="Retype password">
+                      </div>
+                  </div>
+                  <div class="col-12">
+                      <div class="form-group button mb-0">
+                          <button type="submit" class="btn ">Update Password</button>
+                      </div>
+                  </div>
               </div>
-          </div> -->
+          </form>
+      </div>
+  </div> -->
           <!-- End Password Change Area -->
         </div>
       </div>
@@ -175,15 +179,27 @@
   </div>
 </section>
 
+<!-- Start Footer Area -->
 <th:block th:replace="~{common/footer::footer}"></th:block>
+<!--/ End Footer Area -->
+
+<!-- ========================= scroll-top ========================= -->
+<a href="#" class="scroll-top btn-hover">
+  <i class="lni lni-chevron-up"></i>
+</a>
+
+<div th:replace="~{common/header::header}"></div>
 
 <script th:src="@{/js/jquery.3.6.1.min.js}"></script>
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/js/wow.min.js}"></script>
 <script th:src="@{/js/tiny-slider.js}"></script>
 <script th:src="@{/js/glightbox.min.js}"></script>
+<script th:src="@{/js/count-up.min.js}"></script>
 <script th:src="@{/js/main.js}"></script>
-<script th:inline="javascript"></script>
+<script th:inline="javascript">
+
+</script>
 
 </body>
 </html>
