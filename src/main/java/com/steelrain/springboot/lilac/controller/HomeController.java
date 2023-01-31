@@ -1,16 +1,11 @@
 package com.steelrain.springboot.lilac.controller;
 
-import com.steelrain.springboot.lilac.datamodel.LibraryRegionCodeDTO;
-import com.steelrain.springboot.lilac.datamodel.LicenseCodeDTO;
-import com.steelrain.springboot.lilac.datamodel.SubjectCodeDTO;
-import com.steelrain.springboot.lilac.service.ISearchService;
+
 import com.steelrain.springboot.lilac.service.KeywordCategoryCacheService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -20,14 +15,17 @@ public class HomeController {
 
 
     @GetMapping("/")
-    public String index(){
+    public String index(Model model){
+        model.addAttribute("subjectCodes",m_keywordCategoryCacheService.getSubjectCodeList());
+        model.addAttribute("libRegionCodes",m_keywordCategoryCacheService.getLibraryRegionCodeList());
+        model.addAttribute("licenseCodes",m_keywordCategoryCacheService.getLicenseCodeList());
+
         return "index";
 
         // licenseCodes 를 모델에 담아서 보내줘야 할거 같다.
     }
 
-
-    @ModelAttribute("subjectCodes")
+  /*  @ModelAttribute("subjectCodes")
     public List<SubjectCodeDTO> getSubjectCodes(){
         return m_keywordCategoryCacheService.getSubjectCodeList();
     }
@@ -40,5 +38,5 @@ public class HomeController {
     @ModelAttribute("licenseCodes")
     public List<LicenseCodeDTO> getLicenseCodes(){
         return m_keywordCategoryCacheService.getLicenseCodeList();
-    }
+    }*/
 }

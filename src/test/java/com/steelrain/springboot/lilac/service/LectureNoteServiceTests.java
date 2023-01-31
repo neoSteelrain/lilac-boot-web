@@ -54,6 +54,14 @@ public class LectureNoteServiceTests {
     }
 
     @Test
+    @DisplayName("테스트용 데이타 입력")
+    public void addLectureNotes(){
+        for(int i=1 ; i <= 10 ; i++){
+            lectureNoteService.addLectureNote(1L, String.format("%d 번 강의노트", i), String.format("%d 번째 강의노트 설명입니다.열심히 하겠습니다.",i));
+        }
+    }
+
+    @Test
     @Transactional
     @Rollback
     @DisplayName("강의노트 삭제 테스트")

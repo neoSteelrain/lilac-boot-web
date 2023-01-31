@@ -74,7 +74,7 @@
                   <div class="list-icon">
                     <i class="lni lni-checkmark-circle"></i>
                   </div>
-                  <h3>0<span>강의노트 </span>
+                  <h3 th:utext="${lectureNoteList.size()} + '<span>강의노트 </span>'">
                   </h3>
                 </div>
                 <!-- End Single List -->
@@ -114,20 +114,12 @@
                     </div>
                     <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">강의노트 추가</button>
                   </li>
-                  <li>
+                  <li th:each="lectureNote : ${lectureNoteList}">
                     <div class="log-icon">
                       <i class="lni lni-alarm"></i>
                     </div>
-                    <a href="javascript:void(0)" class="title">Your Profile Updated!</a>
-                    <span class="time">12 Minutes Ago</span>
-                    <span class="remove"><a href="javascript:void(0)"><i class="lni lni-close"></i></a></span>
-                  </li>
-                  <li>
-                    <div class="log-icon">
-                      <i class="lni lni-alarm"></i>
-                    </div>
-                    <a href="javascript:void(0)" class="title">You change your password</a>
-                    <span class="time">59 Minutes Ago</span>
+                    <a href="javascript:void(0)" class="title" th:text="${lectureNote.getTitle()}"></a>
+                    <span class="time" th:text="${lectureNote.getDescription()}"></span>
                     <span class="remove"><a href="javascript:void(0)"><i class="lni lni-close"></i></a></span>
                   </li>
                 </ul>
