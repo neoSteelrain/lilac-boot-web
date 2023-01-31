@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class LectureNoteServiceTests {
 
     @Autowired
-    private LectureNoteService lectureNoteService;
+    private ILectureNoteService lectureNoteService;
 
     @Test
     @Transactional

@@ -57,7 +57,7 @@
             <ul>
               <li><a class="active" href="/lecture/lecture-note"><i class="lni lni-dashboard"></i> 강의노트</a></li>
               <li><a href="/member/profile"><i class="lni lni-pencil-alt"></i> 회원정보</a></li>
-              <li><a href="my-items.html"><i class="lni lni-bolt-alt"></i> 메뉴3</a></li>
+              <li><a href="#"><i class="lni lni-bolt-alt"></i> 메뉴3</a></li>
             </ul>
           </div>
         </div>
@@ -118,9 +118,9 @@
                     <div class="log-icon">
                       <i class="lni lni-alarm"></i>
                     </div>
-                    <a href="javascript:void(0)" class="title" th:text="${lectureNote.getTitle()}"></a>
-                    <span class="time" th:text="${lectureNote.getDescription()}"></span>
-                    <span class="remove"><a href="javascript:void(0)"><i class="lni lni-close"></i></a></span>
+                      <a href="javascript:void(0)" class="title" th:text="${lectureNote.title}"></a>
+                      <span class="time" th:text="${lectureNote.description}"></span>
+                      <span class="remove"><a th:href="|javascript:removeLectureNote('${lectureNote.id}')|"><i class="lni lni-close"></i></a></span>
                   </li>
                 </ul>
               </div>
@@ -142,14 +142,16 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form>
+        <form action="/lecture/add-note" method="post" th:object="${noteAdd}" name="noteAddForm">
           <div class="mb-3">
             <label for="ipt-lec" class="col-form-label">강의노트 제목:</label>
-            <input type="text" class="form-control" id="ipt-lec">
+            <input type="text" class="form-control" id="ipt-lec" th:field="*{title}">
+            <span id="tileNotice" th:errors="*{title}"></span>
           </div>
           <div class="mb-3">
             <label for="txa-lec" class="col-form-label">강의노트 설명:</label>
-            <textarea class="form-control" id="txa-lec" row="5"></textarea>
+            <textarea class="form-control" id="txa-lec" th:field="*{description}" row="5"></textarea>
+            <span id="descNotice" th:errors="*{description}"></span>
           </div>
         </form>
       </div>
@@ -181,7 +183,22 @@
 <script th:src="@{/js/count-up.min.js}"></script>
 <script th:src="@{/js/main.js}"></script>
 <script th:inline="javascript">
+  const addLectureNote = () => {
+    document.noteAddForm.submit();
+  }
 
+  const removeLectureNote = (noteId) => {
+    let form = document.createElement('form');
+    let tmp = document.createElement('input');
+    tmp.setAttribute('type', 'hidden');
+    tmp.setAttribute('name', 'noteId');
+    tmp.setAttribute('value', noteId);
+    form.appendChild(tmp);
+    form.setAttribute('method', 'post');
+    form.setAttribute('action', '/lecture/remove-note');
+    document.body.appendChild(form);
+    form.submit();
+  }
 </script>
 
 </body>

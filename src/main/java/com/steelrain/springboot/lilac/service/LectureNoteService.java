@@ -13,11 +13,12 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class LectureNoteService {
+public class LectureNoteService implements ILectureNoteService{
 
     private final LectureNoteRepository m_lectureNoteRepository;
 
 
+    @Override
     public void createDefaultLectureNote(Long memberId, String nickname){
         try{
             createLectureNote(memberId, String.format("%s 님의 기본강의노트", nickname));
@@ -27,6 +28,7 @@ public class LectureNoteService {
         }
     }
 
+    @Override
     public Long addLectureNote(Long memberId, String title, String description){
         Long noteId = null;
         try{
@@ -38,6 +40,7 @@ public class LectureNoteService {
         return noteId;
     }
 
+    @Override
     public void removeLectureNote(Long noteId){
         try{
             deleteLectureNote(noteId);
@@ -46,7 +49,8 @@ public class LectureNoteService {
             throw new LectureNoteException( String.format("강의노트 삭제 실패 - 강의노트 ID : %s", noteId), ex, noteId);
         }
     }
-    
+
+    @Override
     public void modifyLectureNote(LectureNoteDTO lectureNoteDTO) {
         try {
             updateLectureNote(lectureNoteDTO);
@@ -56,6 +60,7 @@ public class LectureNoteService {
         }
     }
 
+    @Override
     public List<LectureNoteDTO> getLectureListByMember(Long memberId){
         return m_lectureNoteRepository.findNoteListByMember(memberId);
     }
