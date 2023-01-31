@@ -7,5 +7,6 @@
     </settings>
     <typeAliases>
         <typeAlias type="com.steelrain.springboot.lilac.datamodel.MemberDTO" alias="MemberDTO"></typeAlias>
+        <typeAlias type="com.steelrain.springboot.lilac.datamodel.LectureNoteDTO" alias="LectureNoteDTO"></typeAlias>
     </typeAliases>
 </configuration>

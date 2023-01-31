@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.steelrain.springboot.lilac.mapper.LectureNoteMapper">
+    <insert id="saveDefaultLectureNote" useGeneratedKeys="true" keyProperty="id" parameterType="LectureNoteDTO">
+        INSERT INTO tbl_lecture(member_id,title) VALUE(#{memberId},#{title})
+    </insert>
+
+    <insert id="saveLectureNote" useGeneratedKeys="true" keyProperty="id" parameterType="LectureNoteDTO">
+        INSERT INTO tbl_lecture(member_id,title,description) VALUE(#{memberId},#{title},#{description})
+    </insert>
+
+    <delete id="deleteLectureNote" parameterType="java.lang.Long">
+        DELETE FROM tbl_lecture WHERE id=#{noteId}
+    </delete>
+
+    <update id="updateLectureNote" parameterType="LectureNoteDTO">
+
+    </update>
+</mapper>
