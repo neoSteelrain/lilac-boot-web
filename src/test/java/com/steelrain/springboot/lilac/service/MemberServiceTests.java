@@ -28,6 +28,7 @@ public class MemberServiceTests {
     private IMemberService m_memberService;
 
 
+
     @Test
     @DisplayName("회원가입 테스트")
     public void testRegisterMember(){
@@ -51,5 +52,17 @@ public class MemberServiceTests {
         log.info(String.format("memberDTO-email : " + memberDTO.getEmail()));
         log.info(String.format("memberDTO-nickname : " + memberDTO.getNickname()));
         log.info(String.format("memberDTO-password : " + memberDTO.getPassword()));
+    }
+
+    @Test
+    public void createMembers() {
+        for(int i=1 ; i <= 10 ; i++){
+            MemberDTO dto = MemberDTO.builder()
+                    .nickname(String.format("user%s", i))
+                    .email(String.format("user%s@user.com", i))
+                    .password("123456yt")
+                    .build();
+            m_memberService.registerMember(dto);
+        }
     }
 }
