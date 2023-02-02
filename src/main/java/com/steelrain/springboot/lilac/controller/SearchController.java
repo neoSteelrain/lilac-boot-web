@@ -59,5 +59,4 @@ public class SearchController {
         
         return "/search/book-detail";
     }
-
 }

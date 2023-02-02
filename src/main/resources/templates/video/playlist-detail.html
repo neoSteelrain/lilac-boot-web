@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>Login - ClassiGrids Classified Ads and Listing Website Template</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.svg}" />
+  <!-- Place favicon.ico in the root directory -->
+
+  <!-- Web Font -->
+  <link
+          href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+
+  <!-- ========================= CSS here ========================= -->
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+  <link rel="stylesheet" th:href="@{/css/LineIcons.2.0.css}" />
+  <link rel="stylesheet" th:href="@{/css/animate.css}" />
+  <link rel="stylesheet" th:href="@{/css/tiny-slider.css}" />
+  <link rel="stylesheet" th:href="@{/css/glightbox.min.css}" />
+  <link rel="stylesheet" th:href="@{/css/main.css}" />
+</head>
+<body>
+<!--[if lte IE 9]>
+<p class="browserupgrade">
+  You are using an <strong>outdated</strong> browser. Please
+  <a href="https://browsehappy.com/">upgrade your browser</a> to improve
+  your experience and security.
+</p>
+<![endif]-->
+
+<!-- Preloader -->
+<div class="preloader">
+  <div class="preloader-inner">
+    <div class="preloader-icon">
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</div>
+<!-- /End Preloader -->
+
+<div th:replace="~{common/header::header}"></div>
+
+<section class="section blog-single" style="margin-top:30px">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-12 col-12">
+        <div class="single-inner">
+          <div class="post-thumbnils">
+            <img src="https://via.placeholder.com/850x460" alt="#">
+          </div>
+          <div class="post-details">
+            <div class="detail-inner">
+              <h2 class="post-title">
+                <a href="blog-single.html">영상 제목</a>
+              </h2>
+              <!-- post meta -->
+              <ul class="custom-flex post-meta">
+                <li>
+                  <a href="javascript:void(0)">
+                    <i class="lni lni-calendar"></i>
+                    20th March 2023
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)">
+                    <i class="lni lni-comments"></i>
+                    35 Comments
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)">
+                    <i class="lni lni-eye"></i>
+                    55 View
+                  </a>
+                </li>
+              </ul>
+              <p>영상 설명란1</p>
+              <!-- post image -->
+
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+                irure
+                dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                pariatur.
+                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia. </p>
+              <!-- post quote -->
+
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+                irure
+                dolor in reprehenderit. </p>
+              <!--post tags -->
+            </div>
+            <!-- Comments -->
+            <div class="post-comments">
+              <h3 class="comment-title"><span>댓글 부분</span></h3>
+              <ul class="comments-list">
+                <li>
+                  <div class="comment-img">
+                    <img src="https://via.placeholder.com/150x150" class="rounded-circle" alt="img">
+                  </div>
+                  <div class="comment-desc">
+                    <div class="desc-top">
+                      <h6>Arista Williamson</h6>
+                      <span class="date">19th May 2023</span>
+                      <a href="javascript:void(0)" class="reply-link"><i class="lni lni-reply"></i>Reply</a>
+                    </div>
+                    <p>
+                      Donec aliquam ex ut odio dictum, ut consequat leo interdum. Aenean nunc
+                      ipsum, blandit eu enim sed, facilisis convallis orci. Etiam commodo
+                      lectus
+                      quis vulputate tincidunt. Mauris tristique velit eu magna maximus
+                      condimentum.
+                    </p>
+                  </div>
+                </li>
+                <li class="children">
+                  <div class="comment-img">
+                    <img src="https://via.placeholder.com/150x150" class="rounded-circle" alt="img">
+                  </div>
+                  <div class="comment-desc">
+                    <div class="desc-top">
+                      <h6>Rosalina Kelian <span class="saved"><i
+                              class="lni lni-bookmark"></i></span></h6>
+                      <span class="date">15th May 2023</span>
+                      <a href="javascript:void(0)" class="reply-link"><i class="lni lni-reply"></i>Reply</a>
+                    </div>
+                    <p>
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                      tempor incididunt ut labore et dolore magna aliqua. Ut enim.
+                    </p>
+                  </div>
+                </li>
+                <li>
+                  <div class="comment-img">
+                    <img src="https://via.placeholder.com/150x150" class="rounded-circle" alt="img">
+                  </div>
+                  <div class="comment-desc">
+                    <div class="desc-top">
+                      <h6>Alex Jemmi</h6>
+                      <span class="date">12th May 2023</span>
+                      <a href="javascript:void(0)" class="reply-link"><i class="lni lni-reply"></i>Reply</a>
+                    </div>
+                    <p>
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                      veniam.
+                    </p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <aside class="col-lg-4 col-md-12 col-12">
+        <div class="sidebar blog-grid-page">
+          <p>
+            재생목록
+          </p>
+          <!-- <div class="form-head">
+              <div class="row align-items-center">
+                  <div class="col-lg-12 col-12 align-right">
+
+                  </div>
+              </div>
+          </div> -->
+          <div class="messages-body">
+            <div class="row">
+              <div class="col-lg-12 col-12">
+                <!-- Start User List -->
+                <div class="user-list">
+                  <ul>
+                    <!-- Start Single List -->
+                    <li>
+                      <a href="javascript:void(0)">
+                        <div class="image">
+                          <img src="https://via.placeholder.com/300x300" alt="#">
+                        </div>
+                        <span class="username">재생목록1</span>
+                        <span class="short-message">Hi, how are ...</span>
+                        <span class="unseen-message">02</span>
+                      </a>
+                    </li>
+                    <!-- End Single List -->
+                    <!-- Start Single List -->
+                    <li>
+                      <a href="javascript:void(0)">
+                        <div class="image">
+                          <img src="https://via.placeholder.com/300x300" alt="#">
+                        </div>
+                        <span class="username">재생목록2</span>
+                        <span class="short-message">I love your design...</span>
+                        <span class="time">NOW</span>
+                      </a>
+                    </li>
+                    <!-- End Single List -->
+                    <!-- Start Single List -->
+                    <li>
+                      <a href="javascript:void(0)">
+                        <div class="image">
+                          <img src="https://via.placeholder.com/300x300" alt="#">
+                        </div>
+                        <span class="username">재생목록3</span>
+                        <span class="short-message">Hi, how are ...</span>
+                        <span class="time">2 mins</span>
+                      </a>
+                    </li>
+                    <!-- End Single List -->
+                    <!-- Start Single List -->
+                    <li>
+                      <a href="javascript:void(0)">
+                        <div class="image busy">
+                          <img src="https://via.placeholder.com/300x300" alt="#">
+                        </div>
+                        <span class="username">Dahia Divers</span>
+                        <span class="short-message">Nice to meet u ...</span>
+                        <span class="time">5 mins</span>
+                      </a>
+                    </li>
+                    <!-- End Single List -->
+                    <!-- Start Single List -->
+                    <li>
+                      <a href="javascript:void(0)">
+                        <div class="image">
+                          <img src="https://via.placeholder.com/300x300" alt="#">
+                        </div>
+                        <span class="username">Jenifer Lofes</span>
+                        <span class="short-message">Hello, I need so...</span>
+                        <span class="time">NOW</span>
+                      </a>
+                    </li>
+                    <!-- End Single List -->
+                    <!-- Start Single List -->
+                    <li>
+                      <a href="javascript:void(0)">
+                        <div class="image">
+                          <img src="https://via.placeholder.com/300x300" alt="#">
+                        </div>
+                        <span class="username">jebs Kristin</span>
+                        <span class="short-message">Hi, I have...</span>
+                        <span class="time">20 mins</span>
+                      </a>
+                    </li>
+                    <!-- End Single List -->
+                  </ul>
+                </div>
+                <!-- End User List -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<th:block th:replace="~{common/footer::footer}"></th:block>
+
+<script th:src="@{/js/jquery.3.6.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/wow.min.js}"></script>
+<script th:src="@{/js/tiny-slider.js}"></script>
+<script th:src="@{/js/glightbox.min.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:inline="javascript">
+
+</script>
+</body>
+</html>

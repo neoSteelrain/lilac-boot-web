@@ -2,6 +2,7 @@ package com.steelrain.springboot.lilac.controller;
 
 
 import com.steelrain.springboot.lilac.service.KeywordCategoryCacheService;
+import com.steelrain.springboot.lilac.service.VideoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 
     private final KeywordCategoryCacheService m_keywordCategoryCacheService;
+    private final VideoService m_videoService;
 
 
     @GetMapping("/")
@@ -19,10 +21,9 @@ public class HomeController {
         model.addAttribute("subjectCodes",m_keywordCategoryCacheService.getSubjectCodeList());
         model.addAttribute("libRegionCodes",m_keywordCategoryCacheService.getLibraryRegionCodeList());
         model.addAttribute("licenseCodes",m_keywordCategoryCacheService.getLicenseCodeList());
+        model.addAttribute("recommendedVideoList", m_videoService.getRecommendedVideoList());
 
         return "index";
-
-        // licenseCodes 를 모델에 담아서 보내줘야 할거 같다.
     }
 
   /*  @ModelAttribute("subjectCodes")
