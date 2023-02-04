@@ -19,4 +19,7 @@ public interface VideoMapper {
 
     @Select("SELECT count(id) FROM tbl_youtube_playlist WHERE title LIKE concat('%',#{keyword},'%')")
     int selectTotalPlayListCountByKeyword(@Param("keyword") String keyword);
+
+    @Select("SELECT video_id, title, publish_date, comment_count, view_count, description FROM tbl_youtube WHERE id=#{videoId}")
+    YoutubeVideoDTO findVideoDetail(Long videoId);
 }

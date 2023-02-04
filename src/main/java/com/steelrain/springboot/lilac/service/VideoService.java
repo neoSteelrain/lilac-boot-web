@@ -49,4 +49,8 @@ public class VideoService implements IVideoService {
                 .endPage(endPage)
                 .maxPage(maxPage).build();
     }
+
+    public YoutubeVideoDTO getVideoDetail(Long videoId) {
+        return m_videoRepository.findVideoDetail(videoId);
+    }
 }

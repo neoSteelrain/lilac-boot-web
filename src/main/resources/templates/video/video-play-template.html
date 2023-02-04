@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div id="video-play-template">
+  <div class="post-thumbnils ratio ratio-16x9">
+    <iframe id="ytplayer" type="text/html" width="1024" height="576"
+            th:src="@{'https://www.youtube.com/embed/'+${videoInfo.videoId}+'?autoplay=1&playsinline=1'}"
+            frameborder="0" allowfullscreen>
+    </iframe>
+  </div>
+  <div class="post-details">
+    <div class="detail-inner">
+      <h5 class="post-title" th:text="${videoInfo.title}"></h5>
+      <ul class="custom-flex post-meta">
+        <li>
+          <i class="lni lni-calendar" th:text="' '+${videoInfo.publishDate}"></i>
+        </li>
+        <li>
+          <i class="lni lni-comments" th:text="' '+${videoInfo.commentCount}"></i>
+        </li>
+        <li>
+          <i class="lni lni-eye" th:text="' '+${videoInfo.viewCount}"></i>
+        </li>
+      </ul>
+      <p th:utext="${videoInfo.description}"></p>
+    </div>
+</div>
+</div>
+</body>
+</html>

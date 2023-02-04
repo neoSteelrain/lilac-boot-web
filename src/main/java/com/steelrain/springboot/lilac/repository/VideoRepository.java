@@ -34,4 +34,8 @@ public class VideoRepository implements IVideoRepository {
     public int selectTotalPlayListCountByKeyword(String keyword){
         return m_videoMapper.selectTotalPlayListCountByKeyword(keyword);
     }
+
+    public YoutubeVideoDTO findVideoDetail(Long videoId) {
+        return m_videoMapper.findVideoDetail(videoId);
+    }
 }

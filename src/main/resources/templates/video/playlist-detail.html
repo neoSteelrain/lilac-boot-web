@@ -49,57 +49,31 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-8 col-md-12 col-12">
-        <div class="single-inner">
-          <div class="post-thumbnils">
-            <img src="https://via.placeholder.com/850x460" alt="#">
+        <div id="div-video-play" class="single-inner">
+          <div class="post-thumbnils ratio ratio-16x9">
+            <iframe id="ytplayer" type="text/html" width="1024" height="576"
+                    th:src="@{'https://www.youtube.com/embed/'+${videoList[0].videoId}+'?autoplay=1&playsinline=1'}"
+                    frameborder="0" allowfullscreen>
+            </iframe>
           </div>
           <div class="post-details">
             <div class="detail-inner">
-              <h2 class="post-title">
-                <a href="blog-single.html">영상 제목</a>
-              </h2>
-              <!-- post meta -->
+              <h5 class="post-title" th:text="${videoList[0].title}"></h5>
               <ul class="custom-flex post-meta">
                 <li>
-                  <a href="javascript:void(0)">
-                    <i class="lni lni-calendar"></i>
-                    20th March 2023
-                  </a>
+                    <i class="lni lni-calendar" th:text="' '+${videoList[0].publishDate}"></i>
                 </li>
                 <li>
-                  <a href="javascript:void(0)">
-                    <i class="lni lni-comments"></i>
-                    35 Comments
-                  </a>
+                    <i class="lni lni-comments" th:text="' '+${videoList[0].commentCount}"></i>
                 </li>
                 <li>
-                  <a href="javascript:void(0)">
-                    <i class="lni lni-eye"></i>
-                    55 View
-                  </a>
+                    <i class="lni lni-eye" th:text="' '+${videoList[0].viewCount}"></i>
                 </li>
               </ul>
-              <p>영상 설명란1</p>
-              <!-- post image -->
-
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                irure
-                dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia. </p>
-              <!-- post quote -->
-
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                irure
-                dolor in reprehenderit. </p>
-              <!--post tags -->
+              <p th:utext="${videoList[0].description}"></p>
             </div>
-            <!-- Comments -->
-            <div class="post-comments">
+            <!-- 댓글 출력 시작 -->
+            <!--<div class="post-comments">
               <h3 class="comment-title"><span>댓글 부분</span></h3>
               <ul class="comments-list">
                 <li>
@@ -156,7 +130,7 @@
                   </div>
                 </li>
               </ul>
-            </div>
+            </div>--> <!-- 댓글 출력 끝 -->
           </div>
         </div>
       </div>
@@ -178,78 +152,18 @@
                 <!-- Start User List -->
                 <div class="user-list">
                   <ul>
-                    <!-- Start Single List -->
-                    <li>
-                      <a href="javascript:void(0)">
+                    <!-- 재생목록의 개별영상 시작 -->
+                    <li th:each="video : ${videoList}">
+                      <a th:href="|javascript:playSelectedVideo(${video.id})|">
                         <div class="image">
-                          <img src="https://via.placeholder.com/300x300" alt="#">
+                          <img th:src="${video.thumbnailDefault}" alt="#">
                         </div>
-                        <span class="username">재생목록1</span>
-                        <span class="short-message">Hi, how are ...</span>
-                        <span class="unseen-message">02</span>
+                        <span class="short-message" th:text="${video.title}"></span>
+<!--                        <span class="short-message" th:text="${video.description}"></span>-->
+<!--                        <span class="time" th:text="${video.duration}"></span>-->
                       </a>
                     </li>
-                    <!-- End Single List -->
-                    <!-- Start Single List -->
-                    <li>
-                      <a href="javascript:void(0)">
-                        <div class="image">
-                          <img src="https://via.placeholder.com/300x300" alt="#">
-                        </div>
-                        <span class="username">재생목록2</span>
-                        <span class="short-message">I love your design...</span>
-                        <span class="time">NOW</span>
-                      </a>
-                    </li>
-                    <!-- End Single List -->
-                    <!-- Start Single List -->
-                    <li>
-                      <a href="javascript:void(0)">
-                        <div class="image">
-                          <img src="https://via.placeholder.com/300x300" alt="#">
-                        </div>
-                        <span class="username">재생목록3</span>
-                        <span class="short-message">Hi, how are ...</span>
-                        <span class="time">2 mins</span>
-                      </a>
-                    </li>
-                    <!-- End Single List -->
-                    <!-- Start Single List -->
-                    <li>
-                      <a href="javascript:void(0)">
-                        <div class="image busy">
-                          <img src="https://via.placeholder.com/300x300" alt="#">
-                        </div>
-                        <span class="username">Dahia Divers</span>
-                        <span class="short-message">Nice to meet u ...</span>
-                        <span class="time">5 mins</span>
-                      </a>
-                    </li>
-                    <!-- End Single List -->
-                    <!-- Start Single List -->
-                    <li>
-                      <a href="javascript:void(0)">
-                        <div class="image">
-                          <img src="https://via.placeholder.com/300x300" alt="#">
-                        </div>
-                        <span class="username">Jenifer Lofes</span>
-                        <span class="short-message">Hello, I need so...</span>
-                        <span class="time">NOW</span>
-                      </a>
-                    </li>
-                    <!-- End Single List -->
-                    <!-- Start Single List -->
-                    <li>
-                      <a href="javascript:void(0)">
-                        <div class="image">
-                          <img src="https://via.placeholder.com/300x300" alt="#">
-                        </div>
-                        <span class="username">jebs Kristin</span>
-                        <span class="short-message">Hi, I have...</span>
-                        <span class="time">20 mins</span>
-                      </a>
-                    </li>
-                    <!-- End Single List -->
+                    <!-- 재생목록의 개별영상 끝 -->
                   </ul>
                 </div>
                 <!-- End User List -->
@@ -271,7 +185,23 @@
 <script th:src="@{/js/glightbox.min.js}"></script>
 <script th:src="@{/js/main.js}"></script>
 <script th:inline="javascript">
-
+  const playSelectedVideo = (paramVideoId) => {
+    console.log("paramVideoId : " +paramVideoId);
+    $.ajax({
+      type:"get",
+      url:"/video/video-template",
+      dataType:"text",
+      data:{videoId:paramVideoId},
+      success:function (result){
+        let html = jQuery('<div>').html(result);
+        let playlist = html.find("div#video-play-template").html();
+        $("#div-video-play").html(playlist);
+      },
+      error:function(error){
+        alert("영상정보 조회중 에러");
+      }
+    })
+  }
 </script>
 </body>
 </html>

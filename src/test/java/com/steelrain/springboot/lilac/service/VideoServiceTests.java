@@ -30,4 +30,12 @@ public class VideoServiceTests {
             log.info("=== 영상정보들 : {}", video);
         });
     }
+
+    @Test
+    public void 영상정보조회(){
+        YoutubeVideoDTO dto = m_videoService.getVideoDetail(23L);
+
+        assertThat(dto != null);
+        log.debug("영상정보 : {}", dto);
+    }
 }

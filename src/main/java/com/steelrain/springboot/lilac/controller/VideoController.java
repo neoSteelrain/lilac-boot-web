@@ -27,8 +27,15 @@ public class VideoController {
 
     @GetMapping("/playlist-detail")
     public String getPlayListDetail(@RequestParam("youtubePlaylistId") Long youtubePlaylistId, Model model){
-        List<YoutubeVideoDTO> videoDTO = m_videoService.getPlayListDetail(youtubePlaylistId);
-        model.addAttribute("videoInfo", videoDTO);
+        List<YoutubeVideoDTO> videoDTOList = m_videoService.getPlayListDetail(youtubePlaylistId);
+        model.addAttribute("videoList", videoDTOList);
         return "/video/playlist-detail";
+    }
+
+    @GetMapping("/video-template")
+    public String getVideoTemplate(@RequestParam("videoId") Long videoId, Model model){
+        YoutubeVideoDTO videoDTO = m_videoService.getVideoDetail(videoId);
+        model.addAttribute("videoInfo", videoDTO);
+        return "/video/video-play-template";
     }
 }
