@@ -2,17 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.steelrain.springboot.lilac.mapper.VideoMapper">
-    <select id="findRecommendedVideoList" resultType="YoutubeVideoDTO">
-        SELECT youtube.id,video_id,channel_id,youtube_playlist_id,title,
-               description,publish_date,rvideo.reg_date,
-               thumbnail_default,thumbnail_medium,thumbnail_high,
-               playlist_id,view_count,search_count,like_count,favorite_count,
-               comment_count,duration,score,magnitude
-        FROM tbl_recommended_video rvideo INNER JOIN tbl_youtube youtube
-            ON rvideo.youtube_id=youtube.id;
+    <resultMap id="findRecommendedVideoListMap" type="RecommendedVideoDTO">
+        <id property="id" column="id" />
+        <result property="YoutubePlaylistId" column="youtube_playlist_id" />
+        <result property="title" column="video_title" />
+        <result property="thumbnailMedium" column="thumbnail_medium" />
+        <result property="viewCount" column="view_count" />
+        <result property="searchCount" column="search_count" />
+        <result property="likeCount" column="like_count" />
+        <result property="favoriteCount" column="favorite_count" />
+        <result property="channelTitle" column="channel_title" />
+    </resultMap>
+    <select id="findRecommendedVideoList" resultMap="findRecommendedVideoListMap">
+        SELECT youtube.id,youtube_playlist_id,youtube.title as video_title,
+               youtube.thumbnail_medium,youtube.view_count,search_count,like_count,favorite_count,chn.title as channel_title
+        FROM tbl_recommended_video rvideo INNER JOIN tbl_youtube youtube INNER JOIN tbl_youtube_channel chn
+            ON rvideo.youtube_id=youtube.id
+                AND youtube.channel_id=chn.id;
     </select>
 <!--
-private Long id;
+    private Long id;
     private String videoId;
     private Long channelId;
     private Long YoutubePlaylistId;
@@ -29,6 +38,7 @@ private Long id;
     private Long likeCount;
     private Long favoriteCount;
     private Long commentCount;
+    private Boolean commentDisabled;
     private String duration;
     private Float score;
     private Float magnitude;
@@ -36,16 +46,26 @@ private Long id;
     <select id="findPlayListDetail" parameterType="java.lang.Long" resultType="YoutubeVideoDTO">
         SELECT yt.id,yt.video_id,yt.channel_id,yt.youtube_playlist_id,yt.title,yt.description,yt.publish_date,
                yt.thumbnail_default,yt.thumbnail_high,yt.playlist_id,yt.view_count,yt.search_count,yt.like_count,yt.favorite_count,yt.comment_count,
-               yt.duration,yt.score,yt.magnitude
+               yt.comment_disabled,yt.duration,yt.score,yt.magnitude
         FROM tbl_youtube yt INNER JOIN tbl_youtube_playlist pl
             ON yt.youtube_playlist_id=pl.id
         WHERE pl.id=#{playlistId};
     </select>
 
-    <select id="findPlayListByKeyword" parameterType="java.lang.String" resultType="YoutubePlaylistDTO">
-        SELECT id,playlist_id,channel_id,title,publish_date,thumbnail_medium,thumbnail_high,item_count,reg_date
-        FROM tbl_youtube_playlist pl
+    <resultMap id="findPlayListByKeywordMap" type="YoutubePlayListDTO">
+        <id property="id" column="id" />
+        <result property="playlistId" column="playlist_id" />
+        <result property="channelId" column="channel_id" />
+        <result property="title" column="title" />
+        <result property="thumbnailMedium" column="thumbnail_medium" />
+        <result property="itemCount" column="item_count" />
+        <result property="channelTitle" column="channel_title" />
+    </resultMap>
+    <select id="findPlayListByKeyword" parameterType="map"  resultMap="findPlayListByKeywordMap">
+        SELECT pl.id,playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,item_count,chn.title as channel_title
+        FROM tbl_youtube_playlist pl INNER JOIN tbl_youtube_channel chn
+            ON pl.channel_id=chn.id
         WHERE pl.title LIKE concat('%',#{keyword},'%')
-        ORDER BY pl.publish_date LIMIT 0,8;
+        ORDER BY pl.publish_date LIMIT #{offset},#{count};
     </select>
 </mapper>

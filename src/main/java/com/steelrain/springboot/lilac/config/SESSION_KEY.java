@@ -1,9 +1,7 @@
 package com.steelrain.springboot.lilac.config;
 
-public class SessionKey {
+public class SESSION_KEY {
     public final static String LOGIN_MEMBER = "LOGIN_MEMBER";
 
-    private SessionKey(){
-
-    }
+    private SESSION_KEY(){}
 }

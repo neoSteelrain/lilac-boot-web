@@ -1,6 +1,6 @@
 package com.steelrain.springboot.lilac.controller;
 
-import com.steelrain.springboot.lilac.config.SessionKey;
+import com.steelrain.springboot.lilac.config.SESSION_KEY;
 import com.steelrain.springboot.lilac.datamodel.LibraryRegionCodeDTO;
 import com.steelrain.springboot.lilac.datamodel.LicenseCodeDTO;
 import com.steelrain.springboot.lilac.datamodel.SubjectCodeDTO;
@@ -101,7 +101,7 @@ public class MemberController {
         MemberDTO memberDTO = m_memberService.loginMember(loginDTO.getEmail(), loginDTO.getPassword());
 
         HttpSession session = servletRequest.getSession();
-        session.setAttribute(SessionKey.LOGIN_MEMBER, memberDTO);
+        session.setAttribute(SESSION_KEY.LOGIN_MEMBER, memberDTO);
 
         return "redirect:/";
     }

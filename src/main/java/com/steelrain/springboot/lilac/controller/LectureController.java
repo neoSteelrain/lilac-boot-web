@@ -1,6 +1,6 @@
 package com.steelrain.springboot.lilac.controller;
 
-import com.steelrain.springboot.lilac.config.SessionKey;
+import com.steelrain.springboot.lilac.config.SESSION_KEY;
 import com.steelrain.springboot.lilac.datamodel.LectureNoteDTO;
 import com.steelrain.springboot.lilac.datamodel.MemberDTO;
 import com.steelrain.springboot.lilac.datamodel.form.LectureNoteAddDTO;
@@ -32,7 +32,7 @@ public class LectureController {
         if(session == null){
             return "redirect:/";
         }
-        MemberDTO memberDTO = (MemberDTO) session.getAttribute(SessionKey.LOGIN_MEMBER);
+        MemberDTO memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
         List<LectureNoteDTO> noteDTOList = m_lectureService.getLectureListByMember(memberDTO.getId());
         model.addAttribute("lectureNoteList", noteDTOList);
         model.addAttribute("noteAdd", new LectureNoteAddDTO());
@@ -56,14 +56,14 @@ public class LectureController {
             log.info("강의노트 생성 에러 : {}", bindingResult);
             
             HttpSession session = request.getSession();
-            MemberDTO memberDTO = (MemberDTO) session.getAttribute(SessionKey.LOGIN_MEMBER);
+            MemberDTO memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
             List<LectureNoteDTO> noteDTOList = m_lectureService.getLectureListByMember(memberDTO.getId());
             model.addAttribute("lectureNoteList", noteDTOList);
             model.addAttribute("noteAdd", new LectureNoteAddDTO());
             return "lecture/lecture-note";
         }
         HttpSession session = request.getSession();
-        MemberDTO memberDTO = (MemberDTO) session.getAttribute(SessionKey.LOGIN_MEMBER);
+        MemberDTO memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
 
         m_lectureService.addLectureNote(memberDTO.getId(), noteDTO.getTitle(), noteDTO.getDescription());
 

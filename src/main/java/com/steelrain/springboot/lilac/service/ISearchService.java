@@ -12,4 +12,5 @@ public interface ISearchService {
 
     LicenseDTO getLicenseInfoByCode(int licenseCode);
     LicenseBookListDTO getLicenseBookList(String keyword, short region, int detailRegion);
+    VideoPlayListSearchResultDTO searchPlayList(String keyword, int offset, int count);
 }

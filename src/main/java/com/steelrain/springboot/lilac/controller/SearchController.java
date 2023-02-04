@@ -59,4 +59,13 @@ public class SearchController {
         
         return "/search/book-detail";
     }
+
+    @GetMapping("/playlist")
+    public String searchPlayList(@RequestParam("keyword") String keyword,
+                                 @RequestParam("offset") int offset,
+                                 @RequestParam("count") int count,
+                                 Model model){
+        model.addAttribute("searchResult", m_searchService.searchPlayList(keyword, offset, count));
+        return "/search/playlist-template";
+    }
 }

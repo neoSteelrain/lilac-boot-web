@@ -1,23 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="kr" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <meta charset="UTF-8">
     <title></title>
 </head>
 <body>
-<div id="youtube-template">
-    <div class="col-lg-3 col-md-4 col-12" th:each="playlist : ${playLists}">
+<!-- 재생목록 템플릿 시작 -->
+<div id="playlist-template">
+    <div class="col-lg-3 col-md-4 col-12" th:each="item : ${searchResult.playList}">
         <div class="single-item-grid">
             <div class="image">
-                <a th:href="@{/video/playlist-detail(youtubePlaylistId=${playlist.id})}"><img th:src="${playlist.thumbnailMedium}" alt="#" /></a>
+                <a th:href="@{/video/playlist-detail(youtubePlaylistId=${item.id})}"><img th:src="${item.thumbnailMedium}" alt="#"></a>
             </div>
-            <div class="content">
-                <a href="javascript:void(0)" class="title" th:text="${playlist.title}"></a>
-                <p th:text="${playlist.itemCount}"></p>
-                <p class="location" th:utext="${playlist.publishDate}+'<i class='+'lni lni-calendar'+'></i>'"></p>
+            <div class="content text-wrap">
+                <a href="javascript:void(0)" class="title" th:text="${item.title}"></a>
+                <p th:text="${item.channelTitle}"></p>
             </div>
         </div>
     </div>
 </div>
+<!-- 재생목록 템플릿 끝 -->
+
+<!-- 재생목록 페이징 템플릿 시작 refreshPlaylist(offset) -->
+<div id="playlist-paging-template">
+    <div class="pagination left" th:with="page=${searchResult.pageDTO.page}" >
+        <ul class="pagination-list">
+            <li><a th:if="${page <= 1}" href="javascript:void(0)"><i class="lni lni-chevron-left"></i></a></li>
+            <li><a th:unless="${page <= 1}" th:href="|javascript:refreshPlaylist('${page-1}')|"><i class="lni lni-chevron-left"></i></a></li>
+            <th:block th:each="idx : ${#numbers.sequence(searchResult.pageDTO.startPage, searchResult.pageDTO.endPage)}">
+                <li th:if="${idx == page}" class="active"><a th:href="|javascript:refreshPlaylist('${idx}')|" th:text="${idx}"></a></li>
+                <li th:unless="${idx == page}" ><a th:href="|javascript:refreshPlaylist('${idx}')|" th:text="${idx}"></a></li>
+            </th:block>
+            <li><a th:if="${page >= searchResult.pageDTO.maxPage}" href="javascript:void(0)"><i class="lni lni-chevron-right"></i></a></li>
+            <li><a th:unless="${page >= searchResult.pageDTO.maxPage}" th:href="|javascript:refreshPlaylist('${page+1}')|"><i class="lni lni-chevron-right"></i></a></li>
+        </ul>
+    </div>
+</div>
+<!-- 재생목록 페이징 템플릿 끝 -->
 </body>
 </html>

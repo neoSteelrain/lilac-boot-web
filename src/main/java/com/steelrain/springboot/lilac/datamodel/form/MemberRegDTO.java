@@ -23,6 +23,6 @@ public class MemberRegDTO {
 
     @NotBlank
     @Length(min=6,max=19)
-    @Pattern(regexp = "^[A-Za-z\\d\\[\\]\\{\\}\\/\\(\\)\\.\\?\\<\\>!@#$%^&*=+-]{6,20}")
+    //@Pattern(regexp = "^[A-Za-z\\d\\[\\]\\{\\}\\/\\(\\)\\.\\?\\<\\>!@#$%^&*=+-]{6,20}")
     private String password;
 }

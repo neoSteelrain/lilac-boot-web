@@ -31,10 +31,4 @@ public class VideoController {
         model.addAttribute("videoInfo", videoDTO);
         return "/video/playlist-detail";
     }
-    
-    @GetMapping("/videos-search")
-    public String searchPlayList(@RequestParam("keyword") String keyword, Model model){
-        model.addAttribute("videoList", m_videoService.searchPlayList(keyword));
-        return "/search/playlist-template";
-    } 
 }

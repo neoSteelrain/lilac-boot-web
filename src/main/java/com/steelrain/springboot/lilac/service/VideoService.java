@@ -1,7 +1,7 @@
 package com.steelrain.springboot.lilac.service;
 
-import com.steelrain.springboot.lilac.datamodel.YoutubePlaylistDTO;
-import com.steelrain.springboot.lilac.datamodel.YoutubeVideoDTO;
+import com.steelrain.springboot.lilac.config.PAGING_CONFIG;
+import com.steelrain.springboot.lilac.datamodel.*;
 import com.steelrain.springboot.lilac.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,20 +12,41 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class VideoService {
+public class VideoService implements IVideoService {
 
     private final VideoRepository m_videoRepository;
 
 
-    public List<YoutubeVideoDTO> getRecommendedVideoList() {
+    @Override
+    public List<RecommendedVideoDTO> getRecommendedVideoList() {
         return m_videoRepository.findRecommendedVideoList();
     }
 
+    @Override
     public List<YoutubeVideoDTO> getPlayListDetail(Long youtubePlaylistId){
         return m_videoRepository.findPlayListDetail(youtubePlaylistId);
     }
 
-    public List<YoutubePlaylistDTO> searchPlayList(String keyword) {
-        return m_videoRepository.findPlayListByKeyword(keyword);
+    @Override
+    public VideoPlayListSearchResultDTO searchPlayList(String keyword, int offset, int count) {
+        return VideoPlayListSearchResultDTO.builder()
+                                        .pageDTO(createPageDTO(keyword, offset, count))
+                                        .playList(m_videoRepository.findPlayListByKeyword(keyword, offset, count))
+                                        .build();
+    }
+
+    private PageDTO createPageDTO(String keyword, int offset, int playlistCount){
+        int totalPlaylistCount = m_videoRepository.selectTotalPlayListCountByKeyword(keyword);
+        int maxPage = (int)(Math.ceil( (double) totalPlaylistCount / playlistCount));
+        int startPage = (((int)(Math.ceil((double) offset / PAGING_CONFIG.BLOCK_LIMIT))) - 1) * PAGING_CONFIG.BLOCK_LIMIT + 1;
+        int endPage = startPage + PAGING_CONFIG.BLOCK_LIMIT -1;
+        if(endPage > maxPage){
+            endPage = maxPage;
+        }
+        return PageDTO.builder()
+                .page(offset)
+                .startPage(startPage)
+                .endPage(endPage)
+                .maxPage(maxPage).build();
     }
 }

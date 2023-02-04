@@ -28,6 +28,7 @@ search_count	int	YES
 like_count	bigint	YES
 favorite_count	bigint	YES
 comment_count	bigint	YES
+comment_disabled	tinyint(1)	YES
 duration	varchar(40)	YES
 score	float	YES
 magnitude	float	YES
@@ -49,6 +50,7 @@ magnitude	float	YES
     private Long likeCount;
     private Long favoriteCount;
     private Long commentCount;
+    private Boolean commentDisabled;
     private String duration;
     private Float score;
     private Float magnitude;
