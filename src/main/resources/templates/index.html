@@ -525,11 +525,41 @@
     <script th:inline="javascript">
 
         const showAddLicenseToNote = () => {
-
-            $("#addNoteModal").modal("show");
+            $.ajax({
+                type:"get",
+                url:"/lecture/api/noteList",
+                headers:{"Content-Type":"application/json"},
+                success:function (result) {
+                    appendNoteList(result);
+                    $("#addNoteModal").modal("show");
+                },
+                error:function (jqXHR){
+                    if(jqXHR.status == 401){
+                        alert("로그인 후 사용할 수 있습니다.");
+                    }else{
+                        alert("강의노트목록을 불러오는데 실패하였습니다.");
+                    }
+                }
+            })
         }
-        const test = () => {
-            console.log("ggggggggggggg");
+        const appendNoteList = (jsonResult) => {
+            const noteListTag = document.querySelector('#lectureNoteSelect');
+
+            for(let i in jsonResult.noteList){
+                if(i == 0){
+                    let opDefault = document.createElement('option');
+                    opDefault.setAttributeNode(document.createAttribute('selected'));
+                    opDefault.textContent='강의노트 선택';
+                    noteListTag.appendChild(opDefault);
+                }
+
+                let op = document.createElement('option');
+                op.textContent=jsonResult.noteList[i]['title'];
+                let val = document.createAttribute('value');
+                val.value = jsonResult.noteList[i]['id'];
+                op.setAttributeNode(val);
+                noteListTag.appendChild(op);
+            }
         }
 
         const changeLibRegionCode = () => {

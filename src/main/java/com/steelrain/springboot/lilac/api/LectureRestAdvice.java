@@ -50,7 +50,7 @@ public class LectureRestAdvice extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(LectureRestController.LectureAddResponse.builder()
                 .requestParameter(null)
                 .code(HttpStatus.BAD_REQUEST.value())
-                .message("강의노트처리 중 예외가 발생하였습니다.")
+                .message(nex.getMessage())
                 .status(HttpStatus.BAD_REQUEST.getReasonPhrase())
                 .build(), HttpStatus.BAD_REQUEST);
     }

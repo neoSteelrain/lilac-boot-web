@@ -12,6 +12,7 @@ public class LectureNoteException extends LilacException{
     @Getter
     private LectureNoteDTO lectureNoteDTO;
 
+
     public LectureNoteException(String msg){
         super(msg);
     }

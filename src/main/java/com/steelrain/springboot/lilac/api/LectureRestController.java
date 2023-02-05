@@ -1,7 +1,9 @@
 package com.steelrain.springboot.lilac.api;
 
 import com.steelrain.springboot.lilac.config.SESSION_KEY;
+import com.steelrain.springboot.lilac.datamodel.LectureNoteDTO;
 import com.steelrain.springboot.lilac.datamodel.MemberDTO;
+import com.steelrain.springboot.lilac.exception.LectureNoteException;
 import com.steelrain.springboot.lilac.exception.ValidationErrorException;
 import com.steelrain.springboot.lilac.service.ILectureNoteService;
 import lombok.*;
@@ -17,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Slf4j
@@ -28,14 +32,26 @@ public class LectureRestController {
     private final ILectureNoteService m_lectureNoteService;
 
 
+    @GetMapping("/noteList")
+    public ResponseEntity<LectureNoteList> getLectureNoteList(HttpServletRequest servletRequest){
+        HttpSession session = servletRequest.getSession(false);
+        if(session == null){
+            return new ResponseEntity<>(LectureNoteList.builder().noteList(new ArrayList<>(0)).build(), HttpStatus.UNAUTHORIZED);
+        }
+        MemberDTO dto = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
+        return new ResponseEntity<>(LectureNoteList.builder()
+                                                .noteList(m_lectureNoteService.getLectureListByMember(dto.getId()))
+                                                .build(), HttpStatus.OK);
+    }
+
     @PostMapping("/addNote")
     public ResponseEntity<LectureAddResponse> addLectureNote(@Validated @RequestBody LectureAddRequest request, Errors errors, HttpServletRequest servletRequest){
         if(errors.hasErrors()){
             throw new ValidationErrorException(errors, request);
         }
         HttpSession session = servletRequest.getSession(false);
-        if(session == null || request.memberId == null){
-            // TODO : 로그인 정보가 없는 요청은 에러 처리를 해야 한다.
+        if(session == null){
+            throw new LectureNoteException("로그인 정보가 필요합니다.");
         }
         MemberDTO dto = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
         Long noteId = m_lectureNoteService.addLectureNote(dto.getId(), request.title, request.description);
@@ -53,6 +69,12 @@ public class LectureRestController {
                                                     .message("강의노트를 추가하였습니다.")
                                                     .status(HttpStatus.OK.getReasonPhrase())
                                                     .build(), HttpStatus.OK);
+    }
+
+    @Getter
+    @Builder
+    static class LectureNoteList{
+        private List<LectureNoteDTO> noteList;
     }
 
     @Getter
