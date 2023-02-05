@@ -5,6 +5,8 @@ import com.steelrain.springboot.lilac.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @RequiredArgsConstructor
 public class MemberRepository implements IMemberRepository{
@@ -24,5 +26,10 @@ public class MemberRepository implements IMemberRepository{
     @Override
     public MemberDTO findMemberByLoginInfo(String email, String password) {
         return m_memberMapper.findMember(email, password);
+    }
+
+    @Override
+    public List<MemberDTO> findAllMembers() {
+        return m_memberMapper.findAllMembers();
     }
 }

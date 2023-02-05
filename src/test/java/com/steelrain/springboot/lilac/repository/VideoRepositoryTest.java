@@ -20,7 +20,7 @@ class VideoRepositoryTest {
 
     @Test
     void findPlayListByKeyword(){
-        List<YoutubePlayListDTO> list = repository.findPlayListByKeyword("정보", 0, 6);
+        List<YoutubePlayListDTO> list = repository.findPlayListByKeyword("자바", 0, 6);
 
         assertThat(list != null);
         list.forEach(pl -> {

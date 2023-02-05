@@ -13,10 +13,8 @@ public class LectureNoteAddDTO {
     private Long memberId;
 
     @NotBlank
-    @Length(min=10, max=100)
     private String title;
 
     @NotBlank
-    @Length(min=10, max=500)
     private String description;
 }

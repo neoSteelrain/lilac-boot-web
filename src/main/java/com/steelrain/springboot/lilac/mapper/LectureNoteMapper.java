@@ -29,4 +29,7 @@ public interface LectureNoteMapper {
             @Result(property = "progress", column = "progress"),
     })
     List<LectureNoteDTO> findNoteListByMember(Long memberId);
+
+    @Select("SELECT count(id) FROM tbl_lecture WHERE member_id=#{memberId} AND title=#{title}")
+    int findDuplicatedLectureNoteByMember(Long memberId, String title);
 }

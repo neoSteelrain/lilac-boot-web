@@ -30,6 +30,7 @@ public class VideoService implements IVideoService {
     @Override
     public VideoPlayListSearchResultDTO searchPlayList(String keyword, int offset, int count) {
         return VideoPlayListSearchResultDTO.builder()
+                                        .requestKeyword(keyword)
                                         .pageDTO(createPageDTO(keyword, offset, count))
                                         .playList(m_videoRepository.findPlayListByKeyword(keyword, offset, count))
                                         .build();

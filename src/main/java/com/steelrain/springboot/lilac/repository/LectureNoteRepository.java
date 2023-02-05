@@ -32,4 +32,8 @@ public class LectureNoteRepository {
     public List<LectureNoteDTO> findNoteListByMember(Long memberId) {
         return m_lectureNoteMapper.findNoteListByMember(memberId);
     }
+
+    public boolean checkDuplicatedLectureNoteByMember(Long memberId, String title) {
+        return m_lectureNoteMapper.findDuplicatedLectureNoteByMember(memberId, title) > 0;
+    }
 }

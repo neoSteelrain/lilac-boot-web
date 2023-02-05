@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.swing.*;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.*;
 
 @Slf4j
@@ -26,6 +28,9 @@ public class MemberServiceTests {
 
     @Autowired
     private IMemberService m_memberService;
+
+    @Autowired
+    private ILectureNoteService m_lectureNoteService;
 
 
 
@@ -56,7 +61,7 @@ public class MemberServiceTests {
 
     @Test
     public void createMembers() {
-        for(int i=1 ; i <= 10 ; i++){
+        for(int i=1 ; i <= 5 ; i++){
             MemberDTO dto = MemberDTO.builder()
                     .nickname(String.format("user%s", i))
                     .email(String.format("user%s@user.com", i))
@@ -64,5 +69,14 @@ public class MemberServiceTests {
                     .build();
             m_memberService.registerMember(dto);
         }
+    }
+    
+    @Test
+    public void 기본강의노트생성확인테스트(){
+        List<MemberDTO> members = m_memberService.getAllMembers();
+
+        members.stream().forEach(member -> {
+            log.debug("강의노트 확인 : {}", m_lectureNoteService.getLectureListByMember(member.getId()));
+        });
     }
 }

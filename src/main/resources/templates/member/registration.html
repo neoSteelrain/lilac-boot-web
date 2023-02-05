@@ -124,25 +124,20 @@
             $.ajax({
                 type: "get",
                 url: "/member/duplicated-email/" + emailInput,
-                statusCode:{
-                    409:function(responseObj, textStatus, jqXHR){
-                        emailNotice.css('color', 'red');
-                        emailNotice.html('중복된 이메일입니다.')
-                    },
-                    400:function (responseObj, textStatus, jqXHR) {
-                        emailNotice.css('color', 'red');
-                        emailNotice.html('이메일 길이는 100자를 넘을 수 없습니다.');
-                    }
-                },
                 success: function (data) {
                     emailNotice.css('color', 'green');
                     emailNotice.html('사용가능한 이메일입니다.')
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    if(jqXHR.status == 400 || jqXHR.status == 409){
-                        return;
+                    if(jqXHR.status == 400){
+                        emailNotice.css('color', 'red');
+                        emailNotice.html('중복된 이메일입니다.')
+                    }else if(jqXHR.status == 409){
+                        emailNotice.css('color', 'red');
+                        emailNotice.html('이메일 길이는 100자를 넘을 수 없습니다.');
+                    }else {
+                        alert('이메일 검증에서 오류가 발생하였습니다');
                     }
-                    alert('이메일 검증에서 오류가 발생하였습니다');
                 }
             });
         }

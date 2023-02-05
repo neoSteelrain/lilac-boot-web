@@ -33,9 +33,14 @@ public class LectureController {
             return "redirect:/";
         }
         MemberDTO memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
+        if(memberDTO == null){
+            return "redirect:/";
+        }
+
         List<LectureNoteDTO> noteDTOList = m_lectureService.getLectureListByMember(memberDTO.getId());
         model.addAttribute("lectureNoteList", noteDTOList);
         model.addAttribute("noteAdd", new LectureNoteAddDTO());
+        model.addAttribute("memberId", memberDTO.getId());
         return "/lecture/lecture-note";
     }
 
@@ -48,9 +53,9 @@ public class LectureController {
 
     /*
         모달창에서 빈 검증을 테스트해보기 위한 코드
-        모달은 한번 뜨고 사라지는 폼이라서 그런지 빈 검증 에러 메시지는 못쓰지만, 검증 기능은 되는것 같다
+        사용하지는 않는다.
      */
-    @PostMapping("/add-note")
+   /* @PostMapping("/add-note")
     public String addLectureNote(@Validated @ModelAttribute("noteDTO") LectureNoteAddDTO noteDTO, BindingResult bindingResult, HttpServletRequest request, Model model){
         if(bindingResult.hasErrors()){
             log.info("강의노트 생성 에러 : {}", bindingResult);
@@ -68,5 +73,5 @@ public class LectureController {
         m_lectureService.addLectureNote(memberDTO.getId(), noteDTO.getTitle(), noteDTO.getDescription());
 
         return "redirect:/lecture/lecture-note";
-    }
+    }*/
 }

@@ -111,7 +111,8 @@
                     <div class="log-icon">
                       <i class="lni lni-circle-plus"></i>
                     </div>
-                    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">강의노트 추가</button>
+<!--                    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#lectureNoteAddModal">강의노트 추가</button>-->
+                    <button class="btn btn-outline-primary" onclick="showAddLectureNoteModal()">강의노트 추가</button>
                   </li>
                   <li th:each="lectureNote : ${lectureNoteList}">
                     <div class="log-icon">
@@ -133,35 +134,32 @@
 </section>
 
 <!-- 강의노트 생성 모달 시작 -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="lectureNoteAddModal" tabindex="-1" aria-labelledby="addLectureNoteLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content" style="height: 700px">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">강의노트 만들기</h1>
+        <h1 class="modal-title fs-5" id="addLectureNoteLabel">강의노트 만들기</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="/lecture/add-note" method="post" th:object="${noteAdd}" name="noteAddForm">
-          <div class="mb-3">
-            <label for="ipt-lec" class="col-form-label">강의노트 제목:</label>
-            <input type="text" class="form-control" id="ipt-lec" th:field="*{title}">
-            <span id="tileNotice" th:errors="*{title}"></span>
-          </div>
-          <div class="mb-3">
-            <label for="txa-lec" class="col-form-label">강의노트 설명:</label>
-            <textarea class="form-control" id="txa-lec" th:field="*{description}" row="5"></textarea>
-            <span id="descNotice" th:errors="*{description}"></span>
-          </div>
-        </form>
+        <div class="mb-3">
+          <label for="noteTitle" class="col-form-label">강의노트 제목:</label>
+          <input id="noteTitle" type="text" class="form-control">
+          <span id="titleNotice" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+          <label for="noteDesc" class="col-form-label">강의노트 설명:</label>
+          <textarea id="noteDesc" class="form-control" row="5"></textarea>
+          <span id="descNotice" class="text-danger"></span>
+        </div>
       </div>
       <div class="modal-footer">
-        <button id="btn-cancle" type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+        <button id="btn-cancel" type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
         <button id="btn-add"  type="button" class="btn btn-primary" onclick="addLectureNote()">만들기</button>
       </div>
     </div>
   </div>
 </div>
-<!-- 강의노트 생성 모달 끝 -->
 
 <!-- Start Footer Area -->
 <th:block th:replace="~{common/footer::footer}"></th:block>
@@ -181,11 +179,51 @@
 <script th:src="@{/js/glightbox.min.js}"></script>
 <script th:src="@{/js/count-up.min.js}"></script>
 <script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/lilac-common.js}"></script>
 <script th:inline="javascript">
-  const addLectureNote = () => {
-    document.noteAddForm.submit();
+  const showAddLectureNoteModal = () => {
+    $("#titleNotice").html('');
+    $("#descNotice").html('');
+    $("#lectureNoteAddModal").modal("show");
   }
 
+  const addLectureNote = () => {
+    const noteTile = $("#noteTitle").val();
+    const noteDesc = $("#noteDesc").val();
+    const isValidNoteTitle = validateString(noteTile);
+    const isValidNoteDesc = validateString(noteDesc);
+    $("#titleNotice").html(isValidNoteTitle ? '' : '강의노트 제목을 입력해주세요');
+    $("#descNotice").html(isValidNoteDesc ? '' : '강의노트 설명을 입력해주세요');
+
+    if(!(isValidNoteTitle && isValidNoteDesc)){
+      return;
+    }
+    let jsonRequest = {
+      "memberId":null,
+      "title":noteTile,
+      "description":noteDesc
+    };
+    $.ajax({
+      type:"post",
+      url:"/lecture/api/addNote",
+      headers:{"Content-Type":"application/json"},
+      data:JSON.stringify(jsonRequest),
+      success:function (result) {
+        alert("강의노트를 추가하였습니다.");
+        $("#lectureNoteAddModal").modal("hide");
+        //document.location.href = "/lecture/lecture-note";
+      },
+      error:function (jqXHR){
+        if(jqXHR.status == 409){
+          alert("중복된 강의노트 입니다. 다른 제목을 입력해주세요.");
+        }else{
+          alert("강의노트 추가를 실패하였습니다");
+        }
+      }
+    })
+  }
+
+  // rest api 호출하지 않고 form으로 post 요청을 날려본다
   const removeLectureNote = (noteId) => {
     let form = document.createElement('form');
     let tmp = document.createElement('input');

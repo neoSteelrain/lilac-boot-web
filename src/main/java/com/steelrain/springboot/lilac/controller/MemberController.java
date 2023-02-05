@@ -61,7 +61,12 @@ public class MemberController {
     }
 
     @GetMapping("/profile")
-    public String profileForm(){
+    public String profileForm(HttpServletRequest servletRequest){
+        HttpSession session = servletRequest.getSession(false);
+        if(session == null){
+            return "redirect:/";
+        }
+
         return "member/profile";
     }
 
@@ -97,12 +102,9 @@ public class MemberController {
             log.info("로그인 에러 : {}", bindingResult);
             return "member/login";
         }
-
         MemberDTO memberDTO = m_memberService.loginMember(loginDTO.getEmail(), loginDTO.getPassword());
-
         HttpSession session = servletRequest.getSession();
         session.setAttribute(SESSION_KEY.LOGIN_MEMBER, memberDTO);
-
         return "redirect:/";
     }
 

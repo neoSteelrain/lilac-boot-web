@@ -32,12 +32,19 @@ public class LectureNoteService implements ILectureNoteService{
     public Long addLectureNote(Long memberId, String title, String description){
         Long noteId = null;
         try{
+            if(checkDuplicatedLectureNoteByMember(memberId, title)){
+                return null;
+            }
             noteId = createLectureNote(memberId, title, description);
         }catch(Exception ex){
             log.error("강의 노트 생성 예외 - addLectureNote() 예외 발생 - {}", ex);
             throw new LectureNoteException( String.format("강의노트 생성 실패 - 회원 ID : %s", memberId), ex, memberId);
         }
         return noteId;
+    }
+
+    private boolean checkDuplicatedLectureNoteByMember(Long memberId, String title){
+        return m_lectureNoteRepository.checkDuplicatedLectureNoteByMember(memberId, title);
     }
 
     @Override

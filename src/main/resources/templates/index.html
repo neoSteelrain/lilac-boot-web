@@ -123,19 +123,16 @@
                     <div class="col-12">
                         <div class="section-title">
                             <h2 class="wow fadeInUp" data-wow-delay=".4s">키워드 목록</h2>
-                            <p class="wow fadeInUp" data-wow-delay=".6s">키워드로 빠른 검색</p>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div th:each="subject : ${subjectCodes}" class="col-lg-2 col-md-3 col-12">
-                        <a href="#" class="single-cat wow fadeInUp" data-wow-delay=".2s">
+                        <a th:href="|javascript:refreshPlaylistByKeyword(1, '${subject.keyWord}')|" class="single-cat wow fadeInUp" data-wow-delay=".2s">
                             <div class="icon">
                                 <img th:src="@{/images/subject/java.png}" alt="#">
                             </div>
                             <h3 th:text="${subject.name}"></h3>
-<!--                            <h3>자바</h3>-->
-<!--                            <h5 class="total">35</h5>-->
                         </a>
                     </div>
                 </div>
@@ -479,6 +476,34 @@
     </section>
     <!-- 유튜브 정보 끝 -->
 
+    <!-- 강의노트 모달 시작 -->
+    <div class="modal fade" id="addNoteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title fs-5" id="staticBackdropLabel">강의노트를 선택하세요</h4><br>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <select id="lectureNoteSelect" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                          <!--  <option selected>강의노트 선택</option>
+                            <option value="1">노트1</option>
+                            <option value="2">노트2</option>
+                            <option value="3">노트3</option>-->
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">취소</button>
+                    <button id="btn-lecture-add" type="button" class="btn btn-primary btn-sm" onclick="addLicenseToLectureNote()">추가</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 강의노트 모달 끝-->
+
     <!-- Start Footer Area -->
     <th:block th:replace="~{common/footer::footer}"></th:block>
     <!--/ End Footer Area -->
@@ -496,7 +521,16 @@
     <script th:src="@{/js/glightbox.min.js}"></script>
     <script th:src="@{/js/count-up.min.js}"></script>
     <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/js/lilac-common.js}"></script>
     <script th:inline="javascript">
+
+        const showAddLicenseToNote = () => {
+
+            $("#addNoteModal").modal("show");
+        }
+        const test = () => {
+            console.log("ggggggggggggg");
+        }
 
         const changeLibRegionCode = () => {
             const m_selectedRegion = $('#location-main').val();
@@ -532,7 +566,7 @@
         const searchHandler = () => {
             searchLicenseSchedulesByCategory();
             refreshLicenseBookList();
-            refreshPlaylist(1);
+            refreshPlaylistByCategory(1);
 
             // 자격증 시험일정 태그로 스크롤 이동
             let offset = $("#section-license").offset();
@@ -581,17 +615,28 @@
             });
         }
 
-        const refreshPlaylist = (argOffset) =>{
-            const paramKeyword = $("#category option:checked").text();
-            if(paramKeyword == ""){
+        const refreshPlaylistByKeyword = (offsetArg, keywordArg) =>{
+            if(keywordArg == ""){
                 return;
             }
+            refreshPlayList(offsetArg, keywordArg);
+        }
+
+        const refreshPlaylistByCategory = (offsetArg) => {
+            const categoryVal = $("#category option:checked").text();
+            if(categoryVal == ""){
+                return;
+            }
+            refreshPlayList(offsetArg, categoryVal);
+        }
+
+        const refreshPlayList = (offsetArg, keywordArg) => {
             $.ajax({
                 type:"get",
                 url:"/search/playlist",
                 data:{
-                    keyword:paramKeyword,
-                    offset:argOffset,
+                    keyword:keywordArg,
+                    offset:offsetArg,
                     count:6
                 },
                 dataType:"text",
@@ -606,19 +651,6 @@
                     alert("재생목록 에러 발생");
                 }
             })
-        }
-
-        const logout = () => {
-            $.ajax({
-                type:"post",
-                url:"/member/logout",
-                success:function (responseObj, textStatus, jqXHR){
-                    location.href = "/";
-                },
-                error:function (jqXHR, textStatus, errorThrown){
-                    alert("로그아웃 도중 에러 발생");
-                }
-            });
         }
     </script>
 </body>

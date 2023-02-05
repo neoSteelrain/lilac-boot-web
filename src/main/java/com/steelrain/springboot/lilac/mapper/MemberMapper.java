@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 @Mapper
 public interface MemberMapper {
 
@@ -12,4 +14,7 @@ public interface MemberMapper {
     int findMemberByEmail(String email);
     int saveMember(MemberDTO memberDTO);
     MemberDTO findMember(@Param("email") String email, @Param("password") String password);
+
+    @Select("SELECT id,nickname,email,password,description,region,dtl_region,profile_original,profile_save,grade,reg_date FROM tbl_member")
+    List<MemberDTO> findAllMembers();
 }
