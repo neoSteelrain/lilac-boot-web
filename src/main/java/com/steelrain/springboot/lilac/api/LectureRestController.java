@@ -45,36 +45,96 @@ public class LectureRestController {
     }
 
     @PostMapping("/addNote")
-    public ResponseEntity<LectureAddResponse> addLectureNote(@Validated @RequestBody LectureAddRequest request, Errors errors, HttpServletRequest servletRequest){
-        if(errors.hasErrors()){
+    public ResponseEntity<LectureAddResponse> addLectureNote(@Validated @RequestBody LectureAddRequest request,
+                                                             Errors errors,
+                                                             HttpServletRequest servletRequest){
+        /*
+            licenseId 는 자격증 id, subjectId 는 키워드 id 이다.
+            licenseId, subjectId 는 XOR 관계 이기 떄문에 하나만 선택해야 한다.
+            하지만 기본강의노트는 둘다 null 을 허용한다
+         */
+        if(errors.hasErrors() || !(request.licenseId == null ^ request.subjectId == null)){
             throw new ValidationErrorException(errors, request);
         }
         HttpSession session = servletRequest.getSession(false);
         if(session == null){
             throw new LectureNoteException("로그인 정보가 필요합니다.");
         }
-        MemberDTO dto = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
-        Long noteId = m_lectureNoteService.addLectureNote(dto.getId(), request.title, request.description);
-        if (noteId == null) {
+        MemberDTO memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
+        Long noteId = m_lectureNoteService.addLectureNote(memberDTO.getId(), request.title, request.description, request.licenseId, request.subjectId);
+        if (noteId != null) {
             return new ResponseEntity<>(LectureAddResponse.builder()
                                                         .requestParameter(request)
-                                                        .code(HttpStatus.CONFLICT.value())
-                                                        .message("이미 존재하는 강의노트 입니다.")
-                                                        .status(HttpStatus.CONFLICT.getReasonPhrase())
-                                                        .build(), HttpStatus.CONFLICT);
+                                                        .code(HttpStatus.OK.value())
+                                                        .message("강의노트를 추가하였습니다.")
+                                                        .status(HttpStatus.OK.getReasonPhrase())
+                                                        .build(), HttpStatus.OK);
+
+
         }
         return new ResponseEntity<>(LectureAddResponse.builder()
                                                     .requestParameter(request)
-                                                    .code(HttpStatus.OK.value())
-                                                    .message("강의노트를 추가하였습니다.")
-                                                    .status(HttpStatus.OK.getReasonPhrase())
-                                                    .build(), HttpStatus.OK);
+                                                    .code(HttpStatus.CONFLICT.value())
+                                                    .message("이미 존재하는 강의노트 입니다.")
+                                                    .status(HttpStatus.CONFLICT.getReasonPhrase())
+                                                    .build(), HttpStatus.CONFLICT);
+    }
+
+    @PostMapping("addPlayList")
+    public ResponseEntity<YoutubePlayListAddResponse> addYoutubePlayListToLectureNote(@Validated @RequestBody YoutubePlayListAddRequest request,
+                                                                                      Errors errors,
+                                                                                      HttpServletRequest servletRequest){
+        if(errors.hasErrors()){
+            throw new ValidationErrorException(errors, request);
+        }
+        HttpSession session = servletRequest.getSession(false);
+        if(session == null){
+            return new ResponseEntity<>(YoutubePlayListAddResponse.builder().message("로그인 정보가 필요합니다.").build(), HttpStatus.UNAUTHORIZED);
+        }
+        MemberDTO memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
+        if(m_lectureNoteService.addYoutubePlayListToLectureNote(request.lectureNoteId, request.playListId, memberDTO.getId())){
+            return new ResponseEntity<>(YoutubePlayListAddResponse.builder()
+                                                                .requestParameter(request)
+                                                                .code(HttpStatus.OK.value())
+                                                                .message("강의노트에 유튜브 재생목록을 추가하였습니다.")
+                                                                .status(HttpStatus.OK.getReasonPhrase())
+                                                                .build(), HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(YoutubePlayListAddResponse.builder()
+                                                                .requestParameter(request)
+                                                                .code(HttpStatus.BAD_REQUEST.value())
+                                                                .message("강의노트에 유튜브 재생목록을 추가하였습니다.")
+                                                                .status(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                                                                .build(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Getter
     @Builder
     static class LectureNoteList{
         private List<LectureNoteDTO> noteList;
+    }
+
+    @Getter
+    @ToString
+    @Builder
+    static class YoutubePlayListAddResponse{
+        private Object requestParameter;
+        private int code;
+        private String message;
+        private String status;
+    }
+
+    @Getter
+    @ToString
+    @Builder
+    static class YoutubePlayListAddRequest{
+
+        @NotNull
+        private Long playListId;
+
+        @NotNull
+        private Long lectureNoteId;
     }
 
     @Getter
@@ -109,7 +169,6 @@ public class LectureRestController {
     @Builder
     static class LectureAddRequest{
 
-        @NotNull
         private Long memberId;
 
         @NotBlank
@@ -117,5 +176,8 @@ public class LectureRestController {
 
         @NotBlank
         private String description;
+
+        private Integer licenseId;
+        private Integer subjectId;
     }
 }

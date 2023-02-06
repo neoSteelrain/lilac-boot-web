@@ -48,7 +48,7 @@ public class LectureNoteServiceTests {
     @Rollback
     @DisplayName("강의노트 추가 테스트")
     public void testAddLectureNote(){
-        Long noteId = lectureNoteService.addLectureNote(1L, "1번 강의노트", "첫번째 강의노트 입니다. 열심히 하겠습니다.");
+        Long noteId = lectureNoteService.addLectureNote(1L, "1번 강의노트", "첫번째 강의노트 입니다. 열심히 하겠습니다.", 1, 2);
         assertThat(noteId != null).isTrue();
         log.info("noteId = {}", noteId);
     }
@@ -57,7 +57,7 @@ public class LectureNoteServiceTests {
     @DisplayName("테스트용 데이타 입력")
     public void addLectureNotes(){
         for(int i=1 ; i <= 10 ; i++){
-            lectureNoteService.addLectureNote(4L, String.format("%d 번 강의노트", i), String.format("%d 번째 강의노트 설명입니다.열심히 하겠습니다.",i));
+            lectureNoteService.addLectureNote(4L, String.format("%d 번 강의노트", i), String.format("%d 번째 강의노트 설명입니다.열심히 하겠습니다."), 1, 2);
         }
     }
 
@@ -66,7 +66,7 @@ public class LectureNoteServiceTests {
     @Rollback
     @DisplayName("강의노트 삭제 테스트")
     public void testRemoveLectureNote(){
-        Long noteId = lectureNoteService.addLectureNote(1L, "1번 강의노트", "첫번째 강의노트 입니다. 열심히 하겠습니다.");
+        Long noteId = lectureNoteService.addLectureNote(1L, "1번 강의노트", "첫번째 강의노트 입니다. 열심히 하겠습니다.", 1, 2);
         assertThat(noteId != null);
         log.info("noteId = {}", noteId);
         lectureNoteService.removeLectureNote(noteId);
@@ -77,7 +77,7 @@ public class LectureNoteServiceTests {
     @Rollback
     @DisplayName("강의노트 수정 테스트")
     public void testModifyLectureNote(){
-        Long noteId = lectureNoteService.addLectureNote(1L, "1번 강의노트", "1번 강의노트 설명");
+        Long noteId = lectureNoteService.addLectureNote(1L, "1번 강의노트", "1번 강의노트 설명", 2, 3);
         List<LectureNoteDTO> note1 = lectureNoteService.getLectureListByMember(1L);
         note1.stream().forEach(note -> {
             log.info("수정 전 강의노트 : {}", note);

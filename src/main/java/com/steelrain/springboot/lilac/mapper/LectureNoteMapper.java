@@ -1,6 +1,7 @@
 package com.steelrain.springboot.lilac.mapper;
 
 import com.steelrain.springboot.lilac.datamodel.LectureNoteDTO;
+import com.steelrain.springboot.lilac.datamodel.PlayListVideoDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
@@ -32,4 +33,6 @@ public interface LectureNoteMapper {
 
     @Select("SELECT count(id) FROM tbl_lecture WHERE member_id=#{memberId} AND title=#{title}")
     int findDuplicatedLectureNoteByMember(Long memberId, String title);
+
+    boolean addVideoIdList(List<PlayListVideoDTO> videoIdLis);
 }

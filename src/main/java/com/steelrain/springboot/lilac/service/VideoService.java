@@ -36,6 +36,11 @@ public class VideoService implements IVideoService {
                                         .build();
     }
 
+    @Override
+    public List<Long> getAllVideoIdByPlayList(Long playListId) {
+        return m_videoRepository.findAllVideoIdByPlayList(playListId);
+    }
+
     private PageDTO createPageDTO(String keyword, int offset, int playlistCount){
         int totalPlaylistCount = m_videoRepository.selectTotalPlayListCountByKeyword(keyword);
         int maxPage = (int)(Math.ceil( (double) totalPlaylistCount / playlistCount));

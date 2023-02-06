@@ -29,6 +29,7 @@ public class VideoController {
     public String getPlayListDetail(@RequestParam("youtubePlaylistId") Long youtubePlaylistId, Model model){
         List<YoutubeVideoDTO> videoDTOList = m_videoService.getPlayListDetail(youtubePlaylistId);
         model.addAttribute("videoList", videoDTOList);
+        model.addAttribute("playListId", youtubePlaylistId);
         return "/video/playlist-detail";
     }
 

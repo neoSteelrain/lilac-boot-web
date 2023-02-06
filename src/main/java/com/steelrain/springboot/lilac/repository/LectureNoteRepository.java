@@ -1,7 +1,9 @@
 package com.steelrain.springboot.lilac.repository;
 
 import com.steelrain.springboot.lilac.datamodel.LectureNoteDTO;
+import com.steelrain.springboot.lilac.datamodel.PlayListVideoDTO;
 import com.steelrain.springboot.lilac.mapper.LectureNoteMapper;
+import com.steelrain.springboot.lilac.service.LectureNoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -35,5 +37,9 @@ public class LectureNoteRepository {
 
     public boolean checkDuplicatedLectureNoteByMember(Long memberId, String title) {
         return m_lectureNoteMapper.findDuplicatedLectureNoteByMember(memberId, title) > 0;
+    }
+
+    public boolean addVideoIdList(List<PlayListVideoDTO> videoIdList) {
+        return m_lectureNoteMapper.addVideoIdList(videoIdList);
     }
 }

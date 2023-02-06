@@ -38,4 +38,8 @@ public class VideoRepository implements IVideoRepository {
     public YoutubeVideoDTO findVideoDetail(Long videoId) {
         return m_videoMapper.findVideoDetail(videoId);
     }
+
+    public List<Long> findAllVideoIdByPlayList(Long playListId) {
+        return m_videoMapper.findAllVideoIdByPlayList(playListId);
+    }
 }

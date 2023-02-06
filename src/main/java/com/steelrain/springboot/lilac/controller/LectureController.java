@@ -5,12 +5,11 @@ import com.steelrain.springboot.lilac.datamodel.LectureNoteDTO;
 import com.steelrain.springboot.lilac.datamodel.MemberDTO;
 import com.steelrain.springboot.lilac.datamodel.form.LectureNoteAddDTO;
 import com.steelrain.springboot.lilac.service.ILectureNoteService;
+import com.steelrain.springboot.lilac.service.KeywordCategoryCacheService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +23,7 @@ import java.util.List;
 public class LectureController {
 
     private final ILectureNoteService m_lectureService;
+    private final KeywordCategoryCacheService m_keywordCategoryCacheService;
 
 
     @GetMapping("/lecture-note")
@@ -41,8 +41,14 @@ public class LectureController {
         model.addAttribute("lectureNoteList", noteDTOList);
         model.addAttribute("noteAdd", new LectureNoteAddDTO());
         model.addAttribute("memberId", memberDTO.getId());
+        model.addAttribute("memberNickname", memberDTO.getNickname());
+        model.addAttribute("memberEmail", memberDTO.getEmail());
+
+        model.addAttribute("licenseCodes",m_keywordCategoryCacheService.getLicenseCodeList());
+        model.addAttribute("subjectCodes",m_keywordCategoryCacheService.getSubjectCodeList());
         return "/lecture/lecture-note";
     }
+    // TODO : 강의노트 정보를 한번에 넘겨줄 DTO가 필요하다
 
     @PostMapping("/remove-note")
     public String removeLectureNote(@RequestParam("noteId") Long noteId){

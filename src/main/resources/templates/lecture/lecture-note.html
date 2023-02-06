@@ -1,174 +1,380 @@
 <!DOCTYPE html>
-<html lang="kr" xmlns:th="http://www.thymeleaf.org" >
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="utf-8" />
-  <meta http-equiv="x-ua-compatible" content="ie=edge" />
-  <title>강의노트</title>
-  <meta name="description" content="" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.svg}" />
-  <!-- Place favicon.ico in the root directory -->
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <title>강의노트</title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.svg}"/>
+    <!-- Place favicon.ico in the root directory -->
 
-  <!-- Web Font -->
-  <link
-          href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-          rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <!-- Web Font -->
+    <link
+            href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+            rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
 
-  <!-- ========================= CSS here ========================= -->
-  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
-  <link rel="stylesheet" th:href="@{/css/LineIcons.2.0.css}" />
-  <link rel="stylesheet" th:href="@{/css/animate.css}" />
-  <link rel="stylesheet" th:href="@{/css/tiny-slider.css}" />
-  <link rel="stylesheet" th:href="@{/css/glightbox.min.css}" />
-  <link rel="stylesheet" th:href="@{/css/main.css}" />
+    <!-- ========================= CSS here ========================= -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/LineIcons.2.0.css}"/>
+    <link rel="stylesheet" th:href="@{/css/animate.css}"/>
+    <link rel="stylesheet" th:href="@{/css/tiny-slider.css}"/>
+    <link rel="stylesheet" th:href="@{/css/glightbox.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
 </head>
+
 <body>
+<!--[if lte IE 9]>
 <p class="browserupgrade">
-  You are using an <strong>outdated</strong> browser. Please
-  <a href="https://browsehappy.com/">upgrade your browser</a> to improve
-  your experience and security.
+    You are using an <strong>outdated</strong> browser. Please
+    <a href="https://browsehappy.com/">upgrade your browser</a> to improve
+    your experience and security.
 </p>
 <![endif]-->
 
 <!-- Preloader -->
 <div class="preloader">
-  <div class="preloader-inner">
-    <div class="preloader-icon">
-      <span></span>
-      <span></span>
+    <div class="preloader-inner">
+        <div class="preloader-icon">
+            <span></span>
+            <span></span>
+        </div>
     </div>
-  </div>
 </div>
-
+<!-- /End Preloader -->
 <div th:replace="~{common/header::header}"></div>
 
-<section class="dashboard section">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-3 col-md-4 col-12">
-        <!-- Start Dashboard Sidebar -->
-        <div class="dashboard-sidebar">
-          <div class="user-image">
-            <img src="https://via.placeholder.com/300x300" alt="#">
-            <h3>회원 닉네임</h3>
-          </div>
-          <div class="dashboard-menu">
-            <ul>
-              <li><a class="active" href="/lecture/lecture-note"><i class="lni lni-dashboard"></i> 강의노트</a></li>
-              <li><a href="/member/profile"><i class="lni lni-pencil-alt"></i> 회원정보</a></li>
-              <li><a href="#"><i class="lni lni-bolt-alt"></i> 메뉴3</a></li>
-            </ul>
-          </div>
-        </div>
-        <!-- Start Dashboard Sidebar -->
-      </div>
-      <div class="col-lg-9 col-md-8 col-12">
-        <div class="main-content">
-          <!-- Start Details Lists -->
-          <div class="details-lists">
-            <div class="row">
-              <div class="col-lg-4 col-md-4 col-12">
-                <!-- Start Single List -->
-                <div class="single-list">
-                  <div class="list-icon">
-                    <i class="lni lni-checkmark-circle"></i>
-                  </div>
-                  <h3 th:utext="${lectureNoteList.size()} + '<span>강의노트 </span>'"></h3>
-                </div>
-                <!-- End Single List -->
-              </div>
-              <div class="col-lg-4 col-md-4 col-12">
-                <!-- Start Single List -->
-                <div class="single-list two">
-                  <div class="list-icon">
-                    <i class="lni lni-alarm"></i>
-                  </div>
-                  <h3>0<span>진행 중 </span>
-                  </h3>
-                </div>
-                <!-- End Single List -->
-              </div>
-              <div class="col-lg-4 col-md-4 col-12">
-                <!-- Start Single List -->
-                <div class="single-list three">
-                  <div class="list-icon">
-                    <i class="lni lni-alarm"></i>
-                  </div>
-                  <h3>0<span>완료된 노트 </span></h3>
-                </div>
-                <!-- End Single List -->
-              </div>
-            </div>
-          </div>
-          <!-- End Details Lists -->
-          <div class="row">
-            <div class="col-lg-12 col-md-12 col-12">
-              <!-- Start Activity Log -->
-              <div class="activity-log dashboard-block">
-                <ul>
-                  <li>
-                    <div class="log-icon">
-                      <i class="lni lni-circle-plus"></i>
+<!-- Start Dashboard Section -->
+<section class="dashboard section" style="margin-top:30px">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-4 col-12">
+                <!-- Start Dashboard Sidebar -->
+                <div class="dashboard-sidebar">
+                    <div class="user-image">
+                        <img src="https://via.placeholder.com/300x300" alt="#">
+                        <h3 th:text="${memberNickname}">
+                            <span><a href="javascript:void(0)" th:text="${memberEmail}"></a></span>
+                        </h3>
                     </div>
-<!--                    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#lectureNoteAddModal">강의노트 추가</button>-->
-                    <button class="btn btn-outline-primary" onclick="showAddLectureNoteModal()">강의노트 추가</button>
-                  </li>
-                  <li th:each="lectureNote : ${lectureNoteList}">
-                    <div class="log-icon">
-                      <i class="lni lni-alarm"></i>
+                    <div class="dashboard-menu">
+                        <ul th:each="note,idx : ${lectureNoteList}">
+                            <li><a href="javascript:void(0)" th:if="${idx.index == 0}" th:class="active"><i class="lni lni-dashboard"></i>[[${note.title}]]</a></li>
+                            <li><a href="javascript:void(0)" th:unless="${idx.index == 0}" ><i class="lni lni-dashboard"></i>[[${note.title}]]</a></li>
+                        </ul>
                     </div>
-                      <a href="javascript:void(0)" class="title" th:text="${lectureNote.title}"></a>
-                      <span class="time" th:text="${lectureNote.description}"></span>
-                      <span class="remove"><a th:href="|javascript:removeLectureNote('${lectureNote.id}')|"><i class="lni lni-close"></i></a></span>
-                  </li>
-                </ul>
-              </div>
-              <!-- End Activity Log -->
+                </div>
+                <!-- Start Dashboard Sidebar -->
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+            <div class="col-lg-9 col-md-8 col-12">
+                <div class="main-content">
+                    <!-- Start Post Ad Block Area -->
+                    <div class="dashboard-block mt-0">
+                        <h3 class="block-title" th:if="${lectureNoteList.size() >= 1}" >[[${lectureNoteList[0].title}]]</h3>
+                        <h3 class="block-title" th:unless="${lectureNoteList.size() >= 1}" >아직 강의노트가 없으시다면 강의노트를 만들어보세요</h3>
+                        <nav class="list-nav">
+                            <ul>
+                                <li th:text="'전체노트 : '+${lectureNoteList.size()}">전체노트 : 12</li>
+                                <li>진행중 : 0</li>
+                                <li>완료 : 0</li>
+                                <li><a href="#all-license-collase" data-bs-toggle="collapse" aria-expanded="false"
+                                       aria-controls="all-license-collase">노트설명 </a></li>
+                                <li><a href="javascript:showAddLectureNoteModal()">노트추가 </a></li>
+                                <li><a href="javascript:void(0)">노트수정 </a></li>
+                                <li><a href="javascript:void(0)">노트삭제 </a></li>
+                            </ul>
+                        </nav>
+                        <div class="collapse" style="padding-left: 20px;padding-right: 20px"
+                             id="all-license-collase">
+                            <div class="detail-inner">
+                                <p th:if="${lectureNoteList.size() >= 1}">[[${lectureNoteList[0].description}]]</p>
+                                <p th:if="${lectureNoteList.size() >= 1}">--- 아직 강의노트 설명을 작성하지 않으셨습니다 ----</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inner-block">
+                        <!-- Start Post Ad Tab -->
+                        <div class="post-ad-tab">
+                            <nav>
+                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                    <button class="nav-link active" id="nav-item-info-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-item-info" type="button" role="tab"
+                                            aria-controls="nav-item-info" aria-selected="true">
+                                        <!-- <span class="serial">01</span> -->
+                                        자격증 정보
+                                        <span class="sub-title">자격증 종류</span>
+                                    </button>
+                                    <button class="nav-link" id="nav-item-details-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-item-details" type="button" role="tab"
+                                            aria-controls="nav-item-details" aria-selected="false">
+                                        도서 정보
+                                        <span class="sub-title">전체 2권</span>
+                                    </button>
+                                    <button class="nav-link" id="nav-user-info-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-user-info" type="button" role="tab"
+                                            aria-controls="nav-user-info" aria-selected="false">
+                                        영상정보
+                                        <span class="sub-title">영상개수 10개</span>
+                                    </button>
+                                </div>
+                            </nav>
+                            <div class="tab-content" id="nav-tabContent">
+                                <div class="tab-pane fade show active" id="nav-item-info" role="tabpanel"
+                                     aria-labelledby="nav-item-info-tab">
+                                    <!-- Start Post Ad Step One Content -->
+                                    <div class="step-one-content">
+                                        <form class="default-form-style" method="post" action="#">
+                                            <div class="row">
+                                                <table class="table table-hover table-bordered" style="width:100%">
+                                                    <thread>
+                                                        <tr>
+                                                            <th scope="col" style="width:12%">설명</th>
+                                                            <th scope="col" style="width:13%">필기접수</th>
+                                                            <th scope="col" style="width:13%">필기시험</th>
+                                                            <th scope="col" style="width:8%">필기합격발표</th>
+                                                            <th scope="col" style="width:13%">실기접수</th>
+                                                            <th scope="col" style="width:13%">실기시험</th>
+                                                            <th scope="col" style="width:8%">실기합격발표</th>
+                                                        </tr>
+                                                    </thread>
+                                                    <tbody>
+                                                    <!--<tr th:each="schedule:${licenseInfo.scheduleList}">
+                                                        <td th:text="${schedule.category}"></td>
+                                                        <td th:text="${schedule.docRegPeriod}"></td>
+                                                        <td th:text="${schedule.docExam}"></td>
+                                                        <td th:text="${schedule.docPass}"></td>
+                                                        <td th:text="${schedule.pracReg}"></td>
+                                                        <td th:text="${schedule.pracExam}"></td>
+                                                        <td th:text="${schedule.docPass}"></td>
+                                                    </tr>-->
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <!-- Start Post Ad Step One Content -->
+                                </div>
+                                <div class="tab-pane fade" id="nav-item-details" role="tabpanel"
+                                     aria-labelledby="nav-item-details-tab">
+                                    <!-- Start Post Ad Step Two Content -->
+                                    <div class="step-two-content">
+                                        <div class="alt-option">
+                                            <span></span>
+                                        </div>
+                                        <div class="my-items">
+                                            <!-- Start List Title -->
+                                            <div class="item-list-title">
+                                                <div class="row align-items-center">
+                                                    <div class="col-lg-7 col-md-7 col-12">
+                                                        <p>도서명</p>
+                                                    </div>
+                                                    <div class="col-lg-2 col-md-2 col-12">
+                                                        <p>출판사</p>
+                                                    </div>
+                                                    <div class="col-lg-2 col-md-2 col-12">
+                                                        <p>출판일</p>
+                                                    </div>
+                                                    <div class="col-lg-1 col-md-1 col-12 align-right">
+                                                        <p>삭제</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- End List Title -->
+                                            <!-- Start Single List -->
+                                            <div class="single-item-list">
+                                                <div class="row align-items-center">
+                                                    <div class="col-lg-7 col-md-7 col-12">
+                                                        <div class="item-image">
+                                                            <img src="https://via.placeholder.com/100x100" alt="#">
+                                                            <div class="content">
+                                                                <h3 class="title"><a href="javascript:void(0)">도서 제목</a>
+                                                                </h3>
+                                                                <span class="price">가격</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2 col-md-2 col-12">
+                                                        <p>한빛미디어</p>
+                                                    </div>
+                                                    <div class="col-lg-2 col-md-2 col-12">
+                                                        <p>2022-10-10</p>
+                                                    </div>
+                                                    <div class="col-lg-1 col-md-1 col-12 align-right">
+                                                        <ul class="action-btn">
+                                                            <li><a href="javascript:void(0)"><i
+                                                                    class="lni lni-trash"></i></a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- End Single List -->
+                                            <!-- Pagination -->
+                                            <div class="pagination left">
+                                                <ul class="pagination-list">
+                                                    <li><a href="javascript:void(0)">1</a></li>
+                                                    <li class="active"><a href="javascript:void(0)">2</a></li>
+                                                    <li><a href="javascript:void(0)">3</a></li>
+                                                    <li><a href="javascript:void(0)">4</a></li>
+                                                    <li><a href="javascript:void(0)"><i
+                                                            class="lni lni-chevron-right"></i></a></li>
+                                                </ul>
+                                            </div>
+                                            <!--/ End Pagination -->
+                                        </div>
+                                    </div>
+                                    <!-- Start Post Ad Step Two Content -->
+                                </div>
+                                <div class="tab-pane fade" id="nav-user-info" role="tabpanel"
+                                     aria-labelledby="nav-user-info-tab">
+                                    <!-- Start Post Ad Step Three Content -->
+                                    <div class="step-three-content">
+                                        <!-- <h3 class="block-title">My Favorites</h3> -->
+                                        <!-- <nav class="list-nav">
+                                            <ul>
+                                                <li class="active"><a href="javascript:void(0)">Featured
+                                                        <span>85</span></a></li>
+                                            </ul>
+                                        </nav> -->
+                                        <!-- Start Items Area -->
+                                        <div class="alt-option">
+                                            <span></span>
+                                        </div>
+                                        <div class="my-items">
+                                            <!-- Start List Title -->
+                                            <div class="item-list-title">
+                                                <div class="row align-items-center">
+                                                    <div class="col-lg-7 col-md-7 col-12">
+                                                        <p>재생목록 제목</p>
+                                                    </div>
+                                                    <div class="col-lg-2 col-md-2 col-12">
+                                                        <p>영상개수</p>
+                                                    </div>
+                                                    <div class="col-lg-2 col-md-2 col-12">
+                                                        <p>진행상황</p>
+                                                    </div>
+                                                    <div class="col-lg-1 col-md-1 col-12 align-right">
+                                                        <p>삭제</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- End List Title -->
+                                            <!-- Start Single List -->
+                                            <div class="single-item-list">
+                                                <div class="row align-items-center">
+                                                    <div class="col-lg-7 col-md-7 col-12">
+                                                        <div class="item-image">
+                                                            <img src="https://via.placeholder.com/100x100" alt="#">
+                                                            <div class="content">
+                                                                <h3 class="title"><a href="javascript:void(0)">자바 완전
+                                                                    정복</a></h3>
+                                                                <span class="price">채널명</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2 col-md-2 col-12">
+                                                        <p>100</p>
+                                                    </div>
+                                                    <div class="col-lg-2 col-md-2 col-12">
+                                                        <p>60%</p>
+                                                    </div>
+                                                    <div class="col-lg-1 col-md-1 col-12 align-right">
+                                                        <ul class="action-btn">
+                                                            <li><a href="javascript:void(0)"><i
+                                                                    class="lni lni-trash"></i></a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- End Single List -->
 
+                                            <!-- Pagination -->
+                                            <div class="pagination left">
+                                                <ul class="pagination-list">
+                                                    <li><a href="javascript:void(0)">1</a></li>
+                                                    <li class="active"><a href="javascript:void(0)">2</a></li>
+                                                    <li><a href="javascript:void(0)">3</a></li>
+                                                    <li><a href="javascript:void(0)">4</a></li>
+                                                    <li><a href="javascript:void(0)"><i
+                                                            class="lni lni-chevron-right"></i></a></li>
+                                                </ul>
+                                            </div>
+                                            <!--/ End Pagination -->
+                                        </div>
+                                        <!-- End Items Area -->
+                                    </div>
+                                </div>
+                                <!-- Start Post Ad Step Three Content -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Post Ad Tab -->
+                </div>
+            </div>
+            <!-- End Post Ad Block Area -->
+        </div>
+    </div>
+</section>
+<!-- End Dashboard Section -->
 <!-- 강의노트 생성 모달 시작 -->
 <div class="modal fade" id="lectureNoteAddModal" tabindex="-1" aria-labelledby="addLectureNoteLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content" style="height: 700px">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="addLectureNoteLabel">강의노트 만들기</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-          <label for="noteTitle" class="col-form-label">강의노트 제목:</label>
-          <input id="noteTitle" type="text" class="form-control">
-          <span id="titleNotice" class="text-danger"></span>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="height: 700px">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="addLectureNoteLabel">강의노트 만들기</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="search-input">
+                                <label for="license"><i class="lni lni-grid-alt theme-color"></i></label>
+                                <select name="license" id="license" th:field="*{licenseCodes}" onchange="checkLicenseSelectBox()">
+                                    <option value="-1">--- 자격증 선택 ---</option>
+                                    <option th:each="licenseCode : ${licenseCodes}" th:value="${licenseCode.id}"
+                                            th:text="${licenseCode.name}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="search-input">
+                                <label for="subject"><i class="lni lni-grid-alt theme-color"></i></label>
+                                <select name="subject" id="subject" th:field="*{subjectCodes}" onchange="checkSubjectSelectBox()" >
+                                    <option value="-1">--- 키워드 선택 ---</option>
+                                    <option th:each="subjectCode : ${subjectCodes}" th:value="${subjectCode.id}"
+                                            th:text="${subjectCode.name}"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="noteTitle" class="col-form-label">강의노트 제목:</label>
+                    <input id="noteTitle" type="text" class="form-control">
+                    <span id="titleNotice" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label for="noteDesc" class="col-form-label">강의노트 설명:</label>
+                    <textarea id="noteDesc" class="form-control" row="5"></textarea>
+                    <span id="descNotice" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-cancel" type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                <button id="btn-add" type="button" class="btn btn-primary" onclick="addLectureNote()">만들기</button>
+            </div>
         </div>
-        <div class="mb-3">
-          <label for="noteDesc" class="col-form-label">강의노트 설명:</label>
-          <textarea id="noteDesc" class="form-control" row="5"></textarea>
-          <span id="descNotice" class="text-danger"></span>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button id="btn-cancel" type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-        <button id="btn-add"  type="button" class="btn btn-primary" onclick="addLectureNote()">만들기</button>
-      </div>
     </div>
-  </div>
 </div>
 
-<!-- Start Footer Area -->
 <th:block th:replace="~{common/footer::footer}"></th:block>
-<!--/ End Footer Area -->
 
 <!-- ========================= scroll-top ========================= -->
 <a href="#" class="scroll-top btn-hover">
-  <i class="lni lni-chevron-up"></i>
+    <i class="lni lni-chevron-up"></i>
 </a>
+
 
 <div th:replace="~{common/header::header}"></div>
 
@@ -181,62 +387,89 @@
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/lilac-common.js}"></script>
 <script th:inline="javascript">
-  const showAddLectureNoteModal = () => {
-    $("#titleNotice").html('');
-    $("#descNotice").html('');
-    $("#lectureNoteAddModal").modal("show");
-  }
 
-  const addLectureNote = () => {
-    const noteTile = $("#noteTitle").val();
-    const noteDesc = $("#noteDesc").val();
-    const isValidNoteTitle = validateString(noteTile);
-    const isValidNoteDesc = validateString(noteDesc);
-    $("#titleNotice").html(isValidNoteTitle ? '' : '강의노트 제목을 입력해주세요');
-    $("#descNotice").html(isValidNoteDesc ? '' : '강의노트 설명을 입력해주세요');
-
-    if(!(isValidNoteTitle && isValidNoteDesc)){
-      return;
+    const toggleAtag = () => {
+        toggleClass(".active-color");
     }
-    let jsonRequest = {
-      "memberId":null,
-      "title":noteTile,
-      "description":noteDesc
-    };
-    $.ajax({
-      type:"post",
-      url:"/lecture/api/addNote",
-      headers:{"Content-Type":"application/json"},
-      data:JSON.stringify(jsonRequest),
-      success:function (result) {
-        alert("강의노트를 추가하였습니다.");
-        $("#lectureNoteAddModal").modal("hide");
-        //document.location.href = "/lecture/lecture-note";
-      },
-      error:function (jqXHR){
-        if(jqXHR.status == 409){
-          alert("중복된 강의노트 입니다. 다른 제목을 입력해주세요.");
+
+    const checkLicenseSelectBox = () => {
+        const selectedVal = $("#license").val();
+        if(selectedVal == -1){
+            $("#subject").attr("disabled", false);
         }else{
-          alert("강의노트 추가를 실패하였습니다");
+            $("#subject").attr("disabled", "disabled");
         }
-      }
-    })
-  }
+    }
 
-  // rest api 호출하지 않고 form으로 post 요청을 날려본다
-  const removeLectureNote = (noteId) => {
-    let form = document.createElement('form');
-    let tmp = document.createElement('input');
-    tmp.setAttribute('type', 'hidden');
-    tmp.setAttribute('name', 'noteId');
-    tmp.setAttribute('value', noteId);
-    form.appendChild(tmp);
-    form.setAttribute('method', 'post');
-    form.setAttribute('action', '/lecture/remove-note');
-    document.body.appendChild(form);
-    form.submit();
-  }
+    const checkSubjectSelectBox = () => {
+        const selectedVal = $("#subject").val();
+        if(selectedVal == -1){
+            $("#license").attr("disabled", false);
+        }else{
+            $("#license").attr("disabled", "disabled");
+        }
+    }
+
+    const showAddLectureNoteModal = () => {
+        $("#titleNotice").html('');
+        $("#descNotice").html('');
+        $("#lectureNoteAddModal").modal("show");
+    }
+
+    const addLectureNote = () => {
+        const noteTile = $("#noteTitle").val();
+        const noteDesc = $("#noteDesc").val();
+        const licenseId = $("#license").val();
+        const subjectId = $("#subject").val();
+        const isValidNoteTitle = validateString(noteTile);
+        const isValidNoteDesc = validateString(noteDesc);
+        $("#titleNotice").html(isValidNoteTitle ? '' : '강의노트 제목을 입력해주세요');
+        $("#descNotice").html(isValidNoteDesc ? '' : '강의노트 설명을 입력해주세요');
+
+        if (!(isValidNoteTitle && isValidNoteDesc)) {
+            return;
+        }
+        let jsonRequest = {
+            "memberId": null,
+            "title": noteTile,
+            "description": noteDesc,
+            "licenseId":(licenseId == undefined || licenseId == -1) ? null : licenseId,
+            "subjectId":(subjectId == undefined || subjectId == -1) ? null : subjectId
+        };
+        $.ajax({
+            type: "post",
+            url: "/lecture/api/addNote",
+            headers: {"Content-Type": "application/json"},
+            data: JSON.stringify(jsonRequest),
+            success: function (result) {
+                alert("강의노트를 추가하였습니다.");
+                $("#lectureNoteAddModal").modal("hide");
+                document.location.href = "/lecture/lecture-note";
+            },
+            error: function (jqXHR) {
+                if (jqXHR.status == 409) {
+                    alert("중복된 강의노트 입니다. 다른 제목을 입력해주세요.");
+                } else {
+                    alert("강의노트 추가를 실패하였습니다");
+                }
+            }
+        })
+    }
+
+    // rest api 호출하지 않고 form으로 post 요청을 날려본다
+    const removeLectureNote = (noteId) => {
+        let form = document.createElement('form');
+        let tmp = document.createElement('input');
+        tmp.setAttribute('type', 'hidden');
+        tmp.setAttribute('name', 'noteId');
+        tmp.setAttribute('value', noteId);
+        form.appendChild(tmp);
+        form.setAttribute('method', 'post');
+        form.setAttribute('action', '/lecture/remove-note');
+        document.body.appendChild(form);
+        form.submit();
+    }
 </script>
-
 </body>
+
 </html>

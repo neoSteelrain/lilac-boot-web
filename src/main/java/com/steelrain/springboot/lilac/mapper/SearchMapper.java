@@ -19,7 +19,7 @@ public interface SearchMapper {
 //            @Result(property = "name", column = "name"),
 //            @Result(property = "keyWord", column = "key_word")
 //    })
-    @Select("SELECT name,key_word FROM tbl_subject WHERE is_active = 1 AND is_scheduled = 0")
+    @Select("SELECT id,name,key_word FROM tbl_subject WHERE is_active = 1 AND is_scheduled = 0")
     List<SubjectCodeDTO> getSubjectCodes();
 
 //    @Select("SELECT code,name FROM tbl_lib_region;")
@@ -54,6 +54,6 @@ public interface SearchMapper {
 //            @Result(property = "name", column = "name"),
 //            @Result(property = "keyWord", column = "key_word")
 //    })
-    @Select("SELECT code,name,key_word FROM tbl_license")
+    @Select("SELECT id,code,name,key_word FROM tbl_license")
     List<LicenseCodeDTO> getLicenseCodes();
 }

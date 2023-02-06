@@ -22,4 +22,7 @@ public interface VideoMapper {
 
     @Select("SELECT video_id, title, publish_date, comment_count, view_count, description FROM tbl_youtube WHERE id=#{videoId}")
     YoutubeVideoDTO findVideoDetail(Long videoId);
+
+    @Select("SELECT id FROM tbl_youtube WHERE youtube_playlist_id=#{playListId}")
+    List<Long> findAllVideoIdByPlayList(Long playListId);
 }
