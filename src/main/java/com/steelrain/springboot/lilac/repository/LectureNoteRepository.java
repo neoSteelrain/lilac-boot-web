@@ -42,4 +42,8 @@ public class LectureNoteRepository {
     public boolean addVideoIdList(List<PlayListVideoDTO> videoIdList) {
         return m_lectureNoteMapper.addVideoIdList(videoIdList);
     }
+
+    public List<LectureNoteDTO> findLectureNoteListByMember(Long memberId) {
+        return m_lectureNoteMapper.findLectureNoteListByMember(memberId);
+    }
 }

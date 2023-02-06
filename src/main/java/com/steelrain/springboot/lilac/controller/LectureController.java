@@ -57,6 +57,17 @@ public class LectureController {
         return "redirect:/lecture/lecture-note";
     }
 
+    @GetMapping("modal-template")
+    public String getLectureNoteListByMemberModal(@RequestParam("memberId") Long memberId, Model model, HttpServletRequest servletRequest){
+        HttpSession session = servletRequest.getSession(false);
+        if(session == null){
+            return "redirect:/";
+        }
+        List<LectureNoteDTO> noteDTOList = m_lectureService.getlectureNoteListByMemberModal(memberId);
+        model.addAttribute("lectureNoteList", noteDTOList);
+        return "/lecture/lecture-note-template";
+    }
+
     /*
         모달창에서 빈 검증을 테스트해보기 위한 코드
         사용하지는 않는다.

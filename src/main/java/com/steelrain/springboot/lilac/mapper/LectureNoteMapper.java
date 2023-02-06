@@ -35,4 +35,7 @@ public interface LectureNoteMapper {
     int findDuplicatedLectureNoteByMember(Long memberId, String title);
 
     boolean addVideoIdList(List<PlayListVideoDTO> videoIdLis);
+
+    @Select("SELECT id,title FROM tbl_lecture WHERE member_id=#{memberId}")
+    List<LectureNoteDTO> findLectureNoteListByMember(Long memberId);
 }

@@ -105,6 +105,11 @@ public class LectureNoteService implements ILectureNoteService{
         return  m_lectureNoteRepository.addVideoIdList(paramList);
     }
 
+    @Override
+    public List<LectureNoteDTO> getlectureNoteListByMemberModal(Long memberId) {
+        return m_lectureNoteRepository.findLectureNoteListByMember(memberId);
+    }
+
     private List<LectureNoteDTO> findNoteListByMember(Long memberId){
         return m_lectureNoteRepository.findNoteListByMember(memberId);
     }
