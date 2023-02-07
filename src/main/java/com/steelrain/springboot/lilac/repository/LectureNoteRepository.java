@@ -43,7 +43,7 @@ public class LectureNoteRepository {
         return m_lectureNoteMapper.addVideoIdList(videoIdList);
     }
 
-    public List<LectureNoteDTO> findLectureNoteListByMember(Long memberId) {
-        return m_lectureNoteMapper.findLectureNoteListByMember(memberId);
+    public List<LectureNoteDTO> findLectureNoteListByMember(Long memberId, Long playListId) {
+        return m_lectureNoteMapper.findLectureNoteListByMember(memberId, playListId);
     }
 }

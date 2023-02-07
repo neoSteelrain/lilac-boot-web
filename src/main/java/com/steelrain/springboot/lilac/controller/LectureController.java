@@ -58,14 +58,14 @@ public class LectureController {
     }
 
     @GetMapping("modal-template")
-    public String getLectureNoteListByMemberModal(@RequestParam("memberId") Long memberId, Model model, HttpServletRequest servletRequest){
+    public String getLectureNoteListByMemberModal(@RequestParam("memberId") Long memberId, Long playListId, Model model, HttpServletRequest servletRequest){
         HttpSession session = servletRequest.getSession(false);
         if(session == null){
             return "redirect:/";
         }
-        List<LectureNoteDTO> noteDTOList = m_lectureService.getlectureNoteListByMemberModal(memberId);
+        List<LectureNoteDTO> noteDTOList = m_lectureService.getLectureNoteListByMemberModal(memberId, playListId);
         model.addAttribute("lectureNoteList", noteDTOList);
-        return "/lecture/lecture-note-template";
+        return "/lecture/lecture-note-modal-template";
     }
 
     /*

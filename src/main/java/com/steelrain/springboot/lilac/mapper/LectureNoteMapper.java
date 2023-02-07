@@ -41,5 +41,5 @@ public interface LectureNoteMapper {
             @Result(property = "id", column="id"),
             @Result(property = "title", column="title")
     })
-    List<LectureNoteDTO> findLectureNoteListByMember(Long memberId);
+    List<LectureNoteDTO> findLectureNoteListByMember(Long memberId, Long playListId);
 }

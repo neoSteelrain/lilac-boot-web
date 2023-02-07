@@ -105,9 +105,14 @@ public class LectureNoteService implements ILectureNoteService{
         return  m_lectureNoteRepository.addVideoIdList(paramList);
     }
 
+    /*
+        회원이 선택한 재생영상을 강의노트에 추가하기 위해 호출하는 서비스
+        회원이 가지고 있는 강의노트중에서 추가하려는 재생목록이 없는 강의노트만 모아서 보내줘야 한다
+        중복된 재생목록이 있으면 안된다.
+     */
     @Override
-    public List<LectureNoteDTO> getlectureNoteListByMemberModal(Long memberId) {
-        return m_lectureNoteRepository.findLectureNoteListByMember(memberId);
+    public List<LectureNoteDTO> getLectureNoteListByMemberModal(Long memberId, Long playListId) {
+        return m_lectureNoteRepository.findLectureNoteListByMember(memberId, playListId);
     }
 
     private List<LectureNoteDTO> findNoteListByMember(Long memberId){

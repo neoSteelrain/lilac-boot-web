@@ -14,26 +14,19 @@
     <delete id="deleteLectureNote" parameterType="java.lang.Long">
         DELETE FROM tbl_lecture WHERE id=#{noteId}
     </delete>
-<!--
-private Integer licenseId;
-private Integer subjectId;
-private String title;
-private String description;
-private Timestamp regDate;
-private Integer progress;
--->
+
     <update id="updateLectureNote" parameterType="LectureNoteDTO">
         UPDATE tbl_lecture SET license_id=#{licenseId} , subject_id=#{subjectId} , title=#{title} , description=#{description} , progress=#{progress} WHERE id = #{id};
     </update>
-<!--
-    private Long lectureId;
-    protected Long lectureMemberId;
-    private Long youtubeId;
- -->
+
     <insert id="addVideoIdList" parameterType="PlayListVideoDTO" >
         INSERT INTO ref_tbl_lecture_youtube(lecture_id,lecture_member_id,youtube_id) VALUES
             <foreach item="item" collection="list" separator=",">
                 (#{item.lectureId},#{item.lectureMemberId},#{item.youtubeId})
             </foreach>
     </insert>
+
+    <select id="findLectureNoteListByMember" parameterType="map" resultMap="LectureNoteDTO">
+
+    </select>
 </mapper>

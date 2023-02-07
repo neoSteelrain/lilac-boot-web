@@ -13,5 +13,5 @@ public interface ILectureNoteService {
 
     boolean addYoutubePlayListToLectureNote(Long lectureNoteId, Long playListId, Long memberId);
 
-    List<LectureNoteDTO> getlectureNoteListByMemberModal(Long memberId);
+    List<LectureNoteDTO> getLectureNoteListByMemberModal(Long memberId, Long playListId);
 }

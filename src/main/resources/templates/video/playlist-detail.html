@@ -70,7 +70,7 @@
                     <i class="lni lni-eye" th:text="' '+${videoList[0].viewCount}"></i>
                 </li>
                 <li>
-                  <a th:href="|javascript:addToLectureNote('${playListId}')|" class="reply-link"><i class="lni lni-notepad"></i> 강의노트에 추가하기</a>
+                  <a th:href="|javascript:showLectureNoteAddModal('${playListId}')|" class="reply-link"><i class="lni lni-notepad"></i> 강의노트에 추가하기</a>
                 </li>
               </ul>
               <p th:utext="${videoList[0].description}"></p>
@@ -168,7 +168,10 @@
                     </li>
                     <!-- 재생목록의 개별영상 끝 -->
                   </ul>
-                  <input id="memberIdHidden" th:value="${memberId}">
+                  <form>
+
+                  </form>
+                  <input id="memberIdHidden" type="hidden" th:value="${memberId}">
                 </div>
                 <!-- End User List -->
               </div>
@@ -194,50 +197,59 @@
 <script th:src="@{/js/main.js}"></script>
 <script th:inline="javascript">
 
-  const addToLectureNote = (paramPlayListId) => {
+  // 강의노트 모달html을 서버로 부터 받아오고 모달창을 띄운다
+  const showLectureNoteAddModal = (paramPlayListId) => {
+    console.log("paramPlayListId : "+paramPlayListId);
+
     const memberIdVal = $("#memberIdHidden").val();
     $.ajax({
       type:"get",
       url:"/lecture/modal-template",
       dataType: "text",
-      data:{memberId:memberIdVal},
+      data:{
+        memberId:memberIdVal,
+        playListId:paramPlayListId
+      },
       success:function (data){
         let html = jQuery('<div>').html(data);
         let contents = html.find("div#lecture-note-modal-template").html();
         $('#div-modal-lecture-note').html(contents);
         $("#addNoteModal").modal("show");
+
       },error:function (error){
         alert("강의노트 입력창 호출에 실패하였습니다.");
       }
     })
-    /*
-            @NotNull
-        private Long playListId;
+  }
 
-        @NotNull
-        private Long lectureNoteId;
-     */
-    // let param = {
-    //   "playListId":paramPlayListId,
-    //   "lectureNoteId":2
-    // }
-    // $.ajax({
-    //   type:"post",
-    //   url:"/lecture/api/addPlayList",
-    //   headers:{"Content-Type":"application/json"},
-    //   data:JSON.stringify(param),
-    //   success:function (resultJson){
-    //     console.log("resultJson : " + resultJson);
-    //     alert("재생목록을 강의노트에 추가하였습니다.");
-    //   },
-    //   error:function(jqXHR){
-    //     if(jqXHR.status == 401){
-    //       alert("로그인 후 사용할 수 있습니다.");
-    //     }
-    //     console.log("jqXHR.status : " + jqXHR.status);
-    //     alert("재생목록을 강의노트에 추가하는데 실패하였습니다.");
-    //   }
-    // })
+  // const addPlayListToLectureNote = (param) => {
+  //   console.log("addPlayListToLectureNote param : " + param);
+  // }
+
+  const addPlayListToLectureNote = () => {
+    const paramPlayListId = [[${playListId}]];
+    const paramLectureNoteId = $("#lectureNoteSelect").val();
+    let param = {
+      "playListId": paramPlayListId,
+      "lectureNoteId": paramLectureNoteId
+    }
+    $.ajax({
+      type: "post",
+      url: "/lecture/api/addPlayList",
+      headers: {"Content-Type": "application/json"},
+      data: JSON.stringify(param),
+      success: function (resultJson) {
+        console.log("resultJson : " + resultJson);
+        alert("재생목록을 강의노트에 추가하였습니다.");
+      },
+      error: function (jqXHR) {
+        if (jqXHR.status == 401) {
+          alert("로그인 후 사용할 수 있습니다.");
+        }
+        console.log("jqXHR.status : " + jqXHR.status);
+        alert("재생목록을 강의노트에 추가하는데 실패하였습니다.");
+      }
+    })
   }
 
   const playSelectedVideo = (paramVideoId) => {
