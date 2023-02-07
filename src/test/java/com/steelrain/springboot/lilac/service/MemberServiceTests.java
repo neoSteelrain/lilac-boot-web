@@ -66,6 +66,7 @@ public class MemberServiceTests {
                     .nickname(String.format("user%s", i))
                     .email(String.format("user%s@user.com", i))
                     .password("123456yt")
+                    .grade(2)
                     .build();
             m_memberService.registerMember(dto);
         }

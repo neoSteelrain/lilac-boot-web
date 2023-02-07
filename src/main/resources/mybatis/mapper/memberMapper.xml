@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.steelrain.springboot.lilac.mapper.MemberMapper">
     <insert id="saveMember" useGeneratedKeys="true" keyProperty="id" parameterType="MemberDTO">
-        INSERT INTO tbl_member(nickname, email, password) value(#{nickname},#{email},#{password})
+        INSERT INTO tbl_member(nickname, email, password,grade) value(#{nickname},#{email},#{password},#{grade})
     </insert>
 
     <select id="findMember" parameterType="map" resultType="MemberDTO">
