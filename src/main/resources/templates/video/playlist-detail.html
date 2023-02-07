@@ -168,6 +168,7 @@
                     </li>
                     <!-- 재생목록의 개별영상 끝 -->
                   </ul>
+                  <input id="memberIdHidden" th:value="${memberId}">
                 </div>
                 <!-- End User List -->
               </div>
@@ -194,10 +195,12 @@
 <script th:inline="javascript">
 
   const addToLectureNote = (paramPlayListId) => {
+    const memberIdVal = $("#memberIdHidden").val();
     $.ajax({
       type:"get",
       url:"/lecture/modal-template",
       dataType: "text",
+      data:{memberId:memberIdVal},
       success:function (data){
         let html = jQuery('<div>').html(data);
         let contents = html.find("div#lecture-note-modal-template").html();

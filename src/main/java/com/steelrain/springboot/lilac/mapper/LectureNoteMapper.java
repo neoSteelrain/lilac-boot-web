@@ -27,7 +27,7 @@ public interface LectureNoteMapper {
             @Result(property = "title", column = "title"),
             @Result(property = "description", column = "description"),
             @Result(property = "regDate", column = "reg_date"),
-            @Result(property = "progress", column = "progress"),
+            @Result(property = "progress", column = "progress")
     })
     List<LectureNoteDTO> findNoteListByMember(Long memberId);
 
@@ -37,5 +37,9 @@ public interface LectureNoteMapper {
     boolean addVideoIdList(List<PlayListVideoDTO> videoIdLis);
 
     @Select("SELECT id,title FROM tbl_lecture WHERE member_id=#{memberId}")
+    @Results(id ="findLectureNoteListByMemberMap", value={
+            @Result(property = "id", column="id"),
+            @Result(property = "title", column="title")
+    })
     List<LectureNoteDTO> findLectureNoteListByMember(Long memberId);
 }

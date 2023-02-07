@@ -1,10 +1,7 @@
 package com.steelrain.springboot.lilac.datamodel;
 
 import jdk.jfr.Timespan;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.sql.Timestamp;
 
@@ -12,17 +9,9 @@ import java.sql.Timestamp;
 @Setter
 @ToString
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class LectureNoteDTO {
-    /*
-    id	bigint	NO	PRI
-    member_id	bigint	NO	PRI
-    license_id	int	YES	MUL
-    subject_id	int	YES	MUL
-    title	varchar(100)	YES
-    description	varchar(500)	YES
-    reg_date	datetime	YES
-    progress	int	YES
-     */
     private Long id;
     private Long memberId;
     private Integer licenseId;
