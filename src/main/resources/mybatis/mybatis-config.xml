@@ -12,5 +12,6 @@
         <typeAlias type="com.steelrain.springboot.lilac.datamodel.YoutubePlayListDTO" alias="YoutubePlayListDTO"></typeAlias>
         <typeAlias type="com.steelrain.springboot.lilac.datamodel.RecommendedVideoDTO" alias="RecommendedVideoDTO"></typeAlias>
         <typeAlias type="com.steelrain.springboot.lilac.datamodel.PlayListVideoDTO" alias="PlayListVideoDTO"></typeAlias>
+        <typeAlias type="com.steelrain.springboot.lilac.datamodel.LectureNoteByMemberDTO" alias="LectureNoteByMemberDTO"></typeAlias>
     </typeAliases>
 </configuration>

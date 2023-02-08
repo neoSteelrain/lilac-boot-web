@@ -50,7 +50,6 @@ public class LectureController {
         return "/lecture/lecture-note";
     }
     // TODO : 강의노트 정보를 한번에 넘겨줄 DTO가 필요하다
-
     @PostMapping("/remove-note")
     public String removeLectureNote(@RequestParam("noteId") Long noteId){
         m_lectureService.removeLectureNote(noteId);

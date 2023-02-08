@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.mapper;
 
+import com.steelrain.springboot.lilac.datamodel.LectureNoteByMemberDTO;
 import com.steelrain.springboot.lilac.datamodel.LectureNoteDTO;
 import com.steelrain.springboot.lilac.datamodel.PlayListVideoDTO;
 import com.steelrain.springboot.lilac.datamodel.form.PlayListAddModalDTO;
@@ -37,7 +38,7 @@ public interface LectureNoteMapper {
 
     boolean addVideoIdList(List<PlayListVideoDTO> videoIdLis);
 
-    //List<PlayListAddModalDTO> findLectureNoteListByMember(Long memberId);
+    List<LectureNoteByMemberDTO> findLectureNoteListByMember(Long memberId);
 
     /* 회원의 모든 강의노트목록을 반환하는 mapper 쿼리 수정 후 주석처리함
     @Select("SELECT id,title FROM tbl_lecture WHERE member_id=#{memberId}")
@@ -46,12 +47,4 @@ public interface LectureNoteMapper {
             @Result(property = "title", column="title")
     })
     List<LectureNoteDTO> findLectureNoteListByMember(Long memberId, Long playListId);*/
-
-    // 회원의 모든 강의노트목록을 반환하는 mapper 쿼리 수정 후 주석처리함
-    @Select("SELECT id,title FROM tbl_lecture WHERE member_id=#{memberId}")
-    @Results(id ="findLectureNoteListByMemberMap", value={
-            @Result(property = "id", column="id"),
-            @Result(property = "title", column="title")
-    })
-    List<LectureNoteDTO> findLectureNoteListByMember(Long memberId);
 }

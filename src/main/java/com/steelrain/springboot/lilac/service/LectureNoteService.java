@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.service;
 
+import com.steelrain.springboot.lilac.datamodel.LectureNoteByMemberDTO;
 import com.steelrain.springboot.lilac.datamodel.LectureNoteDTO;
 import com.steelrain.springboot.lilac.datamodel.PlayListVideoDTO;
 import com.steelrain.springboot.lilac.datamodel.form.PlayListAddModalDTO;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -106,39 +108,38 @@ public class LectureNoteService implements ILectureNoteService{
         return  m_lectureNoteRepository.addVideoIdList(paramList);
     }
 
-    /*
-        회원이 선택한 재생영상을 강의노트에 추가하기 위해 회원의 강의노트목록을 반환하는 서비스
-        회원이 가지고 있는 강의노트중에서 추가하려는 재생목록이 없는 강의노트만 모아서 보내줘야 한다
-        중복된 재생목록이 있으면 안된다.
-        // TODO : form 과 DTO는 분리하는 것이 좋다.
+    /**
+     * 회원이 선택한 재생목록을 강의노트에 추가하기 위해 회원의 강의노트목록을 반환하는 서비스
+     * 회원이 가지고 있는 강의노트중에서 추가하려는 재생목록이 없는 강의노트만 모아서 보내줘야 한다
+     * 중복된 재생목록이 있으면 안된다.
+     * @param memberId 강의노트를 가져올 회원의 id
+     * @param playListId 회원의 강의노트에 추가하려고 하는 재생목록의 id
+     * @return playListId 로 지정된 재생목록을 포함하고 있지 않은 강의노트의 목록
      */
-   /* @Override
-    public List<PlayListAddModalDTO> getLectureNoteListByMemberModal(Long memberId, Long playListId) {
-        // 강의노트를 제외하고 반환해야 한다
-        List<PlayListAddModalDTO> noteDTOList = m_lectureNoteRepository.findLectureNoteListByMember(memberId);
-        noteDTOList.stream().filter(note -> {
-
-
-        })
-        return new ArrayList<>(0);
-    }*/
-
     @Override
     public List<PlayListAddModalDTO> getLectureNoteListByMemberModal(Long memberId, Long playListId) {
-        List<LectureNoteDTO> noteDTOList = m_lectureNoteRepository.findLectureNoteListByMember(memberId);
+        List<LectureNoteByMemberDTO> noteDTOList = m_lectureNoteRepository.findLectureNoteListByMember(memberId);
         List<PlayListAddModalDTO> resultList = new ArrayList<>(noteDTOList.size());
-        for(LectureNoteDTO note : noteDTOList){
-            PlayListAddModalDTO dto = PlayListAddModalDTO.builder()
-                    .id(note.getId())
-                    .title(note.getTitle())
-                    .build();
-            resultList.add(dto);
+        // DB에서 값이 넘어올때 재생목록이 없는 노트는 재생목록값은 null 에서 -1로 치환되어서 넘어온다.
+        Optional<Long> matchedNoteNo = noteDTOList.stream().filter(note -> note.getPlayListId().equals(playListId))
+                                                 .map(LectureNoteByMemberDTO::getNoteId)
+                                                 .findFirst();
+        if(matchedNoteNo.isPresent()){
+            noteDTOList.stream().distinct().filter(note -> !note.getNoteId().equals(matchedNoteNo)).forEach(note -> {
+                resultList.add(PlayListAddModalDTO.builder()
+                        .id(note.getNoteId())
+                        .title(note.getNoteTitle())
+                        .build());
+            });
+        }else{
+         noteDTOList.stream().distinct().forEach(note -> {
+             resultList.add(PlayListAddModalDTO.builder()
+                     .id(note.getNoteId())
+                     .title(note.getNoteTitle())
+                     .build());
+         });
         }
         return resultList;
-    }
-
-    private List<LectureNoteDTO> findNoteListByMember(Long memberId){
-        return m_lectureNoteRepository.findNoteListByMember(memberId);
     }
 
     private void updateLectureNote(LectureNoteDTO lectureNoteDTO){

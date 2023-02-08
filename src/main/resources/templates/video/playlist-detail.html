@@ -1,186 +1,178 @@
 <!DOCTYPE html>
 <html lang="kr" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="utf-8" />
-  <meta http-equiv="x-ua-compatible" content="ie=edge" />
-  <title>Login - ClassiGrids Classified Ads and Listing Website Template</title>
-  <meta name="description" content="" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.svg}" />
-  <!-- Place favicon.ico in the root directory -->
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <title>Login - ClassiGrids Classified Ads and Listing Website Template</title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.svg}"/>
+    <!-- Place favicon.ico in the root directory -->
 
-  <!-- Web Font -->
-  <link
-          href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-          rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <!-- Web Font -->
+    <link
+            href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+            rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
 
-  <!-- ========================= CSS here ========================= -->
-  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
-  <link rel="stylesheet" th:href="@{/css/LineIcons.2.0.css}" />
-  <link rel="stylesheet" th:href="@{/css/animate.css}" />
-  <link rel="stylesheet" th:href="@{/css/tiny-slider.css}" />
-  <link rel="stylesheet" th:href="@{/css/glightbox.min.css}" />
-  <link rel="stylesheet" th:href="@{/css/main.css}" />
+    <!-- ========================= CSS here ========================= -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/LineIcons.2.0.css}"/>
+    <link rel="stylesheet" th:href="@{/css/animate.css}"/>
+    <link rel="stylesheet" th:href="@{/css/tiny-slider.css}"/>
+    <link rel="stylesheet" th:href="@{/css/glightbox.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
 </head>
 <body>
 <!--[if lte IE 9]>
 <p class="browserupgrade">
-  You are using an <strong>outdated</strong> browser. Please
-  <a href="https://browsehappy.com/">upgrade your browser</a> to improve
-  your experience and security.
+    You are using an <strong>outdated</strong> browser. Please
+    <a href="https://browsehappy.com/">upgrade your browser</a> to improve
+    your experience and security.
 </p>
 <![endif]-->
 
 <!-- Preloader -->
 <div class="preloader">
-  <div class="preloader-inner">
-    <div class="preloader-icon">
-      <span></span>
-      <span></span>
+    <div class="preloader-inner">
+        <div class="preloader-icon">
+            <span></span>
+            <span></span>
+        </div>
     </div>
-  </div>
 </div>
 <!-- /End Preloader -->
 
 <div th:replace="~{common/header::header}"></div>
 
 <section class="section blog-single" style="margin-top:30px">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 col-md-12 col-12">
-        <div id="div-video-play" class="single-inner">
-          <div class="post-thumbnils ratio ratio-16x9">
-            <iframe id="ytplayer" type="text/html" width="1024" height="576"
-                    th:src="@{'https://www.youtube.com/embed/'+${videoList[0].videoId}+'?autoplay=1&playsinline=1'}"
-                    frameborder="0" allowfullscreen>
-            </iframe>
-          </div>
-          <div class="post-details">
-            <div class="detail-inner">
-              <h5 class="post-title" th:text="${videoList[0].title}"></h5>
-              <ul class="custom-flex post-meta">
-                <li>
-                    <i class="lni lni-calendar" th:text="' '+${videoList[0].publishDate}"></i>
-                </li>
-                <li>
-                    <i class="lni lni-comments" th:text="' '+${videoList[0].commentCount}"></i>
-                </li>
-                <li>
-                    <i class="lni lni-eye" th:text="' '+${videoList[0].viewCount}"></i>
-                </li>
-                <li>
-                  <a th:href="|javascript:showLectureNoteAddModal('${playListId}')|" class="reply-link"><i class="lni lni-notepad"></i> 강의노트에 추가하기</a>
-                </li>
-              </ul>
-              <p th:utext="${videoList[0].description}"></p>
-            </div>
-            <!-- 댓글 출력 시작 -->
-            <!--<div class="post-comments">
-              <h3 class="comment-title"><span>댓글 부분</span></h3>
-              <ul class="comments-list">
-                <li>
-                  <div class="comment-img">
-                    <img src="https://via.placeholder.com/150x150" class="rounded-circle" alt="img">
-                  </div>
-                  <div class="comment-desc">
-                    <div class="desc-top">
-                      <h6>Arista Williamson</h6>
-                      <span class="date">19th May 2023</span>
-                      <a href="javascript:void(0)" class="reply-link"><i class="lni lni-reply"></i>Reply</a>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-12 col-12">
+                <div id="div-video-play" class="single-inner">
+                    <div class="post-thumbnils ratio ratio-16x9">
+                        <iframe id="ytplayer" type="text/html" width="1024" height="576"
+                                th:src="@{'https://www.youtube.com/embed/'+${videoList[0].videoId}+'?autoplay=1&playsinline=1'}"
+                                frameborder="0" allowfullscreen>
+                        </iframe>
                     </div>
-                    <p>
-                      Donec aliquam ex ut odio dictum, ut consequat leo interdum. Aenean nunc
-                      ipsum, blandit eu enim sed, facilisis convallis orci. Etiam commodo
-                      lectus
-                      quis vulputate tincidunt. Mauris tristique velit eu magna maximus
-                      condimentum.
-                    </p>
-                  </div>
-                </li>
-                <li class="children">
-                  <div class="comment-img">
-                    <img src="https://via.placeholder.com/150x150" class="rounded-circle" alt="img">
-                  </div>
-                  <div class="comment-desc">
-                    <div class="desc-top">
-                      <h6>Rosalina Kelian <span class="saved"><i
-                              class="lni lni-bookmark"></i></span></h6>
-                      <span class="date">15th May 2023</span>
-                      <a href="javascript:void(0)" class="reply-link"><i class="lni lni-reply"></i>Reply</a>
-                    </div>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                      tempor incididunt ut labore et dolore magna aliqua. Ut enim.
-                    </p>
-                  </div>
-                </li>
-                <li>
-                  <div class="comment-img">
-                    <img src="https://via.placeholder.com/150x150" class="rounded-circle" alt="img">
-                  </div>
-                  <div class="comment-desc">
-                    <div class="desc-top">
-                      <h6>Alex Jemmi</h6>
-                      <span class="date">12th May 2023</span>
-                      <a href="javascript:void(0)" class="reply-link"><i class="lni lni-reply"></i>Reply</a>
-                    </div>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                      veniam.
-                    </p>
-                  </div>
-                </li>
-              </ul>
-            </div>--> <!-- 댓글 출력 끝 -->
-          </div>
-        </div>
-      </div>
-      <aside class="col-lg-4 col-md-12 col-12">
-        <div class="sidebar blog-grid-page">
-          <p>
-            재생목록
-          </p>
-          <!-- <div class="form-head">
-              <div class="row align-items-center">
-                  <div class="col-lg-12 col-12 align-right">
-
-                  </div>
-              </div>
-          </div> -->
-          <div class="messages-body">
-            <div class="row">
-              <div class="col-lg-12 col-12">
-                <!-- Start User List -->
-                <div class="user-list">
-                  <ul>
-                    <!-- 재생목록의 개별영상 시작 -->
-                    <li th:each="video : ${videoList}">
-                      <a th:href="|javascript:playSelectedVideo(${video.id})|">
-                        <div class="image">
-                          <img th:src="${video.thumbnailDefault}" alt="#">
+                    <div class="post-details">
+                        <div class="detail-inner">
+                            <h5 class="post-title" th:text="${videoList[0].title}"></h5>
+                            <ul class="custom-flex post-meta">
+                                <li>
+                                    <i class="lni lni-calendar" th:text="' '+${videoList[0].publishDate}"></i>
+                                </li>
+                                <li>
+                                    <i class="lni lni-comments" th:text="' '+${videoList[0].commentCount}"></i>
+                                </li>
+                                <li>
+                                    <i class="lni lni-eye" th:text="' '+${videoList[0].viewCount}"></i>
+                                </li>
+                                <li th:if="${memberId != null}">
+                                    <a th:href="|javascript:showLectureNoteAddModal('${playListId}')|"
+                                       class="reply-link"><i class="lni lni-notepad"></i> 강의노트에 추가하기</a>
+                                </li>
+                            </ul>
+                            <p th:utext="${videoList[0].description}"></p>
                         </div>
-                        <span class="short-message" th:text="${video.title}"></span>
-<!--                        <span class="short-message" th:text="${video.description}"></span>-->
-<!--                        <span class="time" th:text="${video.duration}"></span>-->
-                      </a>
-                    </li>
-                    <!-- 재생목록의 개별영상 끝 -->
-                  </ul>
-                  <form>
-
-                  </form>
-                  <input id="memberIdHidden" type="hidden" th:value="${memberId}">
+                        <!-- 댓글 출력 시작 -->
+                        <!--<div class="post-comments">
+                          <h3 class="comment-title"><span>댓글 부분</span></h3>
+                          <ul class="comments-list">
+                            <li>
+                              <div class="comment-img">
+                                <img src="https://via.placeholder.com/150x150" class="rounded-circle" alt="img">
+                              </div>
+                              <div class="comment-desc">
+                                <div class="desc-top">
+                                  <h6>Arista Williamson</h6>
+                                  <span class="date">19th May 2023</span>
+                                  <a href="javascript:void(0)" class="reply-link"><i class="lni lni-reply"></i>Reply</a>
+                                </div>
+                                <p>
+                                  Donec aliquam ex ut odio dictum, ut consequat leo interdum. Aenean nunc
+                                  ipsum, blandit eu enim sed, facilisis convallis orci. Etiam commodo
+                                  lectus
+                                  quis vulputate tincidunt. Mauris tristique velit eu magna maximus
+                                  condimentum.
+                                </p>
+                              </div>
+                            </li>
+                            <li class="children">
+                              <div class="comment-img">
+                                <img src="https://via.placeholder.com/150x150" class="rounded-circle" alt="img">
+                              </div>
+                              <div class="comment-desc">
+                                <div class="desc-top">
+                                  <h6>Rosalina Kelian <span class="saved"><i
+                                          class="lni lni-bookmark"></i></span></h6>
+                                  <span class="date">15th May 2023</span>
+                                  <a href="javascript:void(0)" class="reply-link"><i class="lni lni-reply"></i>Reply</a>
+                                </div>
+                                <p>
+                                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                  tempor incididunt ut labore et dolore magna aliqua. Ut enim.
+                                </p>
+                              </div>
+                            </li>
+                            <li>
+                              <div class="comment-img">
+                                <img src="https://via.placeholder.com/150x150" class="rounded-circle" alt="img">
+                              </div>
+                              <div class="comment-desc">
+                                <div class="desc-top">
+                                  <h6>Alex Jemmi</h6>
+                                  <span class="date">12th May 2023</span>
+                                  <a href="javascript:void(0)" class="reply-link"><i class="lni lni-reply"></i>Reply</a>
+                                </div>
+                                <p>
+                                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                                  veniam.
+                                </p>
+                              </div>
+                            </li>
+                          </ul>
+                        </div>--> <!-- 댓글 출력 끝 -->
+                    </div>
                 </div>
-                <!-- End User List -->
-              </div>
             </div>
-          </div>
+            <aside class="col-lg-4 col-md-12 col-12">
+                <div class="sidebar blog-grid-page">
+                  <p>
+                    재생목록
+                  </p>
+                  <div class="messages-body">
+                    <div class="row">
+                      <div class="col-lg-12 col-12">
+                        <div class="user-list">
+                          <ul>
+                            <!-- 재생목록의 개별영상 시작 -->
+                            <li th:each="video : ${videoList}">
+                              <a th:href="|javascript:playSelectedVideo(${video.id})|">
+                                <div class="image">
+                                  <img th:src="${video.thumbnailDefault}" alt="#">
+                                </div>
+                                <span class="short-message" th:text="${video.title}"></span>
+        <!--                        <span class="short-message" th:text="${video.description}"></span>-->
+        <!--                        <span class="time" th:text="${video.duration}"></span>-->
+                              </a>
+                            </li>
+                            <!-- 재생목록의 개별영상 끝 -->
+                          </ul>
+                          <form>
+
+                          </form>
+                          <input id="memberIdHidden" type="hidden" th:value="${memberId}">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </aside>
         </div>
-      </aside>
     </div>
-  </div>
 </section>
 
 <div id="div-modal-lecture-note">
@@ -195,79 +187,80 @@
 <script th:src="@{/js/tiny-slider.js}"></script>
 <script th:src="@{/js/glightbox.min.js}"></script>
 <script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/lilac-common.js}"></script>
 <script th:inline="javascript">
 
-  // 강의노트 모달html을 서버로 부터 받아오고 모달창을 띄운다
-  const showLectureNoteAddModal = (paramPlayListId) => {
-    console.log("paramPlayListId : "+paramPlayListId);
+    // 강의노트 모달html을 서버로 부터 받아오고 모달창을 띄운다
+    const showLectureNoteAddModal = (paramPlayListId) => {
+        console.log("paramPlayListId : " + paramPlayListId);
 
-    const memberIdVal = $("#memberIdHidden").val();
-    $.ajax({
-      type:"get",
-      url:"/lecture/modal-template",
-      dataType: "text",
-      data:{
-        memberId:memberIdVal,
-        playListId:paramPlayListId
-      },
-      success:function (data){
-        let html = jQuery('<div>').html(data);
-        let contents = html.find("div#lecture-note-modal-template").html();
-        $('#div-modal-lecture-note').html(contents);
-        $("#addNoteModal").modal("show");
+        const memberIdVal = $("#memberIdHidden").val();
+        $.ajax({
+            type: "get",
+            url: "/lecture/modal-template",
+            dataType: "text",
+            data: {
+                memberId: memberIdVal,
+                playListId: paramPlayListId
+            },
+            success: function (data) {
+                let html = jQuery('<div>').html(data);
+                let contents = html.find("div#lecture-note-modal-template").html();
+                $('#div-modal-lecture-note').html(contents);
+                $("#addNoteModal").modal("show");
 
-      },error:function (error){
-        alert("강의노트 입력창 호출에 실패하였습니다.");
-      }
-    })
-  }
-
-  // const addPlayListToLectureNote = (param) => {
-  //   console.log("addPlayListToLectureNote param : " + param);
-  // }
-
-  const addPlayListToLectureNote = () => {
-    const paramPlayListId = [[${playListId}]];
-    const paramLectureNoteId = $("#lectureNoteSelect").val();
-    let param = {
-      "playListId": paramPlayListId,
-      "lectureNoteId": paramLectureNoteId
+            }, error: function (error) {
+                alert("강의노트 입력창 호출에 실패하였습니다.");
+            }
+        })
     }
-    $.ajax({
-      type: "post",
-      url: "/lecture/api/addPlayList",
-      headers: {"Content-Type": "application/json"},
-      data: JSON.stringify(param),
-      success: function (resultJson) {
-        console.log("resultJson : " + resultJson);
-        alert("재생목록을 강의노트에 추가하였습니다.");
-      },
-      error: function (jqXHR) {
-        if (jqXHR.status == 401) {
-          alert("로그인 후 사용할 수 있습니다.");
-        }
-        console.log("jqXHR.status : " + jqXHR.status);
-        alert("재생목록을 강의노트에 추가하는데 실패하였습니다.");
-      }
-    })
-  }
 
-  const playSelectedVideo = (paramVideoId) => {
-    $.ajax({
-      type:"get",
-      url:"/video/video-template",
-      dataType:"text",
-      data:{videoId:paramVideoId},
-      success:function (result){
-        let html = jQuery('<div>').html(result);
-        let playlist = html.find("div#video-play-template").html();
-        $("#div-video-play").html(playlist);
-      },
-      error:function(error){
-        alert("영상정보 조회중 에러");
-      }
-    })
-  }
+    // const addPlayListToLectureNote = (param) => {
+    //   console.log("addPlayListToLectureNote param : " + param);
+    // }
+
+    const addPlayListToLectureNote = () => {
+        const paramPlayListId = [[${playListId}]];
+        const paramLectureNoteId = $("#lectureNoteSelect").val();
+        let param = {
+            "playListId": paramPlayListId,
+            "lectureNoteId": paramLectureNoteId
+        }
+        $.ajax({
+            type: "post",
+            url: "/lecture/api/addPlayList",
+            headers: {"Content-Type": "application/json"},
+            data: JSON.stringify(param),
+            success: function (resultJson) {
+                alert("재생목록을 강의노트에 추가하였습니다.");
+                $("#addNoteModal").modal("hide");
+            },
+            error: function (jqXHR) {
+                if (jqXHR.status == 401) {
+                    alert("로그인 후 사용할 수 있습니다.");
+                }
+                console.log("jqXHR.status : " + jqXHR.status);
+                alert("재생목록을 강의노트에 추가하는데 실패하였습니다.");
+            }
+        })
+    }
+
+    const playSelectedVideo = (paramVideoId) => {
+        $.ajax({
+            type: "get",
+            url: "/video/video-template",
+            dataType: "text",
+            data: {videoId: paramVideoId},
+            success: function (result) {
+                let html = jQuery('<div>').html(result);
+                let playlist = html.find("div#video-play-template").html();
+                $("#div-video-play").html(playlist);
+            },
+            error: function (error) {
+                alert("영상정보 조회중 에러");
+            }
+        })
+    }
 </script>
 </body>
 </html>

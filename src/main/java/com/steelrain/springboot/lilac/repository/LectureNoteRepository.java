@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.repository;
 
+import com.steelrain.springboot.lilac.datamodel.LectureNoteByMemberDTO;
 import com.steelrain.springboot.lilac.datamodel.LectureNoteDTO;
 import com.steelrain.springboot.lilac.datamodel.PlayListVideoDTO;
 import com.steelrain.springboot.lilac.datamodel.form.PlayListAddModalDTO;
@@ -44,7 +45,7 @@ public class LectureNoteRepository {
         return m_lectureNoteMapper.addVideoIdList(videoIdList);
     }
 
-    public List<LectureNoteDTO> findLectureNoteListByMember(Long memberId) {
+    public List<LectureNoteByMemberDTO> findLectureNoteListByMember(Long memberId) {
         return m_lectureNoteMapper.findLectureNoteListByMember(memberId);
     }
 }
