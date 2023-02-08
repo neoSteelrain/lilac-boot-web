@@ -1,6 +1,5 @@
 package com.steelrain.springboot.lilac.datamodel;
 
-import jdk.jfr.Timespan;
 import lombok.*;
 
 import java.sql.Timestamp;

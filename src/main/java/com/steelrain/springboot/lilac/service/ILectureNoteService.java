@@ -1,6 +1,7 @@
 package com.steelrain.springboot.lilac.service;
 
 import com.steelrain.springboot.lilac.datamodel.LectureNoteDTO;
+import com.steelrain.springboot.lilac.datamodel.form.PlayListAddModalDTO;
 
 import java.util.List;
 
@@ -13,5 +14,5 @@ public interface ILectureNoteService {
 
     boolean addYoutubePlayListToLectureNote(Long lectureNoteId, Long playListId, Long memberId);
 
-    List<LectureNoteDTO> getLectureNoteListByMemberModal(Long memberId, Long playListId);
+    List<PlayListAddModalDTO> getLectureNoteListByMemberModal(Long memberId, Long playListId);
 }

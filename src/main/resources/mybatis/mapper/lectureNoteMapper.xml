@@ -26,7 +26,14 @@
             </foreach>
     </insert>
 
-    <select id="findLectureNoteListByMember" parameterType="map" resultMap="LectureNoteDTO">
-
+    <select id="findLectureNoteListByMember" parameterType="java.lang.Long" resultMap="LectureNoteDTO">
+        SELECT lec.id, lec.title, ref.youtube_id, yt.youtube_playlist_id
+        FROM tbl_lecture lec
+                 LEFT JOIN ref_tbl_lecture_youtube ref
+                           ON lec.id = ref.lecture_id
+                 LEFT JOIN tbl_youtube yt
+                           ON ref.youtube_id=yt.id
+        WHERE lec.member_id=#{memberId}
+        GROUP BY lec.title
     </select>
 </mapper>

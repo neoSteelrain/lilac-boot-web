@@ -2,7 +2,6 @@ package com.steelrain.springboot.lilac.datamodel.form;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 

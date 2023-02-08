@@ -2,6 +2,7 @@ package com.steelrain.springboot.lilac.service;
 
 import com.steelrain.springboot.lilac.datamodel.LectureNoteDTO;
 import com.steelrain.springboot.lilac.datamodel.PlayListVideoDTO;
+import com.steelrain.springboot.lilac.datamodel.form.PlayListAddModalDTO;
 import com.steelrain.springboot.lilac.event.VideoListByPlayListEvent;
 import com.steelrain.springboot.lilac.exception.LectureNoteException;
 import com.steelrain.springboot.lilac.repository.LectureNoteRepository;
@@ -106,13 +107,34 @@ public class LectureNoteService implements ILectureNoteService{
     }
 
     /*
-        회원이 선택한 재생영상을 강의노트에 추가하기 위해 호출하는 서비스
+        회원이 선택한 재생영상을 강의노트에 추가하기 위해 회원의 강의노트목록을 반환하는 서비스
         회원이 가지고 있는 강의노트중에서 추가하려는 재생목록이 없는 강의노트만 모아서 보내줘야 한다
         중복된 재생목록이 있으면 안된다.
+        // TODO : form 과 DTO는 분리하는 것이 좋다.
      */
+   /* @Override
+    public List<PlayListAddModalDTO> getLectureNoteListByMemberModal(Long memberId, Long playListId) {
+        // 강의노트를 제외하고 반환해야 한다
+        List<PlayListAddModalDTO> noteDTOList = m_lectureNoteRepository.findLectureNoteListByMember(memberId);
+        noteDTOList.stream().filter(note -> {
+
+
+        })
+        return new ArrayList<>(0);
+    }*/
+
     @Override
-    public List<LectureNoteDTO> getLectureNoteListByMemberModal(Long memberId, Long playListId) {
-        return m_lectureNoteRepository.findLectureNoteListByMember(memberId, playListId);
+    public List<PlayListAddModalDTO> getLectureNoteListByMemberModal(Long memberId, Long playListId) {
+        List<LectureNoteDTO> noteDTOList = m_lectureNoteRepository.findLectureNoteListByMember(memberId);
+        List<PlayListAddModalDTO> resultList = new ArrayList<>(noteDTOList.size());
+        for(LectureNoteDTO note : noteDTOList){
+            PlayListAddModalDTO dto = PlayListAddModalDTO.builder()
+                    .id(note.getId())
+                    .title(note.getTitle())
+                    .build();
+            resultList.add(dto);
+        }
+        return resultList;
     }
 
     private List<LectureNoteDTO> findNoteListByMember(Long memberId){

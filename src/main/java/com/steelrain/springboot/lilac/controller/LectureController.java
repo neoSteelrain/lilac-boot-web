@@ -4,6 +4,7 @@ import com.steelrain.springboot.lilac.config.SESSION_KEY;
 import com.steelrain.springboot.lilac.datamodel.LectureNoteDTO;
 import com.steelrain.springboot.lilac.datamodel.MemberDTO;
 import com.steelrain.springboot.lilac.datamodel.form.LectureNoteAddDTO;
+import com.steelrain.springboot.lilac.datamodel.form.PlayListAddModalDTO;
 import com.steelrain.springboot.lilac.service.ILectureNoteService;
 import com.steelrain.springboot.lilac.service.KeywordCategoryCacheService;
 import lombok.RequiredArgsConstructor;
@@ -63,7 +64,7 @@ public class LectureController {
         if(session == null){
             return "redirect:/";
         }
-        List<LectureNoteDTO> noteDTOList = m_lectureService.getLectureNoteListByMemberModal(memberId, playListId);
+        List<PlayListAddModalDTO> noteDTOList = m_lectureService.getLectureNoteListByMemberModal(memberId, playListId);
         model.addAttribute("lectureNoteList", noteDTOList);
         return "/lecture/lecture-note-modal-template";
     }
