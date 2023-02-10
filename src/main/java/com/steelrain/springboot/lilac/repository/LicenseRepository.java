@@ -70,9 +70,15 @@ public class LicenseRepository implements ILicenseRespository{
     }*/
 
     @Override
-    public Optional<String> getLicenseName(int licenseCode) {
-        return Optional.ofNullable(m_licenseMapper.getLicenseName(licenseCode));
+    public Optional<String> getLicenseNameByCode(int licenseCode) {
+        return Optional.ofNullable(m_licenseMapper.getLicenseNameByCode(licenseCode));
     }
+
+    @Override
+    public Optional<Integer> getLicenseCodeById(int licenseId) {
+        return Optional.ofNullable(m_licenseMapper.getLicenseNameById(licenseId));
+    }
+
 
     private String callLicenseScheduleAPI(int licenseCode){
         HttpGet httpGet = new HttpGet(m_ApiConfig.getLicenseSchdUrl());

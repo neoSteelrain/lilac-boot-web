@@ -1,10 +1,8 @@
 package com.steelrain.springboot.lilac.repository;
 
 
-import com.steelrain.springboot.lilac.datamodel.LicenseDTO;
 import com.steelrain.springboot.lilac.datamodel.api.LicenseScheduleResponseDTO;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -15,5 +13,6 @@ public interface ILicenseRespository {
 
     // public Optional<LicenseDTO> getLicenseInfo(int licenseCode);
 
-    public Optional<String> getLicenseName(int licenseCode);
+    public Optional<String> getLicenseNameByCode(int licenseCode);
+    public Optional<Integer> getLicenseCodeById(int licenseId);
 }

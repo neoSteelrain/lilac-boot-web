@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LectureNoteDTO {
+    // DB 컬럼과 매칭되는 필드들
     private Long id;
     private Long memberId;
     private Integer licenseId;

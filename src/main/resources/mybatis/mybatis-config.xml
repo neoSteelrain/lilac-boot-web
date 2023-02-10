@@ -12,6 +12,7 @@
         <typeAlias type="com.steelrain.springboot.lilac.datamodel.YoutubePlayListDTO" alias="YoutubePlayListDTO"></typeAlias>
         <typeAlias type="com.steelrain.springboot.lilac.datamodel.RecommendedVideoDTO" alias="RecommendedVideoDTO"></typeAlias>
         <typeAlias type="com.steelrain.springboot.lilac.datamodel.PlayListVideoDTO" alias="PlayListVideoDTO"></typeAlias>
-        <typeAlias type="com.steelrain.springboot.lilac.datamodel.LectureNoteByMemberDTO" alias="LectureNoteByMemberDTO"></typeAlias>
+        <typeAlias type="com.steelrain.springboot.lilac.datamodel.LectureNoteModalDTO" alias="LectureNoteModalDTO"></typeAlias>
+        <typeAlias type="com.steelrain.springboot.lilac.datamodel.view.LectureNoteDetailDTO$LectureVideoPlayListInfo" alias="LectureVideoPlayListInfo"></typeAlias>
     </typeAliases>
 </configuration>

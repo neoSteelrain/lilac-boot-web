@@ -6,6 +6,7 @@ import com.steelrain.springboot.lilac.repository.IMemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Member;
 import java.util.List;
@@ -23,6 +24,7 @@ public class MemberService implements IMemberService {
         return m_memberRepository.findMemberByEmail(email) > 0;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean registerMember(MemberDTO memberDTO) {
         boolean isRegistered = m_memberRepository.saveMember(memberDTO) > 0;

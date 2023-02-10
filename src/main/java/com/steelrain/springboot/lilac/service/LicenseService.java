@@ -16,20 +16,32 @@ import java.util.Optional;
 @Service
 public class LicenseService implements ILicenseService{
 
-    private final ILicenseRespository m_licenseRespository;
+    private final ILicenseRespository m_licenseRepository;
 
-    public LicenseService(ILicenseRespository licenseRespository){
-        this.m_licenseRespository = licenseRespository;
+    public LicenseService(ILicenseRespository licenseRepository){
+        this.m_licenseRepository = licenseRepository;
     }
 
     @Override
     public LicenseDTO getLicenseSchedulesByCode(int licenseCode) {
-        Optional<String> licenseName = m_licenseRespository.getLicenseName(licenseCode);
+        return getLicenseSchedule(licenseCode);
+    }
+    @Override
+    public LicenseDTO getLicenseSchedulesById(int licenseId) {
+        Optional<Integer> licenseCode = m_licenseRepository.getLicenseCodeById(licenseId);
+        if(licenseCode.isEmpty()){
+            return null;
+        }
+        return getLicenseSchedule(licenseCode.get());
+    }
+
+    private LicenseDTO getLicenseSchedule(int licenseCode){
+        Optional<String> licenseName = m_licenseRepository.getLicenseNameByCode(licenseCode);
         if(licenseName.isEmpty()){
             return null;
         }
 
-        LicenseScheduleResponseDTO responseDTO = m_licenseRespository.getLicenseSchedule(licenseCode);
+        LicenseScheduleResponseDTO responseDTO = m_licenseRepository.getLicenseSchedule(licenseCode);
         if(responseDTO == null){
             return null;
         }

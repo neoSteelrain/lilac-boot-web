@@ -1,15 +1,14 @@
 package com.steelrain.springboot.lilac.mapper;
 
-import com.steelrain.springboot.lilac.datamodel.LectureNoteByMemberDTO;
+import com.steelrain.springboot.lilac.datamodel.LectureNoteModalDTO;
 import com.steelrain.springboot.lilac.datamodel.LectureNoteDTO;
 import com.steelrain.springboot.lilac.datamodel.PlayListVideoDTO;
-import com.steelrain.springboot.lilac.datamodel.form.PlayListAddModalDTO;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import com.steelrain.springboot.lilac.datamodel.view.LectureNoteDetailDTO;
+import com.steelrain.springboot.lilac.repository.LectureNoteRepository;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface LectureNoteMapper {
@@ -31,20 +30,26 @@ public interface LectureNoteMapper {
             @Result(property = "regDate", column = "reg_date"),
             @Result(property = "progress", column = "progress")
     })
-    List<LectureNoteDTO> findNoteListByMember(Long memberId);
+    List<LectureNoteDTO> findAllNoteListByMember(Long memberId);
+    //@Select("SELECT id,member_id,license_id,subject_id,title,description,reg_date,progress FROM tbl_lecture WHERE member_id=#{memberId}")
+
 
     @Select("SELECT count(id) FROM tbl_lecture WHERE member_id=#{memberId} AND title=#{title}")
     int findDuplicatedLectureNoteByMember(Long memberId, String title);
 
     boolean addVideoIdList(List<PlayListVideoDTO> videoIdLis);
 
-    List<LectureNoteByMemberDTO> findLectureNoteListByMember(Long memberId);
+    List<LectureNoteModalDTO> findLectureNoteListByMember(Long memberId);
 
-    /* 회원의 모든 강의노트목록을 반환하는 mapper 쿼리 수정 후 주석처리함
-    @Select("SELECT id,title FROM tbl_lecture WHERE member_id=#{memberId}")
-    @Results(id ="findLectureNoteListByMemberMap", value={
-            @Result(property = "id", column="id"),
-            @Result(property = "title", column="title")
-    })
-    List<LectureNoteDTO> findLectureNoteListByMember(Long memberId, Long playListId);*/
+    @Select("SELECT id,member_id,license_id,subject_id,title,description,reg_date,progress FROM tbl_lecture WHERE member_id=#{memberId} AND id=#{noteId}")
+    LectureNoteDTO findLectureNoteByMember(Long memberId, Long noteId);
+
+    List<LectureNoteDetailDTO.LectureVideoPlayListInfo> findVideoInfoByLectureNote(@Param("memberId")Long memberId, @Param("noteId") Long noteId);
+
+    List<LectureNoteRepository.ChannelTitleInfo> findChannelTitle(List<Long> channelIdList);
+
+    @Select("SELECT duration FROM tbl_youtube WHERE youtube_playlist_id=#{playListId}")
+    List<String> findTotalDurationOfPlayList(Long playListId);
+
+    void deletePlayList(@Param("memberId") Long memberId, @Param("noteId") Long noteId, @Param("playlistId") Long playListId);
 }

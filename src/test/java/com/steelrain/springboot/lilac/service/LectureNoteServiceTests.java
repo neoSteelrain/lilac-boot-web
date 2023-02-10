@@ -76,7 +76,7 @@ public class LectureNoteServiceTests {
     @Transactional
     @Rollback
     @DisplayName("강의노트 수정 테스트")
-    public void testModifyLectureNote(){
+    public void testEditLectureNote(){
         Long noteId = lectureNoteService.addLectureNote(1L, "1번 강의노트", "1번 강의노트 설명", 2, 3);
         List<LectureNoteDTO> note1 = lectureNoteService.getLectureListByMember(1L);
         note1.stream().forEach(note -> {
@@ -89,7 +89,7 @@ public class LectureNoteServiceTests {
                 .title("1번 강의노트 수정 후")
                 .description("1번 강의노트 설명 수정 후 ㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹ")
                 .build();
-        lectureNoteService.modifyLectureNote(param);
+        lectureNoteService.editLectureNote(param);
         List<LectureNoteDTO> note2 = lectureNoteService.getLectureListByMember(1L);
         note2.stream().forEach(note -> {
             log.info("수정 후 강의노트 : {}", note);

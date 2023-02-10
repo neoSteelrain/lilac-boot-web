@@ -1,6 +1,5 @@
 package com.steelrain.springboot.lilac.mapper;
 
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -9,7 +8,10 @@ import org.apache.ibatis.annotations.Update;
 public interface LicenseMapper {
 
     @Select("SELECT name FROM tbl_license WHERE code=#{licenseCode}")
-    String getLicenseName(int licenseCode);
+    String getLicenseNameByCode(int licenseCode);
+
+    @Select("SELECT code FROM tbl_license WHERE id=#{licenseId}")
+    Integer getLicenseNameById(int licenseId);
 
     @Select("SELECT schedule_json FROM tbl_license WHERE code=#{licenseCode}")
     String getLicenseScheduleJsonString(int licenseCode);

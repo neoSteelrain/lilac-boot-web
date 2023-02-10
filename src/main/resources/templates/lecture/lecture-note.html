@@ -45,56 +45,60 @@
 <!-- /End Preloader -->
 <div th:replace="~{common/header::header}"></div>
 
-<!-- Start Dashboard Section -->
 <section class="dashboard section" style="margin-top:30px">
     <div class="container">
         <div class="row">
             <div class="col-lg-3 col-md-4 col-12">
-                <!-- Start Dashboard Sidebar -->
+                <!-- 회원의 강의노트 제목목록 시작 -->
                 <div class="dashboard-sidebar">
                     <div class="user-image">
                         <img src="https://via.placeholder.com/300x300" alt="#">
-                        <h3 th:text="${memberNickname}">
-                            <span><a href="javascript:void(0)" th:text="${memberEmail}"></a></span>
+                        <h3 th:text="${memberInfo.nickname}">
+                            <span><a href="javascript:void(0)" th:text="${memberInfo.email}"></a></span>
                         </h3>
                     </div>
                     <div class="dashboard-menu">
                         <ul th:each="note,idx : ${lectureNoteList}">
-                            <li><a href="javascript:void(0)" th:if="${idx.index == 0}" th:class="active"><i class="lni lni-dashboard"></i>[[${note.title}]]</a></li>
-                            <li><a href="javascript:void(0)" th:unless="${idx.index == 0}" ><i class="lni lni-dashboard"></i>[[${note.title}]]</a></li>
+                            <li><a th:href="@{/lecture/lecture-note-member(noteId=${note.id})}" th:if="${idx.index == 0}" th:class="active"><i class="lni lni-notepad"></i>[[${note.title}]]</a></li>
+                            <li><a th:href="@{/lecture/lecture-note-member(noteId=${note.id})}" th:unless="${idx.index == 0}"><i class="lni lni-notepad"></i>[[${note.title}]]</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
-                <!-- Start Dashboard Sidebar -->
+                <!-- 회원의 강의노트 제목목록 끝 -->
             </div>
+            <!--            <div id="lecture-note-detail-div">-->
+
+            <!--            </div>-->
+            <!-- 강의노트 정보 시작 -->
             <div class="col-lg-9 col-md-8 col-12">
                 <div class="main-content">
-                    <!-- Start Post Ad Block Area -->
                     <div class="dashboard-block mt-0">
-                        <h3 class="block-title" th:if="${lectureNoteList.size() >= 1}" >[[${lectureNoteList[0].title}]]</h3>
-                        <h3 class="block-title" th:unless="${lectureNoteList.size() >= 1}" >아직 강의노트가 없으시다면 강의노트를 만들어보세요</h3>
+                        <h3 class="block-title" th:if="${noteDetail.totalNoteCount >= 1}">
+                            [[${noteDetail.noteTitle}]]</h3>
+                        <h3 class="block-title" th:unless="${noteDetail.totalNoteCount >= 1}">아직 강의노트가 없으시다면 강의노트를
+                            만들어보세요</h3>
                         <nav class="list-nav">
                             <ul>
-                                <li th:text="'전체노트 : '+${lectureNoteList.size()}">전체노트 : 12</li>
-                                <li>진행중 : 0</li>
-                                <li>완료 : 0</li>
+                                <li th:text="'전체노트 : '+${noteDetail.totalNoteCount}"></li>
+                                <li th:text="'진행중 : '+${noteDetail.inProgressNoteCount}"></li>
+                                <li th:text="'완료 : '+${noteDetail.completedNoteCount}"></li>
                                 <li><a href="#all-license-collase" data-bs-toggle="collapse" aria-expanded="false"
                                        aria-controls="all-license-collase">노트설명 </a></li>
                                 <li><a href="javascript:showAddLectureNoteModal()">노트추가 </a></li>
-                                <li><a href="javascript:void(0)">노트수정 </a></li>
-                                <li><a href="javascript:void(0)">노트삭제 </a></li>
+                                <li><a th:href="|javascript:editLectureNoteModal('${noteDetail.noteId}')|">노트수정 </a></li>
+                                <li><a th:href="|javascript:removeLectureNote('${noteDetail.noteId}')|">노트삭제 </a></li>
                             </ul>
                         </nav>
                         <div class="collapse" style="padding-left: 20px;padding-right: 20px"
                              id="all-license-collase">
                             <div class="detail-inner">
-                                <p th:if="${lectureNoteList.size() >= 1}">[[${lectureNoteList[0].description}]]</p>
-                                <p th:if="${lectureNoteList.size() >= 1}">--- 아직 강의노트 설명을 작성하지 않으셨습니다 ----</p>
+                                <p th:if="${noteDetail.totalNoteCount >= 1}">[[${noteDetail.noteDescription}]]</p>
+                                <p th:unless="${noteDetail.totalNoteCount >= 1}">--- 아직 강의노트 설명을 작성하지 않으셨습니다 ----</p>
                             </div>
                         </div>
                     </div>
                     <div class="inner-block">
-                        <!-- Start Post Ad Tab -->
                         <div class="post-ad-tab">
                             <nav>
                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -103,7 +107,7 @@
                                             aria-controls="nav-item-info" aria-selected="true">
                                         <!-- <span class="serial">01</span> -->
                                         자격증 정보
-                                        <span class="sub-title">자격증 종류</span>
+                                        <span class="sub-title" th:text="${noteDetail.noteLicenseName}"></span>
                                     </button>
                                     <button class="nav-link" id="nav-item-details-tab" data-bs-toggle="tab"
                                             data-bs-target="#nav-item-details" type="button" role="tab"
@@ -115,14 +119,14 @@
                                             data-bs-target="#nav-user-info" type="button" role="tab"
                                             aria-controls="nav-user-info" aria-selected="false">
                                         영상정보
-                                        <span class="sub-title">영상개수 10개</span>
+                                        <span class="sub-title" th:text="'영상개수 '+${noteDetail.videoPlayList.size()}+'개'"></span>
                                     </button>
                                 </div>
                             </nav>
                             <div class="tab-content" id="nav-tabContent">
                                 <div class="tab-pane fade show active" id="nav-item-info" role="tabpanel"
                                      aria-labelledby="nav-item-info-tab">
-                                    <!-- Start Post Ad Step One Content -->
+                                    <!-- 자격증 정보 탭 시작 -->
                                     <div class="step-one-content">
                                         <form class="default-form-style" method="post" action="#">
                                             <div class="row">
@@ -138,26 +142,27 @@
                                                             <th scope="col" style="width:8%">실기합격발표</th>
                                                         </tr>
                                                     </thread>
-                                                    <tbody>
-                                                    <!--<tr th:each="schedule:${licenseInfo.scheduleList}">
-                                                        <td th:text="${schedule.category}"></td>
-                                                        <td th:text="${schedule.docRegPeriod}"></td>
-                                                        <td th:text="${schedule.docExam}"></td>
-                                                        <td th:text="${schedule.docPass}"></td>
-                                                        <td th:text="${schedule.pracReg}"></td>
-                                                        <td th:text="${schedule.pracExam}"></td>
-                                                        <td th:text="${schedule.docPass}"></td>
-                                                    </tr>-->
-                                                    </tbody>
+                                                    <th:block th:if="${noteDetail.licenseInfo != null}">
+                                                        <tbody>
+                                                        <tr th:each="schedule:${noteDetail.licenseInfo.licenseScheduleList}">
+                                                            <td th:text="${schedule.category}"></td>
+                                                            <td th:text="${schedule.docRegPeriod}"></td>
+                                                            <td th:text="${schedule.docExam}"></td>
+                                                            <td th:text="${schedule.docPass}"></td>
+                                                            <td th:text="${schedule.pracReg}"></td>
+                                                            <td th:text="${schedule.pracExam}"></td>
+                                                            <td th:text="${schedule.docPass}"></td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </th:block>
                                                 </table>
                                             </div>
                                         </form>
-                                    </div>
-                                    <!-- Start Post Ad Step One Content -->
+                                    </div> <!-- 자격증 정보 탭 끝 -->
                                 </div>
                                 <div class="tab-pane fade" id="nav-item-details" role="tabpanel"
                                      aria-labelledby="nav-item-details-tab">
-                                    <!-- Start Post Ad Step Two Content -->
+                                    <!-- 도서 정보 탭 시작 -->
                                     <div class="step-two-content">
                                         <div class="alt-option">
                                             <span></span>
@@ -202,8 +207,7 @@
                                                     </div>
                                                     <div class="col-lg-1 col-md-1 col-12 align-right">
                                                         <ul class="action-btn">
-                                                            <li><a href="javascript:void(0)"><i
-                                                                    class="lni lni-trash"></i></a></li>
+                                                            <li><a href="javascript:void(0)"><i class="lni lni-trash"></i></a></li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -216,18 +220,16 @@
                                                     <li class="active"><a href="javascript:void(0)">2</a></li>
                                                     <li><a href="javascript:void(0)">3</a></li>
                                                     <li><a href="javascript:void(0)">4</a></li>
-                                                    <li><a href="javascript:void(0)"><i
-                                                            class="lni lni-chevron-right"></i></a></li>
+                                                    <li><a href="javascript:void(0)"><i class="lni lni-chevron-right"></i></a></li>
                                                 </ul>
                                             </div>
                                             <!--/ End Pagination -->
                                         </div>
-                                    </div>
-                                    <!-- Start Post Ad Step Two Content -->
+                                    </div> <!-- 도서 정보 탭 끝 -->
                                 </div>
                                 <div class="tab-pane fade" id="nav-user-info" role="tabpanel"
                                      aria-labelledby="nav-user-info-tab">
-                                    <!-- Start Post Ad Step Three Content -->
+                                    <!-- 영상정보 탭 시작 -->
                                     <div class="step-three-content">
                                         <!-- <h3 class="block-title">My Favorites</h3> -->
                                         <!-- <nav class="list-nav">
@@ -241,52 +243,48 @@
                                             <span></span>
                                         </div>
                                         <div class="my-items">
-                                            <!-- Start List Title -->
                                             <div class="item-list-title">
                                                 <div class="row align-items-center">
-                                                    <div class="col-lg-7 col-md-7 col-12">
+                                                    <div class="col-lg-6 col-md-6 col-12">
                                                         <p>재생목록 제목</p>
                                                     </div>
                                                     <div class="col-lg-2 col-md-2 col-12">
                                                         <p>영상개수</p>
                                                     </div>
-                                                    <div class="col-lg-2 col-md-2 col-12">
-                                                        <p>진행상황</p>
+                                                    <div class="col-lg-3 col-md-3 col-12">
+                                                        <p>재생시간</p>
                                                     </div>
                                                     <div class="col-lg-1 col-md-1 col-12 align-right">
                                                         <p>삭제</p>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- End List Title -->
-                                            <!-- Start Single List -->
-                                            <div class="single-item-list">
+                                            <!-- 재생목록 정보 시작 -->
+                                            <div class="single-item-list" th:each="playlistItem : ${noteDetail.videoPlayList}">
                                                 <div class="row align-items-center">
-                                                    <div class="col-lg-7 col-md-7 col-12">
+                                                    <div class="col-lg-6 col-md-6 col-12">
                                                         <div class="item-image">
-                                                            <img src="https://via.placeholder.com/100x100" alt="#">
+                                                            <img th:src="${playlistItem.thumbnailMedium}" alt="#">
                                                             <div class="content">
-                                                                <h3 class="title"><a href="javascript:void(0)">자바 완전
-                                                                    정복</a></h3>
-                                                                <span class="price">채널명</span>
+                                                                <h3 class="title"><a th:href="@{/video/playlist-detail(youtubePlaylistId=${playlistItem.playListId})}" th:text="${playlistItem.title}" ></a></h3>
+                                                                <span class="price" th:text="${playlistItem.channelTitle}"></span>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-2 col-md-2 col-12">
-                                                        <p>100</p>
+                                                        <p th:text="${playlistItem.videoCount}"></p>
                                                     </div>
-                                                    <div class="col-lg-2 col-md-2 col-12">
-                                                        <p>60%</p>
+                                                    <div class="col-lg-3 col-md-3 col-12">
+                                                        <p th:text="${playlistItem.totalDurationFormattedString}"></p>
                                                     </div>
                                                     <div class="col-lg-1 col-md-1 col-12 align-right">
                                                         <ul class="action-btn">
-                                                            <li><a href="javascript:void(0)"><i
-                                                                    class="lni lni-trash"></i></a></li>
+                                                            <li><a th:href="|javascript:removePlayList('${noteDetail.noteId}', '${playlistItem.playListId}')|"><i class="lni lni-trash"></i></a></li>
                                                         </ul>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- End Single List -->
+                                            <!-- 재생목록 정보 끝 -->
 
                                             <!-- Pagination -->
                                             <div class="pagination left">
@@ -295,28 +293,30 @@
                                                     <li class="active"><a href="javascript:void(0)">2</a></li>
                                                     <li><a href="javascript:void(0)">3</a></li>
                                                     <li><a href="javascript:void(0)">4</a></li>
-                                                    <li><a href="javascript:void(0)"><i
-                                                            class="lni lni-chevron-right"></i></a></li>
+                                                    <li><a href="javascript:void(0)"><i class="lni lni-chevron-right"></i></a></li>
                                                 </ul>
                                             </div>
                                             <!--/ End Pagination -->
                                         </div>
                                         <!-- End Items Area -->
                                     </div>
-                                </div>
-                                <!-- Start Post Ad Step Three Content -->
+                                </div> <!-- 영상정보 탭 끝 -->
                             </div>
                         </div>
                     </div>
-                    <!-- End Post Ad Tab -->
                 </div>
             </div>
+            -->
             <!-- End Post Ad Block Area -->
         </div>
     </div>
 </section>
-<!-- End Dashboard Section -->
+
 <!-- 강의노트 생성 모달 시작 -->
+<!--
+    강의노트 생성 모달의 입력검증은 js + css 로 구현되어 있다.
+    강의노트 수정 모달의 입력검증은 bootstrap 의 was-validated 클래스로 구현되어 있다.
+-->
 <div class="modal fade" id="lectureNoteAddModal" tabindex="-1" aria-labelledby="addLectureNoteLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content" style="height: 700px">
@@ -330,7 +330,8 @@
                         <div class="col-6">
                             <div class="search-input">
                                 <label for="license"><i class="lni lni-grid-alt theme-color"></i></label>
-                                <select name="license" id="license" th:field="*{licenseCodes}" onchange="checkLicenseSelectBox()">
+                                <select name="license" id="license" th:field="*{licenseCodes}"
+                                        onchange="checkLicenseSelectBox()">
                                     <option value="-1">--- 자격증 선택 ---</option>
                                     <option th:each="licenseCode : ${licenseCodes}" th:value="${licenseCode.id}"
                                             th:text="${licenseCode.name}"></option>
@@ -340,7 +341,8 @@
                         <div class="col-6">
                             <div class="search-input">
                                 <label for="subject"><i class="lni lni-grid-alt theme-color"></i></label>
-                                <select name="subject" id="subject" th:field="*{subjectCodes}" onchange="checkSubjectSelectBox()" >
+                                <select name="subject" id="subject" th:field="*{subjectCodes}"
+                                        onchange="checkSubjectSelectBox()">
                                     <option value="-1">--- 키워드 선택 ---</option>
                                     <option th:each="subjectCode : ${subjectCodes}" th:value="${subjectCode.id}"
                                             th:text="${subjectCode.name}"></option>
@@ -351,12 +353,12 @@
                 </div>
                 <div class="mb-3">
                     <label for="noteTitle" class="col-form-label">강의노트 제목:</label>
-                    <input id="noteTitle" type="text" class="form-control">
+                    <input id="noteTitle" type="text" class="form-control" maxlength="100">
                     <span id="titleNotice" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
                     <label for="noteDesc" class="col-form-label">강의노트 설명:</label>
-                    <textarea id="noteDesc" class="form-control" row="5" ></textarea>
+                    <textarea id="noteDesc" class="form-control" row="5" maxlength="500"></textarea>
                     <span id="descNotice" class="text-danger"></span>
                 </div>
             </div>
@@ -366,6 +368,8 @@
             </div>
         </div>
     </div>
+</div>
+<div id="editLectureNote-div">
 </div>
 
 <th:block th:replace="~{common/footer::footer}"></th:block>
@@ -386,8 +390,61 @@
 <script th:src="@{/js/count-up.min.js}"></script>
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/lilac-common.js}"></script>
-<script th:src="@{/js/lilac-common.js}"></script>
 <script th:inline="javascript">
+
+    const editLectureNoteModal = (argNoteId) => {
+        $.ajax({
+            type:"get",
+            url:"/lecture/edit-note",
+            data:{noteId:argNoteId},
+            dataType:"text",
+            success:function (data){
+                let html = jQuery('<div>').html(data);
+                let contents = html.find("div#lic-note-edit-template").html();
+                $('#editLectureNote-div').html(contents);
+                $("#lectureNoteEditModal").modal("show");
+            },
+            error:function (error){
+                alert("강의노트 정보를 가져오는데 실패하였습니다.");
+            }
+        })
+    }
+
+    const editLectureNote = () => {
+
+    }
+
+
+
+    const noteTitleClick = (aTag, paramNoteId) => {
+        console.log("aTag : " + aTag);
+        console.log("paramNoteId : " + paramNoteId);
+
+    }
+
+    /*const noteTitleClick = (aTag, paramNoteId) => {
+        console.log("aTag : " + aTag);
+        console.log("paramNoteId : " + paramNoteId);
+        $.ajax({
+            type:"get",
+            url:"/lecture/note-detail-template",
+            data:{noteId:paramNoteId},
+            dataType:"text",
+            success:function (data){
+                /!*
+                let html = jQuery('<div>').html(result);
+                    let contents = html.find("div#lic-schedule-template").html();
+                    $('#license-div').html(contents);
+                 *!/
+                let html = jQuery("<div>").html(data);
+                let contents = html.find("div#lecture-note-detail-template").html();
+                $("#lecture-note-detail-div").html(contents);
+            },
+            error:function (error){
+                alert("강의노트 정보를 가져오는데 실패하였습니다.");
+            }
+        })
+    }*/
 
     const toggleAtag = () => {
         toggleClass(".active-color");
@@ -395,18 +452,18 @@
 
     const checkLicenseSelectBox = () => {
         const selectedVal = $("#license").val();
-        if(selectedVal == -1){
+        if (selectedVal == -1) {
             $("#subject").attr("disabled", false);
-        }else{
+        } else {
             $("#subject").attr("disabled", "disabled");
         }
     }
 
     const checkSubjectSelectBox = () => {
         const selectedVal = $("#subject").val();
-        if(selectedVal == -1){
+        if (selectedVal == -1) {
             $("#license").attr("disabled", false);
-        }else{
+        } else {
             $("#license").attr("disabled", "disabled");
         }
     }
@@ -434,8 +491,8 @@
             "memberId": null,
             "title": noteTile,
             "description": noteDesc,
-            "licenseId":(licenseId == undefined || licenseId == -1) ? null : licenseId,
-            "subjectId":(subjectId == undefined || subjectId == -1) ? null : subjectId
+            "licenseId": (licenseId == undefined || licenseId == -1) ? null : licenseId,
+            "subjectId": (subjectId == undefined || subjectId == -1) ? null : subjectId
         };
         $.ajax({
             type: "post",
@@ -459,16 +516,36 @@
 
     // rest api 호출하지 않고 form으로 post 요청을 날려본다
     const removeLectureNote = (noteId) => {
-        let form = document.createElement('form');
-        let tmp = document.createElement('input');
-        tmp.setAttribute('type', 'hidden');
-        tmp.setAttribute('name', 'noteId');
-        tmp.setAttribute('value', noteId);
+        let form = document.createElement("form");
+        let tmp = document.createElement("input");
+        tmp.setAttribute("type", "hidden");
+        tmp.setAttribute("name", "noteId");
+        tmp.setAttribute("value", noteId);
         form.appendChild(tmp);
-        form.setAttribute('method', 'post');
-        form.setAttribute('action', '/lecture/remove-note');
+        form.setAttribute("method", "post");
+        form.setAttribute("action", "/lecture/remove-note");
         document.body.appendChild(form);
         form.submit();
+        document.body.removeChild(form);
+    }
+
+    const removePlayList = (noteId, playlistId) => {
+        let form = document.createElement("form");
+        let tmp1 = document.createElement("input");
+        tmp1.setAttribute("type","hidden");
+        tmp1.setAttribute("name", "noteId");
+        tmp1.setAttribute("value",noteId);
+        let tmp2 = document.createElement("input");
+        tmp2.setAttribute("type","hidden");
+        tmp2.setAttribute("name", "playListId");
+        tmp2.setAttribute("value", playlistId);
+        form.appendChild(tmp1);
+        form.appendChild(tmp2);
+        form.setAttribute("method","post");
+        form.setAttribute("action", "/lecture/remove-playlist");
+        document.body.appendChild(form);
+        form.submit();
+        document.body.removeChild(form);
     }
 </script>
 </body>

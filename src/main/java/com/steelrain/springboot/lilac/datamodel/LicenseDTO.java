@@ -1,6 +1,5 @@
 package com.steelrain.springboot.lilac.datamodel;
 
-import com.steelrain.springboot.lilac.datamodel.api.LicenseScheduleResponseDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +10,7 @@ import java.util.List;
 @Setter
 public class LicenseDTO {
     // 자격증코드
-    private int licenseCode;
+    private Integer licenseCode;
     // 자격증 이름
     private String licenseName;
 

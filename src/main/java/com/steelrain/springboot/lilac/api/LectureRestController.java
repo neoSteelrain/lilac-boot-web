@@ -8,6 +8,7 @@ import com.steelrain.springboot.lilac.exception.ValidationErrorException;
 import com.steelrain.springboot.lilac.service.ILectureNoteService;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -172,9 +173,11 @@ public class LectureRestController {
         private Long memberId;
 
         @NotBlank
+        @Length(min=1, max=100)
         private String title;
 
         @NotBlank
+        @Length(min=1, max=500)
         private String description;
 
         private Integer licenseId;

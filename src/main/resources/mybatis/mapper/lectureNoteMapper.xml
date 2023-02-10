@@ -16,7 +16,7 @@
     </delete>
 
     <update id="updateLectureNote" parameterType="LectureNoteDTO">
-        UPDATE tbl_lecture SET license_id=#{licenseId} , subject_id=#{subjectId} , title=#{title} , description=#{description} , progress=#{progress} WHERE id = #{id};
+        UPDATE tbl_lecture SET title=#{title} , description=#{description} WHERE id = #{id};
     </update>
 
     <insert id="addVideoIdList" parameterType="PlayListVideoDTO" >
@@ -26,7 +26,7 @@
             </foreach>
     </insert>
 
-    <resultMap id="findLectureNoteListByMemberMap" type="LectureNoteByMemberDTO">
+    <resultMap id="findLectureNoteListByMemberMap" type="LectureNoteModalDTO">
         <result property="noteId" column="id" />
         <result property="noteTitle" column="title" />
         <result property="playListId" column="youtube_playlist_id" />
@@ -40,4 +40,61 @@
                                                         ON tmp.youtube_id = yt.id
         GROUP BY tmp.id, yt.youtube_playlist_id
     </select>
+
+    <resultMap id="findVideoInfoByLectureNoteMap" type="LectureVideoPlayListInfo">
+        <result property="noteId" column="note_id" />
+        <result property="playListId" column="youtube_playlist_id" />
+        <result property="originalPlayListId" column="playlist_id" />
+        <result property="channelId" column="channel_id" />
+        <result property="title" column="title" />
+        <result property="publishDate" column="publish_date" />
+        <result property="thumbnailMedium" column="thumbnail_medium" />
+        <result property="videoCount" column="item_count" />
+        <result property="regDate" column="reg_date" />
+    </resultMap>
+    <select id="findVideoInfoByLectureNote" parameterType="map" resultMap="findVideoInfoByLectureNoteMap">
+        SELECT npl.note_id, pl.id as youtube_playlist_id,playlist_id,
+               channel_id,
+               title,publish_date,thumbnail_medium,item_count,reg_date
+        FROM tbl_youtube_playlist pl
+                 INNER JOIN (
+            SELECT tmp.id as note_id , IFNULL(yt.youtube_playlist_id, -1) AS youtube_playlist_id
+            FROM (SELECT lec.id, ref.youtube_id
+                  FROM tbl_lecture lec
+                           LEFT JOIN ref_tbl_lecture_youtube ref
+                                     ON lec.id = ref.lecture_id
+                  WHERE lec.member_id = #{memberId} AND lec.id = #{noteId}) as tmp
+                     LEFT JOIN tbl_youtube yt
+                               ON tmp.youtube_id = yt.id
+            GROUP BY tmp.id, yt.youtube_playlist_id ) as npl
+                            ON npl.youtube_playlist_id=pl.id;
+    </select>
+
+    <resultMap id="findChannelTitleMap" type="com.steelrain.springboot.lilac.repository.LectureNoteRepository$ChannelTitleInfo">
+        <result property="channelId" column="id" />
+        <result property="channelTitle" column="title" />
+    </resultMap>
+    <select id="findChannelTitle" parameterType="list" resultMap="findChannelTitleMap">
+        SELECT chn.id, chn.title
+        FROM tbl_youtube_channel chn
+        WHERE chn.id IN
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <delete id="deletePlayList" parameterType="map">
+        DELETE FROM ref_tbl_lecture_youtube
+        WHERE id IN (
+            SELECT id
+            FROM
+                (SELECT id
+                 FROM ref_tbl_lecture_youtube ref
+                 WHERE ref.lecture_member_id=#{memberId}
+                   AND ref.lecture_id=#{noteId}
+                   AND EXISTS (
+                         SELECT id AS videoId
+                         FROM tbl_youtube
+                         WHERE youtube_playlist_id=#{playlistId})) AS tmp)
+    </delete>
 </mapper>

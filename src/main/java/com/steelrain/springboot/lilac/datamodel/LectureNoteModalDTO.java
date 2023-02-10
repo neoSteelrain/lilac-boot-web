@@ -5,12 +5,13 @@ import lombok.*;
 import java.util.Objects;
 
 /**
- * 회원의 모든 강의노트와 각각의 강의노트에 들어있는 재생목록을 가진 DTO
+ * 강의노트 추가모달창을 위한 모달창 정보 전용 DTO
+ * 회원의 강의노트를 조회하는 DB 쿼리 결과에 매핑시키기 위해서만 쓰는 DTO 이기때문에 playListId가 강의노트1개 마다 1개씩 붙어있다
  */
 @Getter
 @Setter
 @ToString
-public class LectureNoteByMemberDTO {
+public class LectureNoteModalDTO {
     private Long noteId;
     private String noteTitle;
     private Long playListId;
@@ -19,7 +20,7 @@ public class LectureNoteByMemberDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        LectureNoteByMemberDTO that = (LectureNoteByMemberDTO) o;
+        LectureNoteModalDTO that = (LectureNoteModalDTO) o;
         return Objects.equals(noteId, that.noteId) && Objects.equals(noteTitle, that.noteTitle);
     }
 

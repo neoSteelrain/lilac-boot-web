@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ILicenseService {
     public LicenseDTO getLicenseSchedulesByCode(int licenseCode);
+
+    public LicenseDTO getLicenseSchedulesById(int licenseId);
 }

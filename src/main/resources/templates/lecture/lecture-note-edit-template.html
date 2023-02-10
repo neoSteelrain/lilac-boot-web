@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<!--
+    강의노트 수정모달창의 front 의 입력검증은 bootstrap 의 was-validated 클래스를 사용하였다.
+ -->
+<body>
+<div id="lic-note-edit-template">
+    <div class="modal fade" id="lectureNoteEditModal" tabindex="-1" aria-labelledby="editLectureNoteLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="height: 700px">
+                <form method="post" action="/lecture/edit-note" class="was-validated" th:object="${noteInfo}">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="editLectureNoteLabel">강의노트 수정</h1>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="noteTitle" class="col-form-label">강의노트 제목:</label>
+                            <input id="noteTitle" type="text" class="form-control" maxlength="100" required th:field="*{noteTitle}">
+                            <div class="invalid-feedback">강의노트 제목을 입력하셔야 합니다.</div>
+<!--                            <span id="titleNotice" class="text-danger" th:errors="*{noteTitle}"></span>-->
+                        </div>
+                        <div class="mb-3">
+                            <label for="noteDesc" class="col-form-label">강의노트 설명:</label>
+                            <textarea id="noteDesc" class="form-control" row="5" maxlength="500" required th:field="*{noteDescription}"></textarea>
+                            <div class="invalid-feedback">강의노트 설명을 입력하셔야 합니다.</div>
+<!--                            <span id="descNotice" class="text-danger" th:errors="*{noteDescription}"></span>-->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="btn-cancel" type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                        <button id="btn-add" type="submit" class="btn btn-primary">수정</button>
+                    </div>
+                    <input name="noteId" type="hidden" th:value="${noteInfo.noteId}">
+                    <input name="lectureId" type="hidden" th:value="${noteInfo.lectureId}">
+                    <input name="subjectId" type="hidden" th:value="${noteInfo.subjectId}">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
