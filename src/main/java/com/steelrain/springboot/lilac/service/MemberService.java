@@ -45,4 +45,10 @@ public class MemberService implements IMemberService {
     public List<MemberDTO> getAllMembers() {
         return m_memberRepository.findAllMembers();
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void updateMemberInfo(MemberDTO memberDTO) {
+        m_memberRepository.updateMemberInfo(memberDTO);
+    }
 }

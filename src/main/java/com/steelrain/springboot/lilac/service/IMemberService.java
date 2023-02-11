@@ -11,4 +11,6 @@ public interface IMemberService {
     MemberDTO loginMember(String email, String password);
 
     List<MemberDTO> getAllMembers();
+
+    void updateMemberInfo(MemberDTO memberDTO);
 }

@@ -11,4 +11,20 @@
         FROM tbl_member
         WHERE email=#{email} AND password=#{password};
     </select>
+<!--
+    private Long id;
+    private String nickname;
+    private String email;
+    private String password;
+    private String description;
+    private Short region;
+    private Integer dtlRegion;
+    private String profileOriginal;
+    private String profileSave;
+    private Integer grade;
+    private Timestamp regDate;
+-->
+    <update id="updateMemberInfo" parameterType="MemberDTO">
+        UPDATE tbl_member SET nickname=#{nickname}, email=#{email}, description=#{description} WHERE id=#{id};
+    </update>
 </mapper>

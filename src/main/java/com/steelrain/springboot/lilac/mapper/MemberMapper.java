@@ -17,4 +17,6 @@ public interface MemberMapper {
 
     @Select("SELECT id,nickname,email,password,description,region,dtl_region,profile_original,profile_save,grade,reg_date FROM tbl_member")
     List<MemberDTO> findAllMembers();
+
+    int updateMemberInfo(MemberDTO memberDTO);
 }

@@ -17,7 +17,7 @@ public interface VideoMapper {
     List<YoutubePlayListDTO> findPlayListByKeyword(@Param("keyword") String keyword, @Param("offset") int offset, @Param("count") int count);
 
 
-    @Select("SELECT count(id) FROM tbl_youtube_playlist WHERE title LIKE concat('%',#{keyword},'%')")
+    @Select("SELECT count(id) FROM tbl_youtube_playlist WHERE MATCH(title) AGAINST (#{keyword})")
     int selectTotalPlayListCountByKeyword(@Param("keyword") String keyword);
 
     @Select("SELECT video_id, title, publish_date, comment_count, view_count, description FROM tbl_youtube WHERE id=#{videoId}")

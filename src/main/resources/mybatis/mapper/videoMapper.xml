@@ -20,29 +20,7 @@
             ON rvideo.youtube_id=youtube.id
                 AND youtube.channel_id=chn.id;
     </select>
-<!--
-    private Long id;
-    private String videoId;
-    private Long channelId;
-    private Long YoutubePlaylistId;
-    private String title;
-    private String description;
-    private Timestamp publishDate;
-    private Timestamp regDate;
-    private String thumbnailDefault;
-    private String thumbnailMedium;
-    private String thumbnailHigh;
-    private String playlistId;
-    private Long viewCount;
-    private Integer searchCount;
-    private Long likeCount;
-    private Long favoriteCount;
-    private Long commentCount;
-    private Boolean commentDisabled;
-    private String duration;
-    private Float score;
-    private Float magnitude;
--->
+
     <select id="findPlayListDetail" parameterType="java.lang.Long" resultType="YoutubeVideoDTO">
         SELECT yt.id,yt.video_id,yt.channel_id,yt.youtube_playlist_id,yt.title,yt.description,yt.publish_date,
                yt.thumbnail_default,yt.thumbnail_high,yt.playlist_id,yt.view_count,yt.search_count,yt.like_count,yt.favorite_count,yt.comment_count,
@@ -51,6 +29,24 @@
             ON yt.youtube_playlist_id=pl.id
         WHERE pl.id=#{playlistId};
     </select>
+
+<!--    full text 검색으로 변경 후 주석처리-->
+<!--    <resultMap id="findPlayListByKeywordMap" type="YoutubePlayListDTO">-->
+<!--        <id property="id" column="id" />-->
+<!--        <result property="playlistId" column="playlist_id" />-->
+<!--        <result property="channelId" column="channel_id" />-->
+<!--        <result property="title" column="title" />-->
+<!--        <result property="thumbnailMedium" column="thumbnail_medium" />-->
+<!--        <result property="itemCount" column="item_count" />-->
+<!--        <result property="channelTitle" column="channel_title" />-->
+<!--    </resultMap>-->
+<!--    <select id="findPlayListByKeyword" parameterType="map"  resultMap="findPlayListByKeywordMap">-->
+<!--        SELECT pl.id,playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,item_count,chn.title as channel_title-->
+<!--        FROM tbl_youtube_playlist pl INNER JOIN tbl_youtube_channel chn-->
+<!--            ON pl.channel_id=chn.id-->
+<!--        WHERE pl.title LIKE concat('%',#{keyword},'%')-->
+<!--        ORDER BY pl.publish_date LIMIT #{offset},#{count};-->
+<!--    </select>-->
 
     <resultMap id="findPlayListByKeywordMap" type="YoutubePlayListDTO">
         <id property="id" column="id" />
@@ -64,8 +60,8 @@
     <select id="findPlayListByKeyword" parameterType="map"  resultMap="findPlayListByKeywordMap">
         SELECT pl.id,playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,item_count,chn.title as channel_title
         FROM tbl_youtube_playlist pl INNER JOIN tbl_youtube_channel chn
-            ON pl.channel_id=chn.id
-        WHERE pl.title LIKE concat('%',#{keyword},'%')
-        ORDER BY pl.publish_date LIMIT #{offset},#{count};
+                                                ON pl.channel_id=chn.id
+        WHERE MATCH(pl.title) AGAINST (#{keyword})
+        ORDER BY pl.publish_date LIMIT #{offset}, #{count}
     </select>
 </mapper>

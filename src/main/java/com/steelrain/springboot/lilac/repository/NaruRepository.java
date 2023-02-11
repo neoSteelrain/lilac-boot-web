@@ -7,6 +7,8 @@ import com.steelrain.springboot.lilac.datamodel.api.NaruLibSearchByBookResponseD
 import com.steelrain.springboot.lilac.datamodel.api.NaruLibSearchByRegionResponseDTO;
 import com.steelrain.springboot.lilac.exception.NaruBookExistException;
 import com.steelrain.springboot.lilac.exception.NaruLibraryByBookException;
+import com.steelrain.springboot.lilac.mapper.LicenseBookMapper;
+import lombok.RequiredArgsConstructor;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
@@ -24,20 +26,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class NaruRepository implements INaruRepository{
     private final APIConfig m_apiConfig;
 
-    public NaruRepository(APIConfig apiConfig){
-        this.m_apiConfig = apiConfig;
-    }
 
     @Override
     public NaruLibSearchByBookResponseDTO getLibraryByBook(long isbn, short region, int detailRegion) {
         List<NameValuePair> params = new ArrayList<>(7);
         params.add(new BasicNameValuePair("authKey", m_apiConfig.getNaruLibraryByBookApiKey()));
         params.add(new BasicNameValuePair("isbn", String.valueOf(isbn)));
+        /*
+            naru API에서 region 코드는 필수이지만 detialRegion 코드는 선택입력이다.
+            각 코드는 숫자형이 아닌 문자열로 입력받기 때문에 호출할때에 변환해서 준다.
+         */
         params.add(new BasicNameValuePair("region", String.valueOf(region)));
-        params.add(new BasicNameValuePair("dtl_region", String.valueOf(detailRegion)));
+        if(detailRegion > 0){
+            params.add(new BasicNameValuePair("dtl_region", String.valueOf(detailRegion)));
+        }
         params.add(new BasicNameValuePair("pageNo", String.valueOf(1)));
         params.add(new BasicNameValuePair("pageSize", String.valueOf(50)));
         params.add(new BasicNameValuePair("format", "json"));
@@ -66,8 +72,14 @@ public class NaruRepository implements INaruRepository{
     public NaruLibSearchByRegionResponseDTO getLibraryByRegion(short region, int detailRegion){
         List<NameValuePair> params= new ArrayList<>(6);
         params.add(new BasicNameValuePair("authKey", m_apiConfig.getNaruLibraryByBookApiKey()));
+        /*
+            naru API에서 region 코드는 필수이지만 detialRegion 코드는 선택입력이다.
+            각 코드는 숫자형이 아닌 문자열로 입력받기 때문에 호출할때에 변환해서 준다.
+         */
         params.add(new BasicNameValuePair("region", String.valueOf(region)));
-        params.add(new BasicNameValuePair("dtl_region", String.valueOf(detailRegion)));
+        if(detailRegion > 0){
+            params.add(new BasicNameValuePair("dtl_region", String.valueOf(detailRegion)));
+        }
         params.add(new BasicNameValuePair("pageNo", String.valueOf(1)));
         params.add(new BasicNameValuePair("pageSize", String.valueOf(20)));
         params.add(new BasicNameValuePair("format", "json"));

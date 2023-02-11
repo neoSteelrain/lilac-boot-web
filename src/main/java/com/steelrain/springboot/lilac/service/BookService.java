@@ -8,11 +8,14 @@ import com.steelrain.springboot.lilac.datamodel.api.KakaoSearchedBookDTO;
 import com.steelrain.springboot.lilac.datamodel.api.NaruBookExistResposeDTO;
 import com.steelrain.springboot.lilac.datamodel.api.NaruLibSearchByBookResponseDTO;
 import com.steelrain.springboot.lilac.datamodel.api.NaruLibSearchByRegionResponseDTO;
+import com.steelrain.springboot.lilac.event.KakaoBookSaveEvent;
 import com.steelrain.springboot.lilac.repository.IKaKoBookRepository;
 import com.steelrain.springboot.lilac.repository.INaruRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.sql.Timestamp;
@@ -31,6 +34,7 @@ public class BookService implements IBookService{
     private final IKaKoBookRepository m_kaKoBookRepository;
     private final INaruRepository m_naruRepository;
     private final ICacheService m_cacheService;
+    private final ApplicationEventPublisher m_applicationEventPublisher;
 
 
 
@@ -66,19 +70,19 @@ public class BookService implements IBookService{
     }*/
 
     // 카카오 책검색만 호출하는 버전
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public LicenseBookListDTO getLicenseBookList(String keyword, short region, int detailRegion){
         /*
             1. 카카오 도서검색 API 를 통해 keyword 해당하는 도서목록을 가져온다
             2. 도서의 ISBN을 가지고 나루도서관 API 에 소장도서관목록을 가져온다
-            3. 도서를 소장하고 있는 도서관이 있으면 대출이 가능여부를 가져오고 설정해준다
             - 카카오 API는 ISBN을 문자열로 반환하고, 나루도서관 API는 ISBN을 숫자형식(long)으로 받으므로 형변환이 필요하다
          */
         List<KakaoSearchedBookDTO> bookList = m_kaKoBookRepository.searchBookfromKakao(keyword).getKakaoSearchedBookList();
         LicenseBookListDTO resultDTO = new LicenseBookListDTO();
         List<KaKaoBookDTO> kaKaoBookDTOList = new ArrayList<>(bookList.size());
         for(KakaoSearchedBookDTO book : bookList){
-            if(book.getPrice() <= 0 || book.getSalePrice() <= 0){
+            if(book.getPrice() <= -1 || book.getSalePrice() <= -1){ // 간혹 책가격이 -1로 설정된 책이 있으므로 빼주어야 한다.
                 continue;
             }
             String tmpIsbn = book.getIsbn();
@@ -87,8 +91,16 @@ public class BookService implements IBookService{
 
             resultDTO.setKeyword(keyword);
             resultDTO.setRegionName(m_cacheService.getRegionName(region));
-            resultDTO.setDetailRegionName(m_cacheService.getDetailRegionName(region, detailRegion));
+            if(detailRegion > 0){
+                resultDTO.setDetailRegionName(m_cacheService.getDetailRegionName(region, detailRegion));
+            }
         }
+        // 카카오책 검색결과를 DB에 저장하는 이벤트를 발생한다.
+        KakaoBookSaveEvent bookSaveEvent = KakaoBookSaveEvent.builder()
+                                .kaKaoBookList(kaKaoBookDTOList)
+                                .build();
+        m_applicationEventPublisher.publishEvent(bookSaveEvent);
+
         resultDTO.setKakaoBookList(kaKaoBookDTOList);
         resultDTO.setLibraryList(delegateLibraryByRegionList(region, detailRegion));
         return resultDTO;
@@ -105,11 +117,17 @@ public class BookService implements IBookService{
         return delegateLibraryByRegionList(region, detailRegion);
     }
 
+    /*
+        실제로 naru API를 호출해서 결과를 반환하는 helper 메서드
+     */
     private List<NaruLibraryDTO> delegateLibraryByRegionList(short region, int detailRegion){
         NaruLibSearchByRegionResponseDTO naruLibResult = m_naruRepository.getLibraryByRegion(region, detailRegion);
         return convertNaruLibraryDTO(naruLibResult);
     }
 
+    /*
+        나루 도서관검색 API의 결과를 NaruLibraryDTO로 변환시켜준다
+     */
     private List<NaruLibraryDTO> convertNaruLibraryDTO(NaruLibSearchByRegionResponseDTO srcNaruDTO){
         List<NaruLibraryDTO> resultDTOList = new ArrayList<>(srcNaruDTO.getResponse().getNumfound());
         for(NaruLibSearchByRegionResponseDTO.Libs lib : srcNaruDTO.getResponse().getLibs()){
@@ -130,34 +148,35 @@ public class BookService implements IBookService{
         return resultDTOList;
     }
 
-    private List<NaruLibraryDTO> convertNaruLibraryDTO(NaruLibSearchByBookResponseDTO srcNaruDTO, String isbn13){
-        if(srcNaruDTO.getResponse().getNumfound() <= 0){
-            return new ArrayList<>(0);
-        }
-        List<NaruLibraryDTO> resultDTOList = new ArrayList<>(srcNaruDTO.getResponse().getNumfound());
-        for(NaruLibSearchByBookResponseDTO.Libs lib : srcNaruDTO.getResponse().getLibs()){
-            NaruLibSearchByBookResponseDTO.Library library = lib.getLib();
-
-            // 소장가능여부 가져오기
-            NaruBookExistResposeDTO existDTO = m_naruRepository.checkBookExist(Long.valueOf(isbn13), Integer.valueOf(library.getLibcode()));
-            NaruBookExistResposeDTO.Result existResult = existDTO.getResponse().getResult();
-            resultDTOList.add(NaruLibraryDTO.builder()
-                            .libCode(library.getLibcode())
-                            .name(library.getLibname())
-                            .address(library.getAddress())
-                            .tel(library.getTel())
-                            .latitude(library.getLatitude())
-                            .longitude(library.getLongitude())
-                            .homepage(library.getHomepage())
-                            .closed(library.getClosed())
-                            .operatingTime(library.getOperatingtime())
-                            .isbn13(isbn13)
-                            .hasBook("Y".equals(existResult.getHasbook()))
-                            .isLoanAvailable("Y".equals(existResult.getLoanavailable()))
-                            .build());
-        }
-        return resultDTOList;
-    }
+    // 도서 1권에 대해 소장하고 있는 도서관 목록을 반환하는 메서드 : 로직변경으로 일단 주석처리
+//    private List<NaruLibraryDTO> convertNaruLibraryDTO(NaruLibSearchByBookResponseDTO srcNaruDTO, String isbn13){
+//        if(srcNaruDTO.getResponse().getNumfound() <= 0){
+//            return new ArrayList<>(0);
+//        }
+//        List<NaruLibraryDTO> resultDTOList = new ArrayList<>(srcNaruDTO.getResponse().getNumfound());
+//        for(NaruLibSearchByBookResponseDTO.Libs lib : srcNaruDTO.getResponse().getLibs()){
+//            NaruLibSearchByBookResponseDTO.Library library = lib.getLib();
+//
+//            // 소장가능여부 가져오기
+//            NaruBookExistResposeDTO existDTO = m_naruRepository.checkBookExist(Long.valueOf(isbn13), Integer.valueOf(library.getLibcode()));
+//            NaruBookExistResposeDTO.Result existResult = existDTO.getResponse().getResult();
+//            resultDTOList.add(NaruLibraryDTO.builder()
+//                            .libCode(library.getLibcode())
+//                            .name(library.getLibname())
+//                            .address(library.getAddress())
+//                            .tel(library.getTel())
+//                            .latitude(library.getLatitude())
+//                            .longitude(library.getLongitude())
+//                            .homepage(library.getHomepage())
+//                            .closed(library.getClosed())
+//                            .operatingTime(library.getOperatingtime())
+//                            .isbn13(isbn13)
+//                            .hasBook("Y".equals(existResult.getHasbook()))
+//                            .isLoanAvailable("Y".equals(existResult.getLoanavailable()))
+//                            .build());
+//        }
+//        return resultDTOList;
+//    }
 
     private KaKaoBookDTO convertKakaoBookDTO(KakaoSearchedBookDTO srcBook, String splitedIsbn){
         return KaKaoBookDTO.builder()

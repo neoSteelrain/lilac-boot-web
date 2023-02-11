@@ -56,16 +56,19 @@
                 <div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-12">
                     <div class="form-head">
                         <h4 class="title">로그인</h4>
+<!--                        <div th:if="${#fields.hasGlobalErrors()}">-->
+<!--                            <p class="invalid-feedback">올바르지 않은 로그인 정보입니다</p>-->
+<!--                        </div>-->
                         <form action="/member/login" th:object="${memberLogin}" method="post">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="ipt-email" th:field="*{email}" min="5" maxlength="100" placeholder="이메일">
-                                <label for="ipt-email">이메일</label>
+                                <input type="text" class="form-control" id="email" th:field="*{email}" min="5" maxlength="100" placeholder="이메일">
+                                <label for="email">이메일</label>
                                 <span id="emailNotice" th:errors="*{email}"></span>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="password" class="form-control" id="ipt-password" th:field="*{password}" min="6" maxlength="19"
+                                <input type="password" class="form-control" id="password" th:field="*{password}" min="6" maxlength="19"
                                        placeholder="비밀번호" onblur="checkPassword()">
-                                <label for="ipt-password">비밀번호</label>
+                                <label for="password">비밀번호</label>
                                 <span id="pwNotice" th:errors="*{password}"></span>
                             </div>
                             <div class="check-and-pass">
@@ -86,7 +89,7 @@
                                 <button type="submit" class="btn">로그인</button>
                             </div>
                             <div class="alt-option">
-                                <span>Or</span>
+                                <span></span>
                             </div>
                             <div class="socila-login">
                                 <ul>
@@ -119,15 +122,15 @@
     <script th:src="@{/js/main.js}"></script>
     <script th:inline="javascript">
         const checkPassword = () => {
-            const pwTag = $('#ipt-password');
-            const pw = $('#ipt-password').val();
+            const pwTag = $('#password');
+            const pw = $('#password').val();
             const pwNotice = $('#pwNotice');
             console.log("pw : " + pw);
-            const pwRegex = /^[A-Za-z\d\[\]\{\}\/\(\)\.\?\<\>!@#$%^&*=+-]{6,20}$/;
+            const pwRegex = /^[A-Za-z\d\[\]\{\}\/\(\)\.\?\<\>!@#$%^&*=+-]{6,19}$/;
             if(pw != "" && !pwRegex.test(pw)) {
                 console.log("pwRegex.test(pw) : " + pwRegex.test(pw));
                 pwNotice.css('color', 'red');
-                pwNotice.html('비밀번호는 영문대,소문자,숫자,특수기호 조합으로 6-20자 입니다.');
+                pwNotice.html('비밀번호는 영문대,소문자,숫자,특수기호 조합으로 6-19자 입니다.');
                 pwTag.val('');
                 pwTag.focus();
             }else{

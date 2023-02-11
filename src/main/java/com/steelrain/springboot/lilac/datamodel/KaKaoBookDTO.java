@@ -22,19 +22,20 @@ import java.sql.Timestamp;
 @ToString
 public class KaKaoBookDTO {
     /*
-    isbn13	char(13)	NO	PRI
-    title	varchar(100)	YES
-    contents	varchar(500)	YES
-    url	varchar(255)	YES
+    isbn13	bigint	NO	PRI
+    title	varchar(1024)	YES	MUL
+    contents	varchar(2048)	YES
+    url	varchar(2048)	YES
     publish_date	datetime	YES
     authors	varchar(255)	YES
     publisher	varchar(255)	YES
     translators	varchar(255)	YES
-    price	int	YES
-    sale_price	int	YES
+    price	int	YES		0
+    sale_price	int	YES		0
     thumbnail	varchar(255)	YES
     status	varchar(10)	YES
     reg_date	datetime	YES		CURRENT_TIMESTAMP	DEFAULT_GENERATED
+    update_date	datetime	YES
      */
 
     @ISBN
@@ -74,4 +75,6 @@ public class KaKaoBookDTO {
     private String status;
 
     private Timestamp regDate;
+    private Timestamp updateDate;
+
 }

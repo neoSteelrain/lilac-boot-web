@@ -32,4 +32,9 @@ public class MemberRepository implements IMemberRepository{
     public List<MemberDTO> findAllMembers() {
         return m_memberMapper.findAllMembers();
     }
+
+    @Override
+    public int updateMemberInfo(MemberDTO memberDTO) {
+        return m_memberMapper.updateMemberInfo(memberDTO);
+    }
 }

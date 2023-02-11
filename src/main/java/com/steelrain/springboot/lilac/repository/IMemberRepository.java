@@ -11,4 +11,6 @@ public interface IMemberRepository {
     MemberDTO findMemberByLoginInfo(String email, String password);
 
     List<MemberDTO> findAllMembers();
+
+    int updateMemberInfo(MemberDTO memberDTO);
 }

@@ -72,14 +72,14 @@
                             <div class="col-12 ">
                                 <div class="search-input">
                                     <label for="keyword"><i class="lni lni-search-alt theme-color"></i></label>
-                                    <input type="text" name="keyword" id="keyword" placeholder="검색어">
+                                    <input type="text" name="keyword" id="keyword" placeholder="검색어" onchange="changeKeyword(this)">
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="search-input">
                                     <label for="category"><i class="lni lni-grid-alt theme-color"></i></label>
-                                        <select name="category" id="category" th:field="*{licenseCodes}">
-                                            <option value="">--- 자격증 선택 ---</option>
+                                        <select name="category" id="category" th:field="*{licenseCodes}" onchange="changeCategory(this)">
+                                            <option value="-1">--- 자격증 선택 ---</option>
                                             <option th:each="licenseCode : ${licenseCodes}" th:value="${licenseCode.code}" th:text="${licenseCode.name}"></option>
                                         </select>
                                 </div>
@@ -88,7 +88,7 @@
                                 <div class="search-input">
                                     <label for="location-main"><i class="lni lni-map-marker theme-color"></i></label>
                                         <select name="location-main" id="location-main" th:field="*{libRegionCodes}" th:onchange="changeLibRegionCode()">
-                                            <option value="">--- 지역정보 ---</option>
+                                            <option value="-1">--- 지역정보 ---</option>
                                             <option th:each="libRegionCode : ${libRegionCodes}" th:value="${libRegionCode.code}" th:text="${libRegionCode.name}"></option>
                                         </select>
                                 </div>
@@ -97,7 +97,7 @@
                                 <div class="search-input">
                                     <label for="location-sub"><i class="lni lni-map-marker theme-color"></i></label>
                                     <select name="location-sub" id="location-sub" onchange="changeDetailRegionCode()">
-                                        <option value="">--- 세부지역 ---</option>
+                                        <option value="-1">--- 세부지역 ---</option>
                                     </select>
                                 </div>
                             </div>
@@ -524,6 +524,24 @@
     <script th:src="@{/js/lilac-common.js}"></script>
     <script th:inline="javascript">
 
+        const changeKeyword = (keywordTag) => {
+            if(keywordTag.value == ""){
+                $("#category").attr("disabled", false);
+            }else{
+                $("#category").attr("disabled", true);
+            }
+        }
+
+        const changeCategory = (categoryTag) => {
+            console.log("categoryTag " + categoryTag.toString());
+            console.log("categoryTag.value : " + categoryTag.value);
+            if(categoryTag.value > -1){
+                $("#keyword").attr("disabled", true);
+            }else if(categoryTag.value == -1){
+                $("#keyword").attr("disabled", false);
+            }
+        }
+
         const showAddLicenseToNote = () => {
             $.ajax({
                 type:"get",
@@ -581,9 +599,10 @@
             /*
                 템플릿 문자열 = 백틱 기호호 감싼다. ``
                 `<option value='세부지역코드'>세부지역명</option>`
+                선택하지 않은 값은 -1 로 설정
              */
             $("#location-sub").empty();
-            $("#location-sub").append('<option value="">--- 세부지역 ---</option>');
+            $("#location-sub").append('<option value="-1">--- 세부지역 ---</option>');
             for(const region of detailRegionCodes){
                 $("#location-sub").append(`<option value=${region.code}>${region.detailName}</option>`);
             }
@@ -594,21 +613,37 @@
         }
 
         const searchHandler = () => {
-            searchLicenseSchedulesByCategory();
-            refreshLicenseBookList();
-            refreshPlaylistByCategory(1);
+            /*
+                TODO : 검색처리
+                - 검색어가 있으면 카테고리는 무시하고 검색어로 처리
+                - 카테고리를 선택하면 검색어는 무시하고 카테고리로 처리
+                - 카테고리를 선택하면 검색어는 지워버림
+                - 카테고리검색할때 지역정보는 필수, 세부지역은 선택
+            */
+            const m_category = $("#category").val();
+            const m_keyword = $("#keyword").val();
+            searchLicenseSchedulesByCategory(m_category);
+
+            const m_categoryKeyword = $("#category option:selected").text();
+            const m_region = $("#location-main").val();
+            const m_detailRegion = $("#location-sub").val();
+            refreshLicenseBookList(m_categoryKeyword, m_region, m_detailRegion);
+
+            refreshPlaylistByCategory(1); // 첫번째 페이지를 시작으로 재생목록을 업데이트
 
             // 자격증 시험일정 태그로 스크롤 이동
             let offset = $("#section-license").offset();
             $("html, body").animate({scrollTop: offset.top}, 300);
         }
-
-        const searchLicenseSchedulesByCategory = () => {
-            const m_category = $("#category").val();
+        // 자격증 시험일정 정보를 업데이트하는 함수
+        const searchLicenseSchedulesByCategory = (argCategory) => {
+            if(argCategory == undefined || argCategory <= -1){ // 자격증카테고리를 선택하지 않으면 실행하지 않는다.
+                return;
+            }
             $.ajax({
                 type: "get",
                 url: "/search/licSchd",
-                data: { licenseCode: m_category },
+                data: { licenseCode: argCategory },
                 dataType: "text",
                 success: (result) => {
                     let html = jQuery('<div>').html(result);
@@ -620,18 +655,15 @@
                 }
             });
         }
-
-        const refreshLicenseBookList = () => {
-            const m_keyword = $("#category option:selected").text();
-            const m_region = $("#location-main").val();
-            const m_detailRegion = $("#location-sub").val();
+        // 도서관, 카카오도서 목록을 업데이트하는 함수
+        const refreshLicenseBookList = (argKeyword, argRegion, argDetailRegion) => {
             $.ajax({
                 type:"get",
                 url:"/search/bookList",
                 data:{
-                    keyword:m_keyword,
-                    region:m_region,
-                    detailRegion:m_detailRegion
+                    keyword:argKeyword,
+                    region:argRegion,
+                    detailRegion:argDetailRegion
                 },
                 dataType:"text",
                 success:function (result){
@@ -644,7 +676,7 @@
                 }
             });
         }
-
+        // 키워드목록의 키워드를 처리하는 함수
         const refreshPlaylistByKeyword = (offsetArg, keywordArg) =>{
             if(keywordArg == ""){
                 return;
@@ -654,12 +686,12 @@
 
         const refreshPlaylistByCategory = (offsetArg) => {
             const categoryVal = $("#category option:checked").text();
-            if(categoryVal == ""){
+            if(categoryVal == ""){ // 자격증카테고의 text값을 재생목록의 키워드로 사용한다
                 return;
             }
             refreshPlayList(offsetArg, categoryVal);
         }
-
+        // 동영상 재생목록을 업데이트하는 함수
         const refreshPlayList = (offsetArg, keywordArg) => {
             $.ajax({
                 type:"get",

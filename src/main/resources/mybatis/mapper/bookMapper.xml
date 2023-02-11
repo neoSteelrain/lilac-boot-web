@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.steelrain.springboot.lilac.mapper.LicenseBookMapper">
+
+    <insert id="saveKakaoBookList" parameterType="KaKaoBookDTO">
+        INSERT INTO tbl_book(isbn13,title,contents,url,publish_date,authors,publisher,translators,price,sale_price,thumbnail,status) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.isbn13},#{item.title},#{item.contents},#{item.url},#{item.publishDate},
+             #{item.authors},#{item.publisher},#{item.translators},#{item.price},#{item.salePrice},#{item.thumbnail},#{item.status})
+        </foreach>
+        ON DUPLICATE KEY UPDATE title=VALUES(title),contents=VALUES(contents),url=VALUES(url),publish_date=VALUES(publish_date),authors=VALUES(authors)
+                                ,publisher=VALUES(publisher),translators=VALUES(title),price=VALUES(price),sale_price=VALUES(sale_price),thumbnail=VALUES(thumbnail)
+                                ,status=VALUES(status),update_date=NOW()
+    </insert>
+
+</mapper>

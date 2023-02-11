@@ -59,9 +59,7 @@
                     </div>
                     <div class="dashboard-menu">
                         <ul th:each="note,idx : ${lectureNoteList}">
-                            <li><a th:href="@{/lecture/lecture-note-member(noteId=${note.id})}" th:if="${idx.index == 0}" th:class="active"><i class="lni lni-notepad"></i>[[${note.title}]]</a></li>
-                            <li><a th:href="@{/lecture/lecture-note-member(noteId=${note.id})}" th:unless="${idx.index == 0}"><i class="lni lni-notepad"></i>[[${note.title}]]</a>
-                            </li>
+                            <li><a th:href="@{/lecture/lecture-note-member(noteId=${note.id})}"><i class="lni lni-notepad"></i>[[${note.title}]]</a></li>
                         </ul>
                     </div>
                 </div>
@@ -387,7 +385,6 @@
 <script th:src="@{/js/wow.min.js}"></script>
 <script th:src="@{/js/tiny-slider.js}"></script>
 <script th:src="@{/js/glightbox.min.js}"></script>
-<script th:src="@{/js/count-up.min.js}"></script>
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/lilac-common.js}"></script>
 <script th:inline="javascript">
@@ -410,44 +407,9 @@
         })
     }
 
-    const editLectureNote = () => {
 
-    }
-
-
-
-    const noteTitleClick = (aTag, paramNoteId) => {
-        console.log("aTag : " + aTag);
-        console.log("paramNoteId : " + paramNoteId);
-
-    }
-
-    /*const noteTitleClick = (aTag, paramNoteId) => {
-        console.log("aTag : " + aTag);
-        console.log("paramNoteId : " + paramNoteId);
-        $.ajax({
-            type:"get",
-            url:"/lecture/note-detail-template",
-            data:{noteId:paramNoteId},
-            dataType:"text",
-            success:function (data){
-                /!*
-                let html = jQuery('<div>').html(result);
-                    let contents = html.find("div#lic-schedule-template").html();
-                    $('#license-div').html(contents);
-                 *!/
-                let html = jQuery("<div>").html(data);
-                let contents = html.find("div#lecture-note-detail-template").html();
-                $("#lecture-note-detail-div").html(contents);
-            },
-            error:function (error){
-                alert("강의노트 정보를 가져오는데 실패하였습니다.");
-            }
-        })
-    }*/
-
-    const toggleAtag = () => {
-        toggleClass(".active-color");
+    const noteTitleClickArrow = (aTag) => {
+        aTag.classList.toggle('active');
     }
 
     const checkLicenseSelectBox = () => {
