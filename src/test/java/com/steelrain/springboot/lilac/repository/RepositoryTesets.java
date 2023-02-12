@@ -1,6 +1,5 @@
 package com.steelrain.springboot.lilac.repository;
 
-import com.steelrain.springboot.lilac.datamodel.LicenseDTO;
 import com.steelrain.springboot.lilac.datamodel.api.KakaoBookSearchResponseDTO;
 import com.steelrain.springboot.lilac.datamodel.api.LicenseScheduleResponseDTO;
 import com.steelrain.springboot.lilac.datamodel.api.NaruBookExistResposeDTO;
@@ -8,10 +7,6 @@ import com.steelrain.springboot.lilac.datamodel.api.NaruLibSearchByBookResponseD
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.util.StringUtils;
-
-import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -33,7 +28,7 @@ public class RepositoryTesets {
         char ch = tmp.charAt(50);
         System.out.println("ch : " + ch);*/
 
-        KakaoBookSearchResponseDTO res = kaKoBookRepository.searchBookfromKakao("정보처리기사 2022");
+        KakaoBookSearchResponseDTO res = kaKoBookRepository.searchBookFromKakao("정보처리기사 2022", 1, 6);
 
         assertThat(res != null);
 

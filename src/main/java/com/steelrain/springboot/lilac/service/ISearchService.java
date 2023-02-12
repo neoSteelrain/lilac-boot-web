@@ -13,8 +13,8 @@ public interface ISearchService {
     List<LibraryDetailRegionCodeDTO> getLibDetailRegionCodes(int regionCode);
 
     LicenseDTO getLicenseInfoByCode(int licenseCode);
-    LicenseBookListDTO getLicenseBookList(String keyword, short region, int detailRegion);
-    VideoPlayListSearchResultDTO searchPlayList(String keyword, int offset, int count);
+    LicenseBookListDTO getLicenseBookList(int licenseCode, short regionCode, int detailRegionCode, int pageNum, int bookCount);
+    VideoPlayListSearchResultDTO searchPlayList(int keywordCode, int pageNum, int playlistCount , int keywordType);
 
-    SubjectBookListDTO getSubjectBookList(int subjectCode);
+    SubjectBookListDTO getSubjectBookList(int subjectCode, int pageNum, int bookCount);
 }

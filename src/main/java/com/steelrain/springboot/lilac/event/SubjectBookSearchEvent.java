@@ -15,6 +15,8 @@ public class SubjectBookSearchEvent {
     private int subjectCode;
     private String subjectName;
     private String keyword;
+    private int pageNum;
+    private int subjectBookCount;
 
     @Setter
     private SubjectBookListDTO searchResultDTO;

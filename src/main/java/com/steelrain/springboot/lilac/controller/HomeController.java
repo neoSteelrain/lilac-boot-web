@@ -1,7 +1,7 @@
 package com.steelrain.springboot.lilac.controller;
 
 
-import com.steelrain.springboot.lilac.service.KeywordCategoryCacheService;
+import com.steelrain.springboot.lilac.common.KeywordCategoryCacheService;
 import com.steelrain.springboot.lilac.service.VideoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

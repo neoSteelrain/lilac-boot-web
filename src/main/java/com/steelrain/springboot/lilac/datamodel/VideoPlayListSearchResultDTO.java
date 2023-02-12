@@ -8,7 +8,8 @@ import java.util.List;
 @Getter
 @Builder
 public class VideoPlayListSearchResultDTO {
-    private String requestKeyword;
+    private int requestKeywordCode;
+    private int requestKeywordType;
     private PageDTO pageDTO;
     private List<YoutubePlayListDTO> playList;
 }

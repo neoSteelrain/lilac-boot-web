@@ -1,10 +1,11 @@
-package com.steelrain.springboot.lilac.service;
+package com.steelrain.springboot.lilac.common;
 
 import com.steelrain.springboot.lilac.datamodel.LibraryDetailRegionCodeDTO;
 import com.steelrain.springboot.lilac.datamodel.LibraryRegionCodeDTO;
 import com.steelrain.springboot.lilac.datamodel.LicenseCodeDTO;
 import com.steelrain.springboot.lilac.datamodel.SubjectCodeDTO;
 import com.steelrain.springboot.lilac.mapper.SearchMapper;
+import com.steelrain.springboot.lilac.service.ICacheService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -61,11 +62,16 @@ public class KeywordCategoryCacheService implements ICacheService {
     }
 
     @Override
+    public String getLicenseKeyword(int licenseCode) {
+        return m_licenseCodeList.stream().filter(license -> license.getCode().intValue() == licenseCode).map(LicenseCodeDTO::getKeyWord).findFirst().get();
+    }
+
+    @Override
     public String getRegionName(short region) {
         return m_libRegionCodeList.stream()
                 .filter(regionDTO -> (regionDTO.getCode() == region))
                 .map(LibraryRegionCodeDTO::getName)
-                .collect(Collectors.joining());
+                .findFirst().get();
     }
 
     @Override

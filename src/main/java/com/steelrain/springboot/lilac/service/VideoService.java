@@ -1,7 +1,9 @@
 package com.steelrain.springboot.lilac.service;
 
-import com.steelrain.springboot.lilac.config.PAGING_CONFIG;
+import com.steelrain.springboot.lilac.common.KeywordCategoryCacheService;
+import com.steelrain.springboot.lilac.common.PAGING_CONFIG;
 import com.steelrain.springboot.lilac.datamodel.*;
+import com.steelrain.springboot.lilac.exception.LilacException;
 import com.steelrain.springboot.lilac.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +17,7 @@ import java.util.List;
 public class VideoService implements IVideoService {
 
     private final VideoRepository m_videoRepository;
+    private final KeywordCategoryCacheService m_keywordCategoryCacheService;
 
 
     @Override
@@ -28,12 +31,25 @@ public class VideoService implements IVideoService {
     }
 
     @Override
-    public VideoPlayListSearchResultDTO searchPlayList(String keyword, int offset, int count) {
+    public VideoPlayListSearchResultDTO searchPlayList(int keywordCode, int pageNum, int playlistCount, int keywordType) {
+        int pageStart = (pageNum - 1) * playlistCount;
+        String keywordStr = parseKeywordCode(keywordCode, keywordType);
         return VideoPlayListSearchResultDTO.builder()
-                                        .requestKeyword(keyword)
-                                        .pageDTO(createPageDTO(keyword, offset, count))
-                                        .playList(m_videoRepository.findPlayListByKeyword(keyword, offset-1, count))
+                                        .requestKeywordCode(keywordCode)
+                                        .requestKeywordType(keywordType)
+                                        .pageDTO(createPageDTO(keywordStr, pageNum, playlistCount))
+                                        .playList(m_videoRepository.findPlayListByKeyword(keywordStr, pageStart, playlistCount))
                                         .build();
+    }
+
+    private String parseKeywordCode(int keywordCode, int keywordType){
+        if(keywordType == 1){
+            return m_keywordCategoryCacheService.getLicenseKeyword(keywordCode);
+        }else if(keywordType == 2){
+            return m_keywordCategoryCacheService.getSubjectKeyword(keywordCode);
+        }else{
+            throw new LilacException(String.format("확인할 수 없는 키워드 코드 입니다. 입력된 키워드 코드 : %d", keywordCode));
+        }
     }
 
     @Override
@@ -41,16 +57,16 @@ public class VideoService implements IVideoService {
         return m_videoRepository.findAllVideoIdByPlayList(playListId);
     }
 
-    private PageDTO createPageDTO(String keyword, int offset, int playlistCount){
+    private PageDTO createPageDTO(String keyword, int pageNum, int playlistCount){
         int totalPlaylistCount = m_videoRepository.selectTotalPlayListCountByKeyword(keyword);
         int maxPage = (int)(Math.ceil( (double) totalPlaylistCount / playlistCount));
-        int startPage = (((int)(Math.ceil((double) offset / PAGING_CONFIG.BLOCK_LIMIT))) - 1) * PAGING_CONFIG.BLOCK_LIMIT + 1;
+        int startPage = (((int)(Math.ceil((double) pageNum / PAGING_CONFIG.BLOCK_LIMIT))) - 1) * PAGING_CONFIG.BLOCK_LIMIT + 1;
         int endPage = startPage + PAGING_CONFIG.BLOCK_LIMIT -1;
         if(endPage > maxPage){
             endPage = maxPage;
         }
         return PageDTO.builder()
-                .page(offset)
+                .page(pageNum)
                 .startPage(startPage)
                 .endPage(endPage)
                 .maxPage(maxPage).build();

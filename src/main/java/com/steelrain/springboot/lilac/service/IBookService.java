@@ -8,8 +8,8 @@ import com.steelrain.springboot.lilac.datamodel.view.SubjectBookListDTO;
 import java.util.List;
 
 public interface IBookService {
-    LicenseBookListDTO getLicenseBookList(String keyword, short region, int detailRegion);
+    LicenseBookListDTO getLicenseBookList(int licenseCode, short regionCode, int detailRegionCode, int pageNum, int bookCount);
     List<NaruLibraryDTO> getLibraryByRegionList(short region, int detailRegion);
 
-    SubjectBookListDTO getSubjectBookList(int subjectCode);
+    SubjectBookListDTO getSubjectBookList(int subjectCode, int pageNum, int bookCount);
 }

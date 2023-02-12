@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.service;
 
+import com.steelrain.springboot.lilac.common.BOOK_PAGING_INFO;
 import com.steelrain.springboot.lilac.datamodel.KaKaoBookDTO;
 import com.steelrain.springboot.lilac.datamodel.LicenseBookDetailDTO;
 import com.steelrain.springboot.lilac.datamodel.api.KakaoBookSearchResponseDTO;
@@ -9,7 +10,6 @@ import com.steelrain.springboot.lilac.datamodel.api.KakaoSearchedBookDTO;
 import com.steelrain.springboot.lilac.datamodel.api.NaruLibSearchByRegionResponseDTO;
 import com.steelrain.springboot.lilac.datamodel.view.SubjectBookListDTO;
 import com.steelrain.springboot.lilac.event.KakaoBookSaveEvent;
-import com.steelrain.springboot.lilac.event.SubjectBookSearchEvent;
 import com.steelrain.springboot.lilac.repository.IKaKoBookRepository;
 import com.steelrain.springboot.lilac.repository.INaruRepository;
 import lombok.RequiredArgsConstructor;
@@ -73,13 +73,14 @@ public class BookService implements IBookService{
     // 카카오 책검색만 호출하는 버전
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public LicenseBookListDTO getLicenseBookList(String keyword, short region, int detailRegion){
+    public LicenseBookListDTO getLicenseBookList(int licenseCode, short regionCode, int detailRegionCode, int pageNum, int bookCount){
         /*
             1. 카카오 도서검색 API 를 통해 keyword 해당하는 도서목록을 가져온다
             2. 도서의 ISBN을 가지고 나루도서관 API 에 소장도서관목록을 가져온다
             - 카카오 API는 ISBN을 문자열로 반환하고, 나루도서관 API는 ISBN을 숫자형식(long)으로 받으므로 형변환이 필요하다
          */
-        List<KakaoSearchedBookDTO> bookList = m_kaKoBookRepository.searchBookfromKakao(keyword).getKakaoSearchedBookList();
+        String licenseSearchKeyword = m_cacheService.getLicenseKeyword(licenseCode);
+        List<KakaoSearchedBookDTO> bookList = m_kaKoBookRepository.searchBookFromKakao(licenseSearchKeyword, pageNum, bookCount).getKakaoSearchedBookList();
         LicenseBookListDTO resultDTO = new LicenseBookListDTO();
         List<KaKaoBookDTO> kaKaoBookDTOList = new ArrayList<>(bookList.size());
         for(KakaoSearchedBookDTO book : bookList){
@@ -90,17 +91,17 @@ public class BookService implements IBookService{
             kaKaoBookDTOList.add(convertKakaoBookDTO(book,
                                  StringUtils.containsWhitespace(tmpIsbn) ? StringUtils.tokenizeToStringArray(tmpIsbn, " ")[1] : tmpIsbn));
 
-            resultDTO.setKeyword(keyword);
-            resultDTO.setRegionName(m_cacheService.getRegionName(region));
-            if(detailRegion > 0){
-                resultDTO.setDetailRegionName(m_cacheService.getDetailRegionName(region, detailRegion));
+            resultDTO.setKeyword(licenseSearchKeyword);
+            resultDTO.setRegionName(m_cacheService.getRegionName(regionCode));
+            if(detailRegionCode > 0){
+                resultDTO.setDetailRegionName(m_cacheService.getDetailRegionName(regionCode, detailRegionCode));
             }
         }
         // 카카오책 검색결과를 DB에 저장하는 이벤트를 발생한다.
         publishKaKaoBookSaveEvent(kaKaoBookDTOList);
 
         resultDTO.setKakaoBookList(kaKaoBookDTOList);
-        resultDTO.setLibraryList(delegateLibraryByRegionList(region, detailRegion));
+        resultDTO.setLibraryList(delegateLibraryByRegionList(regionCode, detailRegionCode));
         return resultDTO;
     }
 
@@ -116,9 +117,9 @@ public class BookService implements IBookService{
     }
 
     @Override
-    public SubjectBookListDTO getSubjectBookList(int subjectCode) {
+    public SubjectBookListDTO getSubjectBookList(int subjectCode, int pageNum, int bookCount) {
         String keyword = m_cacheService.getSubjectKeywordBook(subjectCode);
-        KakaoBookSearchResponseDTO responseDTO = m_kaKoBookRepository.searchBookfromKakao(keyword);
+        KakaoBookSearchResponseDTO responseDTO = m_kaKoBookRepository.searchBookFromKakao(keyword, pageNum, bookCount);
         SubjectBookListDTO resultDTO = new SubjectBookListDTO();
         List<KakaoSearchedBookDTO> bookList = responseDTO.getKakaoSearchedBookList();
         List<KaKaoBookDTO> kaKaoBookDTOList = new ArrayList<>(bookList.size());

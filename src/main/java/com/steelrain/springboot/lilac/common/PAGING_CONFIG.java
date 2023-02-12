@@ -1,4 +1,4 @@
-package com.steelrain.springboot.lilac.config;
+package com.steelrain.springboot.lilac.common;
 
 public class PAGING_CONFIG {
     // 하단에 보여줄 페이지 번호 갯수

@@ -29,16 +29,16 @@ public class SearchEventHandler {
 
     @EventListener(LicenseBookSearchEvent.class)
     public void handleLicenseBookSearchEvent(LicenseBookSearchEvent event){
-        event.setLicenseBookListDTO(m_bookService.getLicenseBookList(event.getKeyword(), event.getRegion(), event.getDetailRegion()));
+        event.setLicenseBookListDTO(m_bookService.getLicenseBookList(event.getLicenseCode(), event.getRegionCode(), event.getDetailRegionCode(), event.getPageNum(), event.getLicenseBookCount()));
     }
 
     @EventListener(VideoPlayListSearchEvent.class)
     public void handleVideoPlayListSearchEvent(VideoPlayListSearchEvent event){
-        event.setSearchResultDTO(m_videoService.searchPlayList(event.getKeyword(), event.getOffset(), event.getCount()));
+        event.setSearchResultDTO(m_videoService.searchPlayList(event.getKeywordCode(), event.getPageNum(), event.getPlaylistCount(), event.getKeywordType()));
     }
 
     @EventListener(SubjectBookSearchEvent.class)
     public void handleSubjectBookSearchEvent(SubjectBookSearchEvent event){
-        event.setSearchResultDTO(m_bookService.getSubjectBookList(event.getSubjectCode()));
+        event.setSearchResultDTO(m_bookService.getSubjectBookList(event.getSubjectCode(), event.getPageNum(), event.getSubjectBookCount()));
     }
 }

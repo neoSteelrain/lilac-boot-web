@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.service;
 
+import com.steelrain.springboot.lilac.common.BOOK_PAGING_INFO;
 import com.steelrain.springboot.lilac.datamodel.*;
 import com.steelrain.springboot.lilac.datamodel.view.LicenseBookListDTO;
 import com.steelrain.springboot.lilac.datamodel.view.SubjectBookListDTO;
@@ -45,18 +46,22 @@ public class SearchService implements ISearchService{
         return resultDTO;
     }
 
-
     /**
      * 키워드를 검색조건으로 하는 영상정보 결과를 가져온다
      * 영상정보에 대한 기능은 VideoService 에서 담당하므로 VideoPlayListSearchEvent를 발행하여 VideoService에 실행을 위임한다
-     * @param keyword 검색할 키워드
+     * @param keywordCode 검색할 키워드의 코드
+     * @param pageNum 페이지 번호
+     * @param playlistCount 페이지당 재생목록의 개수
+     * @param keywordType 키워드 종류
      * @return 검색된 재생목록
      */
-    public VideoPlayListSearchResultDTO searchPlayList(String keyword, int offset, int count) {
+    @Override
+    public VideoPlayListSearchResultDTO searchPlayList(int keywordCode, int pageNum, int playlistCount, int keywordType) {
         VideoPlayListSearchEvent searchEvent = VideoPlayListSearchEvent.builder()
-                .keyword(keyword)
-                .offset(offset)
-                .count(count)
+                .keywordCode(keywordCode)
+                .pageNum(pageNum)
+                .playlistCount(playlistCount)
+                .keywordType(keywordType)
                 .build();
         m_appEventPublisher.publishEvent(searchEvent);
         return searchEvent.getSearchResultDTO();
@@ -69,9 +74,11 @@ public class SearchService implements ISearchService{
      * @return 도서정보
      */
     @Override
-    public SubjectBookListDTO getSubjectBookList(int subjectCode) {
+    public SubjectBookListDTO getSubjectBookList(int subjectCode, int pageNum, int bookCount) {
         SubjectBookSearchEvent searchEvent = SubjectBookSearchEvent.builder()
                 .subjectCode(subjectCode)
+                .pageNum(pageNum)
+                .subjectBookCount(bookCount)
                 .build();
         m_appEventPublisher.publishEvent(searchEvent);
         return searchEvent.getSearchResultDTO();
@@ -95,17 +102,20 @@ public class SearchService implements ISearchService{
     /**
      * 키워드에 해당하는 도서정보, 도서관정보를 가져온다
      * 도서정보에 대한 기능은 BookService 에서 담당하므로 LicenseBookSearchEvent를 발행하여 BookService에서 실행을 위임한다
-     * @param keyword 검색할 키워드
-     * @param region 지역코드 : 예) 서울, 인천, 대구
-     * @param detailRegion 세부지역코드 : 예) 인천 미추홀구
-     * @return 자격증에 대한 도서정보
+     * 화면에 보여질 도서의 갯수를 이벤트에 지정해주고 이벤트를 발행한다.
+     * @param licenseCode 자격증코드
+     * @param regionCode 지역코드
+     * @param detailRegionCode 세부지역코드
+     * @return 검색된 자격증관련 도서목록
      */
     @Override
-    public LicenseBookListDTO getLicenseBookList(String keyword, short region, int detailRegion){
+    public LicenseBookListDTO getLicenseBookList(int licenseCode, short regionCode, int detailRegionCode, int pageNum, int bookCount){
         LicenseBookSearchEvent searchEvent = LicenseBookSearchEvent.builder()
-                .keyword(keyword)
-                .region(region)
-                .detailRegion(detailRegion)
+                .licenseCode(licenseCode)
+                .regionCode(regionCode)
+                .detailRegionCode(detailRegionCode)
+                .pageNum(pageNum)
+                .licenseBookCount(bookCount)
                 .build();
         m_appEventPublisher.publishEvent(searchEvent);
         return searchEvent.getLicenseBookListDTO();

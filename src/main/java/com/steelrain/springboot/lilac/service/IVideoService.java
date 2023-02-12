@@ -11,7 +11,7 @@ public interface IVideoService {
 
     List<YoutubeVideoDTO> getPlayListDetail(Long youtubePlaylistId);
 
-    VideoPlayListSearchResultDTO searchPlayList(String keyword, int offset, int count);
+    VideoPlayListSearchResultDTO searchPlayList(int keywordCode, int pageNum, int playlistCount, int keywordType);
 
     List<Long> getAllVideoIdByPlayList(Long playListId);
 }

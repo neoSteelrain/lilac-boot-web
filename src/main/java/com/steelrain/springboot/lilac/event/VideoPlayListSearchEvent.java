@@ -13,9 +13,10 @@ import java.util.List;
 @Builder
 public class VideoPlayListSearchEvent {
 
-    private String keyword;
-    private int offset;
-    private int count;
+    private int keywordCode;
+    private int pageNum;
+    private int playlistCount;
+    private int keywordType;
 
     @Setter
     private VideoPlayListSearchResultDTO searchResultDTO;

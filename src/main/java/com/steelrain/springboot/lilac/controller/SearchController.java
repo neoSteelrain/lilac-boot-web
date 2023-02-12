@@ -1,12 +1,13 @@
 package com.steelrain.springboot.lilac.controller;
 
+import com.steelrain.springboot.lilac.common.BOOK_PAGING_INFO;
+import com.steelrain.springboot.lilac.common.YOUTUBE_PAGING_INFO;
 import com.steelrain.springboot.lilac.datamodel.*;
 import com.steelrain.springboot.lilac.datamodel.view.SubjectBookListDTO;
 import com.steelrain.springboot.lilac.service.ISearchService;
-import com.steelrain.springboot.lilac.service.KeywordCategoryCacheService;
+import com.steelrain.springboot.lilac.common.KeywordCategoryCacheService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.constraints.ISBN;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -44,25 +45,29 @@ public class SearchController {
         return "/search/license-template";
     }
 
-    @GetMapping("/bookList")
-    public String getBookList(@RequestParam("keyword") String keyword, short region, int detailRegion, Model model){
-        if(region <= -1){
-            log.error(String.format("지역코드 입력에러 - 필수입력 지역코드가 없음 : 입력된 지역코드 = %d", region));
+    @GetMapping("/licenseBookList")
+    public String getLicenseBookList(@RequestParam("licenseCode") int licenseCode, short regionCode, int detailRegionCode, int pageNum, int bookCount, Model model){
+        if(regionCode <= -1){
+            log.error(String.format("지역코드 입력에러 - 필수입력 지역코드가 없음 : 입력된 지역코드 = %d", regionCode));
             return "redirect:/";
         }
-        if(region <= -1 && detailRegion < -1){
-            log.error(String.format("지역코드 입력에러 - 지역코드,세부지역코드 2개 다 없음 : 입력된 지역코드 = %d , 입력된 세부지역코드 = %d", region, detailRegion));
+        if(regionCode <= -1 && detailRegionCode < -1){
+            log.error(String.format("지역코드 입력에러 - 지역코드,세부지역코드 2개 다 없음 : 입력된 지역코드 = %d , 입력된 세부지역코드 = %d", regionCode, detailRegionCode));
             return "redirect:/";
         }
-        model.addAttribute("licenseBookInfo", m_searchService.getLicenseBookList(keyword, region, detailRegion));
-        model.addAttribute("region", region);
-        model.addAttribute("detailRegion", detailRegion);
+        model.addAttribute("licenseBookInfo", m_searchService.getLicenseBookList(licenseCode, regionCode, detailRegionCode,
+                                                                                             pageNum, BOOK_PAGING_INFO.BOOK_COUNT_PER_PAGE)); // bookCount 대신 BOOK_COUNT_PER_PAGE
+        model.addAttribute("region", regionCode);
+        model.addAttribute("detailRegion", detailRegionCode);
         return "/search/book-template";
     }
 
     @GetMapping("/subject-book-list")
-    public String getKeywordBookList(@RequestParam("subjectCode") int subjectCode, Model model){
-        SubjectBookListDTO resultDTO = m_searchService.getSubjectBookList(subjectCode);
+    public String getSubjectBookList(@RequestParam("subjectCode") int subjectCode,
+                                     @RequestParam("pageNum") int pageNum,
+                                     @RequestParam("bookCount") int bookCount, Model model){
+
+        SubjectBookListDTO resultDTO = m_searchService.getSubjectBookList(subjectCode, pageNum,  BOOK_PAGING_INFO.BOOK_COUNT_PER_PAGE); // bookCount 대신 BOOK_COUNT_PER_PAGE
 
         model.addAttribute("subjectBookInfo", resultDTO);
         return "/search/subject-book-template";
@@ -86,16 +91,17 @@ public class SearchController {
     }
 
     @GetMapping("/playlist")
-    public String searchPlayList(@RequestParam("keyword") String keyword,
-                                 @RequestParam("offset") int offset,
-                                 @RequestParam("count") int count,
+    public String searchPlayList(@RequestParam("keywordCode") int keywordCode,
+                                 @RequestParam("pageNum") int pageNum,
+                                 @RequestParam("keywordType") int keywordType,
                                  Model model){
-        if(offset <= 0){
-            log.error(String.format("페이징 파라미터 입력 에러 : 입력된 offset 값 = %d", offset));
-            offset = 1; // 잘못된 offset 은 1번째페이지로 설정해준다.
+        if(pageNum <= 0){
+            log.error(String.format("페이징 파라미터 입력 에러 : 입력된 pageNum 값 = %d", pageNum));
+            return "redirect:/";
         }
 
-        model.addAttribute("searchResult", m_searchService.searchPlayList(keyword, offset, count));
+
+        model.addAttribute("searchResult", m_searchService.searchPlayList(keywordCode, pageNum, YOUTUBE_PAGING_INFO.YOUTUBE_COUNT_PER_PAGE, keywordType));
         return "/search/playlist-template";
     }
 }

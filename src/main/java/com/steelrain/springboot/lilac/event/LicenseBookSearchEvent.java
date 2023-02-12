@@ -8,9 +8,11 @@ import lombok.Setter;
 @Getter
 @Builder
 public class LicenseBookSearchEvent {
-    private String keyword;
-    private short region;
-    private int detailRegion;
+    private int licenseCode;
+    private short regionCode;
+    private int detailRegionCode;
+    private int pageNum;
+    private int licenseBookCount;
 
     @Setter
     private LicenseBookListDTO licenseBookListDTO;

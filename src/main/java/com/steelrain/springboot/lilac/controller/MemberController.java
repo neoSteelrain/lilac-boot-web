@@ -1,6 +1,6 @@
 package com.steelrain.springboot.lilac.controller;
 
-import com.steelrain.springboot.lilac.config.SESSION_KEY;
+import com.steelrain.springboot.lilac.common.SESSION_KEY;
 import com.steelrain.springboot.lilac.datamodel.LibraryRegionCodeDTO;
 import com.steelrain.springboot.lilac.datamodel.LicenseCodeDTO;
 import com.steelrain.springboot.lilac.datamodel.SubjectCodeDTO;
@@ -9,7 +9,7 @@ import com.steelrain.springboot.lilac.datamodel.MemberDTO;
 import com.steelrain.springboot.lilac.datamodel.view.MemberProfileEditDTO;
 import com.steelrain.springboot.lilac.datamodel.view.MemberRegDTO;
 import com.steelrain.springboot.lilac.service.IMemberService;
-import com.steelrain.springboot.lilac.service.KeywordCategoryCacheService;
+import com.steelrain.springboot.lilac.common.KeywordCategoryCacheService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

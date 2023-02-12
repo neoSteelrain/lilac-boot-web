@@ -13,6 +13,7 @@ public interface ICacheService {
     List<LibraryDetailRegionCodeDTO> getLibraryDetailRegionCodeList(short regionCode);
     public List<LicenseCodeDTO> getLicenseCodeList();
 
+    String getLicenseKeyword(int licenseCode);
     String getRegionName(short region);
     String getDetailRegionName(short region, int detailRegion);
     String getSubjectKeyword(int subjectCode);

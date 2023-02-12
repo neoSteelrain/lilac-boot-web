@@ -29,13 +29,20 @@ public class KakaoBookRepository implements IKaKoBookRepository{
         this.m_apiConfig = apiConfig;
     }
 
+    /**
+     * 카카오 책검색 REST API를 이용하여 도서정보를 조회하는 클래스
+     * @param keyword 도서제목에 조회할 키워드
+     * @param pageNum 페이지 번호
+     * @param bookCount 페이지당 보여질 책의 개수
+     * @return 카카오 REST API의 json응답을 객체로 매핑하여 반환 : DTO Generator 유틸로 자동생성하였다
+     */
     @Override
-    public KakaoBookSearchResponseDTO searchBookfromKakao(String keyword) {
+    public KakaoBookSearchResponseDTO searchBookFromKakao(String keyword, int pageNum, int bookCount) {
         List<NameValuePair> params = new ArrayList<>(4);
         params.add(new BasicNameValuePair("query", keyword));
         params.add(new BasicNameValuePair("sort", "accuracy"));
-        params.add(new BasicNameValuePair("page", String.valueOf(1)));
-        params.add(new BasicNameValuePair("size", String.valueOf(20)));
+        params.add(new BasicNameValuePair("page", String.valueOf(pageNum)));
+        params.add(new BasicNameValuePair("size", String.valueOf(bookCount)));
 
         HttpGet httpGet = new HttpGet(m_apiConfig.getKakaoRestUrl());
         try{

@@ -1,4 +1,4 @@
-package com.steelrain.springboot.lilac.config;
+package com.steelrain.springboot.lilac.common;
 
 public class SESSION_KEY {
     public final static String LOGIN_MEMBER = "LOGIN_MEMBER";

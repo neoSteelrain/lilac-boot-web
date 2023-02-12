@@ -67,7 +67,8 @@
                     <!-- Start Search Form -->
                     <div class="search-form style2 wow fadeInRight" data-wow-delay=".5s">
                         <h3 class="heading-title">검색</h3>
-                        <p class="sub-heding-text">검색 안내문구</p>
+<!--                        <p class="sub-heding-text">검색 안내문구</p>-->
+                        <p class="text-danger" id="searchInputNotice" ></p>
                         <div class="row">
                             <div class="col-12 ">
                                 <div class="search-input">
@@ -77,8 +78,8 @@
                             </div>
                             <div class="col-12">
                                 <div class="search-input">
-                                    <label for="category"><i class="lni lni-grid-alt theme-color"></i></label>
-                                        <select name="category" id="category" th:field="*{licenseCodes}" onchange="changeCategory(this)">
+                                    <label for="license"><i class="lni lni-grid-alt theme-color"></i></label>
+                                        <select name="license" id="license" th:field="*{licenseCodes}" onchange="changeLicense(this)">
                                             <option value="-1">--- 자격증 선택 ---</option>
                                             <option th:each="licenseCode : ${licenseCodes}" th:value="${licenseCode.code}" th:text="${licenseCode.name}"></option>
                                         </select>
@@ -126,9 +127,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row"> <!-- (argSubjectCode, argOffset, argKeywordType) -->
                     <div th:each="subject : ${subjectCodes}" class="col-lg-2 col-md-3 col-12">
-                        <a th:href="|javascript:refreshPlaylistBySubject(1, '${subject.code}', '${subject.keyWord}')|" class="single-cat wow fadeInUp" data-wow-delay=".2s">
+                        <a th:href="|javascript:refreshPageBySubject('${subject.code}', 1)|" class="single-cat wow fadeInUp" data-wow-delay=".2s">
                             <div class="icon">
                                 <img th:src="@{/images/subject/java.png}" alt="#">
                             </div>
@@ -526,18 +527,16 @@
 
         const changeKeyword = (keywordTag) => {
             if(keywordTag.value == ""){
-                $("#category").attr("disabled", false);
+                $("#license").attr("disabled", false);
             }else{
-                $("#category").attr("disabled", true);
+                $("#license").attr("disabled", true);
             }
         }
 
-        const changeCategory = (categoryTag) => {
-            console.log("categoryTag " + categoryTag.toString());
-            console.log("categoryTag.value : " + categoryTag.value);
-            if(categoryTag.value > -1){
+        const changeLicense = (licenseTag) => {
+            if(licenseTag.value > -1){
                 $("#keyword").attr("disabled", true);
-            }else if(categoryTag.value == -1){
+            }else if(licenseTag.value == -1){
                 $("#keyword").attr("disabled", false);
             }
         }
@@ -611,7 +610,7 @@
         const changeDetailRegionCode = () => {
             const m_detailRegion = $('#location-sub').val();
         }
-
+        // 검색버튼 클릭 이벤트 처리 함수 : 키워드, 카테고리 검색을 처리한다
         const searchHandler = () => {
             /*
                 TODO : 검색처리
@@ -620,30 +619,40 @@
                 - 카테고리를 선택하면 검색어는 지워버림
                 - 카테고리검색할때 지역정보는 필수, 세부지역은 선택
             */
-            const m_category = $("#category").val();
             const m_keyword = $("#keyword").val();
-            searchLicenseSchedulesByCategory(m_category);
+            if(m_keyword != ""){
+                // TODO : 검색어 처리
+                return;
+            }
+            const m_regionCode = $("#location-main option:selected").val();
+            // searchInputNotice
+            if(m_keyword == "" && m_regionCode == -1){
+                $("#searchInputNotice").text("지역정보는 필수입력입니다");
+                return;
+            }
+            // 이제는 카테고리 선택으로 검색처리
+            $("#searchInputNotice").text(""); // 경고문구는 지워준다
+            const m_licenseCode = $("#license option:selected").val();
+            searchLicenseSchedulesByLicenseCode(m_licenseCode);
 
-            const m_categoryKeyword = $("#category option:selected").text();
-            const m_region = $("#location-main").val();
-            const m_detailRegion = $("#location-sub").val();
-            refreshLicenseBookList(m_categoryKeyword, m_region, m_detailRegion);
+            const m_detailRegionCode = $("#location-sub option:selected").val();
+            refreshLicenseBookList(m_licenseCode, m_regionCode, m_detailRegionCode, 1);
 
-            refreshPlaylistByCategory(1); // 첫번째 페이지를 시작으로 재생목록을 업데이트
+            refreshPlaylistByLicense(m_licenseCode, 1); // 첫번째 페이지를 시작으로 재생목록을 업데이트
 
             // 자격증 시험일정 태그로 스크롤 이동
             let offset = $("#section-license").offset();
             $("html, body").animate({scrollTop: offset.top}, 300);
         }
         // 자격증 시험일정 정보를 업데이트하는 함수
-        const searchLicenseSchedulesByCategory = (argCategory) => {
-            if(argCategory == undefined || argCategory <= -1){ // 자격증카테고리를 선택하지 않으면 실행하지 않는다.
+        const searchLicenseSchedulesByLicenseCode = (argLicenseCode) => {
+            if(argLicenseCode == undefined || argLicenseCode <= -1){ // 자격증카테고리를 선택하지 않으면 실행하지 않는다.
                 return;
             }
             $.ajax({
                 type: "get",
                 url: "/search/licSchd",
-                data: { licenseCode: argCategory },
+                data: { licenseCode: argLicenseCode },
                 dataType: "text",
                 success: (result) => {
                     let html = jQuery('<div>').html(result);
@@ -656,14 +665,16 @@
             });
         }
         // 도서관, 카카오도서 목록을 업데이트하는 함수
-        const refreshLicenseBookList = (argKeyword, argRegion, argDetailRegion) => {
+        const refreshLicenseBookList = (argLicenseCode, argRegionCode, argDetailRegionCode, argPageNum) => {
             $.ajax({
                 type:"get",
-                url:"/search/bookList",
+                url:"/search/licenseBookList",
                 data:{
-                    keyword:argKeyword,
-                    region:argRegion,
-                    detailRegion:argDetailRegion
+                    licenseCode:argLicenseCode,
+                    regionCode:argRegionCode,
+                    detailRegionCode:argDetailRegionCode,
+                    pageNum:argPageNum,
+                    bookCount:-1 // 아직 화면이 없으므로 임시로 -1
                 },
                 dataType:"text",
                 success:function (result){
@@ -676,13 +687,11 @@
                 }
             });
         }
-        // 키워드목록의 키워드를 처리하는 함수
-        const refreshPlaylistBySubject = (argOffset, argSubjectCode, argKeyword) =>{
-            if(argKeyword == ""){
-                return;
-            }
+        // 키워드목록의 주제어를 처리하는 함수 const refreshPlayList = (argKeywordCode, argOffset, argKeywordType)
+        const refreshPageBySubject = (argSubjectCode, argOffset) =>{
+
             refreshSubjectBookList(argSubjectCode);
-            refreshPlayList(argOffset, argKeyword);
+            refreshPlayList(argSubjectCode, argOffset, 2);
 
             // 도서정보 태그로 스크롤 이동
             let offset = $("#div-library-book").offset();
@@ -694,11 +703,12 @@
                 type:"get",
                 url:"/search/subject-book-list",
                 data:{
-                    subjectCode:argSubjectCode
+                    subjectCode:argSubjectCode,
+                    pageNum:1,
+                    bookCount:9
                 },
                 dataType:"text",
                 success:function (result){
-                    console.log("result : " + result);
                     let html = jQuery("<div>").html(result);
                     let contents = html.find("div#subject-book-template").html();
                     $("#div-library-book").html(contents);
@@ -709,22 +719,21 @@
             });
         }
 
-        const refreshPlaylistByCategory = (offsetArg) => {
-            const categoryVal = $("#category option:checked").text();
-            if(categoryVal == ""){ // 자격증카테고의 text값을 재생목록의 키워드로 사용한다
+        const refreshPlaylistByLicense = (argLicenseCode, argOffset) => {
+            if(argLicenseCode <= 0){
                 return;
             }
-            refreshPlayList(offsetArg, categoryVal);
+            refreshPlayList(argLicenseCode, argOffset, 1);
         }
-        // 동영상 재생목록을 업데이트하는 함수
-        const refreshPlayList = (offsetArg, keywordArg) => {
+        // 동영상 재생목록을 코드기반으로 업데이트하는 함수
+        const refreshPlayList = (argKeywordCode, argOffset, argKeywordType) => {
             $.ajax({
                 type:"get",
                 url:"/search/playlist",
                 data:{
-                    keyword:keywordArg,
-                    offset:offsetArg,
-                    count:6
+                    keywordCode:argKeywordCode,
+                    pageNum:argOffset,
+                    keywordType:argKeywordType
                 },
                 dataType:"text",
                 success:function (result) {

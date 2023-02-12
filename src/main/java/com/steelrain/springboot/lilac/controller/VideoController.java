@@ -1,6 +1,6 @@
 package com.steelrain.springboot.lilac.controller;
 
-import com.steelrain.springboot.lilac.config.SESSION_KEY;
+import com.steelrain.springboot.lilac.common.SESSION_KEY;
 import com.steelrain.springboot.lilac.datamodel.MemberDTO;
 import com.steelrain.springboot.lilac.datamodel.YoutubeVideoDTO;
 import com.steelrain.springboot.lilac.service.VideoService;
