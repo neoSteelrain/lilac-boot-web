@@ -122,6 +122,10 @@ public class LectureController {
         editDTO.setSubjectId(Objects.isNull(noteDTO.getSubjectId()) ? -1 : noteDTO.getSubjectId());
         model.addAttribute("noteInfo", editDTO);
 
+        // 강의노트를 업데이트하기 위해 필요한 키워드정보들
+        model.addAttribute("licenseCodes",m_keywordCategoryCacheService.getLicenseCodeList());
+        model.addAttribute("subjectCodes",m_keywordCategoryCacheService.getSubjectCodeList());
+
         return "/lecture/lecture-note-edit-template";
     }
 

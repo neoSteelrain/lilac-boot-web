@@ -19,7 +19,7 @@ public interface SearchMapper {
 //            @Result(property = "name", column = "name"),
 //            @Result(property = "keyWord", column = "key_word")
 //    })
-    @Select("SELECT id,name,key_word FROM tbl_subject WHERE is_active = 1 AND is_scheduled = 0")
+    @Select("SELECT id,code,name,key_word,key_word_book FROM tbl_subject WHERE is_active = 1 AND is_scheduled = 0")
     List<SubjectCodeDTO> getSubjectCodes();
 
 //    @Select("SELECT code,name FROM tbl_lib_region;")

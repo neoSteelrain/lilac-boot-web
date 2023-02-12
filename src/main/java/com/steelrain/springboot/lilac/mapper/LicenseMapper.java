@@ -17,5 +17,5 @@ public interface LicenseMapper {
     String getLicenseScheduleJsonString(int licenseCode);
 
     @Update("UPDATE tbl_license SET schedule_json=#{jsonStr} WHERE code=#{licenseCode}")
-    int udpateLicenseScheduleJsonString(int licenseCode, String jsonStr);
+    int updateLicenseScheduleJsonString(int licenseCode, String jsonStr);
 }

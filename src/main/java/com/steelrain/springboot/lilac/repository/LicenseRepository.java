@@ -48,7 +48,7 @@ public class LicenseRepository implements ILicenseRespository{
         String scheduleJsonStr = m_licenseMapper.getLicenseScheduleJsonString(licenseCode);
         if(!StringUtils.hasText(scheduleJsonStr)){
             String tmp = callLicenseScheduleAPI(licenseCode);
-            if(m_licenseMapper.udpateLicenseScheduleJsonString(licenseCode, tmp) >= 1){
+            if(m_licenseMapper.updateLicenseScheduleJsonString(licenseCode, tmp) >= 1){
                 scheduleJsonStr = tmp;
             }
         }

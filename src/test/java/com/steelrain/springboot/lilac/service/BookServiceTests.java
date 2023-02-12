@@ -1,17 +1,12 @@
 package com.steelrain.springboot.lilac.service;
 
-import com.steelrain.springboot.lilac.datamodel.LicenseBookListDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.StringUtils;
 
 import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
-import java.time.temporal.TemporalField;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 

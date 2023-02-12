@@ -32,7 +32,7 @@ public class VideoService implements IVideoService {
         return VideoPlayListSearchResultDTO.builder()
                                         .requestKeyword(keyword)
                                         .pageDTO(createPageDTO(keyword, offset, count))
-                                        .playList(m_videoRepository.findPlayListByKeyword(keyword, offset, count))
+                                        .playList(m_videoRepository.findPlayListByKeyword(keyword, offset-1, count))
                                         .build();
     }
 

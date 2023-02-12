@@ -1,5 +1,7 @@
-package com.steelrain.springboot.lilac.datamodel;
+package com.steelrain.springboot.lilac.datamodel.view;
 
+import com.steelrain.springboot.lilac.datamodel.KaKaoBookDTO;
+import com.steelrain.springboot.lilac.datamodel.NaruLibraryDTO;
 import lombok.Getter;
 import lombok.Setter;
 

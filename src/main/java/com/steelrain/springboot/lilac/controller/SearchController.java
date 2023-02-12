@@ -1,6 +1,7 @@
 package com.steelrain.springboot.lilac.controller;
 
 import com.steelrain.springboot.lilac.datamodel.*;
+import com.steelrain.springboot.lilac.datamodel.view.SubjectBookListDTO;
 import com.steelrain.springboot.lilac.service.ISearchService;
 import com.steelrain.springboot.lilac.service.KeywordCategoryCacheService;
 import lombok.RequiredArgsConstructor;
@@ -57,6 +58,14 @@ public class SearchController {
         model.addAttribute("region", region);
         model.addAttribute("detailRegion", detailRegion);
         return "/search/book-template";
+    }
+
+    @GetMapping("/subject-book-list")
+    public String getKeywordBookList(@RequestParam("subjectCode") int subjectCode, Model model){
+        SubjectBookListDTO resultDTO = m_searchService.getSubjectBookList(subjectCode);
+
+        model.addAttribute("subjectBookInfo", resultDTO);
+        return "/search/subject-book-template";
     }
 
     @GetMapping("/book-detail")

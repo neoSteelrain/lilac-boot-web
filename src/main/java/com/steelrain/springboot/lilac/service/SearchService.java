@@ -1,8 +1,11 @@
 package com.steelrain.springboot.lilac.service;
 
 import com.steelrain.springboot.lilac.datamodel.*;
+import com.steelrain.springboot.lilac.datamodel.view.LicenseBookListDTO;
+import com.steelrain.springboot.lilac.datamodel.view.SubjectBookListDTO;
 import com.steelrain.springboot.lilac.event.LicenseBookSearchEvent;
 import com.steelrain.springboot.lilac.event.LicenseSearchEvent;
+import com.steelrain.springboot.lilac.event.SubjectBookSearchEvent;
 import com.steelrain.springboot.lilac.event.VideoPlayListSearchEvent;
 import com.steelrain.springboot.lilac.repository.ISearchRepository;
 import com.steelrain.springboot.lilac.repository.VideoRepository;
@@ -54,6 +57,21 @@ public class SearchService implements ISearchService{
                 .keyword(keyword)
                 .offset(offset)
                 .count(count)
+                .build();
+        m_appEventPublisher.publishEvent(searchEvent);
+        return searchEvent.getSearchResultDTO();
+    }
+
+    /**
+     * 주제어코드에 해당하는 도서정보를 가져온다
+     * 도서정보는 BookService 에서 담당하므로 SubjectBookSearchEvent 를 발행하여 BookService에 실행을 위임한다.
+     * @param subjectCode 주제어코드
+     * @return 도서정보
+     */
+    @Override
+    public SubjectBookListDTO getSubjectBookList(int subjectCode) {
+        SubjectBookSearchEvent searchEvent = SubjectBookSearchEvent.builder()
+                .subjectCode(subjectCode)
                 .build();
         m_appEventPublisher.publishEvent(searchEvent);
         return searchEvent.getSearchResultDTO();

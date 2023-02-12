@@ -18,6 +18,30 @@
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="search-input">
+                                        <label for="license"><i class="lni lni-grid-alt theme-color"></i></label>
+                                        <select name="lectureId" id="license" onchange="checkLicenseSelectBox()">
+                                            <option value="-1">--- 자격증 선택 ---</option>
+                                            <option th:each="licenseCode : ${licenseCodes}" th:value="${licenseCode.id}"
+                                                    th:text="${licenseCode.name}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="search-input">
+                                        <label for="subject"><i class="lni lni-grid-alt theme-color"></i></label>
+                                        <select name="subjectId" id="subject" onchange="checkSubjectSelectBox()">
+                                            <option value="-1">--- 키워드 선택 ---</option>
+                                            <option th:each="subjectCode : ${subjectCodes}" th:value="${subjectCode.id}"
+                                                    th:text="${subjectCode.name}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
                             <label for="noteTitle" class="col-form-label">강의노트 제목:</label>
                             <input id="noteTitle" type="text" class="form-control" maxlength="100" required th:field="*{noteTitle}">
                             <div class="invalid-feedback">강의노트 제목을 입력하셔야 합니다.</div>

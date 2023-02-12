@@ -2,6 +2,7 @@ package com.steelrain.springboot.lilac.service;
 
 import com.steelrain.springboot.lilac.event.LicenseBookSearchEvent;
 import com.steelrain.springboot.lilac.event.LicenseSearchEvent;
+import com.steelrain.springboot.lilac.event.SubjectBookSearchEvent;
 import com.steelrain.springboot.lilac.event.VideoPlayListSearchEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -34,5 +35,10 @@ public class SearchEventHandler {
     @EventListener(VideoPlayListSearchEvent.class)
     public void handleVideoPlayListSearchEvent(VideoPlayListSearchEvent event){
         event.setSearchResultDTO(m_videoService.searchPlayList(event.getKeyword(), event.getOffset(), event.getCount()));
+    }
+
+    @EventListener(SubjectBookSearchEvent.class)
+    public void handleSubjectBookSearchEvent(SubjectBookSearchEvent event){
+        event.setSearchResultDTO(m_bookService.getSubjectBookList(event.getSubjectCode()));
     }
 }

@@ -8,10 +8,7 @@ import com.steelrain.springboot.lilac.mapper.SearchMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -77,6 +74,21 @@ public class KeywordCategoryCacheService implements ICacheService {
                 .filter(detailRegionDTO -> (detailRegionDTO.getCode() == detailRegion))
                 .map(LibraryDetailRegionCodeDTO::getDetailName)
                 .collect(Collectors.joining());
+    }
+
+    @Override
+    public String getSubjectKeyword(int subjectCode) {
+        return m_subjectCodeList.stream().filter(subject -> subject.getCode() == subjectCode).findFirst().get().getKeyWord();
+    }
+
+    @Override
+    public String getSubjectName(int subjectCode) {
+        return m_subjectCodeList.stream().filter(subject -> subject.getCode() == subjectCode).findFirst().get().getName();
+    }
+
+    @Override
+    public String getSubjectKeywordBook(int subjectCode) {
+        return m_subjectCodeList.stream().filter(subject -> subject.getCode() == subjectCode).findFirst().get().getKeyWordBook();
     }
 
     private void initKeywordMap(){

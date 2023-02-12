@@ -2,13 +2,14 @@ package com.steelrain.springboot.lilac.service;
 
 import com.steelrain.springboot.lilac.datamodel.KaKaoBookDTO;
 import com.steelrain.springboot.lilac.datamodel.LicenseBookDetailDTO;
-import com.steelrain.springboot.lilac.datamodel.LicenseBookListDTO;
+import com.steelrain.springboot.lilac.datamodel.api.KakaoBookSearchResponseDTO;
+import com.steelrain.springboot.lilac.datamodel.view.LicenseBookListDTO;
 import com.steelrain.springboot.lilac.datamodel.NaruLibraryDTO;
 import com.steelrain.springboot.lilac.datamodel.api.KakaoSearchedBookDTO;
-import com.steelrain.springboot.lilac.datamodel.api.NaruBookExistResposeDTO;
-import com.steelrain.springboot.lilac.datamodel.api.NaruLibSearchByBookResponseDTO;
 import com.steelrain.springboot.lilac.datamodel.api.NaruLibSearchByRegionResponseDTO;
+import com.steelrain.springboot.lilac.datamodel.view.SubjectBookListDTO;
 import com.steelrain.springboot.lilac.event.KakaoBookSaveEvent;
+import com.steelrain.springboot.lilac.event.SubjectBookSearchEvent;
 import com.steelrain.springboot.lilac.repository.IKaKoBookRepository;
 import com.steelrain.springboot.lilac.repository.INaruRepository;
 import lombok.RequiredArgsConstructor;
@@ -96,10 +97,7 @@ public class BookService implements IBookService{
             }
         }
         // 카카오책 검색결과를 DB에 저장하는 이벤트를 발생한다.
-        KakaoBookSaveEvent bookSaveEvent = KakaoBookSaveEvent.builder()
-                                .kaKaoBookList(kaKaoBookDTOList)
-                                .build();
-        m_applicationEventPublisher.publishEvent(bookSaveEvent);
+        publishKaKaoBookSaveEvent(kaKaoBookDTOList);
 
         resultDTO.setKakaoBookList(kaKaoBookDTOList);
         resultDTO.setLibraryList(delegateLibraryByRegionList(region, detailRegion));
@@ -115,6 +113,41 @@ public class BookService implements IBookService{
     @Override
     public List<NaruLibraryDTO> getLibraryByRegionList(short region, int detailRegion) {
         return delegateLibraryByRegionList(region, detailRegion);
+    }
+
+    @Override
+    public SubjectBookListDTO getSubjectBookList(int subjectCode) {
+        String keyword = m_cacheService.getSubjectKeywordBook(subjectCode);
+        KakaoBookSearchResponseDTO responseDTO = m_kaKoBookRepository.searchBookfromKakao(keyword);
+        SubjectBookListDTO resultDTO = new SubjectBookListDTO();
+        List<KakaoSearchedBookDTO> bookList = responseDTO.getKakaoSearchedBookList();
+        List<KaKaoBookDTO> kaKaoBookDTOList = new ArrayList<>(bookList.size());
+        for (KakaoSearchedBookDTO book : bookList) {
+            if(book.getPrice() <= -1 || book.getSalePrice() <= -1){ // 간혹 책가격이 -1로 설정된 책이 있으므로 빼주어야 한다.
+                continue;
+            } // ISBN이 하나 오는 경우 앞에 공백이 붙어서 오는 경우가 있으므로, ISBN 문자열에 trim을 해준다.
+            log.debug(String.format("===== > 카카오책 검색의 책1권의 KakaoSearchedBookDTO 정보 : %s", book.toString()));
+            String tmpIsbn = book.getIsbn();
+            kaKaoBookDTOList.add(convertKakaoBookDTO(book,
+                    StringUtils.containsWhitespace(tmpIsbn.trim()) ? StringUtils.tokenizeToStringArray(tmpIsbn, " ")[1] : tmpIsbn));
+        }
+        resultDTO.setKeyword(keyword);
+        resultDTO.setSubjectName(m_cacheService.getSubjectName(subjectCode));
+        resultDTO.setKakaoBookList(kaKaoBookDTOList);
+        // 카카오책 검색결과를 DB에 저장하는 이벤트를 발생한다.
+        publishKaKaoBookSaveEvent(kaKaoBookDTOList);
+        return resultDTO;
+    }
+
+    // 카카오 API로 검색된 결과를 DB에 저장하려고 할때 사용한다.
+    private void publishKaKaoBookSaveEvent(List<KaKaoBookDTO> bookList){
+        if(bookList == null || bookList.size() == 0){
+            return;
+        }
+        KakaoBookSaveEvent bookSaveEvent = KakaoBookSaveEvent.builder()
+                .kaKaoBookList(bookList)
+                .build();
+        m_applicationEventPublisher.publishEvent(bookSaveEvent);
     }
 
     /*

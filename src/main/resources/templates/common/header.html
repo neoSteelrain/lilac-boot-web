@@ -57,9 +57,6 @@
             </div> <!-- navbar collapse -->
             <div class="login-button">
               <ul>
-                <li>
-                  <span th:text="${session.LOGIN_MEMBER == null ? '없음' : session.LOGIN_MEMBER.email}"></span>
-                </li>
                 <th:block th:if="${session.LOGIN_MEMBER == null}">
                   <li>
                     <a href="/member/login"><i class="lni lni-enter"></i> 로그인</a>

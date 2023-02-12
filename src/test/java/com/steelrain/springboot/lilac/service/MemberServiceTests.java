@@ -80,6 +80,4 @@ public class MemberServiceTests {
             log.debug("강의노트 확인 : {}", m_lectureNoteService.getLectureListByMember(member.getId()));
         });
     }
-
-
 }
