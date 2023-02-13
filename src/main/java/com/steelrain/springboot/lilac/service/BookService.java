@@ -4,12 +4,15 @@ import com.steelrain.springboot.lilac.common.BOOK_PAGING_INFO;
 import com.steelrain.springboot.lilac.datamodel.KaKaoBookDTO;
 import com.steelrain.springboot.lilac.datamodel.LicenseBookDetailDTO;
 import com.steelrain.springboot.lilac.datamodel.api.KakaoBookSearchResponseDTO;
+import com.steelrain.springboot.lilac.datamodel.api.NaruLibSearchByBookResponseDTO;
+import com.steelrain.springboot.lilac.datamodel.view.BookDetailDTO;
 import com.steelrain.springboot.lilac.datamodel.view.LicenseBookListDTO;
 import com.steelrain.springboot.lilac.datamodel.NaruLibraryDTO;
 import com.steelrain.springboot.lilac.datamodel.api.KakaoSearchedBookDTO;
 import com.steelrain.springboot.lilac.datamodel.api.NaruLibSearchByRegionResponseDTO;
 import com.steelrain.springboot.lilac.datamodel.view.SubjectBookListDTO;
 import com.steelrain.springboot.lilac.event.KakaoBookSaveEvent;
+import com.steelrain.springboot.lilac.repository.BookRepository;
 import com.steelrain.springboot.lilac.repository.IKaKoBookRepository;
 import com.steelrain.springboot.lilac.repository.INaruRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +38,7 @@ public class BookService implements IBookService{
     private final IKaKoBookRepository m_kaKoBookRepository;
     private final INaruRepository m_naruRepository;
     private final ICacheService m_cacheService;
+    private final BookRepository m_bookRepository;
     private final ApplicationEventPublisher m_applicationEventPublisher;
 
 
@@ -105,12 +109,6 @@ public class BookService implements IBookService{
         return resultDTO;
     }
 
-    public LicenseBookDetailDTO getLicenseBookDetail(String isbn, short region, int detailRegion){
-        LicenseBookDetailDTO resultDTO = null;
-
-        return resultDTO;
-    }
-
     @Override
     public List<NaruLibraryDTO> getLibraryByRegionList(short region, int detailRegion) {
         return delegateLibraryByRegionList(region, detailRegion);
@@ -138,6 +136,18 @@ public class BookService implements IBookService{
         // 카카오책 검색결과를 DB에 저장하는 이벤트를 발생한다.
         publishKaKaoBookSaveEvent(kaKaoBookDTOList);
         return resultDTO;
+    }
+
+    @Override
+    public BookDetailDTO getBookDetailInfo(Long bookId, short regionCode, int detailRegionCode) {
+        /*
+            도서정보와 도서를 소장하고 있는 도서관의 정보를 찾아서 반환한다.
+         */
+        KaKaoBookDTO bookDTO = m_bookRepository.findKaKaoBookInfo(bookId);
+        // TODO 소장하고 있는 도서관 목록가져오기
+        NaruLibSearchByBookResponseDTO libSearchResponse = m_naruRepository.getLibraryByBook(Long.valueOf(bookDTO.getIsbn13()), regionCode, detailRegionCode);
+        //libSearchResponse.getResponse().getLibs()
+        return null;
     }
 
     // 카카오 API로 검색된 결과를 DB에 저장하려고 할때 사용한다.

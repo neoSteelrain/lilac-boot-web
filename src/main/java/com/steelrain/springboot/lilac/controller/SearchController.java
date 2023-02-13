@@ -3,6 +3,7 @@ package com.steelrain.springboot.lilac.controller;
 import com.steelrain.springboot.lilac.common.BOOK_PAGING_INFO;
 import com.steelrain.springboot.lilac.common.YOUTUBE_PAGING_INFO;
 import com.steelrain.springboot.lilac.datamodel.*;
+import com.steelrain.springboot.lilac.datamodel.view.BookDetailDTO;
 import com.steelrain.springboot.lilac.datamodel.view.SubjectBookListDTO;
 import com.steelrain.springboot.lilac.service.ISearchService;
 import com.steelrain.springboot.lilac.common.KeywordCategoryCacheService;
@@ -74,19 +75,20 @@ public class SearchController {
     }
 
     @GetMapping("/book-detail")
-    public String bookDetailForm(@RequestParam("isbn") String isbn,
-                                 @RequestParam("region") short region,
-                                 @RequestParam("detailRegion") int detailRegion){
+    public String bookDetailForm(@RequestParam("bookId") Long bookId,
+                                 @RequestParam(value = "region", required = false) short region,
+                                 @RequestParam(value = "detailRegion",  required = false) int detailRegion){
         // TODO ISBN 형식인지 검증이 필요함. @ISBN 어노테이션을 사용하면 가능하나, 그럴려면 DTO를 따로 만들어야 할거같다.
-        if(region <= 0){
+        if(region < 0){
             log.error(String.format("지역코드 입력에러 - 필수입력 지역코드가 없음 : 입력된 지역코드 = %d", region));
             return "redirect:/";
         }
-        if(region <= 0 && detailRegion < 0){
+        if(region < 0 && detailRegion < 0){
             log.error(String.format("지역코드 입력에러 - 지역코드,세부지역코드 2개 다 없음 : 입력된 지역코드 = %d , 입력된 세부지역코드 = %d", region, detailRegion));
             return "redirect:/";
         }
-        
+        BookDetailDTO bookDetailDTO = m_searchService.getBookDetailInfo(bookId, region, detailRegion);
+
         return "/search/book-detail";
     }
 

@@ -19,19 +19,20 @@ import java.sql.Timestamp;
 @Builder
 public class NaruLibraryDTO {
     /*
-    id	bigint	NO	PRI
-    lib_code	char(6)	YES
-    name	varchar(100)	YES
-    address	varchar(100)	YES
-    tel	varchar(20)	YES
-    fax	varchar(20)	YES
-    latitude	char(10)	YES
-    longitude	char(10)	YES
-    homepage	varchar(255)	YES
-    closed	varchar(255)	YES
-    operating_time	varchar(50)	YES
-    reg_date	datetime	YES
-    isbn13	char(13)	NO	MUL
+    최근 변경된 DB 테이블스키마
+    id	bigint	NO	PRI		auto_increment
+    lib_code	int	NO	UNI		
+    name	varchar(100)	YES			
+    address	varchar(100)	YES			
+    tel	varchar(20)	YES			
+    fax	varchar(20)	YES			
+    latitude	char(10)	YES			
+    longitude	char(10)	YES			
+    homepage	varchar(255)	YES			
+    closed	varchar(255)	YES			
+    operating_time	varchar(50)	YES			
+    reg_date	datetime	YES		CURRENT_TIMESTAMP	DEFAULT_GENERATED
+    update_date	datetime	YES			
      */
 
     private Long id;
@@ -69,14 +70,13 @@ public class NaruLibraryDTO {
 
     private Timestamp regDate;
 
-    @NotEmpty
-    @NotNull
-    private String isbn13;
+//    @NotEmpty
+//    @NotNull
+//    private String isbn13;
     
     // 소장가능여부 : DB와는 상관없는 필드
-    private boolean hasBook;
+    //private boolean hasBook;
 
     // 대출가능여부 : DB와는 상관없는 필드
-    private boolean isLoanAvailable;
-    
+    //private boolean isLoanAvailable;
 }

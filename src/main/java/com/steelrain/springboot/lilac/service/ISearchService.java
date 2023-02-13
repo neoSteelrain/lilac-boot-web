@@ -1,6 +1,7 @@
 package com.steelrain.springboot.lilac.service;
 
 import com.steelrain.springboot.lilac.datamodel.*;
+import com.steelrain.springboot.lilac.datamodel.view.BookDetailDTO;
 import com.steelrain.springboot.lilac.datamodel.view.LicenseBookListDTO;
 import com.steelrain.springboot.lilac.datamodel.view.SubjectBookListDTO;
 
@@ -17,4 +18,6 @@ public interface ISearchService {
     VideoPlayListSearchResultDTO searchPlayList(int keywordCode, int pageNum, int playlistCount , int keywordType);
 
     SubjectBookListDTO getSubjectBookList(int subjectCode, int pageNum, int bookCount);
+
+    BookDetailDTO getBookDetailInfo(Long bookId, short regionCode, int detailRegionCode);
 }

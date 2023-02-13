@@ -22,7 +22,8 @@ import java.sql.Timestamp;
 @ToString
 public class KaKaoBookDTO {
     /*
-    isbn13	bigint	NO	PRI
+    id	bigint	NO	PRI		auto_increment
+    isbn13	bigint	NO	UNI
     title	varchar(1024)	YES	MUL
     contents	varchar(2048)	YES
     url	varchar(2048)	YES
@@ -38,25 +39,28 @@ public class KaKaoBookDTO {
     update_date	datetime	YES
      */
 
+    @NotNull
+    private Long id;
+
     @ISBN
     @Size(max=13)
     @NotEmpty
     @NotNull
     private String isbn13;
 
-    @Size(max=100)
+    @Size(max=1024)
     private String title;
 
-    @Size(max=500)
+    @Size(max=2048)
     private String contents;
 
     @URL
-    @Size(max=255)
+    @Size(max=2048)
     private String url;
 
     private Timestamp publishDate;
 
-    @Size(max=50)
+    @Size(max=255)
     private String authors;
 
     @Size(max=255)

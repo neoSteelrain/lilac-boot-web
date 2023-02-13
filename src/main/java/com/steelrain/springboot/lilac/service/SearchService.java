@@ -2,12 +2,10 @@ package com.steelrain.springboot.lilac.service;
 
 import com.steelrain.springboot.lilac.common.BOOK_PAGING_INFO;
 import com.steelrain.springboot.lilac.datamodel.*;
+import com.steelrain.springboot.lilac.datamodel.view.BookDetailDTO;
 import com.steelrain.springboot.lilac.datamodel.view.LicenseBookListDTO;
 import com.steelrain.springboot.lilac.datamodel.view.SubjectBookListDTO;
-import com.steelrain.springboot.lilac.event.LicenseBookSearchEvent;
-import com.steelrain.springboot.lilac.event.LicenseSearchEvent;
-import com.steelrain.springboot.lilac.event.SubjectBookSearchEvent;
-import com.steelrain.springboot.lilac.event.VideoPlayListSearchEvent;
+import com.steelrain.springboot.lilac.event.*;
 import com.steelrain.springboot.lilac.repository.ISearchRepository;
 import com.steelrain.springboot.lilac.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
@@ -82,6 +80,17 @@ public class SearchService implements ISearchService{
                 .build();
         m_appEventPublisher.publishEvent(searchEvent);
         return searchEvent.getSearchResultDTO();
+    }
+
+    @Override
+    public BookDetailDTO getBookDetailInfo(Long bookId, short regionCode, int detailRegionCode) {
+        BookDetailSearchEvent searchEvent = BookDetailSearchEvent.builder()
+                .bookId(bookId)
+                .regionCode(regionCode)
+                .detailRegionCode(detailRegionCode)
+                .build();
+        m_appEventPublisher.publishEvent(searchEvent);
+        return searchEvent.getBookDetailInfo();
     }
 
     /**

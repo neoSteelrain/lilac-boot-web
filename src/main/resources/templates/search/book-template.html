@@ -76,7 +76,7 @@
                                             <!-- Start Single Item -->
                                             <div class="single-item-grid">
                                                 <div class="image">
-                                                    <a th:href="@{/search/book-detail(isbn=${kakaoBook.isbn13},region=${region},detailRegion=${detailRegion})}" ><img th:src="${kakaoBook.thumbnail}" alt="#"></a>
+                                                    <a th:href="@{/search/book-detail(bookId=${kakaoBook.id},region=${region},detailRegion=${detailRegion})}" ><img th:src="${kakaoBook.thumbnail}" alt="#"></a>
                                                 </div>
                                                 <div class="content text-wrap">
                                                     <h6 class="title" th:text="${kakaoBook.title}"></h6>

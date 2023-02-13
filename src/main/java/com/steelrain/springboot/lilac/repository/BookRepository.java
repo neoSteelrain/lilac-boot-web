@@ -18,4 +18,8 @@ public class BookRepository {
         // ISBN이 있으면 update 없으면 insert
         m_licenseBookMapper.saveKakaoBookList(kaKaoBookList);
     }
+
+    public KaKaoBookDTO findKaKaoBookInfo(Long bookId){
+        return m_licenseBookMapper.findKakaoBookInfo(bookId);
+    }
 }
