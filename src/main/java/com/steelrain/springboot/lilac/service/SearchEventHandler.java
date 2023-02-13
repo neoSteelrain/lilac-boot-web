@@ -41,6 +41,6 @@ public class SearchEventHandler {
 
     @EventListener(BookDetailSearchEvent.class)
     public void handleBookDetailSearchEvent(BookDetailSearchEvent event){
-        event.setBookDetailInfo(m_bookService.getBookDetailInfo(event.getBookId(), event.getRegionCode(), event.getDetailRegionCode()));
+        event.setBookDetailInfo(m_bookService.getBookDetailInfo(event.getIsbn(), event.getRegionCode(), event.getDetailRegionCode()));
     }
 }

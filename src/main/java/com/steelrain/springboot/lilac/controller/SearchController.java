@@ -75,10 +75,10 @@ public class SearchController {
     }
 
     @GetMapping("/book-detail")
-    public String bookDetailForm(@RequestParam("bookId") Long bookId,
+    public String bookDetailInfo(@RequestParam("isbn") Long isbn,
                                  @RequestParam(value = "region", required = false) short region,
-                                 @RequestParam(value = "detailRegion",  required = false) int detailRegion){
-        // TODO ISBN 형식인지 검증이 필요함. @ISBN 어노테이션을 사용하면 가능하나, 그럴려면 DTO를 따로 만들어야 할거같다.
+                                 @RequestParam(value = "detailRegion",  required = false) int detailRegion,
+                                 Model model){
         if(region < 0){
             log.error(String.format("지역코드 입력에러 - 필수입력 지역코드가 없음 : 입력된 지역코드 = %d", region));
             return "redirect:/";
@@ -87,8 +87,7 @@ public class SearchController {
             log.error(String.format("지역코드 입력에러 - 지역코드,세부지역코드 2개 다 없음 : 입력된 지역코드 = %d , 입력된 세부지역코드 = %d", region, detailRegion));
             return "redirect:/";
         }
-        BookDetailDTO bookDetailDTO = m_searchService.getBookDetailInfo(bookId, region, detailRegion);
-
+        model.addAttribute("bookDetailInfo", m_searchService.getBookDetailInfo(isbn, region, detailRegion));
         return "/search/book-detail";
     }
 

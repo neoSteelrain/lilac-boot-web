@@ -19,7 +19,7 @@ public class BookRepository {
         m_licenseBookMapper.saveKakaoBookList(kaKaoBookList);
     }
 
-    public KaKaoBookDTO findKaKaoBookInfo(Long bookId){
-        return m_licenseBookMapper.findKakaoBookInfo(bookId);
+    public KaKaoBookDTO findKaKaoBookInfo(Long isbn){
+        return m_licenseBookMapper.findKakaoBookInfo(isbn);
     }
 }

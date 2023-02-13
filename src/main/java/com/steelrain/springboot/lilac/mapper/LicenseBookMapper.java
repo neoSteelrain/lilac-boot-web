@@ -28,6 +28,6 @@ public interface LicenseBookMapper {
     reg_date	datetime	YES		CURRENT_TIMESTAMP	DEFAULT_GENERATED
     update_date	datetime	YES
      */
-    @Select("SELECT id,isbn13,title,contents,url,publish_date,authors,publisher,translators,price,sale_price,thumbnail,status,reg_date,update_date FROM tbl_book WHERE id=#{bookId}")
-    KaKaoBookDTO findKakaoBookInfo(Long bookId);
+    @Select("SELECT id,isbn13,title,contents,url,publish_date,authors,publisher,translators,price,sale_price,thumbnail,status,reg_date,update_date FROM tbl_book WHERE isbn13=#{isbn}")
+    KaKaoBookDTO findKakaoBookInfo(Long isbn);
 }

@@ -1,9 +1,6 @@
 package com.steelrain.springboot.lilac.datamodel;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.validator.constraints.ISBN;
 import org.hibernate.validator.constraints.URL;
 
@@ -19,6 +16,8 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString
 public class KaKaoBookDTO {
     /*
@@ -81,4 +80,5 @@ public class KaKaoBookDTO {
     private Timestamp regDate;
     private Timestamp updateDate;
 
+    private Long isbn13Long;
 }

@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Builder
 public class BookDetailSearchEvent {
-    private Long bookId;
+    private Long isbn;
     private short regionCode;
     private int detailRegionCode;
 

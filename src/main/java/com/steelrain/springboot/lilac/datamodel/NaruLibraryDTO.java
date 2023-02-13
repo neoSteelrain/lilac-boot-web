@@ -75,8 +75,8 @@ public class NaruLibraryDTO {
 //    private String isbn13;
     
     // 소장가능여부 : DB와는 상관없는 필드
-    //private boolean hasBook;
+    private boolean hasBook;
 
     // 대출가능여부 : DB와는 상관없는 필드
-    //private boolean isLoanAvailable;
+    private boolean isLoanAvailable;
 }

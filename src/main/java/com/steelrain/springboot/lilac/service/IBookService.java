@@ -14,5 +14,5 @@ public interface IBookService {
 
     SubjectBookListDTO getSubjectBookList(int subjectCode, int pageNum, int bookCount);
 
-    BookDetailDTO getBookDetailInfo(Long bookId, short regionCode, int detailRegionCode);
+    BookDetailDTO getBookDetailInfo(Long isbn, short regionCode, int detailRegionCode);
 }

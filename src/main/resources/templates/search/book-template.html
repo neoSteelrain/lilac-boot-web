@@ -13,7 +13,7 @@
                 <div class="category-sidebar">
                     <!-- Start Single Widget -->
                     <div class="single-widget">
-                        <h3 th:text="${licenseBookInfo.getRegionName()}+'-'+${licenseBookInfo.getDetailRegionName()}+' 도서관목록'"></h3>
+                        <h3 th:text="${licenseBookInfo.regionName}+'-'+${licenseBookInfo.detailRegionName}+' 도서관목록'"></h3>
                         <ul class="list">
                             <li th:each="library : ${licenseBookInfo.libraryList}">
                                 <a href="javascript:void(0)" th:text="${library.name}"><i class="lni lni-library"></i><span>0</span></a>
@@ -76,7 +76,7 @@
                                             <!-- Start Single Item -->
                                             <div class="single-item-grid">
                                                 <div class="image">
-                                                    <a th:href="@{/search/book-detail(bookId=${kakaoBook.id},region=${region},detailRegion=${detailRegion})}" ><img th:src="${kakaoBook.thumbnail}" alt="#"></a>
+                                                    <a th:href="@{/search/book-detail(isbn=${kakaoBook.isbn13Long},region=${region},detailRegion=${detailRegion})}" ><img th:src="${kakaoBook.thumbnail}" alt="#"></a>
                                                 </div>
                                                 <div class="content text-wrap">
                                                     <h6 class="title" th:text="${kakaoBook.title}"></h6>

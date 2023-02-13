@@ -3,13 +3,10 @@ package com.steelrain.springboot.lilac.service;
 import com.steelrain.springboot.lilac.common.BOOK_PAGING_INFO;
 import com.steelrain.springboot.lilac.datamodel.KaKaoBookDTO;
 import com.steelrain.springboot.lilac.datamodel.LicenseBookDetailDTO;
-import com.steelrain.springboot.lilac.datamodel.api.KakaoBookSearchResponseDTO;
-import com.steelrain.springboot.lilac.datamodel.api.NaruLibSearchByBookResponseDTO;
+import com.steelrain.springboot.lilac.datamodel.api.*;
 import com.steelrain.springboot.lilac.datamodel.view.BookDetailDTO;
 import com.steelrain.springboot.lilac.datamodel.view.LicenseBookListDTO;
 import com.steelrain.springboot.lilac.datamodel.NaruLibraryDTO;
-import com.steelrain.springboot.lilac.datamodel.api.KakaoSearchedBookDTO;
-import com.steelrain.springboot.lilac.datamodel.api.NaruLibSearchByRegionResponseDTO;
 import com.steelrain.springboot.lilac.datamodel.view.SubjectBookListDTO;
 import com.steelrain.springboot.lilac.event.KakaoBookSaveEvent;
 import com.steelrain.springboot.lilac.repository.BookRepository;
@@ -26,6 +23,7 @@ import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 참고도서 서비스
@@ -139,15 +137,18 @@ public class BookService implements IBookService{
     }
 
     @Override
-    public BookDetailDTO getBookDetailInfo(Long bookId, short regionCode, int detailRegionCode) {
+    public BookDetailDTO getBookDetailInfo(Long isbn, short regionCode, int detailRegionCode) {
         /*
             도서정보와 도서를 소장하고 있는 도서관의 정보를 찾아서 반환한다.
          */
-        KaKaoBookDTO bookDTO = m_bookRepository.findKaKaoBookInfo(bookId);
+        KaKaoBookDTO bookDTO = m_bookRepository.findKaKaoBookInfo(isbn);
         // TODO 소장하고 있는 도서관 목록가져오기
-        NaruLibSearchByBookResponseDTO libSearchResponse = m_naruRepository.getLibraryByBook(Long.valueOf(bookDTO.getIsbn13()), regionCode, detailRegionCode);
-        //libSearchResponse.getResponse().getLibs()
-        return null;
+        NaruLibSearchByBookResponseDTO libSearchResponse = m_naruRepository.getLibraryByBook(isbn, regionCode, detailRegionCode);
+        List<NaruLibraryDTO> libList = convertNaruLibraryDTO(libSearchResponse, Long.valueOf(bookDTO.getIsbn13()));
+        return BookDetailDTO.builder()
+                .bookDTO(bookDTO)
+                .libraryList(libList)
+                .build();
     }
 
     // 카카오 API로 검색된 결과를 DB에 저장하려고 할때 사용한다.
@@ -193,37 +194,41 @@ public class BookService implements IBookService{
     }
 
     // 도서 1권에 대해 소장하고 있는 도서관 목록을 반환하는 메서드 : 로직변경으로 일단 주석처리
-//    private List<NaruLibraryDTO> convertNaruLibraryDTO(NaruLibSearchByBookResponseDTO srcNaruDTO, String isbn13){
-//        if(srcNaruDTO.getResponse().getNumfound() <= 0){
-//            return new ArrayList<>(0);
-//        }
-//        List<NaruLibraryDTO> resultDTOList = new ArrayList<>(srcNaruDTO.getResponse().getNumfound());
-//        for(NaruLibSearchByBookResponseDTO.Libs lib : srcNaruDTO.getResponse().getLibs()){
-//            NaruLibSearchByBookResponseDTO.Library library = lib.getLib();
-//
-//            // 소장가능여부 가져오기
-//            NaruBookExistResposeDTO existDTO = m_naruRepository.checkBookExist(Long.valueOf(isbn13), Integer.valueOf(library.getLibcode()));
-//            NaruBookExistResposeDTO.Result existResult = existDTO.getResponse().getResult();
-//            resultDTOList.add(NaruLibraryDTO.builder()
-//                            .libCode(library.getLibcode())
-//                            .name(library.getLibname())
-//                            .address(library.getAddress())
-//                            .tel(library.getTel())
-//                            .latitude(library.getLatitude())
-//                            .longitude(library.getLongitude())
-//                            .homepage(library.getHomepage())
-//                            .closed(library.getClosed())
-//                            .operatingTime(library.getOperatingtime())
+    private List<NaruLibraryDTO> convertNaruLibraryDTO(NaruLibSearchByBookResponseDTO srcNaruDTO, Long isbn13){
+        if(Objects.isNull(srcNaruDTO)){
+            return new ArrayList<>(0);
+        }
+        if(srcNaruDTO.getResponse().getNumfound() <= 0){
+            return new ArrayList<>(0);
+        }
+        List<NaruLibraryDTO> resultDTOList = new ArrayList<>(srcNaruDTO.getResponse().getNumfound());
+        for(NaruLibSearchByBookResponseDTO.Libs lib : srcNaruDTO.getResponse().getLibs()){
+            NaruLibSearchByBookResponseDTO.Library library = lib.getLib();
+
+            // 소장가능여부 가져오기
+            NaruBookExistResposeDTO existDTO = m_naruRepository.checkBookExist(isbn13, Integer.valueOf(library.getLibcode()));
+            NaruBookExistResposeDTO.Result existResult = existDTO.getResponse().getResult();
+            resultDTOList.add(NaruLibraryDTO.builder()
+                            .libCode(library.getLibcode())
+                            .name(library.getLibname())
+                            .address(library.getAddress())
+                            .tel(library.getTel())
+                            .latitude(library.getLatitude())
+                            .longitude(library.getLongitude())
+                            .homepage(library.getHomepage())
+                            .closed(library.getClosed())
+                            .operatingTime(library.getOperatingtime())
 //                            .isbn13(isbn13)
-//                            .hasBook("Y".equals(existResult.getHasbook()))
-//                            .isLoanAvailable("Y".equals(existResult.getLoanavailable()))
-//                            .build());
-//        }
-//        return resultDTOList;
-//    }
+                            .hasBook("Y".equals(existResult.getHasbook()))
+                            .isLoanAvailable("Y".equals(existResult.getLoanavailable()))
+                            .build());
+        }
+        return resultDTOList;
+    }
 
     private KaKaoBookDTO convertKakaoBookDTO(KakaoSearchedBookDTO srcBook, String splitedIsbn){
         return KaKaoBookDTO.builder()
+                .isbn13Long(Long.valueOf(splitedIsbn))
                 .isbn13(splitedIsbn)
                 .title(srcBook.getTitle())
                 .contents(srcBook.getContents())

@@ -83,9 +83,9 @@ public class SearchService implements ISearchService{
     }
 
     @Override
-    public BookDetailDTO getBookDetailInfo(Long bookId, short regionCode, int detailRegionCode) {
+    public BookDetailDTO getBookDetailInfo(Long isbn, short regionCode, int detailRegionCode) {
         BookDetailSearchEvent searchEvent = BookDetailSearchEvent.builder()
-                .bookId(bookId)
+                .isbn(isbn)
                 .regionCode(regionCode)
                 .detailRegionCode(detailRegionCode)
                 .build();
