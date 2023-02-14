@@ -4,10 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.steelrain.springboot.lilac.config.APIConfig;
 import com.steelrain.springboot.lilac.datamodel.api.KakaoBookSearchResponseDTO;
 import com.steelrain.springboot.lilac.exception.KakaoBookSearchException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.ClassicHttpResponse;
+import org.apache.hc.core5.http.Header;
 import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.NameValuePair;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
@@ -20,6 +22,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Repository
 public class KakaoBookRepository implements IKaKoBookRepository{
 
@@ -57,6 +60,14 @@ public class KakaoBookRepository implements IKaKoBookRepository{
         KakaoBookSearchResponseDTO result = null;
         try(CloseableHttpClient httpClient = HttpClients.createDefault();
             ClassicHttpResponse response = httpClient.execute(httpGet)){
+
+            if(log.isDebugEnabled()){
+                log.debug("=======> 카카오 HTTP 응답헤더 내용 시작 ===========");
+                for(Header header : response.getHeaders()){
+                    log.debug("헤더 키 : {} , 헤더 값 : {}", header.getName(), header.getValue());
+                }
+                log.debug("=======> 카카오 HTTP 응답헤더 내용 끝 ===========");
+            }
 
             HttpEntity entity = response.getEntity();
             ObjectMapper objectMapper = new ObjectMapper();

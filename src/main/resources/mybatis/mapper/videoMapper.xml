@@ -64,4 +64,16 @@
         WHERE MATCH(pl.title) AGAINST (#{keyword})
         ORDER BY pl.publish_date LIMIT #{offset}, #{count}
     </select>
+
+    <resultMap id="findRecommendedPlayListMap" type="com.steelrain.springboot.lilac.datamodel.view.RecommendedPlayListDTO">
+        TODO
+    </resultMap>
+    <select id="findRecommendedPlayList" resultMap="findRecommendedPlayListMap">
+        SELECT tmp.id, tmp.title, tmp.thumbnail_medium, chn.title as channel_title
+        FROM (SELECT pl.id, pl.channel_id, pl.title, pl.thumbnail_medium
+              FROM tbl_recommended_playlist rpl INNER JOIN tbl_youtube_playlist pl
+                                                           ON rpl.youtube_playlist_id = pl.id) as tmp
+                 INNER JOIN tbl_youtube_channel chn
+                            ON tmp.channel_id = chn.id;
+    </select>
 </mapper>

@@ -2,7 +2,8 @@ package com.steelrain.springboot.lilac.mapper;
 
 import com.steelrain.springboot.lilac.datamodel.YoutubePlayListDTO;
 import com.steelrain.springboot.lilac.datamodel.YoutubeVideoDTO;
-import com.steelrain.springboot.lilac.datamodel.RecommendedVideoDTO;
+import com.steelrain.springboot.lilac.datamodel.view.RecommendedPlayListDTO;
+import com.steelrain.springboot.lilac.datamodel.view.RecommendedVideoDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -25,4 +26,9 @@ public interface VideoMapper {
 
     @Select("SELECT id FROM tbl_youtube WHERE youtube_playlist_id=#{playListId}")
     List<Long> findAllVideoIdByPlayList(Long playListId);
+
+    @Select("SELECT IF(count(id) = 1, 1, 0) FROM tbl_youtube_playlist WHERE id=#{playListId}")
+    boolean isExistYoutubePlayList(Long playListId);
+
+    List<RecommendedPlayListDTO> findRecommendedPlayList();
 }

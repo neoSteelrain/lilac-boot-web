@@ -64,7 +64,7 @@
                             <div class="category-grid-topbar">
                                 <div class="row align-items-center">
                                     <div class="col-lg-6 col-md-6 col-12">
-                                        <h3 class="title" th:text="${subjectBookInfo.subjectName} + ' 키워드로 검색된 책목록'"></h3>
+                                        <h3 class="title" th:text="${subjectBookInfo.subjectName} + ' 키워드로 검색된 책목록'+' , 검색된 도서수 :' + ${subjectBookInfo.totalBookCount} + ' 권'"></h3>
                                     </div>
                                 </div>
                             </div>
@@ -75,7 +75,7 @@
                                             <!-- Start Single Item -->
                                             <div class="single-item-grid">
                                                 <div class="image">
-                                                    <a th:href="@{/search/book-detail(isbn=${kakaoBook.isbn13},region=-1,detailRegion=-1)}"><img
+                                                    <a th:href="@{/search/book-detail(isbn=${kakaoBook.isbn13},region=${subjectBookInfo.regionCode},detailRegion=${subjectBookInfo.detailRegionCode})}"><img
                                                             th:src="${kakaoBook.thumbnail}" alt="#"></a>
                                                 </div>
                                                 <div class="content text-wrap">

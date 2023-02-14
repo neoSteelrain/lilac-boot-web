@@ -3,6 +3,7 @@ package com.steelrain.springboot.lilac.service;
 import com.steelrain.springboot.lilac.common.KeywordCategoryCacheService;
 import com.steelrain.springboot.lilac.common.PagingUtils;
 import com.steelrain.springboot.lilac.datamodel.*;
+import com.steelrain.springboot.lilac.datamodel.view.RecommendedVideoDTO;
 import com.steelrain.springboot.lilac.exception.LilacException;
 import com.steelrain.springboot.lilac.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +59,11 @@ public class VideoService implements IVideoService {
         return m_videoRepository.findAllVideoIdByPlayList(playListId);
     }
 
+    @Override
     public YoutubeVideoDTO getVideoDetail(Long videoId) {
         return m_videoRepository.findVideoDetail(videoId);
     }
+
+    @Override
+    public boolean isExistYoutubePlayList(Long playListId){ return m_videoRepository.isExistYoutubePlayList(playListId);}
 }

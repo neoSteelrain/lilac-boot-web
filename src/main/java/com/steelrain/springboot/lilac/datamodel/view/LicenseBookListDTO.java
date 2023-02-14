@@ -18,6 +18,7 @@ public class LicenseBookListDTO {
     private String regionName;
     private String detailRegionName;
 
+    private int totalBookCount;
     private List<KaKaoBookDTO> kakaoBookList;
     private List<NaruLibraryDTO> libraryList;
     private PageDTO pageInfo;

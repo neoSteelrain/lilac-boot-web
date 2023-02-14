@@ -10,9 +10,15 @@ import java.util.List;
 @Getter
 @Setter
 public class SubjectBookListDTO {
-    private int subjectCode;
     private String keyword;
+    private int subjectCode;
+    private int regionCode;
+    private int detailRegionCode;
     private String subjectName;
+    private String regionName;
+    private String detailRegionName;
+
+    private int totalBookCount;
     private PageDTO pageInfo;
     private List<KaKaoBookDTO> kakaoBookList;
 }

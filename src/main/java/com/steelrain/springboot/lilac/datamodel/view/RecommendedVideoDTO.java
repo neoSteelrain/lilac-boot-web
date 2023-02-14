@@ -1,4 +1,4 @@
-package com.steelrain.springboot.lilac.datamodel;
+package com.steelrain.springboot.lilac.datamodel.view;
 
 import lombok.Builder;
 import lombok.Getter;

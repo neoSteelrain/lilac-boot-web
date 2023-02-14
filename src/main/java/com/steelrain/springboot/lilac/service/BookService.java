@@ -107,6 +107,7 @@ public class BookService implements IBookService{
         resultDTO.setDetailRegionCode(detailRegionCode);
         resultDTO.setDetailRegionName(m_cacheService.getRegionName(regionCode));
         resultDTO.setDetailRegionName(m_cacheService.getDetailRegionName(regionCode, detailRegionCode));
+        resultDTO.setTotalBookCount(responseDTO.getMeta().getTotalCount());
         resultDTO.setKakaoBookList(kaKaoBookDTOList);
         resultDTO.setLibraryList(delegateLibraryByRegionList(regionCode, detailRegionCode));
         resultDTO.setPageInfo(PagingUtils.createPagingInfo(responseDTO.getMeta().getTotalCount(), pageNum, bookCount));
@@ -150,9 +151,14 @@ public class BookService implements IBookService{
             도서정보와 도서를 소장하고 있는 도서관의 정보를 찾아서 반환한다.
          */
         KaKaoBookDTO bookDTO = m_bookRepository.findKaKaoBookInfo(isbn);
-        // TODO 소장하고 있는 도서관 목록가져오기
-        NaruLibSearchByBookResponseDTO libSearchResponse = m_naruRepository.getLibraryByBook(isbn, regionCode, detailRegionCode);
-        List<NaruLibraryDTO> libList = convertNaruLibraryDTO(libSearchResponse, Long.valueOf(bookDTO.getIsbn13()));
+        List<NaruLibraryDTO> libList = null;
+        if(regionCode == 0 || (regionCode == 0 && detailRegionCode == 0)){
+            libList = new ArrayList<>(0);
+        }else{
+            // TODO 소장하고 있는 도서관 목록가져오기
+            NaruLibSearchByBookResponseDTO libSearchResponse = m_naruRepository.getLibraryByBook(isbn, regionCode, detailRegionCode);
+            libList = convertNaruLibraryDTO(libSearchResponse, Long.valueOf(bookDTO.getIsbn13()));
+        }
         return BookDetailDTO.builder()
                 .bookDTO(bookDTO)
                 .libraryList(libList)

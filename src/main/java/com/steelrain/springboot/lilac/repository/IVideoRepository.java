@@ -2,7 +2,7 @@ package com.steelrain.springboot.lilac.repository;
 
 import com.steelrain.springboot.lilac.datamodel.YoutubePlayListDTO;
 import com.steelrain.springboot.lilac.datamodel.YoutubeVideoDTO;
-import com.steelrain.springboot.lilac.datamodel.RecommendedVideoDTO;
+import com.steelrain.springboot.lilac.datamodel.view.RecommendedVideoDTO;
 
 import java.util.List;
 
