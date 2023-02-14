@@ -1,8 +1,7 @@
 package com.steelrain.springboot.lilac.service;
 
-import com.steelrain.springboot.lilac.common.BOOK_PAGING_INFO;
+import com.steelrain.springboot.lilac.common.PagingUtils;
 import com.steelrain.springboot.lilac.datamodel.KaKaoBookDTO;
-import com.steelrain.springboot.lilac.datamodel.LicenseBookDetailDTO;
 import com.steelrain.springboot.lilac.datamodel.api.*;
 import com.steelrain.springboot.lilac.datamodel.view.BookDetailDTO;
 import com.steelrain.springboot.lilac.datamodel.view.LicenseBookListDTO;
@@ -82,7 +81,8 @@ public class BookService implements IBookService{
             - 카카오 API는 ISBN을 문자열로 반환하고, 나루도서관 API는 ISBN을 숫자형식(long)으로 받으므로 형변환이 필요하다
          */
         String licenseSearchKeyword = m_cacheService.getLicenseKeyword(licenseCode);
-        List<KakaoSearchedBookDTO> bookList = m_kaKoBookRepository.searchBookFromKakao(licenseSearchKeyword, pageNum, bookCount).getKakaoSearchedBookList();
+        KakaoBookSearchResponseDTO responseDTO = m_kaKoBookRepository.searchBookFromKakao(licenseSearchKeyword, pageNum, bookCount);
+        List<KakaoSearchedBookDTO> bookList = responseDTO.getKakaoSearchedBookList();
         LicenseBookListDTO resultDTO = new LicenseBookListDTO();
         List<KaKaoBookDTO> kaKaoBookDTOList = new ArrayList<>(bookList.size());
         for(KakaoSearchedBookDTO book : bookList){
@@ -102,8 +102,14 @@ public class BookService implements IBookService{
         // 카카오책 검색결과를 DB에 저장하는 이벤트를 발생한다.
         publishKaKaoBookSaveEvent(kaKaoBookDTOList);
 
+        resultDTO.setLicenseCode(licenseCode);
+        resultDTO.setRegionCode(regionCode);
+        resultDTO.setDetailRegionCode(detailRegionCode);
+        resultDTO.setDetailRegionName(m_cacheService.getRegionName(regionCode));
+        resultDTO.setDetailRegionName(m_cacheService.getDetailRegionName(regionCode, detailRegionCode));
         resultDTO.setKakaoBookList(kaKaoBookDTOList);
         resultDTO.setLibraryList(delegateLibraryByRegionList(regionCode, detailRegionCode));
+        resultDTO.setPageInfo(PagingUtils.createPagingInfo(responseDTO.getMeta().getTotalCount(), pageNum, bookCount));
         return resultDTO;
     }
 
@@ -128,11 +134,13 @@ public class BookService implements IBookService{
             kaKaoBookDTOList.add(convertKakaoBookDTO(book,
                     StringUtils.containsWhitespace(tmpIsbn.trim()) ? StringUtils.tokenizeToStringArray(tmpIsbn, " ")[1] : tmpIsbn));
         }
+        resultDTO.setSubjectCode(subjectCode);
         resultDTO.setKeyword(keyword);
         resultDTO.setSubjectName(m_cacheService.getSubjectName(subjectCode));
         resultDTO.setKakaoBookList(kaKaoBookDTOList);
         // 카카오책 검색결과를 DB에 저장하는 이벤트를 발생한다.
         publishKaKaoBookSaveEvent(kaKaoBookDTOList);
+        resultDTO.setPageInfo(PagingUtils.createPagingInfo(responseDTO.getMeta().getTotalCount(), pageNum, bookCount));
         return resultDTO;
     }
 
@@ -228,7 +236,7 @@ public class BookService implements IBookService{
 
     private KaKaoBookDTO convertKakaoBookDTO(KakaoSearchedBookDTO srcBook, String splitedIsbn){
         return KaKaoBookDTO.builder()
-                .isbn13Long(Long.valueOf(splitedIsbn))
+                .isbn13Long(Long.valueOf(splitedIsbn.trim()))
                 .isbn13(splitedIsbn)
                 .title(srcBook.getTitle())
                 .contents(srcBook.getContents())

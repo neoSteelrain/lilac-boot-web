@@ -63,7 +63,11 @@ public class KeywordCategoryCacheService implements ICacheService {
 
     @Override
     public String getLicenseKeyword(int licenseCode) {
-        return m_licenseCodeList.stream().filter(license -> license.getCode().intValue() == licenseCode).map(LicenseCodeDTO::getKeyWord).findFirst().get();
+        return m_licenseCodeList.stream()
+                .filter(license -> license.getCode().intValue() == licenseCode)
+                .map(LicenseCodeDTO::getKeyWord)
+                .findFirst()
+                .get();
     }
 
     @Override
@@ -71,7 +75,8 @@ public class KeywordCategoryCacheService implements ICacheService {
         return m_libRegionCodeList.stream()
                 .filter(regionDTO -> (regionDTO.getCode() == region))
                 .map(LibraryRegionCodeDTO::getName)
-                .findFirst().get();
+                .findFirst()
+                .get();
     }
 
     @Override
@@ -84,17 +89,26 @@ public class KeywordCategoryCacheService implements ICacheService {
 
     @Override
     public String getSubjectKeyword(int subjectCode) {
-        return m_subjectCodeList.stream().filter(subject -> subject.getCode() == subjectCode).findFirst().get().getKeyWord();
+        return m_subjectCodeList.stream()
+                .filter(subject -> subject.getCode() == subjectCode)
+                .findFirst()
+                .get().getKeyWord();
     }
 
     @Override
     public String getSubjectName(int subjectCode) {
-        return m_subjectCodeList.stream().filter(subject -> subject.getCode() == subjectCode).findFirst().get().getName();
+        return m_subjectCodeList.stream()
+                .filter(subject -> subject.getCode() == subjectCode)
+                .findFirst()
+                .get().getName();
     }
 
     @Override
     public String getSubjectKeywordBook(int subjectCode) {
-        return m_subjectCodeList.stream().filter(subject -> subject.getCode() == subjectCode).findFirst().get().getKeyWordBook();
+        return m_subjectCodeList.stream()
+                .filter(subject -> subject.getCode() == subjectCode)
+                .findFirst()
+                .get().getKeyWordBook();
     }
 
     private void initKeywordMap(){

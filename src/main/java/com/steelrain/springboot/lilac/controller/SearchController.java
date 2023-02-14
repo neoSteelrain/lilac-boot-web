@@ -1,9 +1,7 @@
 package com.steelrain.springboot.lilac.controller;
 
-import com.steelrain.springboot.lilac.common.BOOK_PAGING_INFO;
 import com.steelrain.springboot.lilac.common.YOUTUBE_PAGING_INFO;
 import com.steelrain.springboot.lilac.datamodel.*;
-import com.steelrain.springboot.lilac.datamodel.view.BookDetailDTO;
 import com.steelrain.springboot.lilac.datamodel.view.SubjectBookListDTO;
 import com.steelrain.springboot.lilac.service.ISearchService;
 import com.steelrain.springboot.lilac.common.KeywordCategoryCacheService;
@@ -57,7 +55,7 @@ public class SearchController {
             return "redirect:/";
         }
         model.addAttribute("licenseBookInfo", m_searchService.getLicenseBookList(licenseCode, regionCode, detailRegionCode,
-                                                                                             pageNum, BOOK_PAGING_INFO.BOOK_COUNT_PER_PAGE)); // bookCount 대신 BOOK_COUNT_PER_PAGE
+                                                                                             pageNum, bookCount));
         model.addAttribute("region", regionCode);
         model.addAttribute("detailRegion", detailRegionCode);
         return "/search/book-template";
@@ -68,7 +66,7 @@ public class SearchController {
                                      @RequestParam("pageNum") int pageNum,
                                      @RequestParam("bookCount") int bookCount, Model model){
 
-        SubjectBookListDTO resultDTO = m_searchService.getSubjectBookList(subjectCode, pageNum,  BOOK_PAGING_INFO.BOOK_COUNT_PER_PAGE); // bookCount 대신 BOOK_COUNT_PER_PAGE
+        SubjectBookListDTO resultDTO = m_searchService.getSubjectBookList(subjectCode, pageNum,  bookCount);
 
         model.addAttribute("subjectBookInfo", resultDTO);
         return "/search/subject-book-template";

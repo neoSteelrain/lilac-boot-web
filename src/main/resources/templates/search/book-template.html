@@ -97,17 +97,20 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-12">
-                                            <!-- Pagination -->
-                                            <div class="pagination left">
-                                                <ul class="pagination-list">
-                                                    <li><a href="javascript:void(0)">1</a></li>
-                                                    <li class="active"><a href="javascript:void(0)">2</a></li>
-                                                    <li><a href="javascript:void(0)">3</a></li>
-                                                    <li><a href="javascript:void(0)">4</a></li>
-                                                    <li><a href="javascript:void(0)"><i class="lni lni-chevron-right"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <!--/ End Pagination -->
+                                            <th:block th:if="${licenseBookInfo.kakaoBookList.size() > 0}"> <!-- 검색결과가 없으면 안나오게 처리 -->
+                                                <div class="pagination left" th:with="page=${licenseBookInfo.pageInfo.page}" >
+                                                    <ul class="pagination-list">
+                                                        <li><a th:if="${page <= 1}"><i class="lni lni-chevron-left"></i></a></li> <!-- const refreshLicenseBookList = (argLicenseCode, argRegionCode, argDetailRegionCode, argPageNum)  -->
+                                                        <li><a th:unless="${page <= 1}" th:href="|javascript:refreshLicenseBookList('${licenseBookInfo.licenseCode}', '${licenseBookInfo.regionCode}', '${licenseBookInfo.detailRegionCode}', '${licenseBookInfo.pageInfo.page-1}')|"><i class="lni lni-chevron-left"></i></a></li>
+                                                        <th:block th:each="idx : ${#numbers.sequence(licenseBookInfo.pageInfo.startPage, licenseBookInfo.pageInfo.endPage)}">
+                                                            <li th:if="${idx == page}" class="active"><a th:href="|javascript:refreshLicenseBookList('${licenseBookInfo.licenseCode}', '${licenseBookInfo.regionCode}', '${licenseBookInfo.detailRegionCode}',  '${idx}')|" th:text="${idx}"></a></li>
+                                                            <li th:unless="${idx == page}" ><a th:href="|javascript:refreshLicenseBookList('${licenseBookInfo.licenseCode}', '${licenseBookInfo.regionCode}', '${licenseBookInfo.detailRegionCode}',  '${idx}')|" th:text="${idx}"></a></li>
+                                                        </th:block>
+                                                        <li><a th:if="${page >= licenseBookInfo.pageInfo.maxPage}"><i class="lni lni-chevron-right"></i></a></li>
+                                                        <li><a th:unless="${page >= licenseBookInfo.pageInfo.maxPage}" th:href="|javascript:refreshLicenseBookList('${licenseBookInfo.licenseCode}', '${licenseBookInfo.regionCode}', '${licenseBookInfo.detailRegionCode}', ' ${licenseBookInfo.pageInfo.page+1}')|"><i class="lni lni-chevron-right"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                            </th:block>
                                         </div>
                                     </div>
                                 </div>

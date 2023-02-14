@@ -674,13 +674,16 @@
                     regionCode:argRegionCode,
                     detailRegionCode:argDetailRegionCode,
                     pageNum:argPageNum,
-                    bookCount:-1 // 아직 화면이 없으므로 임시로 -1
+                    bookCount:9 // 아직 화면이 없으므로 임시로 9
                 },
                 dataType:"text",
                 success:function (result){
                     let html = jQuery("<div>").html(result);
                     let contents = html.find("div#library-book-template").html();
                     $("#div-library-book").html(contents);
+
+                    // 도서정보 태그로 스크롤 이동
+                    moveScrollToBookList();
                 },
                 error:(errMSg) => {
                     alert("도서검색 에러 발생");
@@ -690,21 +693,24 @@
         // 키워드목록의 주제어를 처리하는 함수 const refreshPlayList = (argKeywordCode, argOffset, argKeywordType)
         const refreshPageBySubject = (argSubjectCode, argOffset) =>{
 
-            refreshSubjectBookList(argSubjectCode);
+            refreshSubjectBookList(argSubjectCode, argOffset);
             refreshPlayList(argSubjectCode, argOffset, 2);
 
+
+        }
+        const moveScrollToBookList = () => {
             // 도서정보 태그로 스크롤 이동
             let offset = $("#div-library-book").offset();
             $("html, body").animate({scrollTop: offset.top}, 300);
         }
 
-        const refreshSubjectBookList = (argSubjectCode) => {
+        const refreshSubjectBookList = (argSubjectCode, argPageNum) => {
             $.ajax({
                 type:"get",
                 url:"/search/subject-book-list",
                 data:{
                     subjectCode:argSubjectCode,
-                    pageNum:1,
+                    pageNum:argPageNum,
                     bookCount:9
                 },
                 dataType:"text",
@@ -712,6 +718,9 @@
                     let html = jQuery("<div>").html(result);
                     let contents = html.find("div#subject-book-template").html();
                     $("#div-library-book").html(contents);
+
+                    // 도서정보 태그로 스크롤 이동
+                    moveScrollToBookList();
                 },
                 error:(errMSg) => {
                     alert("도서검색 에러 발생");

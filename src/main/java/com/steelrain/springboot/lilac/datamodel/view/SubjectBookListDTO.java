@@ -10,8 +10,9 @@ import java.util.List;
 @Getter
 @Setter
 public class SubjectBookListDTO {
+    private int subjectCode;
     private String keyword;
     private String subjectName;
-    private PageDTO pageDTO;
+    private PageDTO pageInfo;
     private List<KaKaoBookDTO> kakaoBookList;
 }

@@ -1,7 +1,7 @@
 package com.steelrain.springboot.lilac.service;
 
 import com.steelrain.springboot.lilac.common.KeywordCategoryCacheService;
-import com.steelrain.springboot.lilac.common.PAGING_CONFIG;
+import com.steelrain.springboot.lilac.common.PagingUtils;
 import com.steelrain.springboot.lilac.datamodel.*;
 import com.steelrain.springboot.lilac.exception.LilacException;
 import com.steelrain.springboot.lilac.repository.VideoRepository;
@@ -34,10 +34,11 @@ public class VideoService implements IVideoService {
     public VideoPlayListSearchResultDTO searchPlayList(int keywordCode, int pageNum, int playlistCount, int keywordType) {
         int pageStart = (pageNum - 1) * playlistCount;
         String keywordStr = parseKeywordCode(keywordCode, keywordType);
+        int totalPlaylistCount = m_videoRepository.selectTotalPlayListCountByKeyword(keywordStr);
         return VideoPlayListSearchResultDTO.builder()
                                         .requestKeywordCode(keywordCode)
                                         .requestKeywordType(keywordType)
-                                        .pageDTO(createPageDTO(keywordStr, pageNum, playlistCount))
+                                        .pageDTO(PagingUtils.createPagingInfo(totalPlaylistCount, pageNum, playlistCount))
                                         .playList(m_videoRepository.findPlayListByKeyword(keywordStr, pageStart, playlistCount))
                                         .build();
     }
@@ -55,21 +56,6 @@ public class VideoService implements IVideoService {
     @Override
     public List<Long> getAllVideoIdByPlayList(Long playListId) {
         return m_videoRepository.findAllVideoIdByPlayList(playListId);
-    }
-
-    private PageDTO createPageDTO(String keyword, int pageNum, int playlistCount){
-        int totalPlaylistCount = m_videoRepository.selectTotalPlayListCountByKeyword(keyword);
-        int maxPage = (int)(Math.ceil( (double) totalPlaylistCount / playlistCount));
-        int startPage = (((int)(Math.ceil((double) pageNum / PAGING_CONFIG.BLOCK_LIMIT))) - 1) * PAGING_CONFIG.BLOCK_LIMIT + 1;
-        int endPage = startPage + PAGING_CONFIG.BLOCK_LIMIT -1;
-        if(endPage > maxPage){
-            endPage = maxPage;
-        }
-        return PageDTO.builder()
-                .page(pageNum)
-                .startPage(startPage)
-                .endPage(endPage)
-                .maxPage(maxPage).build();
     }
 
     public YoutubeVideoDTO getVideoDetail(Long videoId) {
