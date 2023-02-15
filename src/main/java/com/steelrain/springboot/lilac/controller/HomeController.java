@@ -21,7 +21,7 @@ public class HomeController {
         model.addAttribute("subjectCodes",m_keywordCategoryCacheService.getSubjectCodeList());
         model.addAttribute("libRegionCodes",m_keywordCategoryCacheService.getLibraryRegionCodeList());
         model.addAttribute("licenseCodes",m_keywordCategoryCacheService.getLicenseCodeList());
-        model.addAttribute("recommendedVideoList", m_videoService.getRecommendedVideoList());
+        model.addAttribute("recommendedPlayList", m_videoService.getRecommendedVideoList());
 
         return "index";
     }

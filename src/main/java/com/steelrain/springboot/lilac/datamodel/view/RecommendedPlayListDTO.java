@@ -20,17 +20,8 @@ public class RecommendedPlayListDTO {
     private String description;
     private Timestamp publishDate;
     private Timestamp regDate;
-    private String thumbnailDefault;
     private String thumbnailMedium;
-    private String thumbnailHigh;
     private String playlistId;
-    private Long viewCount;
-    private Integer searchCount;
-    private Long likeCount;
-    private Long favoriteCount;
-    private Long commentCount;
-    private Boolean commentDisabled;
-    private String duration;
-    private Float score;
-    private Float magnitude;
+
+    private String channelTitle;
 }

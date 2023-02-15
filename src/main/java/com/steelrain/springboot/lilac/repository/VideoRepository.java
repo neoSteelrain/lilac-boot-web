@@ -2,6 +2,7 @@ package com.steelrain.springboot.lilac.repository;
 
 import com.steelrain.springboot.lilac.datamodel.YoutubePlayListDTO;
 import com.steelrain.springboot.lilac.datamodel.YoutubeVideoDTO;
+import com.steelrain.springboot.lilac.datamodel.view.RecommendedPlayListDTO;
 import com.steelrain.springboot.lilac.datamodel.view.RecommendedVideoDTO;
 import com.steelrain.springboot.lilac.mapper.VideoMapper;
 import lombok.RequiredArgsConstructor;
@@ -45,5 +46,9 @@ public class VideoRepository implements IVideoRepository {
 
     public boolean isExistYoutubePlayList(Long playListId){
         return m_videoMapper.isExistYoutubePlayList(playListId);
+    }
+
+    public List<RecommendedPlayListDTO> findRecommendedPlayList() {
+        return m_videoMapper.findRecommendedPlayList();
     }
 }

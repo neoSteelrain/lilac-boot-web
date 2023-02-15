@@ -3,6 +3,7 @@ package com.steelrain.springboot.lilac.service;
 import com.steelrain.springboot.lilac.common.KeywordCategoryCacheService;
 import com.steelrain.springboot.lilac.common.PagingUtils;
 import com.steelrain.springboot.lilac.datamodel.*;
+import com.steelrain.springboot.lilac.datamodel.view.RecommendedPlayListDTO;
 import com.steelrain.springboot.lilac.datamodel.view.RecommendedVideoDTO;
 import com.steelrain.springboot.lilac.exception.LilacException;
 import com.steelrain.springboot.lilac.repository.VideoRepository;
@@ -24,6 +25,11 @@ public class VideoService implements IVideoService {
     @Override
     public List<RecommendedVideoDTO> getRecommendedVideoList() {
         return m_videoRepository.findRecommendedVideoList();
+    }
+
+    @Override
+    public List<RecommendedPlayListDTO> getRecommendedPlayList() {
+        return m_videoRepository.findRecommendedPlayList();
     }
 
     @Override

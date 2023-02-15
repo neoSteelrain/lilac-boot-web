@@ -450,16 +450,16 @@
                             aria-labelledby="nav-latest-tab">
                             <!-- 추천영상 목록 시작 -->
                             <div id="div-playlist" class="row">
-                                <div class="col-lg-3 col-md-4 col-12" th:each="video : ${recommendedVideoList}">
+                                <div class="col-lg-3 col-md-4 col-12" th:each="playlist : ${recommendedPlayList}">
                                     <div class="single-item-grid">
                                         <div class="image">
-                                            <a th:href="@{/video/playlist-detail(youtubePlaylistId=${video.youtubePlaylistId})}"><img th:src="${video.thumbnailMedium}" alt="#"></a>
+                                            <a th:href="@{/video/playlist-detail(youtubePlaylistId=${playlist.youtubePlaylistId})}"><img th:src="${playlist.thumbnailMedium}" alt="#"></a>
 <!--                                            <i class=" cross-badge lni lni-bolt"></i>-->
                                             <span class="flat-badge sale" >추천</span>
                                         </div>
                                         <div class="content text-wrap">
-                                            <a href="javascript:void(0)" class="title" th:text="${video.title}"></a>
-                                            <p th:text="${video.channelTitle}"></p>
+                                            <a href="javascript:void(0)" class="title" th:text="${playlist.title}"></a>
+                                            <p th:text="${playlist.channelTitle}"></p>
                                         </div>
                                     </div>
                                 </div>
