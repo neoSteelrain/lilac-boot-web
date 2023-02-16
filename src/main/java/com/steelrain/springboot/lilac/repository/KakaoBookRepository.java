@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.steelrain.springboot.lilac.config.APIConfig;
 import com.steelrain.springboot.lilac.datamodel.api.KakaoBookSearchResponseDTO;
 import com.steelrain.springboot.lilac.exception.KakaoBookSearchException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -12,6 +13,7 @@ import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.Header;
 import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.NameValuePair;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
 import org.apache.hc.core5.net.URIBuilder;
 import org.springframework.stereotype.Repository;
@@ -23,14 +25,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @Repository
 public class KakaoBookRepository implements IKaKoBookRepository{
 
     private final APIConfig m_apiConfig;
+    private final CloseableHttpClient m_httpClient;
 
-    public KakaoBookRepository(APIConfig apiConfig){
-        this.m_apiConfig = apiConfig;
-    }
+
 
     /**
      * 카카오 책검색 REST API를 이용하여 도서정보를 조회하는 클래스
@@ -58,8 +60,7 @@ public class KakaoBookRepository implements IKaKoBookRepository{
             throw new KakaoBookSearchException("카카오 책검색 API 호출시 예외발생", urie);
         }
         KakaoBookSearchResponseDTO result = null;
-        try(CloseableHttpClient httpClient = HttpClients.createDefault();
-            ClassicHttpResponse response = httpClient.execute(httpGet)){
+        try(ClassicHttpResponse response = m_httpClient.execute(httpGet)){
 
             if(log.isDebugEnabled()){
                 log.debug("=======> 카카오 HTTP 응답헤더 내용 시작 ===========");
@@ -72,6 +73,7 @@ public class KakaoBookRepository implements IKaKoBookRepository{
             HttpEntity entity = response.getEntity();
             ObjectMapper objectMapper = new ObjectMapper();
             result = objectMapper.readValue(entity.getContent(), KakaoBookSearchResponseDTO.class);
+            EntityUtils.consume(entity);
         }catch(IOException ex){
             throw new KakaoBookSearchException("카카오 책검색 API 호출시 예외발생", ex);
         }

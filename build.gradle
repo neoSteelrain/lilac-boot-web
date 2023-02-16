@@ -22,9 +22,6 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.httpcomponents.client5/httpclient5
     implementation group: 'org.apache.httpcomponents.client5', name: 'httpclient5', version: '5.2.1'
 
-    // WebClient 의존성 추가
-    // implementation 'org.springframework.boot:spring-boot-starter-webflux'
-
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -34,6 +31,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+    // 테스트코드에서 @Slf4j 사용할 수 있도록 하는 의존성추가
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 }

@@ -29,6 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NaruRepository implements INaruRepository{
     private final APIConfig m_apiConfig;
+    private final CloseableHttpClient m_httpClient;
 
 
     @Override
@@ -58,8 +59,7 @@ public class NaruRepository implements INaruRepository{
             throw new NaruLibraryByBookException("나루 소장도서관 검색 예외", urie);
         }
         NaruLibSearchByBookResponseDTO result = null;
-        try(CloseableHttpClient httpClient = HttpClients.createDefault();
-            ClassicHttpResponse response = httpClient.execute(httpGet)){
+        try(ClassicHttpResponse response = m_httpClient.execute(httpGet)){
             HttpEntity entity = response.getEntity();
             ObjectMapper objectMapper = new ObjectMapper();
             result = objectMapper.readValue(entity.getContent(), NaruLibSearchByBookResponseDTO.class);
