@@ -13,4 +13,6 @@ public interface IMemberRepository {
     List<MemberDTO> findAllMembers();
 
     int updateMemberInfo(MemberDTO memberDTO);
+
+    int findMemberByNickName(String nickName);
 }

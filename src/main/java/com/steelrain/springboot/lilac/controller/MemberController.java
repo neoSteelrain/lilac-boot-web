@@ -110,6 +110,16 @@ public class MemberController {
                 new ResponseEntity<>("중복된 이메일주소", HttpStatus.CONFLICT):
                 new ResponseEntity<>("사용가능한 이메일주소", HttpStatus.OK);
     }
+    
+    @GetMapping("/duplicated-nickname/{nickname}")
+    public ResponseEntity<String> checkDuplicatedNickname(@PathVariable("nickname") String nickname){
+        if( nickname.length() < 1 || nickname.length() > 20){
+            return new ResponseEntity<>("닉네임은 1자 이상 20자 이하이어야 합니다.", HttpStatus.BAD_REQUEST);
+        }
+        return m_memberService.checkDuplicatedEmail(nickname) ? 
+                new ResponseEntity<>("중복된 닉네임", HttpStatus.CONFLICT):
+                new ResponseEntity<>("사용가능한 닉네임", HttpStatus.OK);
+    }
 
     @PostMapping("/registration")
     public String registerMember(@Validated @ModelAttribute("memberReg") MemberRegDTO memberRegDTO, BindingResult bindingResult){

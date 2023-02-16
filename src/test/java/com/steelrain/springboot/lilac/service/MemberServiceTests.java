@@ -50,6 +50,24 @@ public class MemberServiceTests {
     }
 
     @Test
+    @Rollback()
+    public void 회원가입닉네임중복테스트(){
+        String testNickname = "user2";
+        MemberDTO memberDTO1 = MemberDTO.builder()
+                .nickname(testNickname)
+                .email("user2@user.com")
+                .password("123456yt")
+                .grade(2)
+                .build();
+
+        boolean isRegistered = m_memberService.registerMember(memberDTO1);
+        assertThat(isRegistered).isTrue();
+
+        boolean isDuplicatedNickname = m_memberService.checkDuplicatedNickName(testNickname);
+        assertThat(isDuplicatedNickname).isTrue();
+    }
+
+    @Test
     public void testMemberLogin(){
         MemberDTO memberDTO = m_memberService.loginMember("user1@user.com", "1234");
 

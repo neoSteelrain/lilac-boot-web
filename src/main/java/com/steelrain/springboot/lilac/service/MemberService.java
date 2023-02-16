@@ -24,6 +24,12 @@ public class MemberService implements IMemberService {
         return m_memberRepository.findMemberByEmail(email) > 0;
     }
 
+    @Override
+    public boolean checkDuplicatedNickName(String nickName) {
+        return m_memberRepository.findMemberByNickName(nickName) > 0 ;
+    }
+
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean registerMember(MemberDTO memberDTO) {

@@ -37,4 +37,9 @@ public class MemberRepository implements IMemberRepository{
     public int updateMemberInfo(MemberDTO memberDTO) {
         return m_memberMapper.updateMemberInfo(memberDTO);
     }
+
+    @Override
+    public int findMemberByNickName(String nickName) {
+        return m_memberMapper.findMemberByNickName(nickName);
+    }
 }

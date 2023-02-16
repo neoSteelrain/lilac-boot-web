@@ -19,4 +19,7 @@ public interface MemberMapper {
     List<MemberDTO> findAllMembers();
 
     int updateMemberInfo(MemberDTO memberDTO);
+
+    @Select("SELECT count(id) AS emailCount FROM tbl_member WHERE nickname = #{nickName}")
+    int findMemberByNickName(String nickName);
 }

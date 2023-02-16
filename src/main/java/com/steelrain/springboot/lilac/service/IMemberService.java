@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface IMemberService {
     boolean checkDuplicatedEmail(String email);
+
+    boolean checkDuplicatedNickName(String nickName);
     boolean registerMember(MemberDTO memberDTO);
 
     MemberDTO loginMember(String email, String password);
