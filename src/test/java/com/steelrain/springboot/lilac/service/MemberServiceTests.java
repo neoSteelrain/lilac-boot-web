@@ -12,12 +12,16 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.swing.*;
 
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -65,6 +69,21 @@ public class MemberServiceTests {
 
         boolean isDuplicatedNickname = m_memberService.checkDuplicatedNickName(testNickname);
         assertThat(isDuplicatedNickname).isTrue();
+    }
+
+    @Test
+    @Rollback
+    public void 회원가입중복예외테스트(){
+        String testNickname = "user2";
+        MemberDTO memberDTO1 = MemberDTO.builder()
+                .nickname(testNickname)
+                .email("user2@user.com")
+                .password("123456yt")
+                .grade(2)
+                .build();
+
+        m_memberService.registerMember(memberDTO1);
+        //assertThatThrownBy( () -> m_memberService.registerMember(memberDTO1)).isInstanceOf(DuplicateKeyException.class).hasMessageContaining(testNickname);
     }
 
     @Test

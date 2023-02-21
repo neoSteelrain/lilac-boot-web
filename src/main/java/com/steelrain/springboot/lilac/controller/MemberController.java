@@ -52,9 +52,30 @@ public class MemberController {
     }
 
     @GetMapping("/login")
-    public String loginForm(Model model){
+    public String loginForm(@RequestParam(value = "redirectURL", defaultValue = "/") String redirectURL, Model model){
         model.addAttribute("memberLogin", new MemberLoginDTO());
+        model.addAttribute("redirectURL", redirectURL);
         return "member/login";
+    }
+
+    @PostMapping("/login")
+    public String login(@Validated @ModelAttribute("memberLogin") MemberLoginDTO loginDTO, BindingResult bindingResult,
+                        @RequestParam(value = "redirectURL", defaultValue = "/") String redirectURL,
+                        HttpServletRequest servletRequest){
+
+        if(bindingResult.hasErrors()){
+            log.info("로그인 에러 : {}", bindingResult);
+            return "redirect:/member/login";
+        }
+        log.debug("===> log post - redirectURL : {}", redirectURL);
+        MemberDTO memberDTO = m_memberService.loginMember(loginDTO.getEmail(), loginDTO.getPassword());
+        if(memberDTO != null){
+            HttpSession session = servletRequest.getSession();
+            session.setAttribute(SESSION_KEY.LOGIN_MEMBER, memberDTO);
+            return "redirect:" + redirectURL;
+        }else{
+            return "/member/login";
+        }
     }
 
     @GetMapping("/registration")
@@ -136,26 +157,7 @@ public class MemberController {
         return  m_memberService.registerMember(memberDTO) ? "redirect:/member/registration" : "redirect:/";
     }
 
-    @PostMapping("/login")
-    public String login(@Validated @ModelAttribute("memberLogin") MemberLoginDTO loginDTO, BindingResult bindingResult,
-                        HttpServletRequest servletRequest){
-        //특정 필드가 아닌 복합 룰 검증
-        /*if (form.getPrice() != null && form.getQuantity() != null) {
-            int resultPrice = form.getPrice() * form.getQuantity();
-            if (resultPrice < 10000) {
-                bindingResult.reject("totalPriceMin", new Object[]{10000, resultPrice}, null);
-            }
-        }*/
 
-        if(bindingResult.hasErrors()){
-            log.info("로그인 에러 : {}", bindingResult);
-            return "redirect:/member/login";
-        }
-        MemberDTO memberDTO = m_memberService.loginMember(loginDTO.getEmail(), loginDTO.getPassword());
-        HttpSession session = servletRequest.getSession();
-        session.setAttribute(SESSION_KEY.LOGIN_MEMBER, memberDTO);
-        return "redirect:/";
-    }
 
     @PostMapping("/logout")
     public String logout(HttpServletRequest servletRequest){
