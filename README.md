@@ -1,8 +1,5 @@
-# 프로젝트 기획안
-
+### 개인 웹 프로젝트
 ---
-
-### 프로젝트 명 : 라일락
 
 ### 기획의도
 
@@ -54,9 +51,10 @@
 
 API 호출이 많은 부분을 차지하므로 검색허용량에 주의해야 한다.
 
+---
 ### 유스케이스
 ![lilac-UC](https://user-images.githubusercontent.com/113125088/220843275-60748186-06d2-4bfc-8b1d-8edf646af58f.png)
 
-
+---
 ### ERD
 ![lilac-boot-erd](https://user-images.githubusercontent.com/113125088/220843469-8b18a4b8-9f9e-480a-a0bd-82ddf256082c.png)
