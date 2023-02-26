@@ -10,6 +10,7 @@ import com.steelrain.springboot.lilac.datamodel.view.MemberProfileEditDTO;
 import com.steelrain.springboot.lilac.datamodel.view.MemberRegDTO;
 import com.steelrain.springboot.lilac.service.IMemberService;
 import com.steelrain.springboot.lilac.common.KeywordCategoryCacheService;
+import com.steelrain.springboot.lilac.validate.LoginValidationSequence;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -59,15 +60,14 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public String login(@Validated @ModelAttribute("memberLogin") MemberLoginDTO loginDTO, BindingResult bindingResult,
+    public String login(@Validated(LoginValidationSequence.class) @ModelAttribute("memberLogin") MemberLoginDTO loginDTO, BindingResult bindingResult,
                         @RequestParam(value = "redirectURL", defaultValue = "/") String redirectURL,
                         HttpServletRequest servletRequest){
 
         if(bindingResult.hasErrors()){
             log.info("로그인 에러 : {}", bindingResult);
-            return "redirect:/member/login";
+            return "/member/login";
         }
-        log.debug("===> log post - redirectURL : {}", redirectURL);
         MemberDTO memberDTO = m_memberService.loginMember(loginDTO.getEmail(), loginDTO.getPassword());
         if(memberDTO != null){
             HttpSession session = servletRequest.getSession();
@@ -82,6 +82,21 @@ public class MemberController {
     public String registerForm(Model model){
         model.addAttribute("memberReg", new MemberRegDTO());
         return "member/registration";
+    }
+
+    @PostMapping("/registration")
+    public String registerMember(@Validated @ModelAttribute("memberReg") MemberRegDTO memberRegDTO, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            log.info("회원가입 에러 : {}", bindingResult);
+            return "/member/registration";
+        }
+
+        MemberDTO memberDTO = MemberDTO.builder()
+                .nickname(memberRegDTO.getNickname())
+                .email(memberRegDTO.getEmail())
+                .password(memberRegDTO.getPassword())
+                .build();
+        return  m_memberService.registerMember(memberDTO) ? "redirect:/member/registration" : "redirect:/";
     }
 
     @GetMapping("/profile")
@@ -142,20 +157,7 @@ public class MemberController {
                 new ResponseEntity<>("사용가능한 닉네임", HttpStatus.OK);
     }
 
-    @PostMapping("/registration")
-    public String registerMember(@Validated @ModelAttribute("memberReg") MemberRegDTO memberRegDTO, BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
-            log.info("회원가입 에러 : {}", bindingResult);
-            return "redirect:/member/registration";
-        }
 
-        MemberDTO memberDTO = MemberDTO.builder()
-                .nickname(memberRegDTO.getNickname())
-                .email(memberRegDTO.getEmail())
-                .password(memberRegDTO.getPassword())
-                .build();
-        return  m_memberService.registerMember(memberDTO) ? "redirect:/member/registration" : "redirect:/";
-    }
 
 
 

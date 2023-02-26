@@ -61,15 +61,22 @@
 <!--                        </div>-->
                         <form action="/member/login" th:object="${memberLogin}" method="post">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="email" th:field="*{email}" min="5" maxlength="100" placeholder="이메일">
+                                <input type="text" class="form-control" id="email" th:field="*{email}" min="5" maxlength="100" placeholder="이메일" onblur="checkEmail()">
                                 <label for="email">이메일</label>
-                                <span id="emailNotice" th:errors="*{email}"></span>
+<!--                                <span id="emailNotice" th:errors="*{email}"></span>-->
+                                <span id="emailNoticeJs" class="text-danger"></span>
+                                <span id="emailNotice" th:each="err : ${#fields.errors()}" th:if="${errStat.first}" th:text="${err}"class="text-danger" ></span>
                             </div>
                             <div class="form-floating mb-3">
                                 <input type="password" class="form-control" id="password" th:field="*{password}" min="6" maxlength="19"
                                        placeholder="비밀번호" onblur="checkPassword()">
                                 <label for="password">비밀번호</label>
-                                <span id="pwNotice" th:errors="*{password}"></span>
+<!--                                <ul>-->
+<!--                                    <li th:each="err : ${#fields.errors('price')}" th:if="${errStat.first}" th:text="${err}" class="error" />-->
+<!--                                </ul>-->
+<!--                                <span id="pwNotice" th:errors="*{password}"></span>-->
+                                <span id="pwNoticeJs" class="text-danger"></span>
+                                <span id="pwNotice" th:each="err : ${#fields.errors()}" th:if="${errStat.first}" th:text="${err}" class="text-danger"></span>
                             </div>
                             <div class="check-and-pass">
                                 <div class="row align-items-center">
@@ -93,15 +100,13 @@
                             </div>
                             <div class="socila-login">
                                 <ul>
-<!--                                    <li><a href="javascript:void(0)" class="facebook"><i class="lni lni-facebook-original"></i>Login With-->
-<!--                                            Facebook</a></li>-->
                                     <li><a href="javascript:void(0)" class="google"><i class="lni lni-google"></i>구글계정 로그인</a>
                                     </li>
                                 </ul>
                             </div>
                             <p class="outer-link">회원가입이 안되어 있으신가요? <a href="/member/registration">회원가입</a>
                             </p>
-<!--                            <input type="hidden" name="redirectURL" th:value="${redirectURL}">-->
+                            <input type="hidden" name="redirectURL" th:value="${redirectURL}">
                         </form>
                     </div>
                 </div>
@@ -122,21 +127,34 @@
     <script th:src="@{/js/glightbox.min.js}"></script>
     <script th:src="@{/js/main.js}"></script>
     <script th:inline="javascript">
-        const checkPassword = () => {
-            const pwTag = $('#password');
-            const pw = $('#password').val();
-            const pwNotice = $('#pwNotice');
-            console.log("pw : " + pw);
-            const pwRegex = /^[A-Za-z\d\[\]\{\}\/\(\)\.\?\<\>!@#$%^&*=+-]{6,19}$/;
-            if(pw != "" && !pwRegex.test(pw)) {
-                console.log("pwRegex.test(pw) : " + pwRegex.test(pw));
-                pwNotice.css('color', 'red');
-                pwNotice.html('비밀번호는 영문대,소문자,숫자,특수기호 조합으로 6-19자 입니다.');
-                pwTag.val('');
-                pwTag.focus();
+        const checkEmail = () => {
+            let email = $('#email').val();
+            let emailNoticeJs = $('#emailNoticeJs');
+            if(email == ""){
+                emailNoticeJs.text('이메일을 입력해주세요');
+                return;
+            }
+            const emailRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}(.[a-zA-Z]{2,3})?$/u;
+            if(emailRegex.test(email)){
+                emailNoticeJs.text('');
             }else{
-                pwNotice.css('color', 'red');
-                pwNotice.html('');
+                emailNoticeJs.text('이메일 주소형식에 어긋납니다')
+                $('#email').focus();
+            }
+        }
+        const checkPassword = () => {
+            let pw = $('#password').val();
+            let pwNoticeJs = $('#pwNoticeJs');
+            if(pw == ""){
+                pwNoticeJs.text('비밀번호를 입력해주세요');
+                return;
+            }
+            const pwRegex = /^[A-Za-z\d\[\]\{\}\/\(\)\.\?\<\>!@#$%^&*=+-]{6,19}$/;
+            if(pwRegex.test(pw)){
+                pwNoticeJs.text('');
+            }else{
+                pwNoticeJs.text('비밀번호는 영문대,소문자,숫자,특수기호 조합으로 6-19자 입니다.');
+                $('#password').focus();
             }
         }
     </script>
