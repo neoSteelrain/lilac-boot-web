@@ -11,6 +11,7 @@ import com.steelrain.springboot.lilac.datamodel.view.MemberRegDTO;
 import com.steelrain.springboot.lilac.service.IMemberService;
 import com.steelrain.springboot.lilac.common.KeywordCategoryCacheService;
 import com.steelrain.springboot.lilac.validate.LoginValidationSequence;
+import com.steelrain.springboot.lilac.validate.RegistrationValidateSequence;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -85,7 +86,7 @@ public class MemberController {
     }
 
     @PostMapping("/registration")
-    public String registerMember(@Validated @ModelAttribute("memberReg") MemberRegDTO memberRegDTO, BindingResult bindingResult){
+    public String registerMember(@Validated(RegistrationValidateSequence.class) @ModelAttribute("memberReg") MemberRegDTO memberRegDTO, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             log.info("회원가입 에러 : {}", bindingResult);
             return "/member/registration";
@@ -148,18 +149,14 @@ public class MemberController {
     }
     
     @GetMapping("/duplicated-nickname/{nickname}")
-    public ResponseEntity<String> checkDuplicatedNickname(@PathVariable("nickname") String nickname){
-        if( nickname.length() < 1 || nickname.length() > 20){
+    public ResponseEntity<String> checkDuplicatedNickname(@PathVariable("nickname") String nickname) {
+        if (nickname.length() < 1 || nickname.length() > 20) {
             return new ResponseEntity<>("닉네임은 1자 이상 20자 이하이어야 합니다.", HttpStatus.BAD_REQUEST);
         }
-        return m_memberService.checkDuplicatedEmail(nickname) ? 
-                new ResponseEntity<>("중복된 닉네임", HttpStatus.CONFLICT):
+        return m_memberService.checkDuplicatedNickName(nickname) ?
+                new ResponseEntity<>("중복된 닉네임", HttpStatus.CONFLICT) :
                 new ResponseEntity<>("사용가능한 닉네임", HttpStatus.OK);
     }
-
-
-
-
 
     @PostMapping("/logout")
     public String logout(HttpServletRequest servletRequest){

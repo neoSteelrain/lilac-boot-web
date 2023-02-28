@@ -58,20 +58,26 @@
                         <h6 class="title">회원가입</h6>
                         <form action="/member/registration" th:object="${memberReg}" method="post">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="ipt-nickname" th:field="*{nickname}" min="1" maxlength="20" placeholder="닉네임">
+                                <input type="text" class="form-control" id="ipt-nickname" th:field="*{nickname}" min="1" maxlength="20" placeholder="닉네임" onblur="checkDuplicatedId()" >
                                 <label for="ipt-nickname">닉네임</label>
-                                <span id="nickNameNotice" class="ui-state-error-text" th:errors="*{nickname}"></span>
+<!--                                <span id="nickNameNotice" class="ui-state-error-text" th:errors="*{nickname}"></span>-->
+                                <span id="nickNameNoticeJs" class="text-danger"></span>
+                                <span id="nickNameNotice" th:each="err : ${#fields.errors('nickname')}" th:if="${errStat.first}" th:text="${err}" class="text-danger"></span>
                             </div>
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="ipt-email" th:field="*{email}" min="5" maxlength="100" placeholder="이메일" onblur="checkDuplicatedEmail()">
                                 <label for="ipt-email">이메일</label>
-                                <span id="emailNotice" th:errors="*{email}"></span>
+<!--                                <span id="emailNotice" th:errors="*{email}"></span>-->
+                                <span id="emailNoticeJs" class="text-danger"></span>
+                                <span id="emailNotice" th:each="err : ${#fields.errors('email')}" th:if="${errStat.first}" th:text="${err}" class="text-danger"></span>
                             </div>
                             <div class="form-floating mb-3">
                                 <input type="password" class="form-control" id="ipt-password" th:field="*{password}" min="6" maxlength="19"
                                        placeholder="password" onblur="checkPassword()">
                                 <label for="ipt-password">비밀번호</label>
-                                <span id="pwNotice" th:errors="*{password}"></span>
+<!--                                <span id="pwNotice" th:errors="*{password}"></span>-->
+                                <span id="pwNoticeJs" class="text-danger"></span>
+                                <span id="pwNotice" th:each="err : ${#fields.errors('password')}" th:if="${errStat.first}" th:text="${err}" class="text-danger"></span>
                             </div>
                             <hr class="my-2">
                             <div class="button">
@@ -106,17 +112,54 @@
     <script th:src="@{/js/glightbox.min.js}"></script>
     <script th:src="@{/js/main.js}"></script>
     <script th:inline="javascript">
+        const checkDuplicatedId = () => {
+            const nickNameInput = $('#ipt-nickname').val();
+            const nickNameNotice = $('#nickNameNoticeJs');
+            if (nickNameInput == "") {
+                nickNameNotice.attr('class','text-danger');
+                nickNameNotice.html('닉네임은 필수입력입니다')
+                return;
+            }
+            const nickNameRegex = /^([가-힝a-zA-Z0-9]){1,20}$/u;
+            if (!nickNameRegex.test(nickNameInput)) {
+                nickNameNotice.attr('class','text-danger');
+                nickNameNotice.html('닉네임형식에 어긋납니다')
+                $('#ipt-nickname').focus();
+                return;
+            }
+            console.log("nickNameInput : " + nickNameInput);
+            $.ajax({
+                type: "get",
+                url: "/member/duplicated-nickname/" + nickNameInput,
+                success: function (data) {
+                    nickNameNotice.attr('class','text-success');
+                    nickNameNotice.html('사용가능한 닉네임입니다.');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    if(jqXHR.status == 409){
+                        nickNameNotice.attr('class','text-danger');
+                        nickNameNotice.html('중복된 닉네임입니다.');
+                    }else if(jqXHR.status == 400){
+                        nickNameNotice.attr('class','text-danger');
+                        nickNameNotice.html('닉네임 길이는 20자를 넘을 수 없습니다.');
+                    }else {
+                        alert('닉네임 검증에서 오류가 발생하였습니다');
+                    }
+                }
+            });
+        }
+
         const checkDuplicatedEmail = () => {
             const emailInput = $('#ipt-email').val();
-            const emailNotice = $('#emailNotice');
-            const emailRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}(.[a-zA-Z]{2,3})?$/u;
+            const emailNotice = $('#emailNoticeJs');
             if (emailInput == "") {
-                emailNotice.css('color', 'red');
+                emailNotice.attr('class','text-danger');
                 emailNotice.html('이메일 주소는 필수입력입니다')
                 return;
             }
+            const emailRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}(.[a-zA-Z]{2,3})?$/u;
             if (!emailRegex.test(emailInput)) {
-                emailNotice.css('color', 'red');
+                emailNotice.attr('class','text-danger');
                 emailNotice.html('이메일 주소형식에 어긋납니다')
                 $('#ipt-email').focus();
                 return;
@@ -125,15 +168,15 @@
                 type: "get",
                 url: "/member/duplicated-email/" + emailInput,
                 success: function (data) {
-                    emailNotice.css('color', 'green');
-                    emailNotice.html('사용가능한 이메일입니다.')
+                    emailNotice.attr('class','text-success');
+                    emailNotice.html('사용가능한 이메일입니다.');
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    if(jqXHR.status == 400){
-                        emailNotice.css('color', 'red');
-                        emailNotice.html('중복된 이메일입니다.')
-                    }else if(jqXHR.status == 409){
-                        emailNotice.css('color', 'red');
+                    if(jqXHR.status == 409){
+                        emailNotice.attr('class','text-danger');
+                        emailNotice.html('중복된 이메일입니다.');
+                    }else if(jqXHR.status == 400){
+                        emailNotice.attr('class','text-danger');
                         emailNotice.html('이메일 길이는 100자를 넘을 수 없습니다.');
                     }else {
                         alert('이메일 검증에서 오류가 발생하였습니다');
@@ -145,14 +188,12 @@
             const pwTag = $('#ipt-password');
             const pw = $('#ipt-password').val();
             const pwNotice = $('#pwNotice');
-            const pwRegex = /^[A-Za-z\d\[\]\{\}\/\(\)\.\?\<\>!@#$%^&*=+-]{6,20}$/;
+            const pwRegex = /^([a-zA-Z0-9]){5,19}$/;
             if(pw != "" && !pwRegex.test(pw)) {
-                pwNotice.css('color', 'red');
-                pwNotice.html('비밀번호는 영문대,소문자,숫자,특수기호 조합으로 6-20자 입니다.');
+                pwNotice.html('비밀번호는 영문대,소문자,숫자 조합으로 6-19자 입니다.');
                 pwTag.val('');
                 pwTag.focus();
             }else{
-                pwNotice.css('color', 'red');
                 pwNotice.html('');
             }
         }

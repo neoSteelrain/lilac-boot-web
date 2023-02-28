@@ -65,18 +65,15 @@
                                 <label for="email">이메일</label>
 <!--                                <span id="emailNotice" th:errors="*{email}"></span>-->
                                 <span id="emailNoticeJs" class="text-danger"></span>
-                                <span id="emailNotice" th:each="err : ${#fields.errors()}" th:if="${errStat.first}" th:text="${err}"class="text-danger" ></span>
+                                <span id="emailNotice" th:each="err : ${#fields.errors('email')}" th:if="${errStat.first}" th:text="${err}"class="text-danger" ></span>
                             </div>
                             <div class="form-floating mb-3">
                                 <input type="password" class="form-control" id="password" th:field="*{password}" min="6" maxlength="19"
                                        placeholder="비밀번호" onblur="checkPassword()">
                                 <label for="password">비밀번호</label>
-<!--                                <ul>-->
-<!--                                    <li th:each="err : ${#fields.errors('price')}" th:if="${errStat.first}" th:text="${err}" class="error" />-->
-<!--                                </ul>-->
 <!--                                <span id="pwNotice" th:errors="*{password}"></span>-->
                                 <span id="pwNoticeJs" class="text-danger"></span>
-                                <span id="pwNotice" th:each="err : ${#fields.errors()}" th:if="${errStat.first}" th:text="${err}" class="text-danger"></span>
+                                <span id="pwNotice" th:each="err : ${#fields.errors('password')}" th:if="${errStat.first}" th:text="${err}" class="text-danger"></span>
                             </div>
                             <div class="check-and-pass">
                                 <div class="row align-items-center">
@@ -149,11 +146,11 @@
                 pwNoticeJs.text('비밀번호를 입력해주세요');
                 return;
             }
-            const pwRegex = /^[A-Za-z\d\[\]\{\}\/\(\)\.\?\<\>!@#$%^&*=+-]{6,19}$/;
+            const pwRegex = /^([a-zA-Z0-9]){5,19}$/;
             if(pwRegex.test(pw)){
                 pwNoticeJs.text('');
             }else{
-                pwNoticeJs.text('비밀번호는 영문대,소문자,숫자,특수기호 조합으로 6-19자 입니다.');
+                pwNoticeJs.text('비밀번호는 영문대,소문자,숫자 조합으로 6-19자 입니다.');
                 $('#password').focus();
             }
         }
