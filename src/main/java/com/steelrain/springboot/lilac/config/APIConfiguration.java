@@ -45,6 +45,19 @@ public class APIConfiguration {
     @Value("${naru.library.region.api.url}")
     private String m_libraryByRegionUrl;
 
+    @Value("${aws.s3.accessKey}")
+    private String m_awsS2AccessKey;
+
+    @Value("${aws.s3.secretKey}")
+    private String m_awsS3SecretKey;
+
+    @Value("${aws.s3.bucket}")
+    private String m_awsS3Bucket;
+
+    @Value("${aws.s3.base.dir}")
+    private String m_awsS3BaseDir;
+
+
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer(){
         return new PropertySourcesPlaceholderConfigurer();
@@ -61,6 +74,10 @@ public class APIConfiguration {
                              m_naruBookExistUrl,
                              m_licenseSchdUrl,
                              m_licenseMajorApiUrl,
-                             m_libraryByRegionUrl);
+                             m_libraryByRegionUrl,
+                             m_awsS2AccessKey,
+                             m_awsS3SecretKey,
+                             m_awsS3Bucket,
+                             m_awsS3BaseDir);
     }
 }

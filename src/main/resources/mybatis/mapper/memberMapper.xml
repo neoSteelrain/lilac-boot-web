@@ -9,7 +9,7 @@
     <select id="findMember" parameterType="map" resultType="MemberDTO">
         SELECT id,nickname,email,password,description,region,dtl_region,profile_original,profile_save,grade,reg_date
         FROM tbl_member
-        WHERE email=#{email} AND password=#{password};
+        WHERE email=#{email} AND password=#{password}
     </select>
 <!--
     private Long id;
@@ -25,6 +25,10 @@
     private Timestamp regDate;
 -->
     <update id="updateMemberInfo" parameterType="MemberDTO">
-        UPDATE tbl_member SET nickname=#{nickname}, email=#{email}, description=#{description} WHERE id=#{id};
+        UPDATE tbl_member SET nickname=#{nickname}, email=#{email}, description=#{description} WHERE id=#{id}
+    </update>
+
+    <update id="updateMemberProfile" parameterType="map">
+        UPDATE tbl_member SET profile_original=#{originalProfileName}, profile_save=#{uploadedUrl} WHERE id=#{memberId}
     </update>
 </mapper>

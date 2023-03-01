@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -14,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class 기타_테스트 {
 
     @Test
-    public void testTTTTTT(){
+    public void LongValueOf_테스트(){
         Long i = Long.valueOf(31);
         Long i2  = Long.valueOf(31);
 
@@ -22,7 +23,7 @@ public class 기타_테스트 {
     }
 
     @Test
-    public void ISO8601Duration파싱테스트() throws ParseException {
+    public void ISO8601Duration_파싱테스트() throws ParseException {
         String videoDuration = "PT1H28M57S";
         Duration du = Duration.parse(videoDuration);
         log.debug("du : " + du.toMinutes());
@@ -34,5 +35,11 @@ public class 기타_테스트 {
         log.debug("tmp : " + tmp);
 
         log.debug(String.format("%d시간 %d분 %d초", du.toHoursPart(),du.toMinutesPart(), du.toSecondsPart()));
+    }
+    
+    @Test
+    public void UUID_테스트(){
+        UUID uuid = UUID.fromString("파일이름");
+        log.debug("uuid : {}", uuid.toString());
     }
 }

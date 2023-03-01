@@ -4,6 +4,9 @@ package com.steelrain.springboot.lilac.service;
 import com.steelrain.springboot.lilac.datamodel.MemberDTO;
 import com.steelrain.springboot.lilac.repository.IMemberRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,9 +20,13 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.swing.*;
 
+import java.io.*;
+import java.nio.file.Files;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
@@ -116,5 +123,25 @@ public class MemberServiceTests {
         members.stream().forEach(member -> {
             log.debug("강의노트 확인 : {}", m_lectureNoteService.getLectureListByMember(member.getId()));
         });
+    }
+
+    @Test
+    //@Transactional
+    public void 회원프로필변경테스트(){
+        String TEST_FILE_PATH = "C:\\large_1769431.png";
+        Long memberId = 2L;
+        File file = new File(TEST_FILE_PATH);
+        try {
+            FileItem fileItem = new DiskFileItem(file.getName(), Files.probeContentType(file.toPath()), false, file.getName(), (int) file.length(), file.getParentFile());
+            InputStream inputStream = new FileInputStream(file);
+            OutputStream outputStream = fileItem.getOutputStream();
+            IOUtils.copy(inputStream, outputStream);
+            MultipartFile multipartFile = new CommonsMultipartFile(fileItem);
+
+            boolean isUpdated = m_memberService.updateMemberProfile(multipartFile, memberId);
+            assertThat(isUpdated).isTrue();
+        }catch(IOException ioe){
+            log.debug("회원프로필변경 테스트 예외 : {}", ioe);
+        }
     }
 }

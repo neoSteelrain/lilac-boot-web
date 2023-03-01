@@ -1,185 +1,191 @@
 <!DOCTYPE html>
-<html lang="kr" xmlns:th="http://www.thymeleaf.org" >
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="utf-8" />
-  <meta http-equiv="x-ua-compatible" content="ie=edge" />
-  <title>회원정보</title>
-  <meta name="description" content="" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.svg}" />
-  <!-- Place favicon.ico in the root directory -->
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <title>회원정보</title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.svg}"/>
+    <!-- Place favicon.ico in the root directory -->
 
-  <!-- Web Font -->
-  <link
-          href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-          rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <!-- Web Font -->
+    <link
+            href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+            rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
 
-  <!-- ========================= CSS here ========================= -->
-  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
-  <link rel="stylesheet" th:href="@{/css/LineIcons.2.0.css}" />
-  <link rel="stylesheet" th:href="@{/css/animate.css}" />
-  <link rel="stylesheet" th:href="@{/css/tiny-slider.css}" />
-  <link rel="stylesheet" th:href="@{/css/glightbox.min.css}" />
-  <link rel="stylesheet" th:href="@{/css/main.css}" />
+    <!-- ========================= CSS here ========================= -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/LineIcons.2.0.css}"/>
+    <link rel="stylesheet" th:href="@{/css/animate.css}"/>
+    <link rel="stylesheet" th:href="@{/css/tiny-slider.css}"/>
+    <link rel="stylesheet" th:href="@{/css/glightbox.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
 </head>
 <body>
 <p class="browserupgrade">
-  You are using an <strong>outdated</strong> browser. Please
-  <a href="https://browsehappy.com/">upgrade your browser</a> to improve
-  your experience and security.
+    You are using an <strong>outdated</strong> browser. Please
+    <a href="https://browsehappy.com/">upgrade your browser</a> to improve
+    your experience and security.
 </p>
 <![endif]-->
 
 <!-- Preloader -->
 <div class="preloader">
-  <div class="preloader-inner">
-    <div class="preloader-icon">
-      <span></span>
-      <span></span>
+    <div class="preloader-inner">
+        <div class="preloader-icon">
+            <span></span>
+            <span></span>
+        </div>
     </div>
-  </div>
 </div>
 
 <div th:replace="~{common/header::header}"></div>
 
 <section class="dashboard section">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-3 col-md-4 col-12">
-        <!-- Start Dashboard Sidebar -->
-        <div class="dashboard-sidebar">
-          <div class="user-image">
-            <img src="https://via.placeholder.com/300x300" alt="#">
-            <h3 th:text="${memberInfo.nickname}">
-              <span th:text="${memberInfo.regDate}"></span>
-            </h3>
-          </div>
-          <div class="dashboard-menu">
-            <ul>
-<!--              <li><a href="/lecture/lecture-note"><i class="lni lni-dashboard"></i> 강의노트</a></li>-->
-              <li><a class="active" href="/member/profile"><i class="lni lni-pencil-alt"></i> 회원정보</a></li>
-<!--              <li><a href="my-items.html"><i class="lni lni-bolt-alt"></i> 메뉴3</a></li>-->
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-9 col-md-8 col-12">
-        <div class="main-content">
-          <!-- Start Profile Settings Area -->
-          <div class="dashboard-block mt-0 profile-settings-block">
-            <h3 class="block-title">회원정보</h3>
-            <div class="inner-block">
-              <div class="image">
-                <img src="https://via.placeholder.com/300x300" alt="#">
-              </div>
-              <form class="profile-setting-form was-validated" method="post" action="/member/profile">
-                <div class="row">
-                  <div class="col-lg-6 col-12">
-                    <div class="form-group">
-                      <label>닉네임</label>
-                      <input name="nickname" type="text" required maxlength="20" th:placeholder="${memberInfo.nickname}" th:value="${memberInfo.nickname}">
-                      <div class="invalid-feedback">닉네임은 필수입력입니다.</div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-4 col-12">
+                <!-- Start Dashboard Sidebar -->
+                <div class="dashboard-sidebar">
+                    <div class="user-image">
+                        <img id="profileImgPreViewSm" th:src="${memberInfo.profileSave == null} ? '/images/default-profile.jpg' : ${memberInfo.profileSave}">
+<!--                        <img th:unless="${memberInfo.profileSave == null}" th:src="${memberInfo.profileSave}">-->
+                        <h3 th:text="${memberInfo.nickname}">
+                            <span th:text="${memberInfo.regDate}"></span>
+                        </h3>
                     </div>
-                  </div>
-                  <div class="col-lg-6 col-12">
-                    <div class="form-group">
-                      <label>이메일 주소</label>
-                      <input name="email" type="email" required maxlength="100" th:placeholder="${memberInfo.email}" th:value="${memberInfo.email}">
-                      <div class="invalid-feedback">이메일은 필수입력입니다.</div>
+                    <div class="dashboard-menu">
+                        <ul>
+                            <!--              <li><a href="/lecture/lecture-note"><i class="lni lni-dashboard"></i> 강의노트</a></li>-->
+                            <li><a class="active" href="/member/profile"><i class="lni lni-pencil-alt"></i> 회원정보</a>
+                            </li>
+                            <!--              <li><a href="my-items.html"><i class="lni lni-bolt-alt"></i> 메뉴3</a></li>-->
+                        </ul>
                     </div>
-                  </div>
-                  <div class="col-lg-6 col-12">
-                    <div class="form-group">
-                      <div class="row">
-<!--                        <div class="col-6">-->
-<!--                          <div class="search-input">-->
-<!--                             <label for="location-main"><i class="lni lni-map-marker theme-color"></i></label>-->
-<!--                            <select name="location-main" id="location-main"-->
-<!--                                    th:field="*{libRegionCodes}"-->
-<!--                                    th:onchange="changeLibRegionCode()">-->
-<!--                              <option value="">-&#45;&#45; 지역정보 -&#45;&#45;</option>-->
-<!--                              <option th:each="libRegionCode : ${libRegionCodes}"-->
-<!--                                      th:value="${libRegionCode.code}"-->
-<!--                                      th:text="${libRegionCode.name}"></option>-->
-<!--                            </select>-->
-<!--                          </div>-->
-<!--                        </div>-->
-<!--                        <div class="col-6">-->
-<!--                          <div class="search-input">-->
-<!--                            &lt;!&ndash; <label for="location-sub"><i class="lni lni-map-marker theme-color"></i></label> &ndash;&gt;-->
-<!--                            <select name="location-sub" id="location-sub"-->
-<!--                                    onchange="changeDetailRegionCode()">-->
-<!--                              <option value="">-&#45;&#45; 세부지역 -&#45;&#45;</option>-->
-<!--                            </select>-->
-<!--                          </div>-->
-<!--                        </div>-->
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="form-group upload-image">
-                      <label>프로필 이미지</label>
-                      <input name="profile-image" type="file" placeholder="Upload Image">
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="form-group message">
-                      <label>자기소개</label>
-                      <textarea name="description" th:placeholder="${memberInfo.description}" th:value="${memberInfo.description}"></textarea>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="form-group button mb-0">
-                      <button type="submit" class="btn ">회원정보 수정</button>
-                    </div>
-                  </div>
                 </div>
-              </form>
             </div>
-          </div>
-          <!-- End Profile Settings Area -->
-          <!-- Start Password Change Area -->
-          <!-- <div class="dashboard-block password-change-block">
-      <h3 class="block-title">비밀번호 변경</h3>
-      <div class="inner-block">
-          <form class="default-form-style" method="post" action="#">
-              <div class="row">
-                  <div class="col-12">
-                      <div class="form-group">
-                          <label>Current Password*</label>
-                          <input name="current-password" type="password"
-                              placeholder="Enter old password">
-                      </div>
-                  </div>
-                  <div class="col-12">
-                      <div class="form-group">
-                          <label>New Password*</label>
-                          <input name="new-password" type="password"
-                              placeholder="Enter new password">
-                      </div>
-                  </div>
-                  <div class="col-12">
-                      <div class="form-group">
-                          <label>Retype Password*</label>
-                          <input name="retype-password" type="password"
-                              placeholder="Retype password">
-                      </div>
-                  </div>
-                  <div class="col-12">
-                      <div class="form-group button mb-0">
-                          <button type="submit" class="btn ">Update Password</button>
-                      </div>
-                  </div>
-              </div>
-          </form>
-      </div>
-  </div> -->
-          <!-- End Password Change Area -->
+            <div class="col-lg-9 col-md-8 col-12">
+                <div class="main-content">
+                    <!-- Start Profile Settings Area -->
+                    <div class="dashboard-block mt-0 profile-settings-block">
+                        <h3 class="block-title">회원정보</h3>
+                        <div class="inner-block">
+                            <div class="image">
+                                <img id="profileImgPreViewLg" th:src="${memberInfo.profileSave == null} ? '/images/default-profile.jpg' : ${memberInfo.profileSave}">
+                            </div>
+                            <form class="profile-setting-form was-validated" method="post" action="/member/profile" enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="col-lg-6 col-12">
+                                        <div class="form-group">
+                                            <label>닉네임</label>
+                                            <input name="nickname" type="text" required maxlength="20"
+                                                   th:placeholder="${memberInfo.nickname}"
+                                                   th:value="${memberInfo.nickname}">
+                                            <div class="invalid-feedback">닉네임은 필수입력입니다.</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-12">
+                                        <div class="form-group">
+                                            <label>이메일 주소</label>
+                                            <input name="email" type="email" required maxlength="100"
+                                                   th:placeholder="${memberInfo.email}" th:value="${memberInfo.email}">
+                                            <div class="invalid-feedback">이메일은 필수입력입니다.</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <!--                        <div class="col-6">-->
+                                                <!--                          <div class="search-input">-->
+                                                <!--                             <label for="location-main"><i class="lni lni-map-marker theme-color"></i></label>-->
+                                                <!--                            <select name="location-main" id="location-main"-->
+                                                <!--                                    th:field="*{libRegionCodes}"-->
+                                                <!--                                    th:onchange="changeLibRegionCode()">-->
+                                                <!--                              <option value="">-&#45;&#45; 지역정보 -&#45;&#45;</option>-->
+                                                <!--                              <option th:each="libRegionCode : ${libRegionCodes}"-->
+                                                <!--                                      th:value="${libRegionCode.code}"-->
+                                                <!--                                      th:text="${libRegionCode.name}"></option>-->
+                                                <!--                            </select>-->
+                                                <!--                          </div>-->
+                                                <!--                        </div>-->
+                                                <!--                        <div class="col-6">-->
+                                                <!--                          <div class="search-input">-->
+                                                <!--                            &lt;!&ndash; <label for="location-sub"><i class="lni lni-map-marker theme-color"></i></label> &ndash;&gt;-->
+                                                <!--                            <select name="location-sub" id="location-sub"-->
+                                                <!--                                    onchange="changeDetailRegionCode()">-->
+                                                <!--                              <option value="">-&#45;&#45; 세부지역 -&#45;&#45;</option>-->
+                                                <!--                            </select>-->
+                                                <!--                          </div>-->
+                                                <!--                        </div>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group upload-image">
+                                            <label>프로필 이미지</label>
+                                            <input name="profileImage" id="profileImage" type="file" placeholder="Upload Image" onchange="changeProfileImg()">
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group message">
+                                            <label>자기소개</label>
+                                            <textarea name="description" th:placeholder="${memberInfo.description}"
+                                                      th:value="${memberInfo.description}"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group button mb-0">
+                                            <button type="submit" class="btn ">회원정보 수정</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- End Profile Settings Area -->
+                    <!-- Start Password Change Area -->
+                    <!-- <div class="dashboard-block password-change-block">
+                <h3 class="block-title">비밀번호 변경</h3>
+                <div class="inner-block">
+                    <form class="default-form-style" method="post" action="#">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>Current Password*</label>
+                                    <input name="current-password" type="password"
+                                        placeholder="Enter old password">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>New Password*</label>
+                                    <input name="new-password" type="password"
+                                        placeholder="Enter new password">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>Retype Password*</label>
+                                    <input name="retype-password" type="password"
+                                        placeholder="Retype password">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group button mb-0">
+                                    <button type="submit" class="btn ">Update Password</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div> -->
+                    <!-- End Password Change Area -->
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </section>
 
 <!-- Start Footer Area -->
@@ -188,7 +194,7 @@
 
 <!-- ========================= scroll-top ========================= -->
 <a href="#" class="scroll-top btn-hover">
-  <i class="lni lni-chevron-up"></i>
+    <i class="lni lni-chevron-up"></i>
 </a>
 
 <div th:replace="~{common/header::header}"></div>
@@ -202,6 +208,18 @@
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/lilac-common.js}"></script>
 <script th:inline="javascript">
+    const changeProfileImg = () => {
+        let files = $('#profileImage').prop('files');
+        //const files = $('#ipt-profile')[0].files;
+        if(files == undefined)
+            return;
+        let reader = new FileReader();
+        reader.onload = (e) => {
+            $('#profileImgPreViewLg').attr('src', e.target.result);
+            $('#profileImgPreViewSm').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(files[0]);
+    }
 
 </script>
 

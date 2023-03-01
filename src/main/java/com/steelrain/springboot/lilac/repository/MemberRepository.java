@@ -42,4 +42,9 @@ public class MemberRepository implements IMemberRepository{
     public int findMemberByNickName(String nickName) {
         return m_memberMapper.findMemberByNickName(nickName);
     }
+
+    @Override
+    public int updateMemberProfile(Long memberId, String originalProfileName, String uploadedUrl) {
+        return m_memberMapper.updateMemberProfile(memberId, originalProfileName, uploadedUrl);
+    }
 }

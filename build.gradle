@@ -34,6 +34,15 @@ dependencies {
     // 테스트코드에서 @Slf4j 사용할 수 있도록 하는 의존성추가
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
+    
+    // AWS S3 의존성 추가
+    implementation platform('software.amazon.awssdk:bom:2.17.261')
+    implementation 'software.amazon.awssdk:s3'
+
+    // https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload
+    implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
 }
 
 tasks.named('test') {

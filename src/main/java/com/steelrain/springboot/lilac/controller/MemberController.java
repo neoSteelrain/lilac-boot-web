@@ -113,6 +113,9 @@ public class MemberController {
         memberEditDTO.setRegion(memberDTO.getRegion());
         memberEditDTO.setDtlRegion(memberDTO.getDtlRegion());
         memberEditDTO.setDescription(memberDTO.getDescription());
+        memberEditDTO.setProfileOriginal(memberDTO.getProfileOriginal());
+        memberEditDTO.setProfileSave(memberDTO.getProfileSave());
+        memberEditDTO.setRegDate(memberDTO.getRegDate());
         model.addAttribute("memberInfo", memberEditDTO);
 
         return "member/profile";
@@ -130,10 +133,7 @@ public class MemberController {
             return new RedirectView("/");
         }
         MemberDTO memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
-        memberDTO.setNickname(editDTO.getNickname());
-        memberDTO.setEmail(editDTO.getEmail());
-        memberDTO.setDescription(editDTO.getDescription());
-        m_memberService.updateMemberInfo(memberDTO);
+        m_memberService.updateMemberInfo(memberDTO, editDTO);
 
         return new RedirectView("/member/profile");
     }

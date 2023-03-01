@@ -1,21 +1,34 @@
 package com.steelrain.springboot.lilac.service;
 
 import com.steelrain.springboot.lilac.datamodel.MemberDTO;
+import com.steelrain.springboot.lilac.datamodel.view.MemberProfileEditDTO;
 import com.steelrain.springboot.lilac.event.MemberRegistrationEvent;
+import com.steelrain.springboot.lilac.repository.IAwsS3Repository;
 import com.steelrain.springboot.lilac.repository.IMemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.FileSystemUtils;
+import org.springframework.web.multipart.MultipartFile;
+import org.thymeleaf.util.StringUtils;
 
-import java.lang.reflect.Member;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
+import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberService implements IMemberService {
 
     private final IMemberRepository m_memberRepository;
+    private final IAwsS3Repository m_awsAwsS3Repository;
     private final ApplicationEventPublisher m_appEventPublisher;
 
 
@@ -54,7 +67,32 @@ public class MemberService implements IMemberService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updateMemberInfo(MemberDTO memberDTO) {
+    public void updateMemberInfo(MemberDTO memberDTO, MemberProfileEditDTO editDTO) {
+        memberDTO.setNickname(editDTO.getNickname());
+        memberDTO.setEmail(editDTO.getEmail());
+        memberDTO.setDescription(editDTO.getDescription());
+        memberDTO.setProfileOriginal(editDTO.getProfileImage().getOriginalFilename());
+        memberDTO.setProfileSave(updateMemberProfile(editDTO.getProfileImage(), memberDTO.getId(), memberDTO.getProfileSave()));
         m_memberRepository.updateMemberInfo(memberDTO);
+    }
+
+    /*
+        S3 에 삭제횟수는 제한적이고 비용이 발생한다.
+        원본파일의 이름만 변경되고 S3에 있는 키값은 변하지 않아도 되므로
+        원본파일 이름만 변경하고 S3에 저장된 이름은 변경되지 않고 업데이트한다.
+     */
+    private String updateMemberProfile(MultipartFile multipartFile, Long memberId, String originalSavedFileName){
+        String originalProfileName = multipartFile.getOriginalFilename();
+        // 회원의 프로필이미지가 있으면 이전에 저장된 S3 키값을 사용하고, 프로필이미지가 없으면 새로 키를 만들어준다
+        String saveProfileName = StringUtils.isEmpty(originalSavedFileName) ?
+                                    convertUUIDFormattedFileName(originalProfileName) :
+                                    FilenameUtils.getName(originalSavedFileName);
+        String uploadedUrl = m_awsAwsS3Repository.upLoadMemberProfile(multipartFile, saveProfileName);
+        m_memberRepository.updateMemberProfile(memberId, originalProfileName, uploadedUrl);
+        return uploadedUrl;
+    }
+
+    private String convertUUIDFormattedFileName(String origin){
+        return UUID.randomUUID().toString() + "." +  FilenameUtils.getExtension(origin);
     }
 }

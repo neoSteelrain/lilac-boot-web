@@ -16,4 +16,12 @@ public class InvalidScheduleJsonException extends LilacException{
         m_jsonStr = jsonStr;
         m_licenseCode = licenseCode;
     }
+
+    public int getLicenseCode(){
+        return m_licenseCode;
+    }
+
+    public String getJsonStr(){
+        return m_jsonStr;
+    }
 }

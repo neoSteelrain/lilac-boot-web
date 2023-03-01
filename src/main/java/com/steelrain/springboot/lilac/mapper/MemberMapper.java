@@ -22,4 +22,6 @@ public interface MemberMapper {
 
     @Select("SELECT count(id) AS emailCount FROM tbl_member WHERE nickname = #{nickName}")
     int findMemberByNickName(String nickName);
+
+    int updateMemberProfile(Long memberId, String originalProfileName, String uploadedUrl);
 }

@@ -19,6 +19,11 @@ public class APIConfig {
     private String licenseMajorApiKey;
     private String licenseMajorApiUrl;
     private String libraryByRegionUrl;
+    private String awsS3accessKey;
+    private String awsS3SecretKey;
+    private String awsS3Bucket;
+    private String awsS3BaseDir;
+
 
     public APIConfig(String youtubeApikey,
                      String kakaoRestApikey,
@@ -30,7 +35,11 @@ public class APIConfig {
                      String naruBookExistUrl,
                      String licenseSchdUrl,
                      String licenseMajorApiUrl,
-                     String libraryByRegionUrl){
+                     String libraryByRegionUrl,
+                     String awsS3accessKey,
+                     String awsS3SecretKey,
+                     String awsS3Bucket,
+                     String awsS3BaseDir){
         this.youtubeKey = youtubeApikey;
         this.kakaoRestKey = kakaoRestApikey;
         this.licenseSchdApikey = licenseSchdApikey;
@@ -42,5 +51,9 @@ public class APIConfig {
         this.licenseSchdUrl = licenseSchdUrl;
         this.licenseMajorApiUrl = licenseMajorApiUrl;
         this.libraryByRegionUrl = libraryByRegionUrl;
+        this.awsS3accessKey = awsS3accessKey;
+        this.awsS3SecretKey = awsS3SecretKey;
+        this.awsS3Bucket = awsS3Bucket;
+        this.awsS3BaseDir = awsS3BaseDir;
     }
 }
