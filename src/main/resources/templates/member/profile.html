@@ -210,7 +210,6 @@
 <script th:inline="javascript">
     const changeProfileImg = () => {
         let files = $('#profileImage').prop('files');
-        //const files = $('#ipt-profile')[0].files;
         if(files == undefined)
             return;
         let reader = new FileReader();
@@ -220,7 +219,6 @@
         }
         reader.readAsDataURL(files[0]);
     }
-
 </script>
 
 </body>

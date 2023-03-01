@@ -127,7 +127,6 @@
                 $('#ipt-nickname').focus();
                 return;
             }
-            console.log("nickNameInput : " + nickNameInput);
             $.ajax({
                 type: "get",
                 url: "/member/duplicated-nickname/" + nickNameInput,
