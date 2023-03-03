@@ -155,7 +155,6 @@ public class BookService implements IBookService{
         if(regionCode == 0 || (regionCode == 0 && detailRegionCode == 0)){
             libList = new ArrayList<>(0);
         }else{
-            // TODO 소장하고 있는 도서관 목록가져오기
             NaruLibSearchByBookResponseDTO libSearchResponse = m_naruRepository.getLibraryByBook(isbn, regionCode, detailRegionCode);
             libList = convertNaruLibraryDTO(libSearchResponse, Long.valueOf(bookDTO.getIsbn13()));
         }

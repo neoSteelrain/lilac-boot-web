@@ -25,7 +25,7 @@ public class ApacheHttpClientConnectionPoolEvictor {
         }
         try{
             synchronized (this){
-                log.debug("http connetion 회수 실행");
+                log.debug("http connection 회수 실행");
                 m_connectionManager.closeExpired();
                 m_connectionManager.closeIdle(TimeValue.ofMicroseconds(IDLE_TIMEOUT));
             }

@@ -19,7 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
                                      "/member/duplicated-nickname/**",
                                      "/member/duplicated-email/**",
                                      "/favicon/**",
-                                     "/error",
+                                     "/error/**",
                                      "/*.ico",
                                      "/css/**",
                                      "/fonts/**",
