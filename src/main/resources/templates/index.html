@@ -249,177 +249,25 @@
                                     <div class="tab-pane fade show active" id="nav-grid" role="tabpanel"
                                          aria-labelledby="nav-grid-tab">
                                         <div class="row">
-                                            <div class="col-lg-4 col-md-6 col-12">
-                                                <!-- Start Single Item -->
+                                            <div th:each="kakaoBook : ${recommendedBookList.kakaoBookList}" class="col-lg-4 col-md-6 col-12">
                                                 <div class="single-item-grid">
                                                     <div class="image">
-                                                        <a href="item-details.html"><img src="https://via.placeholder.com/600x400" alt="#"></a>
-                                                        <!--<i class=" cross-badge lni lni-bolt"></i>
-                                                        <span class="flat-badge sale">Sale</span>-->
+                                                        <a href="javascript:void(0)"><img  th:src="${kakaoBook.thumbnail}"></a>
+                                                        <span th:if="${kakaoBook.salePrice > 0}" class="flat-badge sale">할인중</span>
                                                     </div>
-                                                    <div class="content">
-                                                        <a href="javascript:void(0)" class="tag">저자</a>
-                                                        <h6 class="title">
-                                                            책제목
-                                                        </h6>
-                                                        <p class="text">
-                                                            설명
-                                                        </p>
-                                                        <!--<a href="javascript:void(0)" class="tag">Mobile</a>
-                                                        <h3 class="title">
-                                                            <a href="item-details.html">Apple Iphone X</a>
-                                                        </h3>
-                                                        <p class="location"><a href="javascript:void(0)"><i class="lni lni-map-marker">
-                                                        </i>Boston</a></p>-->
+                                                    <div class="content text-wrap">
+                                                        <h6 class="title" th:text="${kakaoBook.title}"></h6>
                                                         <ul class="info">
-                                                            <li class="price">가격</li>
+                                                            <li class="info" th:text="${{kakaoBook.price}} +' -> '+ ${{kakaoBook.salePrice}}+' 원'"></li>
+                                                            <li class="like"><a th:href="@{kakaoBook.url}"><i
+                                                                    class="lni lni-link"></i></a>
+                                                            </li>
                                                             <li class="like"><a href="javascript:void(0)"><i
                                                                     class="lni lni-notepad"></i></a>
                                                             </li>
                                                         </ul>
                                                     </div>
                                                 </div>
-                                                <!-- End Single Item -->
-                                            </div>
-                                            <div class="col-lg-4 col-md-6 col-12">
-                                                <!-- Start Single Item -->
-                                                <div class="single-item-grid">
-                                                    <div class="image">
-                                                        <a href="item-details.html"><img src="https://via.placeholder.com/600x400" alt="#"></a>
-                                                        <i class=" cross-badge lni lni-bolt"></i>
-                                                        <span class="flat-badge sale">Sale</span>
-                                                    </div>
-                                                    <div class="content">
-                                                        <a href="javascript:void(0)" class="tag">Others</a>
-                                                        <h3 class="title">
-                                                            <a href="item-details.html">Travel Kit</a>
-                                                        </h3>
-                                                        <p class="location"><a href="javascript:void(0)"><i class="lni lni-map-marker">
-                                                        </i>San Francisco</a></p>
-                                                        <ul class="info">
-                                                            <li class="price">$580.00</li>
-                                                            <li class="like"><a href="javascript:void(0)"><i
-                                                                    class="lni lni-heart"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <!-- End Single Item -->
-                                            </div>
-                                            <div class="col-lg-4 col-md-6 col-12">
-                                                <!-- Start Single Item -->
-                                                <div class="single-item-grid">
-                                                    <div class="image">
-                                                        <a href="item-details.html"><img src="https://via.placeholder.com/600x400" alt="#"></a>
-                                                        <i class=" cross-badge lni lni-bolt"></i>
-                                                        <span class="flat-badge sale">Sale</span>
-                                                    </div>
-                                                    <div class="content">
-                                                        <a href="javascript:void(0)" class="tag">Electronic</a>
-                                                        <h3 class="title">
-                                                            <a href="item-details.html">Nikon DSLR Camera</a>
-                                                        </h3>
-                                                        <p class="location"><a href="javascript:void(0)"><i class="lni lni-map-marker">
-                                                        </i>Alaska, USA</a></p>
-                                                        <ul class="info">
-                                                            <li class="price">$560.00</li>
-                                                            <li class="like"><a href="javascript:void(0)"><i
-                                                                    class="lni lni-heart"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <!-- End Single Item -->
-                                            </div>
-                                            <div class="col-lg-4 col-md-6 col-12">
-                                                <!-- Start Single Item -->
-                                                <div class="single-item-grid">
-                                                    <div class="image">
-                                                        <a href="item-details.html"><img src="https://via.placeholder.com/600x400" alt="#"></a>
-                                                        <i class=" cross-badge lni lni-bolt"></i>
-                                                        <span class="flat-badge sale">Sale</span>
-                                                    </div>
-                                                    <div class="content">
-                                                        <a href="javascript:void(0)" class="tag">Furniture</a>
-                                                        <h3 class="title">
-                                                            <a href="item-details.html">Poster Paint</a>
-                                                        </h3>
-                                                        <p class="location"><a href="javascript:void(0)"><i class="lni lni-map-marker">
-                                                        </i>Las Vegas</a></p>
-                                                        <ul class="info">
-                                                            <li class="price">$85.00</li>
-                                                            <li class="like"><a href="javascript:void(0)"><i
-                                                                    class="lni lni-heart"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <!-- End Single Item -->
-                                            </div>
-                                            <div class="col-lg-4 col-md-6 col-12">
-                                                <!-- Start Single Item -->
-                                                <div class="single-item-grid">
-                                                    <div class="image">
-                                                        <a href="item-details.html"><img src="https://via.placeholder.com/600x400" alt="#"></a>
-                                                        <i class=" cross-badge lni lni-bolt"></i>
-                                                        <span class="flat-badge sale">Sale</span>
-                                                    </div>
-                                                    <div class="content">
-                                                        <a href="javascript:void(0)" class="tag">Furniture</a>
-                                                        <h3 class="title">
-                                                            <a href="item-details.html">Official Metting Chair</a>
-                                                        </h3>
-                                                        <p class="location"><a href="javascript:void(0)"><i class="lni lni-map-marker">
-                                                        </i>Alaska, USA</a></p>
-                                                        <ul class="info">
-                                                            <li class="price">$750.00</li>
-                                                            <li class="like"><a href="javascript:void(0)"><i
-                                                                    class="lni lni-heart"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <!-- End Single Item -->
-                                            </div>
-                                            <div class="col-lg-4 col-md-6 col-12">
-                                                <!-- Start Single Item -->
-                                                <div class="single-item-grid">
-                                                    <div class="image">
-                                                        <a href="item-details.html"><img src="https://via.placeholder.com/600x400" alt="#"></a>
-                                                        <i class=" cross-badge lni lni-bolt"></i>
-                                                        <span class="flat-badge rent">Rent</span>
-                                                    </div>
-                                                    <div class="content">
-                                                        <a href="javascript:void(0)" class="tag">Books & Magazine</a>
-                                                        <h3 class="title">
-                                                            <a href="item-details.html">Story Book</a>
-                                                        </h3>
-                                                        <p class="location"><a href="javascript:void(0)"><i class="lni lni-map-marker">
-                                                        </i>New York, USA</a></p>
-                                                        <ul class="info">
-                                                            <li class="price">$120.00</li>
-                                                            <li class="like"><a href="javascript:void(0)"><i
-                                                                    class="lni lni-heart"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <!-- End Single Item -->
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <!-- Pagination -->
-                                                <div class="pagination left">
-                                                    <ul class="pagination-list">
-                                                        <li><a href="javascript:void(0)">1</a></li>
-                                                        <li class="active"><a href="javascript:void(0)">2</a></li>
-                                                        <li><a href="javascript:void(0)">3</a></li>
-                                                        <li><a href="javascript:void(0)">4</a></li>
-                                                        <li><a href="javascript:void(0)"><i class="lni lni-chevron-right"></i></a></li>
-                                                    </ul>
-                                                </div>
-                                                <!--/ End Pagination -->
                                             </div>
                                         </div>
                                     </div>
@@ -454,7 +302,6 @@
                                     <div class="single-item-grid">
                                         <div class="image">
                                             <a th:href="@{/video/playlist-detail(youtubePlaylistId=${playlist.youtubePlaylistId})}"><img th:src="${playlist.thumbnailMedium}" alt="#"></a>
-<!--                                            <i class=" cross-badge lni lni-bolt"></i>-->
                                             <span class="flat-badge sale" >추천</span>
                                         </div>
                                         <div class="content text-wrap">

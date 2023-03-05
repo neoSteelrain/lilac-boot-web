@@ -6,6 +6,7 @@ import com.steelrain.springboot.lilac.datamodel.api.*;
 import com.steelrain.springboot.lilac.datamodel.view.BookDetailDTO;
 import com.steelrain.springboot.lilac.datamodel.view.LicenseBookListDTO;
 import com.steelrain.springboot.lilac.datamodel.NaruLibraryDTO;
+import com.steelrain.springboot.lilac.datamodel.view.RecommendedBookListDTO;
 import com.steelrain.springboot.lilac.datamodel.view.SubjectBookListDTO;
 import com.steelrain.springboot.lilac.event.KakaoBookSaveEvent;
 import com.steelrain.springboot.lilac.repository.BookRepository;
@@ -162,6 +163,13 @@ public class BookService implements IBookService{
                 .bookDTO(bookDTO)
                 .libraryList(libList)
                 .build();
+    }
+
+    @Override
+    public RecommendedBookListDTO getRecommendedBookList() {
+        RecommendedBookListDTO result = new RecommendedBookListDTO();
+        result.setKakaoBookList(m_bookRepository.getRecommendedBookList());
+        return result;
     }
 
     // 카카오 API로 검색된 결과를 DB에 저장하려고 할때 사용한다.

@@ -3,6 +3,8 @@ package com.steelrain.springboot.lilac.datamodel;
 import lombok.*;
 import org.hibernate.validator.constraints.ISBN;
 import org.hibernate.validator.constraints.URL;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.NumberFormat;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -68,7 +70,9 @@ public class KaKaoBookDTO {
     @Size(max=255)
     private String translators;
 
+    @NumberFormat(pattern="###,###")
     private Integer price;
+    @NumberFormat(pattern="###,###")
     private Integer salePrice;
 
     @Size(max=255)
@@ -77,7 +81,9 @@ public class KaKaoBookDTO {
     @Size(max=10)
     private String status;
 
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Timestamp regDate;
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Timestamp updateDate;
 
     private Long isbn13Long;

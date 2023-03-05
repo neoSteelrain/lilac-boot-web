@@ -14,4 +14,10 @@
                                 ,status=VALUES(status),update_date=NOW()
     </insert>
 
+    <select id="getRecommendedBookList" resultType="KaKaoBookDTO">
+        SELECT tb.id,tb.isbn13,tb.title,tb.contents,tb.url,tb.publish_date,tb.authors,tb.publisher,tb.translators,tb.price,tb.sale_price,tb.thumbnail,tb.status,tb.reg_date,tb.update_date
+        FROM tbl_recommended_book rb INNER JOIN tbl_book tb
+            ON rb.id = tb.id;
+    </select>
+
 </mapper>

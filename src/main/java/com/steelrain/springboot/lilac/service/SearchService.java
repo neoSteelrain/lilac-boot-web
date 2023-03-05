@@ -18,7 +18,6 @@ import java.util.List;
 public class SearchService implements ISearchService{
 
     private final ISearchRepository m_searchRepository;
-    private final VideoRepository m_videoRepository;
     private final ApplicationEventPublisher m_appEventPublisher;
 
     @Override
@@ -36,12 +35,6 @@ public class SearchService implements ISearchService{
         return m_searchRepository.getLibDetailRegionCodes(regionCode);
     }
 
-    public LicenseBookDetailDTO getLicenseBookDetail(String isbn, short region, int detailRegion){
-        LicenseBookDetailDTO resultDTO = null;
-
-
-        return resultDTO;
-    }
 
     /**
      * 키워드를 검색조건으로 하는 영상정보 결과를 가져온다

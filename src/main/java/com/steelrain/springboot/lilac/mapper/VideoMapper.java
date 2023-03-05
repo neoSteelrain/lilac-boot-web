@@ -14,9 +14,9 @@ import java.util.List;
 public interface VideoMapper {
 
     List<RecommendedVideoDTO> findRecommendedVideoList();
+    List<RecommendedPlayListDTO> findRecommendedPlayList();
     List<YoutubeVideoDTO> findPlayListDetail(Long youtubePlaylistId);
     List<YoutubePlayListDTO> findPlayListByKeyword(@Param("keyword") String keyword, @Param("offset") int offset, @Param("count") int count);
-
 
     @Select("SELECT count(id) FROM tbl_youtube_playlist WHERE MATCH(title) AGAINST (#{keyword})")
     int selectTotalPlayListCountByKeyword(@Param("keyword") String keyword);
@@ -29,6 +29,4 @@ public interface VideoMapper {
 
     @Select("SELECT IF(count(id) = 1, 1, 0) FROM tbl_youtube_playlist WHERE id=#{playListId}")
     boolean isExistYoutubePlayList(Long playListId);
-
-    List<RecommendedPlayListDTO> findRecommendedPlayList();
 }

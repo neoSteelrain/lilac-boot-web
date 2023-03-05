@@ -15,7 +15,7 @@ public class RecommendedPlayListDTO {
     private Long id;
     private String videoId;
     private Long channelId;
-    private Long YoutubePlaylistId;
+    private Long youtubePlaylistId;
     private String title;
     private String description;
     private Timestamp publishDate;

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.steelrain.springboot.lilac.mapper.VideoMapper">
-    <resultMap id="findRecommendedVideoListMap" type="RecommendedVideoDTO">
+    <!--<resultMap id="findRecommendedVideoListMap" type="RecommendedVideoDTO">
         <id property="id" column="id" />
         <result property="YoutubePlaylistId" column="youtube_playlist_id" />
         <result property="title" column="video_title" />
@@ -12,8 +12,8 @@
         <result property="likeCount" column="like_count" />
         <result property="favoriteCount" column="favorite_count" />
         <result property="channelTitle" column="channel_title" />
-    </resultMap>
-    <select id="findRecommendedVideoList" resultMap="findRecommendedVideoListMap">
+    </resultMap>-->
+    <select id="findRecommendedVideoList" resultType="RecommendedVideoDTO">
         SELECT youtube.id,youtube_playlist_id,youtube.title as video_title,
                youtube.thumbnail_medium,youtube.view_count,search_count,like_count,favorite_count,chn.title as channel_title
         FROM tbl_recommended_video rvideo INNER JOIN tbl_youtube youtube INNER JOIN tbl_youtube_channel chn
@@ -65,14 +65,13 @@
         ORDER BY pl.publish_date LIMIT #{offset}, #{count}
     </select>
 
-    <resultMap id="findRecommendedPlayListMap" type="com.steelrain.springboot.lilac.datamodel.view.RecommendedPlayListDTO">
-        <result property="YoutubePlaylistId" column="youtube_playlist_id" />
+    <!--<resultMap id="findRecommendedPlayListMap" type="com.steelrain.springboot.lilac.datamodel.view.RecommendedPlayListDTO">
+        <result property="youtubePlaylistId" column="youtube_playlist_id" />
         <result property="title" column="title" />
         <result property="thumbnailMedium" column="thumbnail_medium" />
         <result property="channelTitle" column="channel_title" />
-        <result property="YoutubePlaylistId" column="youtube_playlist_id" />
-    </resultMap>
-    <select id="findRecommendedPlayList" resultMap="findRecommendedPlayListMap">
+    </resultMap>-->
+    <select id="findRecommendedPlayList" resultType="RecommendedPlayListDTO">
         SELECT tmp.id as youtube_playlist_id, tmp.title, tmp.thumbnail_medium, chn.title as channel_title
         FROM (SELECT pl.id, pl.channel_id, pl.title, pl.thumbnail_medium
               FROM tbl_recommended_playlist rpl INNER JOIN tbl_youtube_playlist pl

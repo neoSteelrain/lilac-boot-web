@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
 
@@ -39,7 +40,11 @@ magnitude	float	YES
     private Long YoutubePlaylistId;
     private String title;
     private String description;
+
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Timestamp publishDate;
+
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Timestamp regDate;
     private String thumbnailDefault;
     private String thumbnailMedium;

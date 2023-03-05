@@ -86,7 +86,7 @@
                                 </tr>
                                 <tr>
                                     <td>출판일</td>
-                                    <td th:text="${bookDetailInfo.bookDTO.publishDate}"></td>
+                                    <td th:text="${{bookDetailInfo.bookDTO.publishDate}}"></td>
                                 </tr>
                                 <tr>
                                     <td>품절 여부</td>
@@ -94,11 +94,11 @@
                                 </tr>
                                 <tr>
                                     <td>도서 정가</td>
-                                    <td th:text="${bookDetailInfo.bookDTO.price}"></td>
+                                    <td th:text="${{bookDetailInfo.bookDTO.price}}"></td>
                                 </tr>
                                 <tr>
                                     <td>도서 판매가</td>
-                                    <td th:text="${bookDetailInfo.bookDTO.salePrice}"></td>
+                                    <td th:text="${{bookDetailInfo.bookDTO.salePrice}}"></td>
                                 </tr>
                                 </tbody>
                             </table>

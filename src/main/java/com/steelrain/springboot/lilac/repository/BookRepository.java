@@ -1,6 +1,7 @@
 package com.steelrain.springboot.lilac.repository;
 
 import com.steelrain.springboot.lilac.datamodel.KaKaoBookDTO;
+import com.steelrain.springboot.lilac.datamodel.view.RecommendedBookListDTO;
 import com.steelrain.springboot.lilac.mapper.LicenseBookMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -21,5 +22,9 @@ public class BookRepository {
 
     public KaKaoBookDTO findKaKaoBookInfo(Long isbn){
         return m_licenseBookMapper.findKakaoBookInfo(isbn);
+    }
+
+    public List<KaKaoBookDTO> getRecommendedBookList() {
+        return m_licenseBookMapper.getRecommendedBookList();
     }
 }

@@ -61,7 +61,7 @@
                             <h5 class="post-title" th:text="${videoList[0].title}"></h5>
                             <ul class="custom-flex post-meta">
                                 <li>
-                                    <i class="lni lni-calendar" th:text="' '+${videoList[0].publishDate}"></i>
+                                    <i class="lni lni-calendar" th:text="' '+${{videoList[0].publishDate}}"></i>
                                 </li>
                                 <li>
                                     <i class="lni lni-comments" th:text="' '+${videoList[0].commentCount}"></i>
