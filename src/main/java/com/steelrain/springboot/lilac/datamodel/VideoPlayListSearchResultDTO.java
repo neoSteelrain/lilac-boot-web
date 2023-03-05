@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.datamodel;
 
+import com.steelrain.springboot.lilac.common.PageDTO;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -1,8 +1,11 @@
-package com.steelrain.springboot.lilac.datamodel;
+package com.steelrain.springboot.lilac.common;
 
 import lombok.Builder;
 import lombok.Getter;
 
+/**
+ * 페이징처리에서 필요한 페이징 정보를 나타내는 클래스
+ */
 @Getter
 @Builder
 public class PageDTO {

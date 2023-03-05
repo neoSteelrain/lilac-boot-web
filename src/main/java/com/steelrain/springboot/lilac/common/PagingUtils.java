@@ -1,7 +1,8 @@
 package com.steelrain.springboot.lilac.common;
 
-import com.steelrain.springboot.lilac.datamodel.PageDTO;
-
+/**
+ * 페지징 기능이 필요할때 페이지번호를 계산해주는 클래스
+ */
 public class PagingUtils {
     private final static int BLOCK_LIMIT = 10;
 

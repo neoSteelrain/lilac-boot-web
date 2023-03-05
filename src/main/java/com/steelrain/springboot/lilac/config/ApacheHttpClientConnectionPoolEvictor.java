@@ -8,6 +8,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+/**
+ * 주기적으로 Apache Http client 커넥션풀에서 idle되거나 만료된 커넥션들을 회수한다
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor

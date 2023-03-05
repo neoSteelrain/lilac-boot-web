@@ -2,6 +2,7 @@ package com.steelrain.springboot.lilac.datamodel;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.List;
 

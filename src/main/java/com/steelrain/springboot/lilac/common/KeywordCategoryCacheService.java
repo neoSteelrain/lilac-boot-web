@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * 자격증 코드, 지역코드, 세부지역코드를 정적으로 보관하여 캐싱기능을 제공하는 클래스
+ */
 @Slf4j
 @Component
 public class KeywordCategoryCacheService implements ICacheService {

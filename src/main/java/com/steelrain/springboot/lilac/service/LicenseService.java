@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.service;
 
+import com.steelrain.springboot.lilac.common.StringFormatter;
 import com.steelrain.springboot.lilac.datamodel.LicenseDTO;
 import com.steelrain.springboot.lilac.datamodel.LicenseScheduleDTO;
 import com.steelrain.springboot.lilac.datamodel.api.LicenseScheduleResponseDTO;
@@ -70,33 +71,33 @@ public class LicenseService implements ILicenseService{
             // 필기시험 단계 검사 0110, 0113, now 0112, 0116, 0119
             if(Integer.parseInt(schedule.getDocRegStartDt()) <= now && Integer.parseInt(schedule.getDocRegEndDt()) >= now ){
                 licenseDTO.setLicStep(schedule.getImplSeq() + "회차 필기시험 접수중");
-                licenseDTO.setLicEndDate(schedule.getDocRegEndDt());
+                licenseDTO.setLicEndDate(convertDateFormat(schedule.getDocRegEndDt()));
                 continue;
             }
             if(Integer.parseInt(schedule.getDocExamStartDt()) <= now && Integer.parseInt(schedule.getDocExamEndDt()) >= now ){
                 licenseDTO.setLicStep(schedule.getImplSeq() + "회차 필기시험 진행중");
-                licenseDTO.setLicEndDate(schedule.getDocExamEndDt());
+                licenseDTO.setLicEndDate(convertDateFormat(schedule.getDocExamEndDt()));
                 continue;
             }
             if(Integer.parseInt(schedule.getDocPassDt()) == now){
                 licenseDTO.setLicStep(schedule.getImplSeq() + "회차 필기시험 결과발표");
-                licenseDTO.setLicEndDate(schedule.getDocPassDt());
+                licenseDTO.setLicEndDate(convertDateFormat(schedule.getDocPassDt()));
                 continue;
             }
             // 실기시험 단계 검사
             if(Integer.parseInt(schedule.getPracRegStartDt()) <= now && Integer.parseInt(schedule.getPracRegEndDt()) >= now ){
                 licenseDTO.setLicStep(schedule.getImplSeq() + "회차 실기시험 접수중");
-                licenseDTO.setLicEndDate(schedule.getPracRegEndDt());
+                licenseDTO.setLicEndDate(convertDateFormat(schedule.getPracRegEndDt()));
                 continue;
             }
             if(Integer.parseInt(schedule.getPracExamStartDt()) <= now && Integer.parseInt(schedule.getPracExamEndDt()) >= now ){
                 licenseDTO.setLicStep(schedule.getImplSeq() + "회차 실기시험 진행중");
-                licenseDTO.setLicEndDate(schedule.getPracExamEndDt());
+                licenseDTO.setLicEndDate(convertDateFormat(schedule.getPracExamEndDt()));
                 continue;
             }
             if(Integer.parseInt(schedule.getPracPassDt()) == now){
                 licenseDTO.setLicStep(schedule.getImplSeq() + "회차 실기시험 결과발표");
-                licenseDTO.setLicEndDate(schedule.getPracPassDt());
+                licenseDTO.setLicEndDate(convertDateFormat(schedule.getPracPassDt()));
                 continue;
             }
             /*
@@ -107,6 +108,11 @@ public class LicenseService implements ILicenseService{
                 licenseDTO.setLicEndDate("-");
             }
         }
+    }
+
+    private String convertDateFormat(String src){
+        Optional<String> result = StringFormatter.toDateFormattedString(src);
+        return result.isPresent() ? result.get() : src;
     }
 
     /*
@@ -129,13 +135,13 @@ public class LicenseService implements ILicenseService{
             LicenseScheduleDTO dto = new LicenseScheduleDTO();
             String tmp = String.format("%s년 정기 %s %d회", schedule.getImplyy(), getLicenseCategoryName(schedule.getDescription()), schedule.getImplSeq());
             dto.setCategory(tmp);
-            // TODO : 날짜 포매팅 필요함
-            dto.setDocRegPeriod(schedule.getDocRegStartDt() + " - " + schedule.getDocRegEndDt());
-            dto.setDocExam(schedule.getDocExamStartDt() + " - " + schedule.getDocExamEndDt());
-            dto.setDocPass(schedule.getDocPassDt());
-            dto.setPracReg(schedule.getPracRegStartDt() + " - " + schedule.getPracRegEndDt());
-            dto.setPracExam(schedule.getPracExamStartDt() + " - " + schedule.getPracExamEndDt());
-            dto.setPracPass(schedule.getPracPassDt());
+            // TODO :날짜 포매팅을 에너테이션으로 처리하는 방법을 찾아보자
+            dto.setDocRegPeriod(StringFormatter.toDateFormattedString(schedule.getDocRegStartDt()).get() + " - " + StringFormatter.toDateFormattedString(schedule.getDocRegEndDt()).get());
+            dto.setDocExam(StringFormatter.toDateFormattedString(schedule.getDocExamStartDt()) .get()+ " - " + StringFormatter.toDateFormattedString(schedule.getDocExamEndDt()).get());
+            dto.setDocPass(StringFormatter.toDateFormattedString(schedule.getDocPassDt()).get());
+            dto.setPracReg(StringFormatter.toDateFormattedString(schedule.getPracRegStartDt()).get() + " - " + StringFormatter.toDateFormattedString(schedule.getPracRegEndDt()).get());
+            dto.setPracExam(StringFormatter.toDateFormattedString(schedule.getPracExamStartDt()).get() + " - " + StringFormatter.toDateFormattedString(schedule.getPracExamEndDt()).get());
+            dto.setPracPass(StringFormatter.toDateFormattedString(schedule.getPracPassDt()).get());
             resultList.add(dto);
         }
         return resultList;
