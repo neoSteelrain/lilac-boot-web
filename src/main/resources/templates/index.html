@@ -57,7 +57,7 @@
                     <div class="hero-text wow fadeInLeft" data-wow-delay=".3s">
                         <!-- Start Hero Text -->
                         <div class="section-heading">
-                            <h2>유자도</h2>
+                            <h2>라일락</h2>
                             <p>유튜브, 카카오 도서, 자격증 일정 검색기능을 제공합니다. <br>여러분의 자격증 취득에 도움이 되었으면 좋겠습니다.</p>
                         </div>
                         <!-- End Hero Text -->
@@ -455,7 +455,6 @@
         // 검색버튼 클릭 이벤트 처리 함수 : 키워드, 카테고리 검색을 처리한다
         const searchHandler = () => {
             /*
-                TODO : 검색처리
                 - 검색어가 있으면 카테고리는 무시하고 검색어로 처리
                 - 카테고리를 선택하면 검색어는 무시하고 카테고리로 처리
                 - 카테고리를 선택하면 검색어는 지워버림
@@ -463,7 +462,9 @@
             */
             const m_keyword = $("#keyword").val();
             if(m_keyword != ""){
-                // TODO : 검색어 처리
+                // 검색어 처리
+                refreshSearchBookList(m_keyword, 1);
+                refreshPlayList(0, m_keyword, 1, 0);
                 return;
             }
             const m_regionCode = $("#location-main option:selected").val();
@@ -486,6 +487,7 @@
             let offset = $("#section-license").offset();
             $("html, body").animate({scrollTop: offset.top}, 300);
         }
+
         // 자격증 시험일정 정보를 업데이트하는 함수
         const searchLicenseSchedulesByLicenseCode = (argLicenseCode) => {
             if(argLicenseCode == undefined || argLicenseCode <= -1){ // 자격증카테고리를 선택하지 않으면 실행하지 않는다.
@@ -496,13 +498,13 @@
                 url: "/search/licSchd",
                 data: { licenseCode: argLicenseCode },
                 dataType: "text",
-                success: (result) => {
-                    let html = jQuery('<div>').html(result);
+                success: function (result){
+                    let html = jQuery("<div>").html(result);
                     let contents = html.find("div#lic-schedule-template").html();
-                    $('#license-div').html(contents);
+                    $("#license-div").html(contents);
                 },
                 error: (errMsg) => {
-                    alert(errMsg.toString());
+                    alert("검색도중 예외가 발생하였습니다");
                 }
             });
         }
@@ -528,7 +530,7 @@
                     moveScrollToBookList();
                 },
                 error:(errMSg) => {
-                    alert("도서검색 에러 발생");
+                    alert("검색도중 예외가 발생하였습니다");
                 }
             });
         }
@@ -536,9 +538,7 @@
         const refreshPageBySubject = (argSubjectCode, argOffset) =>{
 
             refreshSubjectBookList(argSubjectCode, argOffset);
-            refreshPlayList(argSubjectCode, argOffset, 2);
-
-
+            refreshPlayList(argSubjectCode, null, argOffset, 2);
         }
         const moveScrollToBookList = () => {
             // 도서정보 태그로 스크롤 이동
@@ -570,19 +570,46 @@
             });
         }
 
+        const refreshSearchBookList = (argKeyword, argPageNum) => {
+            if(argKeyword == undefined || argKeyword == ""){
+                return;
+            }
+            $.ajax({
+                type:"get",
+                url:"/search/keyword-book-list",
+                data:{
+                    keyword:argKeyword,
+                    // regionCode:argRegionCode,
+                    // detailRegionCode:argDetailRegionCode,
+                    pageNum:argPageNum,
+                    bookCount:9 // 아직 화면이 없으므로 임시로 9
+                },
+                dataType:"text",
+                success: function (result) {
+                    let html = jQuery("<div>").html(result);
+                    let contents = html.find("div#subject-book-template").html();
+                    $("#div-library-book").html(contents);
+                },
+                error:function (){
+                    alert("검색도중 예외가 발생하였습니다");
+                }
+            })
+        }
+
         const refreshPlaylistByLicense = (argLicenseCode, argOffset) => {
             if(argLicenseCode <= 0){
                 return;
             }
-            refreshPlayList(argLicenseCode, argOffset, 1);
+            refreshPlayList(argLicenseCode, null, argOffset, 1);
         }
         // 동영상 재생목록을 코드기반으로 업데이트하는 함수
-        const refreshPlayList = (argKeywordCode, argOffset, argKeywordType) => {
+        const refreshPlayList = (argKeywordCode, argSearchKeyword, argOffset, argKeywordType) => {
             $.ajax({
                 type:"get",
                 url:"/search/playlist",
                 data:{
                     keywordCode:argKeywordCode,
+                    searchKeyword:argSearchKeyword,
                     pageNum:argOffset,
                     keywordType:argKeywordType
                 },

@@ -38,9 +38,9 @@ public class VideoService implements IVideoService {
     }
 
     @Override
-    public VideoPlayListSearchResultDTO searchPlayList(int keywordCode, int pageNum, int playlistCount, int keywordType) {
+    public VideoPlayListSearchResultDTO searchPlayList(int keywordCode, String searchKeyword, int pageNum, int playlistCount, int keywordType) {
         int pageStart = (pageNum - 1) * playlistCount;
-        String keywordStr = parseKeywordCode(keywordCode, keywordType);
+        String keywordStr = parseKeywordCode(keywordCode, searchKeyword, keywordType);
         int totalPlaylistCount = m_videoRepository.selectTotalPlayListCountByKeyword(keywordStr);
         return VideoPlayListSearchResultDTO.builder()
                                         .requestKeywordCode(keywordCode)
@@ -50,14 +50,35 @@ public class VideoService implements IVideoService {
                                         .build();
     }
 
-    private String parseKeywordCode(int keywordCode, int keywordType){
-        if(keywordType == 1){
-            return m_keywordCategoryCacheService.getLicenseKeyword(keywordCode);
-        }else if(keywordType == 2){
-            return m_keywordCategoryCacheService.getSubjectKeyword(keywordCode);
-        }else{
-            throw new LilacException(String.format("확인할 수 없는 키워드 코드 입니다. 입력된 키워드 코드 : %d", keywordCode));
+    /*@Override
+    public VideoPlayListSearchResultDTO searchPlayList(int keywordCode, String searchKeyword, int pageNum, int playlistCount, SEARCH_KEYWORD_TYPE keywordType) {
+        int pageStart = (pageNum - 1) * playlistCount;
+        String keywordStr = parseKeywordCode(keywordCode, searchKeyword, keywordType);
+        int totalPlaylistCount = m_videoRepository.selectTotalPlayListCountByKeyword(keywordStr);
+        return VideoPlayListSearchResultDTO.builder()
+                .requestKeywordCode(keywordCode)
+                .requestKeywordType(keywordType)
+                .pageDTO(PagingUtils.createPagingInfo(totalPlaylistCount, pageNum, playlistCount))
+                .playList(m_videoRepository.findPlayListByKeyword(keywordStr, pageStart, playlistCount))
+                .build();
+    }*/
+
+    private String parseKeywordCode(int keywordCode, String searchKeyword, int keywordType){
+        String result = null;
+        switch (keywordType) {
+            case 0:
+                result = searchKeyword;
+                break;
+            case 1:
+                result = m_keywordCategoryCacheService.getLicenseKeyword(keywordCode);
+                break;
+            case 2:
+                result = m_keywordCategoryCacheService.getSubjectKeyword(keywordCode);
+                break;
+            default:
+                throw new LilacException(String.format("확인할 수 없는 키워드 코드 입니다. 입력된 키워드 코드 : %d", keywordCode));
         }
+        return result;
     }
 
     @Override

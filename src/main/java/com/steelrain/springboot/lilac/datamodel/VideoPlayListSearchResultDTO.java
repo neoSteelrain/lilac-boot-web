@@ -11,6 +11,7 @@ import java.util.List;
 public class VideoPlayListSearchResultDTO {
     private int requestKeywordCode;
     private int requestKeywordType;
+    //private SEARCH_KEYWORD_TYPE requestKeywordType;
     private PageDTO pageDTO;
     private List<YoutubePlayListDTO> playList;
 }

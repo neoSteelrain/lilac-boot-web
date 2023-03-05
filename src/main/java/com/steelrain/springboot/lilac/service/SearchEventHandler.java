@@ -31,7 +31,7 @@ public class SearchEventHandler {
 
     @EventListener(VideoPlayListSearchEvent.class)
     public void handleVideoPlayListSearchEvent(VideoPlayListSearchEvent event){
-        event.setSearchResultDTO(m_videoService.searchPlayList(event.getKeywordCode(), event.getPageNum(), event.getPlaylistCount(), event.getKeywordType()));
+        event.setSearchResultDTO(m_videoService.searchPlayList(event.getKeywordCode(), event.getKeyword(), event.getPageNum(), event.getPlaylistCount(), event.getKeywordType()));
     }
 
     @EventListener(SubjectBookSearchEvent.class)

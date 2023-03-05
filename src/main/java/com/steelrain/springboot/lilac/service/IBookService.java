@@ -13,6 +13,7 @@ public interface IBookService {
     LicenseBookListDTO getLicenseBookList(int licenseCode, short regionCode, int detailRegionCode, int pageNum, int bookCount);
     List<NaruLibraryDTO> getLibraryByRegionList(short region, int detailRegion);
     SubjectBookListDTO getSubjectBookList(int subjectCode, int pageNum, int bookCount);
+    //SubjectBookListDTO getSubjectBookList(String keyword, int pageNum, int bookCount);
     BookDetailDTO getBookDetailInfo(Long isbn, short regionCode, int detailRegionCode);
     RecommendedBookListDTO getRecommendedBookList();
 }

@@ -3,18 +3,17 @@ package com.steelrain.springboot.lilac.service;
 import com.steelrain.springboot.lilac.common.PagingUtils;
 import com.steelrain.springboot.lilac.datamodel.KaKaoBookDTO;
 import com.steelrain.springboot.lilac.datamodel.api.*;
-import com.steelrain.springboot.lilac.datamodel.view.BookDetailDTO;
-import com.steelrain.springboot.lilac.datamodel.view.LicenseBookListDTO;
+import com.steelrain.springboot.lilac.datamodel.view.*;
 import com.steelrain.springboot.lilac.datamodel.NaruLibraryDTO;
-import com.steelrain.springboot.lilac.datamodel.view.RecommendedBookListDTO;
-import com.steelrain.springboot.lilac.datamodel.view.SubjectBookListDTO;
 import com.steelrain.springboot.lilac.event.KakaoBookSaveEvent;
+import com.steelrain.springboot.lilac.event.KeywordBookSearchEvent;
 import com.steelrain.springboot.lilac.repository.BookRepository;
 import com.steelrain.springboot.lilac.repository.IKaKoBookRepository;
 import com.steelrain.springboot.lilac.repository.INaruRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -41,38 +40,6 @@ public class BookService implements IBookService{
 
 
 
-    // 책검색 APi 수정이전 버전, 카카오 책검색과 나루API를 한번에 같이 호출하는 버전
-    /*@Override
-    public List<LicenseBookDTO> getLicenseBookList(String keyword, short region, int detailRegion){
-        *//*
-            1. 카카오 도서검색 API 를 통해 keyword 해당하는 도서목록을 가져온다
-            2. 도서의 ISBN을 가지고 나루도서관 API 에 소장도서관목록을 가져온다
-            3. 도서를 소장하고 있는 도서관이 있으면 대출이 가능여부를 가져오고 설정해준다
-            - 카카오 API는 ISBN을 문자열로 반환하고, 나루도서관 API는 ISBN을 숫자형식(long)으로 받으므로 형변환이 필요하다
-         *//*
-        List<KakaoSearchedBookDTO> bookList = m_kaKoBookRepository.searchBookfromKakao(keyword).getKakaoSearchedBookList();
-        List<LicenseBookDTO> resultDTOList = new ArrayList<>(bookList.size());
-        for(KakaoSearchedBookDTO book : bookList){
-            *//*
-             - 카카오 API에서 ISBN을 "ISBN10 ISBN13" (예: "1160503141 9791160503142" ) 2가지 ISBN을 넘겨주는 경우가 있으므로 2가지 같이넘어올 경우 ISBN13을 선택해서 사용한다
-             - ISBN 문자열을 자르는 작업이 필요하다
-             *//*
-            String tmpIsbn = book.getIsbn();
-            String splitedIsbn = StringUtils.containsWhitespace(tmpIsbn) ? StringUtils.tokenizeToStringArray(tmpIsbn, " ")[1] : tmpIsbn;
-            long isbn = Long.valueOf(splitedIsbn);
-            NaruLibSearchByBookResponseDTO naruLibResult = m_naruRepository.getLibraryByBook(isbn, region, detailRegion);
-            LicenseBookDTO resultDTO = new LicenseBookDTO();
-            resultDTO.setKakaoBookDTO(convertKakaoBookDTO(book, splitedIsbn)); // 한번자른 ISBN문자열을 다시 자르는 일이 없도록 잘라진 ISBN을 같이 넘겨준다.
-            resultDTO.setLibraryList(convertNaruLibraryDTO(naruLibResult, resultDTO.getKakaoBookDTO().getIsbn13()));
-            resultDTO.setKeyword(keyword);
-            resultDTO.setRegionName(m_cacheService.getRegionName(region));
-            resultDTO.setDetailRegionName(m_cacheService.getDetailRegionName(region, detailRegion));
-            resultDTOList.add(resultDTO);
-        }
-        return resultDTOList;
-    }*/
-
-    // 카카오 책검색만 호출하는 버전
     @Transactional(rollbackFor = Exception.class)
     @Override
     public LicenseBookListDTO getLicenseBookList(int licenseCode, short regionCode, int detailRegionCode, int pageNum, int bookCount){
@@ -123,6 +90,13 @@ public class BookService implements IBookService{
     @Override
     public SubjectBookListDTO getSubjectBookList(int subjectCode, int pageNum, int bookCount) {
         String keyword = m_cacheService.getSubjectKeywordBook(subjectCode);
+        SubjectBookListDTO resultDTO = getBookListByKeyword(keyword, pageNum, bookCount);
+        resultDTO.setSubjectCode(subjectCode);
+        resultDTO.setSubjectName(m_cacheService.getSubjectName(subjectCode));
+        return resultDTO;
+    }
+
+    private SubjectBookListDTO getBookListByKeyword(String keyword, int pageNum, int bookCount){
         KakaoBookSearchResponseDTO responseDTO = m_kaKoBookRepository.searchBookFromKakao(keyword, pageNum, bookCount);
         SubjectBookListDTO resultDTO = new SubjectBookListDTO();
         List<KakaoSearchedBookDTO> bookList = responseDTO.getKakaoSearchedBookList();
@@ -136,15 +110,15 @@ public class BookService implements IBookService{
             kaKaoBookDTOList.add(convertKakaoBookDTO(book,
                     StringUtils.containsWhitespace(tmpIsbn.trim()) ? StringUtils.tokenizeToStringArray(tmpIsbn, " ")[1] : tmpIsbn));
         }
-        resultDTO.setSubjectCode(subjectCode);
         resultDTO.setKeyword(keyword);
-        resultDTO.setSubjectName(m_cacheService.getSubjectName(subjectCode));
         resultDTO.setKakaoBookList(kaKaoBookDTOList);
+        resultDTO.setTotalBookCount(responseDTO.getMeta().getTotalCount());
         // 카카오책 검색결과를 DB에 저장하는 이벤트를 발생한다.
         publishKaKaoBookSaveEvent(kaKaoBookDTOList);
         resultDTO.setPageInfo(PagingUtils.createPagingInfo(responseDTO.getMeta().getTotalCount(), pageNum, bookCount));
         return resultDTO;
     }
+
 
     @Override
     public BookDetailDTO getBookDetailInfo(Long isbn, short regionCode, int detailRegionCode) {
@@ -170,6 +144,17 @@ public class BookService implements IBookService{
         RecommendedBookListDTO result = new RecommendedBookListDTO();
         result.setKakaoBookList(m_bookRepository.getRecommendedBookList());
         return result;
+    }
+
+    /**
+     * SearchService의 도서키워드검색 이벤트를 처리하는 핸들러메서드
+     * @param event 도서검색키워드검색 이벤트
+     */
+    @EventListener(KeywordBookSearchEvent.class)
+    public void handleKeywordBookSearchEvent(KeywordBookSearchEvent event){
+        SubjectBookListDTO sbjBookListDTO = getBookListByKeyword(event.getKeyword(), event.getPageNum(), event.getBookCount());
+        sbjBookListDTO.setSubjectName(event.getKeyword());
+        event.setKeywordBookListDTO(sbjBookListDTO);
     }
 
     // 카카오 API로 검색된 결과를 DB에 저장하려고 할때 사용한다.

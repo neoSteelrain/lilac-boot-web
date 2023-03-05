@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.service;
 
+import com.steelrain.springboot.lilac.datamodel.SEARCH_KEYWORD_TYPE;
 import com.steelrain.springboot.lilac.datamodel.view.RecommendedPlayListDTO;
 import com.steelrain.springboot.lilac.datamodel.view.RecommendedVideoDTO;
 import com.steelrain.springboot.lilac.datamodel.VideoPlayListSearchResultDTO;
@@ -13,7 +14,8 @@ public interface IVideoService {
 
     List<YoutubeVideoDTO> getPlayListDetail(Long youtubePlaylistId);
 
-    VideoPlayListSearchResultDTO searchPlayList(int keywordCode, int pageNum, int playlistCount, int keywordType);
+    VideoPlayListSearchResultDTO searchPlayList(int keywordCode, String searchKeyword, int pageNum, int playlistCount, int keywordType);
+    //VideoPlayListSearchResultDTO searchPlayList(int keywordCode, String searchKeyword, int pageNum, int playlistCount, SEARCH_KEYWORD_TYPE keywordType);
 
     List<Long> getAllVideoIdByPlayList(Long playListId);
 
