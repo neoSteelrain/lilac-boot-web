@@ -79,9 +79,8 @@ public class MemberService implements IMemberService {
 
 
     /*
-        S3 에 삭제횟수는 제한적이고 비용이 발생한다.
         원본파일의 이름만 변경되고 S3에 있는 키값은 변하지 않아도 되므로
-        원본파일 이름만 변경하고 S3에 저장된 이름은 변경되지 않고 업데이트한다.
+        원본파일 이름만 변경하고 S3에 저장된 이름은 변경되지 않고 덮어쓰기한다.
      */
     private String updateMemberProfile(MultipartFile multipartFile, Long memberId, String originalSavedFileName){
         String originalProfileName = multipartFile.getOriginalFilename();

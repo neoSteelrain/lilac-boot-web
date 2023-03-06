@@ -59,7 +59,7 @@ public class BookService implements IBookService{
             }
             String tmpIsbn = book.getIsbn();
             kaKaoBookDTOList.add(convertKakaoBookDTO(book,
-                                 StringUtils.containsWhitespace(tmpIsbn) ? StringUtils.tokenizeToStringArray(tmpIsbn, " ")[1] : tmpIsbn));
+                                 StringUtils.containsWhitespace(tmpIsbn.trim()) ? StringUtils.tokenizeToStringArray(tmpIsbn, " ")[1] : tmpIsbn));
 
             resultDTO.setKeyword(licenseSearchKeyword);
             resultDTO.setRegionName(m_cacheService.getRegionName(regionCode));
