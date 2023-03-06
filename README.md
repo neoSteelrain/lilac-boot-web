@@ -1,4 +1,4 @@
-### 개인 웹 프로젝트
+### 개인 웹 프로젝트 : Lilac
 ---
 
 ### 기획의도
@@ -58,10 +58,13 @@
 - Apache HttpClient
 - AWS S3
 
-### 기타
-- API 호출이 많은 부분을 차지하므로 검색허용량에 주의해야 한다.
 ---
-
+### 시스템 구성
+- DB : MySQL, Spring batch
+    - 스프링 배치, 유튜브 API, 구글 클라우드 API (감정분석)를 이용하여 유튜브데이터를 주기적으로 저장합니다.
+- WEB : Spring MVC
+    - 배치작업으로 저장된 데이터, 공공데이터 API, 카카오 API 를 이용하여 동영상, 도서정보, 도서관 정보를 사용자에게 제공합니다.
+---
 ### 유스케이스
 ![lilac-UC](https://user-images.githubusercontent.com/113125088/220843275-60748186-06d2-4bfc-8b1d-8edf646af58f.png)
 
