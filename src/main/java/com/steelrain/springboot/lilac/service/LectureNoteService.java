@@ -4,12 +4,15 @@ import com.steelrain.springboot.lilac.datamodel.*;
 import com.steelrain.springboot.lilac.datamodel.view.LectureNoteDetailDTO;
 import com.steelrain.springboot.lilac.datamodel.view.PlayListAddModalDTO;
 import com.steelrain.springboot.lilac.event.LicenseInfoByLectureNoteEvent;
+import com.steelrain.springboot.lilac.event.MemberRegistrationEvent;
 import com.steelrain.springboot.lilac.event.VideoListByPlayListEvent;
 import com.steelrain.springboot.lilac.exception.LectureNoteException;
 import com.steelrain.springboot.lilac.repository.LectureNoteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,7 +51,7 @@ public class LectureNoteService implements ILectureNoteService{
                 return null;
             }
             /*
-             licenseId 는 자격증 id, subjectId 는 키워드 id 이다.
+             licenseId 는 자격증 id, subjectId 는 주제어 id 이다.
              licenseId, subjectId 는 XOR 관계 이기 떄문에 하나만 선택해야 한다.
              */
             noteId = createLectureNote(memberId, title, description, licenseId, subjectId);
@@ -169,7 +172,9 @@ public class LectureNoteService implements ILectureNoteService{
         noteDetailDTO = initLectureNoteDetailInfoByMember(memberId, noteId, noteDetailDTO);
         // 강의노트의 자격증정보 초기화
         initLicenseInfoByLectureNote(noteDetailDTO.getLicenseId(), noteDetailDTO.getSubjectId(), noteDetailDTO);
-        // 강의노트의 등록된 재생목록 초기화
+        // 강의노트에 등록된 도서목록 초기화
+        initBookInfoByLectureNote(memberId, noteId, noteDetailDTO);
+        // 강의노트에 등록된 재생목록 초기화
         initVideoInfoByLectureNote(memberId, noteId, noteDetailDTO);
         return noteDetailDTO;
     }
@@ -184,8 +189,26 @@ public class LectureNoteService implements ILectureNoteService{
         return m_lectureNoteRepository.findLectureNoteByMember(memberId, noteId);
     }
 
+    @Override
+    public void registerBook(Long bookId, Long lectureNoteId, Long memberId){
+        m_lectureNoteRepository.addBook(bookId, lectureNoteId, memberId);
+    }
+
+    @Async
+    @EventListener(MemberRegistrationEvent.class)
+    public void createDefaultLectureNoteByNewMember(MemberRegistrationEvent event){
+        createDefaultLectureNote(event.getMemberId(), event.getMemberNickname());
+    }
+
     /*
-        강의노트에 등록된 재생목록들에 대한 정보를 초기화
+        강의노트에 등록된 도서정보목록을 LectureNoteDetailDTO에 설정한다.
+     */
+    private void initBookInfoByLectureNote(Long memberId, Long noteId, final LectureNoteDetailDTO noteDetailDTO) {
+        noteDetailDTO.setKakaoBookInfo(m_lectureNoteRepository.findBookListByLectureNote(memberId, noteId));
+    }
+
+    /*
+        강의노트에 등록된 재생목록들을 LectureNoteDetailDTO에 설정한다.
      */
     private LectureNoteDetailDTO initVideoInfoByLectureNote(Long memberId, Long noteId, final LectureNoteDetailDTO noteDetailDTO){
         List<LectureNoteDetailDTO.LectureVideoPlayListInfo> playlist = m_lectureNoteRepository.findVideoInfoByLectureNote(memberId, noteId);
@@ -222,8 +245,8 @@ public class LectureNoteService implements ILectureNoteService{
 
     private LectureNoteDetailDTO.LicenseInfo createLicenseInfo(LicenseDTO dto){
         if(dto.getScheduleList() == null && dto.getScheduleList().size() == 0){
-            List<LectureNoteDetailDTO.LicenseScheduleInfo> schInfoList = new ArrayList<>(1);
-            LectureNoteDetailDTO.LicenseScheduleInfo info = LectureNoteDetailDTO.LicenseScheduleInfo.builder()
+            List<LicenseScheduleDTO> schInfoList = new ArrayList<>(1);
+            LicenseScheduleDTO info = LicenseScheduleDTO.builder()
                     .category("-")
                     .docRegPeriod("-")
                     .docExam("-")
@@ -242,9 +265,9 @@ public class LectureNoteService implements ILectureNoteService{
                     .licenseScheduleList(schInfoList)
                     .build();
         }
-        List<LectureNoteDetailDTO.LicenseScheduleInfo> schInfoList = new ArrayList<>(dto.getScheduleList().size());
+        List<LicenseScheduleDTO> schInfoList = new ArrayList<>(dto.getScheduleList().size());
         for(LicenseScheduleDTO sch : dto.getScheduleList()){
-            LectureNoteDetailDTO.LicenseScheduleInfo info = LectureNoteDetailDTO.LicenseScheduleInfo.builder()
+            LicenseScheduleDTO info = LicenseScheduleDTO.builder()
                     .category(sch.getCategory())
                     .docRegPeriod(sch.getDocRegPeriod())
                     .docExam(sch.getDocExam())

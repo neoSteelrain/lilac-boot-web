@@ -185,23 +185,23 @@
                                             </div>
                                             <!-- End List Title -->
                                             <!-- Start Single List -->
-                                            <div class="single-item-list">
+                                            <div class="single-item-list" th:each="bookInfo : ${noteDetail.kakaoBookInfo}">
                                                 <div class="row align-items-center">
                                                     <div class="col-lg-7 col-md-7 col-12">
                                                         <div class="item-image">
-                                                            <img src="https://via.placeholder.com/100x100" alt="#">
+                                                            <img th:src="${bookInfo.thumbnail}" alt="#">
                                                             <div class="content">
-                                                                <h3 class="title"><a href="javascript:void(0)">도서 제목</a>
+                                                                <h3 class="title"><a href="javascript:void(0)" th:text="${bookInfo.title}"></a>
                                                                 </h3>
-                                                                <span class="price">가격</span>
+                                                                <span class="price" th:text="${{bookInfo.price}} + ' -> ' + ${{bookInfo.salePrice}}"></span>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-2 col-md-2 col-12">
-                                                        <p>한빛미디어</p>
+                                                        <p th:text="${bookInfo.publisher}"></p>
                                                     </div>
                                                     <div class="col-lg-2 col-md-2 col-12">
-                                                        <p>2022-10-10</p>
+                                                        <p th:text="${{bookInfo.publishDate}}"></p>
                                                     </div>
                                                     <div class="col-lg-1 col-md-1 col-12 align-right">
                                                         <ul class="action-btn">

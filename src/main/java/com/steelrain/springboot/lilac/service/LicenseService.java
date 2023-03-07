@@ -4,7 +4,11 @@ import com.steelrain.springboot.lilac.common.StringFormatter;
 import com.steelrain.springboot.lilac.datamodel.LicenseDTO;
 import com.steelrain.springboot.lilac.datamodel.LicenseScheduleDTO;
 import com.steelrain.springboot.lilac.datamodel.api.LicenseScheduleResponseDTO;
+import com.steelrain.springboot.lilac.event.LicenseInfoByLectureNoteEvent;
+import com.steelrain.springboot.lilac.event.LicenseSearchEvent;
 import com.steelrain.springboot.lilac.repository.ILicenseRespository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -15,13 +19,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class LicenseService implements ILicenseService{
 
     private final ILicenseRespository m_licenseRepository;
 
-    public LicenseService(ILicenseRespository licenseRepository){
-        this.m_licenseRepository = licenseRepository;
-    }
 
     @Override
     public LicenseDTO getLicenseSchedulesByCode(int licenseCode) {
@@ -35,6 +37,17 @@ public class LicenseService implements ILicenseService{
         }
         return getLicenseSchedule(licenseCode.get());
     }
+
+    @EventListener(LicenseSearchEvent.class)
+    public void handleLicenseSearchEvent(LicenseSearchEvent event){
+        event.setLicenseDTO(getLicenseSchedulesByCode(event.getCode()));
+    }
+
+    @EventListener(LicenseInfoByLectureNoteEvent.class)
+    public void handleLicenseInfoByLectureNoteEvent(LicenseInfoByLectureNoteEvent event){
+        event.setLicenseDTO(getLicenseSchedulesById(event.getLicenseId()));
+    }
+
 
     private LicenseDTO getLicenseSchedule(int licenseCode){
         Optional<String> licenseName = m_licenseRepository.getLicenseNameByCode(licenseCode);
@@ -132,17 +145,16 @@ public class LicenseService implements ILicenseService{
         List<LicenseScheduleResponseDTO.LicenseSchedule> schedules = responseDTO.getBody().getScheduleList();
 
         for(LicenseScheduleResponseDTO.LicenseSchedule schedule : schedules){
-            LicenseScheduleDTO dto = new LicenseScheduleDTO();
-            String tmp = String.format("%s년 정기 %s %d회", schedule.getImplyy(), getLicenseCategoryName(schedule.getDescription()), schedule.getImplSeq());
-            dto.setCategory(tmp);
             // TODO :날짜 포매팅을 에너테이션으로 처리하는 방법을 찾아보자
-            dto.setDocRegPeriod(StringFormatter.toDateFormattedString(schedule.getDocRegStartDt()).get() + " - " + StringFormatter.toDateFormattedString(schedule.getDocRegEndDt()).get());
-            dto.setDocExam(StringFormatter.toDateFormattedString(schedule.getDocExamStartDt()) .get()+ " - " + StringFormatter.toDateFormattedString(schedule.getDocExamEndDt()).get());
-            dto.setDocPass(StringFormatter.toDateFormattedString(schedule.getDocPassDt()).get());
-            dto.setPracReg(StringFormatter.toDateFormattedString(schedule.getPracRegStartDt()).get() + " - " + StringFormatter.toDateFormattedString(schedule.getPracRegEndDt()).get());
-            dto.setPracExam(StringFormatter.toDateFormattedString(schedule.getPracExamStartDt()).get() + " - " + StringFormatter.toDateFormattedString(schedule.getPracExamEndDt()).get());
-            dto.setPracPass(StringFormatter.toDateFormattedString(schedule.getPracPassDt()).get());
-            resultList.add(dto);
+            resultList.add(LicenseScheduleDTO.builder()
+                            .category(String.format("%s년 정기 %s %d회", schedule.getImplyy(), getLicenseCategoryName(schedule.getDescription()), schedule.getImplSeq()))
+                            .docRegPeriod(StringFormatter.toDateFormattedString(schedule.getDocRegStartDt()).get() + " - " + StringFormatter.toDateFormattedString(schedule.getDocRegEndDt()).get())
+                            .docExam(StringFormatter.toDateFormattedString(schedule.getDocExamStartDt()) .get()+ " - " + StringFormatter.toDateFormattedString(schedule.getDocExamEndDt()).get())
+                            .docPass(StringFormatter.toDateFormattedString(schedule.getDocPassDt()).get())
+                            .pracReg(StringFormatter.toDateFormattedString(schedule.getPracRegStartDt()).get() + " - " + StringFormatter.toDateFormattedString(schedule.getPracRegEndDt()).get())
+                            .pracExam(StringFormatter.toDateFormattedString(schedule.getPracExamStartDt()).get() + " - " + StringFormatter.toDateFormattedString(schedule.getPracExamEndDt()).get())
+                            .pracPass(StringFormatter.toDateFormattedString(schedule.getPracPassDt()).get())
+                            .build());
         }
         return resultList;
     }

@@ -26,6 +26,11 @@
             </foreach>
     </insert>
 
+    <insert id="addBook" parameterType="map">
+        INSERT INTO ref_tbl_lecture_book(lecture_id, lecture_member_id, book_id) VALUE
+            (#{lectureNoteId}, #{memberId}, #{bookId})
+    </insert>
+
     <resultMap id="findLectureNoteListByMemberMap" type="LectureNoteModalDTO">
         <result property="noteId" column="id" />
         <result property="noteTitle" column="title" />
@@ -68,6 +73,45 @@
                                ON tmp.youtube_id = yt.id
             GROUP BY tmp.id, yt.youtube_playlist_id ) as npl
                             ON npl.youtube_playlist_id=pl.id;
+    </select>
+<!--
+        private Long id;
+        private String isbn13;
+        private String title;
+        private String contents;
+        private String url;
+        private Timestamp publishDate;
+        private String authors;
+        private String publisher;
+        private String translators;
+        private Integer price;
+        private Integer salePrice;
+        private String thumbnail;
+        private String status;
+        private Timestamp regDate;
+-->
+    <resultMap id="findBookListByLectureNoteMap" type="KaKaoBookDTO">
+        <result property="id" column="id" />
+        <result property="isbn13" column="isbn13" />
+        <result property="title" column="title" />
+        <result property="contents" column="contents" />
+        <result property="url" column="url" />
+        <result property="publishDate" column="publish_date" />
+        <result property="authors" column="authors" />
+        <result property="publisher" column="publisher" />
+        <result property="translators" column="translators" />
+        <result property="price" column="price" />
+        <result property="salePrice" column="sale_price" />
+        <result property="thumbnail" column="thumbnail" />
+        <result property="status" column="status" />
+        <result property="regDate" column="reg_date" />
+    </resultMap>
+    <select id="findBookListByLectureNote" parameterType="map" resultMap="findBookListByLectureNoteMap">
+        SELECT tb.id, tb.isbn13, tb.title, tb.contents, tb.url, tb.publish_date, tb.authors, tb.publisher, tb.translators, tb.price, tb.sale_price, tb.thumbnail, tb.status, tb.reg_date
+        FROM ref_tbl_lecture_book refb INNER JOIN tbl_book tb
+            ON refb.lecture_member_id=#{memberId}
+                AND refb.lecture_id=#{noteId}
+                AND refb.book_id = tb.id;
     </select>
 
     <resultMap id="findChannelTitleMap" type="com.steelrain.springboot.lilac.repository.LectureNoteRepository$ChannelTitleInfo">

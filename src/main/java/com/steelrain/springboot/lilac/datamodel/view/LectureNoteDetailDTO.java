@@ -1,7 +1,8 @@
 package com.steelrain.springboot.lilac.datamodel.view;
 
+import com.steelrain.springboot.lilac.datamodel.KaKaoBookDTO;
+import com.steelrain.springboot.lilac.datamodel.LicenseScheduleDTO;
 import lombok.*;
-import org.apache.ibatis.annotations.Select;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -27,29 +28,10 @@ public class LectureNoteDetailDTO {
     private LicenseInfo licenseInfo;
     
     // 도서정보
-    private List<KakaoBookInfo> kakaoBookInfo;
+    private List<KaKaoBookDTO> kakaoBookInfo;
 
     // 영상정보
     private List<LectureVideoPlayListInfo> videoPlayList;
-
-
-    @Getter
-    @Builder
-    public static class KakaoBookInfo{
-        private String isbn13;
-        private String title;
-        private String contents;
-        private String url;
-        private Timestamp publishDate;
-        private String authors;
-        private String publisher;
-        private String translators;
-        private Integer price;
-        private Integer salePrice;
-        private String thumbnail;
-        private String status;
-        private Timestamp regDate;
-    }
 
     @Getter
     @Builder
@@ -67,32 +49,7 @@ public class LectureNoteDetailDTO {
         // 종료일자
         private String licEndDate;
         // 자격증시험일정
-        List<LicenseScheduleInfo> licenseScheduleList;
-    }
-
-    @Getter
-    @Builder
-    public static class LicenseScheduleInfo{
-        // 구분
-        private String category;
-
-        // 필기원서접수기간
-        private String docRegPeriod;
-
-        // 필기시험기간
-        private String docExam;
-
-        // 필기합격 발표일
-        private String docPass;
-
-        // 실기원수접수기간
-        private String pracReg;
-
-        // 실기시험기간
-        private String pracExam;
-
-        // 최종합격 발표일
-        private String pracPass;
+        List<LicenseScheduleDTO> licenseScheduleList;
     }
 
     @Getter
@@ -115,7 +72,7 @@ public class LectureNoteDetailDTO {
         private Integer videoCount;
         private Timestamp regDate;
 
-        // 화면에 보여질 가공된 정보
+        // 화면에 보여질 가공된 정보들
         @Setter
         private Double progressStatus; // 진행상황
         @Setter

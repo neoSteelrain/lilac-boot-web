@@ -5,7 +5,6 @@ import com.steelrain.springboot.lilac.datamodel.LibraryRegionCodeDTO;
 import com.steelrain.springboot.lilac.datamodel.LicenseCodeDTO;
 import com.steelrain.springboot.lilac.datamodel.SubjectCodeDTO;
 import com.steelrain.springboot.lilac.mapper.SearchMapper;
-import com.steelrain.springboot.lilac.service.ICacheService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

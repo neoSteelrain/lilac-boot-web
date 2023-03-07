@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.repository;
 
+import com.steelrain.springboot.lilac.datamodel.KaKaoBookDTO;
 import com.steelrain.springboot.lilac.datamodel.LectureNoteModalDTO;
 import com.steelrain.springboot.lilac.datamodel.LectureNoteDTO;
 import com.steelrain.springboot.lilac.datamodel.PlayListVideoDTO;
@@ -93,6 +94,14 @@ public class LectureNoteRepository {
 
     public void deletePlayList(Long memberId, Long noteId, Long playListId) {
         m_lectureNoteMapper.deletePlayList(memberId, noteId, playListId);
+    }
+
+    public void addBook(Long bookId, Long lectureNoteId, Long memberId) {
+        m_lectureNoteMapper.addBook(bookId, lectureNoteId, memberId);
+    }
+
+    public List<KaKaoBookDTO> findBookListByLectureNote(Long memberId, Long noteId) {
+        return m_lectureNoteMapper.findBookListByLectureNote(memberId, noteId);
     }
 
     /**

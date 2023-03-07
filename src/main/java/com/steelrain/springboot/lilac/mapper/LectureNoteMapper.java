@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.mapper;
 
+import com.steelrain.springboot.lilac.datamodel.KaKaoBookDTO;
 import com.steelrain.springboot.lilac.datamodel.LectureNoteModalDTO;
 import com.steelrain.springboot.lilac.datamodel.LectureNoteDTO;
 import com.steelrain.springboot.lilac.datamodel.PlayListVideoDTO;
@@ -52,4 +53,8 @@ public interface LectureNoteMapper {
     List<String> findTotalDurationOfPlayList(Long playListId);
 
     void deletePlayList(@Param("memberId") Long memberId, @Param("noteId") Long noteId, @Param("playlistId") Long playListId);
+
+    void addBook(@Param("bookId") Long bookId, @Param("lectureNoteId") Long lectureNoteId, @Param("memberId") Long memberId);
+
+    List<KaKaoBookDTO> findBookListByLectureNote(Long memberId, Long noteId);
 }

@@ -1,12 +1,12 @@
 package com.steelrain.springboot.lilac.service;
 
+import com.steelrain.springboot.lilac.common.ICacheService;
 import com.steelrain.springboot.lilac.common.PagingUtils;
 import com.steelrain.springboot.lilac.datamodel.KaKaoBookDTO;
 import com.steelrain.springboot.lilac.datamodel.api.*;
 import com.steelrain.springboot.lilac.datamodel.view.*;
 import com.steelrain.springboot.lilac.datamodel.NaruLibraryDTO;
-import com.steelrain.springboot.lilac.event.KakaoBookSaveEvent;
-import com.steelrain.springboot.lilac.event.KeywordBookSearchEvent;
+import com.steelrain.springboot.lilac.event.*;
 import com.steelrain.springboot.lilac.repository.BookRepository;
 import com.steelrain.springboot.lilac.repository.IKaKoBookRepository;
 import com.steelrain.springboot.lilac.repository.INaruRepository;
@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -156,6 +157,29 @@ public class BookService implements IBookService{
         sbjBookListDTO.setSubjectName(event.getKeyword());
         event.setKeywordBookListDTO(sbjBookListDTO);
     }
+
+    @EventListener(LicenseBookSearchEvent.class)
+    public void handleLicenseBookSearchEvent(LicenseBookSearchEvent event){
+        event.setLicenseBookListDTO(getLicenseBookList(event.getLicenseCode(), event.getRegionCode(), event.getDetailRegionCode(), event.getPageNum(), event.getLicenseBookCount()));
+    }
+
+    @EventListener(SubjectBookSearchEvent.class)
+    public void handleSubjectBookSearchEvent(SubjectBookSearchEvent event){
+        event.setSearchResultDTO(getSubjectBookList(event.getSubjectCode(), event.getPageNum(), event.getSubjectBookCount()));
+    }
+
+    @EventListener(BookDetailSearchEvent.class)
+    public void handleBookDetailSearchEvent(BookDetailSearchEvent event){
+        event.setBookDetailInfo(getBookDetailInfo(event.getIsbn(), event.getRegionCode(), event.getDetailRegionCode()));
+    }
+
+    @Async
+    @EventListener(KakaoBookSaveEvent.class)
+    public void handleBookSaveEvent(KakaoBookSaveEvent event){
+        m_bookRepository.saveKakaoBookList(event.getKaKaoBookList());
+    }
+
+
 
     // 카카오 API로 검색된 결과를 DB에 저장하려고 할때 사용한다.
     private void publishKaKaoBookSaveEvent(List<KaKaoBookDTO> bookList){

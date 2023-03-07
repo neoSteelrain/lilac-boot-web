@@ -1,6 +1,7 @@
 package com.steelrain.springboot.lilac.service;
 
 import com.steelrain.springboot.lilac.datamodel.LectureNoteDTO;
+import com.steelrain.springboot.lilac.datamodel.view.LectureNoteDetailDTO;
 import com.steelrain.springboot.lilac.exception.LectureNoteException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -27,9 +28,7 @@ public class LectureNoteServiceTests {
     @Rollback
     @DisplayName("기본 강의노트 생성 테스트")
     public void testCreateDefaultLectureNote(){
-
         lectureNoteService.createDefaultLectureNote(4L, "user3");
-
     }
 
     @Test
@@ -44,11 +43,11 @@ public class LectureNoteServiceTests {
     }
     
     @Test
-    @Transactional
-    @Rollback
+    @Transactional()
+    @Rollback(true)
     @DisplayName("강의노트 추가 테스트")
     public void testAddLectureNote(){
-        Long noteId = lectureNoteService.addLectureNote(1L, "1번 강의노트", "첫번째 강의노트 입니다. 열심히 하겠습니다.", 1, 2);
+        Long noteId = lectureNoteService.addLectureNote(2L, "1번 강의노트", "첫번째 강의노트 입니다. 열심히 하겠습니다.", 1, null);
         assertThat(noteId != null).isTrue();
         log.info("noteId = {}", noteId);
     }
@@ -57,7 +56,7 @@ public class LectureNoteServiceTests {
     @DisplayName("테스트용 데이타 입력")
     public void addLectureNotes(){
         for(int i=1 ; i <= 10 ; i++){
-            lectureNoteService.addLectureNote(4L, String.format("%d 번 강의노트", i), String.format("%d 번째 강의노트 설명입니다.열심히 하겠습니다."), 1, 2);
+            lectureNoteService.addLectureNote(2L, String.format("%d 번 강의노트", i), String.format("%d 번째 강의노트 설명입니다.열심히 하겠습니다.", i), 1, 0);
         }
     }
 
@@ -95,5 +94,21 @@ public class LectureNoteServiceTests {
             log.info("수정 후 강의노트 : {}", note);
         });
         log.info("=================== 노트 수정 끝 ================");
+    }
+
+    @Test
+    @Transactional
+    @Rollback(false)
+    public void 강의노트_도서추가_테스트(){
+        lectureNoteService.registerBook(1L, 6L, 2L);
+    }
+
+    @Test
+    public void 회원_강의노트_정보가져오기_테스트(){
+        LectureNoteDetailDTO resultDTO = lectureNoteService.getLectureNoteDetailInfoByMember(2L, 6L);
+
+        assertThat(resultDTO).isNotNull();
+        assertThat(resultDTO.getKakaoBookInfo().size() > 0).isTrue();
+        log.debug("카카오북 정보 : {}",resultDTO.getKakaoBookInfo().get(0).toString());
     }
 }

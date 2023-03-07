@@ -17,28 +17,6 @@ public class BookServiceTests {
     private IBookService bookService;
 
     @Test
-    public void testGetKakaoBookLibraryList(){
-
-        /*List<LicenseBookDTO> resultList = bookService.getLicenseBookList("정보처리기사", (short)23, 23040);
-
-        System.out.println("================= 책정보 시작 ====================");
-        resultList.stream().forEach(result ->{
-            System.out.println(result.getKakaoBookDTO().toString());
-        });
-        System.out.println("================= 책정보 끝 ====================");
-        
-        System.out.println("================= 도서관 출력 시작 ====================");
-        resultList.stream().forEach(result -> {
-            System.out.println(String.format("도서관 갯수 : %d", result.getLibraryList().size()));
-            result.getLibraryList().stream().forEach(library ->{
-                System.out.println(String.format("도서관 정보 : %s", library.toString()));
-            });
-        });
-        System.out.println("================= 도서관 출력 끝 ====================");*/
-        // 2023-01-10T00:00:00.000+09:00
-    }
-
-    @Test
     public void testTimestamp(){
         String timeStr = "2023-01-10T00:00:00.000+09:00";
         ZonedDateTime zt = ZonedDateTime.parse(timeStr);
@@ -55,4 +33,6 @@ public class BookServiceTests {
         assertThat(strs != null).isEqualTo(strs.length == 2);
         System.out.println(strs);
     }
+
+
 }

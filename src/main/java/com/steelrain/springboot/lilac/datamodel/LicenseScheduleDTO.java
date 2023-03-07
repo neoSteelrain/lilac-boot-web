@@ -1,10 +1,11 @@
 package com.steelrain.springboot.lilac.datamodel;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
-@Setter
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Builder
 public class LicenseScheduleDTO {
     // 구분
     private String category;

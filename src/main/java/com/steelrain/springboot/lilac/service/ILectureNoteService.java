@@ -20,4 +20,5 @@ public interface ILectureNoteService {
     void removePlayList(Long memberId, Long noteId, Long playListId);
 
     LectureNoteDTO getLectureNoteByMember(Long id, Long noteId);
+    void registerBook(Long bookId, Long lectureNoteId, Long memberId);
 }

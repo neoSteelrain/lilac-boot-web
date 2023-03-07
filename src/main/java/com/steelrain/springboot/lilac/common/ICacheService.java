@@ -1,4 +1,4 @@
-package com.steelrain.springboot.lilac.service;
+package com.steelrain.springboot.lilac.common;
 
 import com.steelrain.springboot.lilac.datamodel.LibraryDetailRegionCodeDTO;
 import com.steelrain.springboot.lilac.datamodel.LibraryRegionCodeDTO;

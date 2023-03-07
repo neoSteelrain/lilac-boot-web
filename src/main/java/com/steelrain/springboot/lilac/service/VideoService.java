@@ -5,10 +5,13 @@ import com.steelrain.springboot.lilac.common.PagingUtils;
 import com.steelrain.springboot.lilac.datamodel.*;
 import com.steelrain.springboot.lilac.datamodel.view.RecommendedPlayListDTO;
 import com.steelrain.springboot.lilac.datamodel.view.RecommendedVideoDTO;
+import com.steelrain.springboot.lilac.event.VideoListByPlayListEvent;
+import com.steelrain.springboot.lilac.event.VideoPlayListSearchEvent;
 import com.steelrain.springboot.lilac.exception.LilacException;
 import com.steelrain.springboot.lilac.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -62,6 +65,16 @@ public class VideoService implements IVideoService {
                 .playList(m_videoRepository.findPlayListByKeyword(keywordStr, pageStart, playlistCount))
                 .build();
     }*/
+
+    @EventListener(VideoPlayListSearchEvent.class)
+    public void handleVideoPlayListSearchEvent(VideoPlayListSearchEvent event){
+        event.setSearchResultDTO(searchPlayList(event.getKeywordCode(), event.getKeyword(), event.getPageNum(), event.getPlaylistCount(), event.getKeywordType()));
+    }
+
+    @EventListener(VideoListByPlayListEvent.class)
+    public void handleVideoListByPlayListEvent(VideoListByPlayListEvent event){
+        event.setVideoDTOList(getAllVideoIdByPlayList(event.getPlayListId()));
+    }
 
     private String parseKeywordCode(int keywordCode, String searchKeyword, int keywordType){
         String result = null;
