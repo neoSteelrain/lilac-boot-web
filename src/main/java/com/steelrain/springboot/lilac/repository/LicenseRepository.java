@@ -7,6 +7,7 @@ import com.steelrain.springboot.lilac.datamodel.api.LicenseScheduleResponseDTO;
 import com.steelrain.springboot.lilac.exception.InvalidScheduleJsonException;
 import com.steelrain.springboot.lilac.exception.LicenseScheduleException;
 import com.steelrain.springboot.lilac.mapper.LicenseMapper;
+import lombok.RequiredArgsConstructor;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
@@ -32,16 +33,12 @@ import java.util.Optional;
  * 국가자격 시험일정 조회 서비스 API 에서 자격증의 시험일정을 조회한다.
  */
 @Repository
+@RequiredArgsConstructor
 public class LicenseRepository implements ILicenseRespository{
 
     private final APIConfig m_ApiConfig;
     private final LicenseMapper m_licenseMapper;
 
-
-    public LicenseRepository(APIConfig apiConfig, LicenseMapper licenseMapper){
-        this.m_ApiConfig = apiConfig;
-        this.m_licenseMapper = licenseMapper;
-    }
 
     @Override
     public LicenseScheduleResponseDTO getLicenseSchedule(int licenseCode){

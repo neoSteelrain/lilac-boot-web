@@ -2,7 +2,6 @@ package com.steelrain.springboot.lilac.service;
 
 import com.steelrain.springboot.lilac.datamodel.*;
 import com.steelrain.springboot.lilac.datamodel.view.BookDetailDTO;
-import com.steelrain.springboot.lilac.datamodel.view.KeywordBookListDTO;
 import com.steelrain.springboot.lilac.datamodel.view.LicenseBookListDTO;
 import com.steelrain.springboot.lilac.datamodel.view.SubjectBookListDTO;
 import com.steelrain.springboot.lilac.event.*;

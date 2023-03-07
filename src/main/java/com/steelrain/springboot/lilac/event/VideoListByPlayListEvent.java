@@ -1,6 +1,5 @@
 package com.steelrain.springboot.lilac.event;
 
-import com.steelrain.springboot.lilac.datamodel.YoutubeVideoDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

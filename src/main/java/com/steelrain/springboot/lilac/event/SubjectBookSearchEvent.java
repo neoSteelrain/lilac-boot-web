@@ -1,6 +1,5 @@
 package com.steelrain.springboot.lilac.event;
 
-import com.steelrain.springboot.lilac.datamodel.KaKaoBookDTO;
 import com.steelrain.springboot.lilac.datamodel.view.SubjectBookListDTO;
 import lombok.Builder;
 import lombok.Getter;

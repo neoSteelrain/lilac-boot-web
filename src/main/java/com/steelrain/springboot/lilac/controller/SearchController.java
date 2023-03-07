@@ -1,16 +1,14 @@
 package com.steelrain.springboot.lilac.controller;
 
+import com.steelrain.springboot.lilac.common.ICacheService;
 import com.steelrain.springboot.lilac.common.YOUTUBE_PAGING_INFO;
 import com.steelrain.springboot.lilac.datamodel.*;
-import com.steelrain.springboot.lilac.datamodel.view.KeywordBookListDTO;
 import com.steelrain.springboot.lilac.datamodel.view.SubjectBookListDTO;
 import com.steelrain.springboot.lilac.service.ISearchService;
-import com.steelrain.springboot.lilac.common.KeywordCategoryCacheService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -23,7 +21,7 @@ import java.util.List;
 public class SearchController {
 
     private final ISearchService m_searchService;
-    private final KeywordCategoryCacheService m_keywordCategoryCacheService;
+    private final ICacheService m_keywordCategoryCacheService;
 
 
     @GetMapping("/dtlRegionCode")

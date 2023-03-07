@@ -1,10 +1,9 @@
 package com.steelrain.springboot.lilac.controller;
 
 
-import com.steelrain.springboot.lilac.common.KeywordCategoryCacheService;
+import com.steelrain.springboot.lilac.common.ICacheService;
 import com.steelrain.springboot.lilac.service.IBookService;
 import com.steelrain.springboot.lilac.service.IVideoService;
-import com.steelrain.springboot.lilac.service.VideoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequiredArgsConstructor
 public class HomeController {
 
-    private final KeywordCategoryCacheService m_keywordCategoryCacheService;
+    private final ICacheService m_keywordCategoryCacheService;
     private final IVideoService m_videoService;
     private final IBookService m_bookService;
 

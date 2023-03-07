@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.controller;
 
+import com.steelrain.springboot.lilac.common.ICacheService;
 import com.steelrain.springboot.lilac.common.SESSION_KEY;
 import com.steelrain.springboot.lilac.datamodel.LectureNoteDTO;
 import com.steelrain.springboot.lilac.datamodel.MemberDTO;
@@ -8,7 +9,6 @@ import com.steelrain.springboot.lilac.datamodel.view.LectureNoteDetailDTO;
 import com.steelrain.springboot.lilac.datamodel.view.LectureNoteEditDTO;
 import com.steelrain.springboot.lilac.datamodel.view.PlayListAddModalDTO;
 import com.steelrain.springboot.lilac.service.ILectureNoteService;
-import com.steelrain.springboot.lilac.common.KeywordCategoryCacheService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -31,7 +31,7 @@ import java.util.Objects;
 public class LectureController {
 
     private final ILectureNoteService m_lectureService;
-    private final KeywordCategoryCacheService m_keywordCategoryCacheService;
+    private final ICacheService m_keywordCategoryCacheService;
 
 
     @GetMapping("/lecture-note")

@@ -10,8 +10,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@RequiredArgsConstructor
+
 @Repository
+@RequiredArgsConstructor
 public class VideoRepository implements IVideoRepository {
 
     private final VideoMapper m_videoMapper;

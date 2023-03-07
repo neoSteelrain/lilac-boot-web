@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.controller;
 
+import com.steelrain.springboot.lilac.common.ICacheService;
 import com.steelrain.springboot.lilac.common.SESSION_KEY;
 import com.steelrain.springboot.lilac.datamodel.LibraryRegionCodeDTO;
 import com.steelrain.springboot.lilac.datamodel.LicenseCodeDTO;
@@ -9,7 +10,6 @@ import com.steelrain.springboot.lilac.datamodel.MemberDTO;
 import com.steelrain.springboot.lilac.datamodel.view.MemberProfileEditDTO;
 import com.steelrain.springboot.lilac.datamodel.view.MemberRegDTO;
 import com.steelrain.springboot.lilac.service.IMemberService;
-import com.steelrain.springboot.lilac.common.KeywordCategoryCacheService;
 import com.steelrain.springboot.lilac.validate.LoginValidationSequence;
 import com.steelrain.springboot.lilac.validate.RegistrationValidateSequence;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,7 @@ import java.util.List;
 public class MemberController {
 
     private final IMemberService m_memberService;
-    private final KeywordCategoryCacheService m_keywordCategoryCacheService;
+    private final ICacheService m_keywordCategoryCacheService;
 
 
     @ModelAttribute("subjectCodes")

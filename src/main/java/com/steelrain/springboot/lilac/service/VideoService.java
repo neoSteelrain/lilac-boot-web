@@ -1,6 +1,6 @@
 package com.steelrain.springboot.lilac.service;
 
-import com.steelrain.springboot.lilac.common.KeywordCategoryCacheService;
+import com.steelrain.springboot.lilac.common.ICacheService;
 import com.steelrain.springboot.lilac.common.PagingUtils;
 import com.steelrain.springboot.lilac.datamodel.*;
 import com.steelrain.springboot.lilac.datamodel.view.RecommendedPlayListDTO;
@@ -22,7 +22,7 @@ import java.util.List;
 public class VideoService implements IVideoService {
 
     private final VideoRepository m_videoRepository;
-    private final KeywordCategoryCacheService m_keywordCategoryCacheService;
+    private final ICacheService m_keywordCategoryCacheService;
 
 
     @Override
