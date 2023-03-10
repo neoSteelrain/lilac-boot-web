@@ -18,6 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * 자격증 서비스
+ * - 자격증의 비즈니스 로직을 구현
+ * - 자격증 관련된 이벤트를 처리/발행한다
+ */
 @Service
 @RequiredArgsConstructor
 public class LicenseService implements ILicenseService{

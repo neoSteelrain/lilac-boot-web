@@ -259,11 +259,8 @@
                                                         <h6 class="title" th:text="${kakaoBook.title}"></h6>
                                                         <ul class="info">
                                                             <li class="info" th:text="${{kakaoBook.price}} +' -> '+ ${{kakaoBook.salePrice}}+' 원'"></li>
-                                                            <li class="like"><a th:href="@{kakaoBook.url}"><i
+                                                            <li class="like"><a th:href="${kakaoBook.url}" target="_blank"><i
                                                                     class="lni lni-link"></i></a>
-                                                            </li>
-                                                            <li class="like"><a href="javascript:void(0)"><i
-                                                                    class="lni lni-notepad"></i></a>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -425,7 +422,7 @@
             const m_selectedRegion = $('#location-main').val();
             $.ajax({
                 type:"get",
-                url:"/search/dtlRegionCode",
+                url:"/search/dtl-region-code",
                 dataType:"json",
                 data:{ regionCode: m_selectedRegion },
                 success:(result) => {
@@ -461,10 +458,12 @@
                 - 카테고리검색할때 지역정보는 필수, 세부지역은 선택
             */
             const m_keyword = $("#keyword").val();
+            console.log("m_keyword : "+m_keyword);
             if(m_keyword != ""){
                 // 검색어 처리
                 refreshSearchBookList(m_keyword, 1);
                 refreshPlayList(0, m_keyword, 1, 0);
+                moveScrollToBookList();
                 return;
             }
             const m_regionCode = $("#location-main option:selected").val();
@@ -483,6 +482,10 @@
 
             refreshPlaylistByLicense(m_licenseCode, 1); // 첫번째 페이지를 시작으로 재생목록을 업데이트
 
+            moveScrollToLicenseScheduleList();
+        }
+
+        const moveScrollToLicenseScheduleList = () => {
             // 자격증 시험일정 태그로 스크롤 이동
             let offset = $("#section-license").offset();
             $("html, body").animate({scrollTop: offset.top}, 300);
@@ -495,7 +498,7 @@
             }
             $.ajax({
                 type: "get",
-                url: "/search/licSchd",
+                url: "/search/license-schedule",
                 data: { licenseCode: argLicenseCode },
                 dataType: "text",
                 success: function (result){
@@ -512,7 +515,7 @@
         const refreshLicenseBookList = (argLicenseCode, argRegionCode, argDetailRegionCode, argPageNum) => {
             $.ajax({
                 type:"get",
-                url:"/search/licenseBookList",
+                url:"/search/license-book-list",
                 data:{
                     licenseCode:argLicenseCode,
                     regionCode:argRegionCode,
@@ -602,6 +605,7 @@
             }
             refreshPlayList(argLicenseCode, null, argOffset, 1);
         }
+
         // 동영상 재생목록을 코드기반으로 업데이트하는 함수
         const refreshPlayList = (argKeywordCode, argSearchKeyword, argOffset, argKeywordType) => {
             $.ajax({

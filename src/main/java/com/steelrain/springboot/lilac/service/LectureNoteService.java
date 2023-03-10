@@ -1,13 +1,14 @@
 package com.steelrain.springboot.lilac.service;
 
 import com.steelrain.springboot.lilac.datamodel.*;
+import com.steelrain.springboot.lilac.datamodel.view.BookAddModalDTO;
 import com.steelrain.springboot.lilac.datamodel.view.LectureNoteDetailDTO;
 import com.steelrain.springboot.lilac.datamodel.view.PlayListAddModalDTO;
 import com.steelrain.springboot.lilac.event.LicenseInfoByLectureNoteEvent;
 import com.steelrain.springboot.lilac.event.MemberRegistrationEvent;
 import com.steelrain.springboot.lilac.event.VideoListByPlayListEvent;
 import com.steelrain.springboot.lilac.exception.LectureNoteException;
-import com.steelrain.springboot.lilac.repository.LectureNoteRepository;
+import com.steelrain.springboot.lilac.repository.ILectureNoteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -22,12 +23,17 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * 강의노트 서비스
+ * - 강의노트의 비즈니스 로직을 구현
+ * - 강의노트 관련된 이벤트를 처리/발행 한다
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class LectureNoteService implements ILectureNoteService{
 
-    private final LectureNoteRepository m_lectureNoteRepository;
+    private final ILectureNoteRepository m_lectureNoteRepository;
     private final ApplicationEventPublisher m_appEventPublisher;
 
 
@@ -119,30 +125,37 @@ public class LectureNoteService implements ILectureNoteService{
         return  m_lectureNoteRepository.addVideoIdList(paramList);
     }
 
+
+
     /**
      * 회원이 선택한 재생목록을 강의노트에 추가하기 위해 회원의 강의노트목록을 반환하는 서비스
-     * 회원이 가지고 있는 강의노트중에서 추가하려는 재생목록이 없는 강의노트만 모아서 보내줘야 한다
-     * 중복된 재생목록이 있으면 안된다.
+     * 회원이 가지고 있는 강의노트중에서 추가하려는 재생목록이 없는 강의노트만 모아서 보내준다
      * @param memberId 강의노트를 가져올 회원의 id
      * @param playListId 회원의 강의노트에 추가하려고 하는 재생목록의 id
      * @return playListId 로 지정된 재생목록을 포함하고 있지 않은 강의노트의 목록
      */
     @Override
-    public List<PlayListAddModalDTO> getLectureNoteListByMemberModal(Long memberId, Long playListId) {
+    public List<PlayListAddModalDTO> getLectureNoteListByPlayListModal(Long memberId, Long playListId) {
         /*
-            DB에서 값이 넘어올때 재생목록이 없는 노트는 재생목록값은 null 에서 -1로 치환되어서 넘어온다.
+            - 중복된 재생목록이 있으면 안된다
+            - DB에서 값이 넘어올때 재생목록이 없는 노트는 재생목록값은 null 에서 -1로 치환되어서 넘어온다.
+            - -1로 치환하는 이유 : 스트림으로 처리할때 NPE 가 발생하지 않도록 하기 위해서 null 대신 -1로 바꿔준다
             - 작업순서
             1. DB에서 회원의 모든 강의노트 및 강의노트에 있는 재생목록이 반환된다.
-            2. 전달인자로 넘어온 재생목록이 회원이 가지고 있는 전체재생목록에 있는지 검사를 해서 추가하려는 재생목록이 이미 있는 강의노트id를 뽑아낸다
+            2. 전달인자로 넘어온 재생목록이 회원이 가지고 있는 전체재생목록에 있는지 검사해서 추가하려는 재생목록이 이미 있는 강의노트id를 뽑아낸다
             3. 2번에서 뽑아낸 강의노트를 강의노트목록에서 빼고 강의노트목록을 반환
          */
-        List<LectureNoteModalDTO> noteDTOList = m_lectureNoteRepository.findLectureNoteListByMember(memberId);
+        // 1. DB에서 회원의 모든 강의노트 및 강의노트에 있는 재생목록을 반환
+        List<LectureNoteModalDTO> noteDTOList = m_lectureNoteRepository.findLectureNoteListByPlayList(memberId);
         List<PlayListAddModalDTO> resultList = new ArrayList<>(noteDTOList.size());
-        Optional<Long> matchedNoteNo = noteDTOList.stream().filter(note -> note.getPlayListId().equals(playListId))
-                                                 .map(LectureNoteModalDTO::getNoteId)
-                                                 .findFirst();
-        if(matchedNoteNo.isPresent()){
-            noteDTOList.stream().filter(note -> !note.getNoteId().equals(matchedNoteNo.get())).distinct().forEach(note -> {
+
+        // 2. 전달인자로 넘어온 재생목록이 회원이 가지고 있는 전체재생목록에 있는지 검사를 해서 추가하려는 재생목록이 이미 있는 강의노트id를 뽑아낸다
+        Optional<Long> matchedNoteId = noteDTOList.stream().filter(note -> note.getPlayListId().equals(playListId))
+                .map(LectureNoteModalDTO::getNoteId)
+                .findFirst();
+        // 3. 2번에서 뽑아낸 강의노트를 강의노트목록에서 빼고 강의노트목록을 반환
+        if(matchedNoteId.isPresent()){
+            noteDTOList.stream().filter(note -> !note.getNoteId().equals(matchedNoteId.get())).distinct().forEach(note -> {
                 resultList.add(PlayListAddModalDTO.builder()
                         .id(note.getNoteId())
                         .title(note.getNoteTitle())
@@ -157,6 +170,53 @@ public class LectureNoteService implements ILectureNoteService{
          });
         }
         return resultList;
+    }
+
+    /**
+     * 회원이 선택한 도서르 강의노트에 추가하기 위해 회원의 강의노트목록을 반환하는 서비스
+     * 회원이 가지고 있는 강의노트중에서 추가하려는 도서가 없는 강의노트만 모아서 보내준다
+     * @param memberId 강의노트의 회원 ID
+     * @param bookId 강의노트에 추가하려는 도서 ID
+     * @return bookId 로 지정된 도서를 포함하고 있지 않은 강의노트목록
+     */
+    @Override
+    public List<BookAddModalDTO> getLectureNoteListByBookModal(Long memberId, Long bookId) {
+        /*
+            - 중복된 재생목록이 있으면 안된다
+            - getLectureNoteListByPlayListModal 메서드의 처리로직과 비슷하게 처리한다
+            - DB에서 값이 넘어올때 재생목록이 없는 노트는 재생목록값은 null 에서 -1로 치환되어서 넘어온다
+            - -1로 치환하는 이유 : 스트림으로 처리할때 NPE 가 발생하지 않도록 하기 위해서 null 대신 -1로 바꿔준다
+            - 작업순서
+            1. DB에서 회원의 모든 강의노트 및 강의노트에 있는 재생목록이 반환된다.
+            2. 전달인자로 넘어온 도서Id를 가지고, 회원이 가지고 있는 전체재생목록에 있는지 검사해서 추가하려는 도서가 이미 있는 강의노트id를 뽑아낸다
+            3. 2번에서 뽑아낸 강의노트를 강의노트목록에서 빼고 강의노트목록을 반환
+         */
+        List<LectureNoteModalDTO> noteDTOList = m_lectureNoteRepository.findLectureNoteListByBook(memberId);
+        List<BookAddModalDTO> resultDTO = new ArrayList<>(noteDTOList.size());
+        Optional<Long> matchedNoteId = noteDTOList.stream().filter(note -> note.getBookId().equals(bookId))
+                .map(LectureNoteModalDTO::getNoteId)
+                .findFirst();
+        if(matchedNoteId.isPresent()){
+            noteDTOList.stream().filter(note -> !note.getNoteId().equals(matchedNoteId.get())).distinct().forEach(note -> {
+                resultDTO.add(BookAddModalDTO.builder()
+                        .id(note.getNoteId())
+                        .title(note.getNoteTitle())
+                        .build());
+            });
+        }else{
+            noteDTOList.stream().distinct().forEach(note -> {
+                resultDTO.add(BookAddModalDTO.builder()
+                        .id(note.getNoteId())
+                        .title(note.getNoteTitle())
+                        .build());
+            });
+        }
+        return resultDTO;
+    }
+
+    @Override
+    public void removeBook(Long refId) {
+        m_lectureNoteRepository.deleteBook(refId);
     }
 
     /**
@@ -204,7 +264,7 @@ public class LectureNoteService implements ILectureNoteService{
         강의노트에 등록된 도서정보목록을 LectureNoteDetailDTO에 설정한다.
      */
     private void initBookInfoByLectureNote(Long memberId, Long noteId, final LectureNoteDetailDTO noteDetailDTO) {
-        noteDetailDTO.setKakaoBookInfo(m_lectureNoteRepository.findBookListByLectureNote(memberId, noteId));
+        noteDetailDTO.setKakaoBookList( m_lectureNoteRepository.findBookListByLectureNote(memberId, noteId));
     }
 
     /*

@@ -8,6 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * 관리자 서비스
+ * - 관리자의 비즈니스 로직을 구현
+ * - 관리자 관련된 이벤트를 처리/발행 한다 
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor

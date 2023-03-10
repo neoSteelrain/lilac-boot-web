@@ -15,6 +15,10 @@
         DELETE FROM tbl_lecture WHERE id=#{noteId}
     </delete>
 
+    <delete id="deleteBook" parameterType="java.lang.Long">
+        DELETE FROM ref_tbl_lecture_book WHERE id=#{refId};
+    </delete>
+
     <update id="updateLectureNote" parameterType="LectureNoteDTO">
         UPDATE tbl_lecture SET title=#{title} , description=#{description} WHERE id = #{id};
     </update>
@@ -31,19 +35,33 @@
             (#{lectureNoteId}, #{memberId}, #{bookId})
     </insert>
 
-    <resultMap id="findLectureNoteListByMemberMap" type="LectureNoteModalDTO">
+    <resultMap id="findLectureNoteListByPlayListMap" type="LectureNoteModalDTO">
         <result property="noteId" column="id" />
         <result property="noteTitle" column="title" />
         <result property="playListId" column="youtube_playlist_id" />
     </resultMap>
-    <select id="findLectureNoteListByMember" parameterType="java.lang.Long" resultMap="findLectureNoteListByMemberMap">
+    <select id="findLectureNoteListByPlayList" parameterType="java.lang.Long" resultMap="findLectureNoteListByPlayListMap">
         SELECT tmp.id, tmp.title, IFNULL(yt.youtube_playlist_id, -1) AS youtube_playlist_id
         FROM (SELECT lec.id, lec.title, ref.youtube_id
               FROM tbl_lecture lec LEFT JOIN ref_tbl_lecture_youtube ref
-                                             ON lec.id = ref.lecture_id
+                ON lec.id = ref.lecture_id
               WHERE lec.member_id = #{memberId}) as tmp LEFT JOIN tbl_youtube yt
-                                                        ON tmp.youtube_id = yt.id
+        ON tmp.youtube_id = yt.id
         GROUP BY tmp.id, yt.youtube_playlist_id
+    </select>
+
+    <resultMap id="findLectureNoteListByBookMap" type="LectureNoteModalDTO">
+        <result property="noteId" column="lec_id"/>
+        <result property="noteTitle" column="lec_title"/>
+        <result property="bookId" column="book_id"/>
+    </resultMap>
+    <select id="findLectureNoteListByBook" parameterType="java.lang.Long" resultMap="findLectureNoteListByBookMap">
+        SELECT tmp.id as lec_id, tmp.title as lec_title, IFNULL(tmp.book_id, -1) as book_id
+        FROM (SELECT lec.id, lec.title, ref.book_id
+              FROM tbl_lecture lec LEFT JOIN ref_tbl_lecture_book ref
+                ON lec.id=ref.lecture_id
+              WHERE lec.member_id=#{memberId}) as tmp LEFT JOIN tbl_book tb
+        ON tmp.book_id=tb.id
     </select>
 
     <resultMap id="findVideoInfoByLectureNoteMap" type="LectureVideoPlayListInfo">
@@ -68,30 +86,15 @@
                   FROM tbl_lecture lec
                            LEFT JOIN ref_tbl_lecture_youtube ref
                                      ON lec.id = ref.lecture_id
-                  WHERE lec.member_id = #{memberId} AND lec.id = #{noteId}) as tmp
-                     LEFT JOIN tbl_youtube yt
-                               ON tmp.youtube_id = yt.id
+                  WHERE lec.member_id = #{memberId} AND lec.id = #{noteId}) as tmp LEFT JOIN tbl_youtube yt
+                ON tmp.youtube_id = yt.id
             GROUP BY tmp.id, yt.youtube_playlist_id ) as npl
-                            ON npl.youtube_playlist_id=pl.id;
+        ON npl.youtube_playlist_id=pl.id;
     </select>
-<!--
-        private Long id;
-        private String isbn13;
-        private String title;
-        private String contents;
-        private String url;
-        private Timestamp publishDate;
-        private String authors;
-        private String publisher;
-        private String translators;
-        private Integer price;
-        private Integer salePrice;
-        private String thumbnail;
-        private String status;
-        private Timestamp regDate;
--->
-    <resultMap id="findBookListByLectureNoteMap" type="KaKaoBookDTO">
-        <result property="id" column="id" />
+
+    <resultMap id="findBookListByLectureNoteMap" type="LectureNoteBook">
+        <result property="lecBookId" column="id" />
+        <result property="id" column="book_id" />
         <result property="isbn13" column="isbn13" />
         <result property="title" column="title" />
         <result property="contents" column="contents" />
@@ -107,7 +110,7 @@
         <result property="regDate" column="reg_date" />
     </resultMap>
     <select id="findBookListByLectureNote" parameterType="map" resultMap="findBookListByLectureNoteMap">
-        SELECT tb.id, tb.isbn13, tb.title, tb.contents, tb.url, tb.publish_date, tb.authors, tb.publisher, tb.translators, tb.price, tb.sale_price, tb.thumbnail, tb.status, tb.reg_date
+        SELECT refb.id, tb.id as book_id, tb.isbn13, tb.title, tb.contents, tb.url, tb.publish_date, tb.authors, tb.publisher, tb.translators, tb.price, tb.sale_price, tb.thumbnail, tb.status, tb.reg_date
         FROM ref_tbl_lecture_book refb INNER JOIN tbl_book tb
             ON refb.lecture_member_id=#{memberId}
                 AND refb.lecture_id=#{noteId}

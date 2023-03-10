@@ -12,6 +12,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * 검색 서비스
+ * - 검색의 비즈니스 로직을 구현
+ * - 검색관련 이벤트를 처리/발행 한다
+ */
 @Service
 @RequiredArgsConstructor
 public class SearchService implements ISearchService{

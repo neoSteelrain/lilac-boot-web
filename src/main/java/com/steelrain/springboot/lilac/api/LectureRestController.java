@@ -21,8 +21,11 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-
+/**
+ * 모달창에서 사용하는 REST API
+ */
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -80,7 +83,7 @@ public class LectureRestController {
                                                     .build(), HttpStatus.CONFLICT);
     }
 
-    @PostMapping("addPlayList")
+    @PostMapping("/addPlayList")
     public ResponseEntity<YoutubePlayListAddResponse> addYoutubePlayListToLectureNote(@Validated @RequestBody YoutubePlayListAddRequest request,
                                                                                       Errors errors,
                                                                                       HttpServletRequest servletRequest){
@@ -88,7 +91,7 @@ public class LectureRestController {
             throw new ValidationErrorException(errors, request);
         }
         HttpSession session = servletRequest.getSession(false);
-        if(session == null){
+        if(session == null && Objects.isNull(session.getAttribute(SESSION_KEY.LOGIN_MEMBER))){
             return new ResponseEntity<>(YoutubePlayListAddResponse.builder().message("로그인 정보가 필요합니다.").build(), HttpStatus.UNAUTHORIZED);
         }
         MemberDTO memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
@@ -109,6 +112,37 @@ public class LectureRestController {
         }
     }
 
+    @PostMapping("/addBook")
+    public ResponseEntity<BookAddResponse> addBookToLectureNote(@Validated @RequestBody BookAddRequest request,
+                                                                Errors errors,
+                                                                HttpServletRequest servletRequest){
+        if(errors.hasErrors()){
+            throw new ValidationErrorException(errors, request);
+        }
+        HttpSession session = servletRequest.getSession(false);
+        if(session == null && Objects.isNull(session.getAttribute(SESSION_KEY.LOGIN_MEMBER))){
+            return new ResponseEntity<>(BookAddResponse.builder().message("로그인 정보가 필요합니다.").build(), HttpStatus.UNAUTHORIZED);
+        }
+        MemberDTO memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
+        m_lectureNoteService.registerBook(request.getBookId(), request.getLectureNoteId(), memberDTO.getId());
+        return new ResponseEntity<>(BookAddResponse.builder()
+                .requestParameter(request)
+                .code(HttpStatus.OK.value())
+                .message("강의노트에 도서를 추가하였습니다.")
+                .status(HttpStatus.OK.getReasonPhrase())
+                .build(), HttpStatus.OK);
+    }
+
+    @Getter
+    @ToString
+    @Builder
+    static class BookAddResponse{
+        private Object requestParameter;
+        private int code;
+        private String message;
+        private String status;
+    }
+
     @Getter
     @Builder
     static class LectureNoteList{
@@ -123,6 +157,17 @@ public class LectureRestController {
         private int code;
         private String message;
         private String status;
+    }
+
+    @Getter
+    @ToString
+    @Builder
+    static class BookAddRequest{
+        @NotNull
+        private Long bookId;
+
+        @NotNull
+        private Long lectureNoteId;
     }
 
     @Getter

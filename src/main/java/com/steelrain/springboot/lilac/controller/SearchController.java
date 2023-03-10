@@ -1,18 +1,23 @@
 package com.steelrain.springboot.lilac.controller;
 
 import com.steelrain.springboot.lilac.common.ICacheService;
+import com.steelrain.springboot.lilac.common.SESSION_KEY;
 import com.steelrain.springboot.lilac.common.YOUTUBE_PAGING_INFO;
 import com.steelrain.springboot.lilac.datamodel.*;
 import com.steelrain.springboot.lilac.datamodel.view.SubjectBookListDTO;
 import com.steelrain.springboot.lilac.service.ISearchService;
+import com.steelrain.springboot.lilac.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Controller
@@ -24,7 +29,7 @@ public class SearchController {
     private final ICacheService m_keywordCategoryCacheService;
 
 
-    @GetMapping("/dtlRegionCode")
+    @GetMapping("/dtl-region-code")
     @ResponseBody
     public List<LibraryDetailRegionCodeDTO> getLibDetailRegionCodes(@RequestParam("regionCode") short regionCode){
         if(regionCode < 11){ // 지역코드는 11부터 시작한다
@@ -34,7 +39,7 @@ public class SearchController {
         return m_keywordCategoryCacheService.getLibraryDetailRegionCodeList(regionCode);
     }
 
-    @GetMapping("/licSchd")
+    @GetMapping("/license-schedule")
     public String getLicenseInfo(@RequestParam("licenseCode") int licenseCode, Model model){
         if(licenseCode <= 0){
             log.error("유효하지 않은 자격증코드 : 입력된 자격증코드 = {}", licenseCode);
@@ -44,18 +49,18 @@ public class SearchController {
         return "/search/license-template";
     }
 
-    @GetMapping("/licenseBookList")
+    @GetMapping("/license-book-list")
     public String getLicenseBookList(@RequestParam("licenseCode") int licenseCode,
                                      @RequestParam("regionCode") short regionCode,
                                      @RequestParam("detailRegionCode") int detailRegionCode,
                                      @RequestParam("pageNum") int pageNum,
                                      @RequestParam("bookCount") int bookCount, Model model){
         if(regionCode <= -1){
-            log.error("지역코드 입력에러 - 필수입력 지역코드가 없음 : 입력된 지역코드 = {}", regionCode);
+            log.error("지역코드 입력에러 - 필수입력 지역코드 없음 : 입력된 지역코드 = {}", regionCode);
             return "redirect:/";
         }
         if(regionCode <= -1 && detailRegionCode < -1){
-            log.error("지역코드 입력에러 - 지역코드,세부지역코드 2개 다 없음 : 입력된 지역코드 = {} , 입력된 세부지역코드 = {}", regionCode, detailRegionCode);
+            log.error("지역코드 입력에러 - 지역코드,세부지역코드 없음 : 입력된 지역코드 = {} , 입력된 세부지역코드 = {}", regionCode, detailRegionCode);
             return "redirect:/";
         }
         model.addAttribute("licenseBookInfo", m_searchService.getLicenseBookList(licenseCode, regionCode, detailRegionCode,
@@ -80,7 +85,7 @@ public class SearchController {
     public String bookDetailInfo(@RequestParam("isbn") Long isbn,
                                  @RequestParam(value = "region", required = false) short region,
                                  @RequestParam(value = "detailRegion",  required = false) int detailRegion,
-                                 Model model){
+                                 Model model, HttpServletRequest servletRequest){
         if(region < 0){
             log.error("지역코드 입력에러 - 필수입력 지역코드가 없음 : 입력된 지역코드 = {}", region);
             return "redirect:/";
@@ -88,6 +93,11 @@ public class SearchController {
         if(region < 0 && detailRegion < 0){
             log.error("지역코드 입력에러 - 지역코드,세부지역코드 2개 다 없음 : 입력된 지역코드 = {} , 입력된 세부지역코드 = {}", region, detailRegion);
             return "redirect:/";
+        }
+        HttpSession session = servletRequest.getSession(false);
+        if(Objects.nonNull(session)){
+            MemberDTO memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
+            model.addAttribute("memberId", memberDTO.getId());
         }
         model.addAttribute("bookDetailInfo", m_searchService.getBookDetailInfo(isbn, region, detailRegion));
         return "/search/book-detail";
@@ -107,24 +117,8 @@ public class SearchController {
         return "/search/playlist-template";
     }
 
-//    @GetMapping("/playlist")
-//    public String searchPlayList(@RequestParam("keywordCode") int keywordCode,
-//                                 @RequestParam(value = "searchKeyword", required = false) String searchKeyword,
-//                                 @RequestParam("pageNum") int pageNum,
-//                                 @RequestParam("keywordType") SEARCH_KEYWORD_TYPE keywordType,
-//                                 Model model){
-//        if(keywordCode < 0 || pageNum <= 0){
-//            log.error("유튜브검색 파라미터 입력 에러 : 입력된 keywordCode, pageNum, keywordType 값 = {},{},{]", keywordCode, pageNum, keywordType);
-//            return "redirect:/";
-//        }
-//        model.addAttribute("searchResult", m_searchService.searchPlayList(keywordCode, searchKeyword, pageNum, YOUTUBE_PAGING_INFO.YOUTUBE_COUNT_PER_PAGE, keywordType));
-//        return "/search/playlist-template";
-//    }
-
     @GetMapping("/keyword-book-list")
     public String getKeywordBookList(@RequestParam("keyword") String keyword,
-//                                     @RequestParam("regionCode") short regionCode,
-//                                     @RequestParam("detailRegionCode") int detailRegionCode,
                                      @RequestParam("pageNum") int pageNum,
                                      @RequestParam("bookCount") int bookCount, Model model){
         SubjectBookListDTO bookListDTO = m_searchService.getSubjectBookList(keyword, pageNum, bookCount);

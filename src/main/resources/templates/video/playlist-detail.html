@@ -70,7 +70,7 @@
                                     <i class="lni lni-eye" th:text="' '+${videoList[0].viewCount}"></i>
                                 </li>
                                 <li th:if="${memberId != null}">
-                                    <a th:href="|javascript:showLectureNoteAddModal('${playListId}')|"
+                                    <a th:href="|javascript:showPlaylistAddModal('${playListId}')|"
                                        class="reply-link"><i class="lni lni-notepad"></i> 강의노트에 추가하기</a>
                                 </li>
                             </ul>
@@ -176,7 +176,6 @@
 </section>
 
 <div id="div-modal-lecture-note">
-
 </div>
 
 <th:block th:replace="~{common/footer::footer}"></th:block>
@@ -191,13 +190,11 @@
 <script th:inline="javascript">
 
     // 강의노트 모달html을 서버로 부터 받아오고 모달창을 띄운다
-    const showLectureNoteAddModal = (paramPlayListId) => {
-        console.log("paramPlayListId : " + paramPlayListId);
-
+    const showPlaylistAddModal = (paramPlayListId) => {
         const memberIdVal = $("#memberIdHidden").val();
         $.ajax({
             type: "get",
-            url: "/lecture/modal-template",
+            url: "/lecture/modal-playlist-template",
             dataType: "text",
             data: {
                 memberId: memberIdVal,
@@ -205,7 +202,7 @@
             },
             success: function (data) {
                 let html = jQuery('<div>').html(data);
-                let contents = html.find("div#lecture-note-modal-template").html();
+                let contents = html.find("div#playlist-add-modal").html();
                 $('#div-modal-lecture-note').html(contents);
                 $("#addNoteModal").modal("show");
 
@@ -214,14 +211,10 @@
             }
         })
     }
-
-    // const addPlayListToLectureNote = (param) => {
-    //   console.log("addPlayListToLectureNote param : " + param);
-    // }
-
+    // playlist-add-model.html 에서 호출하는 함수
     const addPlayListToLectureNote = () => {
         const paramPlayListId = [[${playListId}]];
-        const paramLectureNoteId = $("#lectureNoteSelect").val();
+        const paramLectureNoteId = $("#lectureNoteSelect").val(); // playlist-add-model.html에 있는 셀렉트박스 태그
         let param = {
             "playListId": paramPlayListId,
             "lectureNoteId": paramLectureNoteId
@@ -239,7 +232,6 @@
                 if (jqXHR.status == 401) {
                     alert("로그인 후 사용할 수 있습니다.");
                 }
-                console.log("jqXHR.status : " + jqXHR.status);
                 alert("재생목록을 강의노트에 추가하는데 실패하였습니다.");
             }
         })

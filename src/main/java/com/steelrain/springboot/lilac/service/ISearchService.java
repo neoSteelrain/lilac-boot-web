@@ -8,6 +8,9 @@ import com.steelrain.springboot.lilac.datamodel.view.SubjectBookListDTO;
 
 import java.util.List;
 
+/**
+ * 검색 서비스 인터페이스
+ */
 public interface ISearchService {
 
     List<SubjectCodeDTO> getSubjectCodes();

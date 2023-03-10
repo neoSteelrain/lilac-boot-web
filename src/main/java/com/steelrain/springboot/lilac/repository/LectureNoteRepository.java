@@ -1,10 +1,10 @@
 package com.steelrain.springboot.lilac.repository;
 
-import com.steelrain.springboot.lilac.datamodel.KaKaoBookDTO;
 import com.steelrain.springboot.lilac.datamodel.LectureNoteModalDTO;
 import com.steelrain.springboot.lilac.datamodel.LectureNoteDTO;
 import com.steelrain.springboot.lilac.datamodel.PlayListVideoDTO;
 import com.steelrain.springboot.lilac.datamodel.view.LectureNoteDetailDTO;
+import com.steelrain.springboot.lilac.datamodel.view.LectureNoteDetailDTO.LectureNoteBook;
 import com.steelrain.springboot.lilac.mapper.LectureNoteMapper;
 import lombok.*;
 import org.springframework.stereotype.Repository;
@@ -16,46 +16,56 @@ import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
-public class LectureNoteRepository {
+public class LectureNoteRepository implements ILectureNoteRepository {
 
     private final LectureNoteMapper m_lectureNoteMapper;
 
+    @Override
     public boolean saveDefaultLectureNote(LectureNoteDTO lectureNoteDTO){
         return m_lectureNoteMapper.saveDefaultLectureNote(lectureNoteDTO) > 0;
     }
 
+    @Override
     public boolean saveLectureNote(LectureNoteDTO lectureNoteDTO){
         return m_lectureNoteMapper.saveLectureNote(lectureNoteDTO) > 0;
     }
 
+    @Override
     public boolean deleteLectureNote(Long noteId){
         return m_lectureNoteMapper.deleteLectureNote(noteId) > 0;
     }
 
+    @Override
     public boolean updateLectureNote(LectureNoteDTO lectureNoteDTO) {
         return m_lectureNoteMapper.updateLectureNote(lectureNoteDTO) > 0;
     }
 
+    @Override
     public List<LectureNoteDTO> findNoteListByMember(Long memberId) {
         return m_lectureNoteMapper.findAllNoteListByMember(memberId);
     }
 
+    @Override
     public boolean checkDuplicatedLectureNoteByMember(Long memberId, String title) {
         return m_lectureNoteMapper.findDuplicatedLectureNoteByMember(memberId, title) > 0;
     }
 
+    @Override
     public boolean addVideoIdList(List<PlayListVideoDTO> videoIdList) {
         return m_lectureNoteMapper.addVideoIdList(videoIdList);
     }
 
-    public List<LectureNoteModalDTO> findLectureNoteListByMember(Long memberId) {
-        return m_lectureNoteMapper.findLectureNoteListByMember(memberId);
+    @Override
+    public List<LectureNoteModalDTO> findLectureNoteListByPlayList(Long memberId) {
+        return m_lectureNoteMapper.findLectureNoteListByPlayList(memberId);
     }
 
+    @Override
     public LectureNoteDTO findLectureNoteByMember(Long memberId, Long noteId) {
         return m_lectureNoteMapper.findLectureNoteByMember(memberId, noteId);
     }
 
+    @Override
     public List<LectureNoteDetailDTO.LectureVideoPlayListInfo> findVideoInfoByLectureNote(Long memberId, Long noteId) {
         List<LectureNoteDetailDTO.LectureVideoPlayListInfo> resultList = m_lectureNoteMapper.findVideoInfoByLectureNote(memberId, noteId);
         if(resultList.size() == 0){
@@ -83,6 +93,7 @@ public class LectureNoteRepository {
         유튜브 영상은 재생시간을 ISO 8601 duration 형식(P#DT#H#M#S)으로 표현하기 때문에
         자바에서 Duration 객체로 변환하여 사용한다.
      */
+    @Override
     public Duration findTotalDurationOfPlayList(Long playListId) {
         List<String> durationList = m_lectureNoteMapper.findTotalDurationOfPlayList(playListId);
         long totalDurationValue = 0;
@@ -92,16 +103,29 @@ public class LectureNoteRepository {
         return Duration.ofSeconds(totalDurationValue);
     }
 
+    @Override
     public void deletePlayList(Long memberId, Long noteId, Long playListId) {
         m_lectureNoteMapper.deletePlayList(memberId, noteId, playListId);
     }
 
+    @Override
     public void addBook(Long bookId, Long lectureNoteId, Long memberId) {
         m_lectureNoteMapper.addBook(bookId, lectureNoteId, memberId);
     }
 
-    public List<KaKaoBookDTO> findBookListByLectureNote(Long memberId, Long noteId) {
+    @Override
+    public List<LectureNoteBook> findBookListByLectureNote(Long memberId, Long noteId) {
         return m_lectureNoteMapper.findBookListByLectureNote(memberId, noteId);
+    }
+
+    @Override
+    public List<LectureNoteModalDTO> findLectureNoteListByBook(Long memberId) {
+        return m_lectureNoteMapper.findLectureNoteListByBook(memberId);
+    }
+
+    @Override
+    public void deleteBook(Long refId) {
+        m_lectureNoteMapper.deleteBook(refId);
     }
 
     /**

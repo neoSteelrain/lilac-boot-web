@@ -65,9 +65,6 @@
                 </div>
                 <!-- 회원의 강의노트 제목목록 끝 -->
             </div>
-            <!--            <div id="lecture-note-detail-div">-->
-
-            <!--            </div>-->
             <!-- 강의노트 정보 시작 -->
             <div class="col-lg-9 col-md-8 col-12">
                 <div class="main-content">
@@ -103,7 +100,6 @@
                                     <button class="nav-link active" id="nav-item-info-tab" data-bs-toggle="tab"
                                             data-bs-target="#nav-item-info" type="button" role="tab"
                                             aria-controls="nav-item-info" aria-selected="true">
-                                        <!-- <span class="serial">01</span> -->
                                         자격증 정보
                                         <span class="sub-title" th:text="${noteDetail.noteLicenseName}"></span>
                                     </button>
@@ -111,13 +107,13 @@
                                             data-bs-target="#nav-item-details" type="button" role="tab"
                                             aria-controls="nav-item-details" aria-selected="false">
                                         도서 정보
-                                        <span class="sub-title">전체 2권</span>
+                                        <span class="sub-title" th:text="${noteDetail.kakaoBookList.size()}+' 권'"></span>
                                     </button>
                                     <button class="nav-link" id="nav-user-info-tab" data-bs-toggle="tab"
                                             data-bs-target="#nav-user-info" type="button" role="tab"
                                             aria-controls="nav-user-info" aria-selected="false">
                                         영상정보
-                                        <span class="sub-title" th:text="'영상개수 '+${noteDetail.videoPlayList.size()}+'개'"></span>
+                                        <span class="sub-title" th:text="'재생목록개수 '+${noteDetail.videoPlayList.size()}+'개'"></span>
                                     </button>
                                 </div>
                             </nav>
@@ -185,7 +181,7 @@
                                             </div>
                                             <!-- End List Title -->
                                             <!-- Start Single List -->
-                                            <div class="single-item-list" th:each="bookInfo : ${noteDetail.kakaoBookInfo}">
+                                            <div class="single-item-list" th:each="bookInfo : ${noteDetail.kakaoBookList}">
                                                 <div class="row align-items-center">
                                                     <div class="col-lg-7 col-md-7 col-12">
                                                         <div class="item-image">
@@ -205,23 +201,12 @@
                                                     </div>
                                                     <div class="col-lg-1 col-md-1 col-12 align-right">
                                                         <ul class="action-btn">
-                                                            <li><a href="javascript:void(0)"><i class="lni lni-trash"></i></a></li>
+                                                            <li><a th:href="|javascript:removeBook('${bookInfo.lecBookId}', '${noteDetail.noteId}')|"><i class="lni lni-trash"></i></a></li>
                                                         </ul>
                                                     </div>
                                                 </div>
                                             </div>
                                             <!-- End Single List -->
-                                            <!-- Pagination -->
-                                            <div class="pagination left">
-                                                <ul class="pagination-list">
-                                                    <li><a href="javascript:void(0)">1</a></li>
-                                                    <li class="active"><a href="javascript:void(0)">2</a></li>
-                                                    <li><a href="javascript:void(0)">3</a></li>
-                                                    <li><a href="javascript:void(0)">4</a></li>
-                                                    <li><a href="javascript:void(0)"><i class="lni lni-chevron-right"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <!--/ End Pagination -->
                                         </div>
                                     </div> <!-- 도서 정보 탭 끝 -->
                                 </div>
@@ -229,13 +214,6 @@
                                      aria-labelledby="nav-user-info-tab">
                                     <!-- 영상정보 탭 시작 -->
                                     <div class="step-three-content">
-                                        <!-- <h3 class="block-title">My Favorites</h3> -->
-                                        <!-- <nav class="list-nav">
-                                            <ul>
-                                                <li class="active"><a href="javascript:void(0)">Featured
-                                                        <span>85</span></a></li>
-                                            </ul>
-                                        </nav> -->
                                         <!-- Start Items Area -->
                                         <div class="alt-option">
                                             <span></span>
@@ -283,18 +261,6 @@
                                                 </div>
                                             </div>
                                             <!-- 재생목록 정보 끝 -->
-
-                                            <!-- Pagination -->
-                                            <div class="pagination left">
-                                                <ul class="pagination-list">
-                                                    <li><a href="javascript:void(0)">1</a></li>
-                                                    <li class="active"><a href="javascript:void(0)">2</a></li>
-                                                    <li><a href="javascript:void(0)">3</a></li>
-                                                    <li><a href="javascript:void(0)">4</a></li>
-                                                    <li><a href="javascript:void(0)"><i class="lni lni-chevron-right"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <!--/ End Pagination -->
                                         </div>
                                         <!-- End Items Area -->
                                     </div>
@@ -407,7 +373,6 @@
         })
     }
 
-
     const noteTitleClickArrow = (aTag) => {
         aTag.classList.toggle('active');
     }
@@ -486,6 +451,25 @@
         form.appendChild(tmp);
         form.setAttribute("method", "post");
         form.setAttribute("action", "/lecture/remove-note");
+        document.body.appendChild(form);
+        form.submit();
+        document.body.removeChild(form);
+    }
+
+    const removeBook = (refId, noteId) => {
+        let form = document.createElement("form");
+        let tmp1 = document.createElement("input");
+        tmp1.setAttribute("type","hidden");
+        tmp1.setAttribute("name", "refId");
+        tmp1.setAttribute("value",refId);
+        let tmp2 = document.createElement("input");
+        tmp2.setAttribute("type","hidden");
+        tmp2.setAttribute("name", "noteId");
+        tmp2.setAttribute("value", noteId);
+        form.appendChild(tmp1);
+        form.appendChild(tmp2);
+        form.setAttribute("method","post");
+        form.setAttribute("action", "/lecture/remove-book");
         document.body.appendChild(form);
         form.submit();
         document.body.removeChild(form);

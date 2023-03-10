@@ -1,6 +1,7 @@
 package com.steelrain.springboot.lilac.service;
 
 import com.steelrain.springboot.lilac.datamodel.LectureNoteDTO;
+import com.steelrain.springboot.lilac.datamodel.view.BookAddModalDTO;
 import com.steelrain.springboot.lilac.datamodel.view.LectureNoteDetailDTO;
 import com.steelrain.springboot.lilac.exception.LectureNoteException;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -108,7 +110,26 @@ public class LectureNoteServiceTests {
         LectureNoteDetailDTO resultDTO = lectureNoteService.getLectureNoteDetailInfoByMember(2L, 6L);
 
         assertThat(resultDTO).isNotNull();
-        assertThat(resultDTO.getKakaoBookInfo().size() > 0).isTrue();
-        log.debug("카카오북 정보 : {}",resultDTO.getKakaoBookInfo().get(0).toString());
+        assertThat(resultDTO.getKakaoBookList().size() > 0).isTrue();
+        log.debug("카카오북 정보 : {}",resultDTO.getKakaoBookList().get(0).toString());
+    }
+
+    @Test
+    public void 강의노트_도서추가하기_테스트(){
+        List<BookAddModalDTO> resultList = lectureNoteService.getLectureNoteListByBookModal(2L, 1L);
+
+        assertThat(resultList).isNotNull();
+        assertThat(resultList.size() > 0).isTrue();
+    }
+
+    @Test
+    @Transactional
+    public void 강의노트_도서삭제_테스트(){
+        lectureNoteService.removeBook(3L);
+
+        LectureNoteDetailDTO info = lectureNoteService.getLectureNoteDetailInfoByMember(2L, 6L);
+        assertThat(info.getKakaoBookList().stream()
+                .filter(book -> book.getLecBookId().equals(3L))
+                .count() == 0).isTrue();
     }
 }

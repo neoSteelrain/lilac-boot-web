@@ -1,6 +1,7 @@
 package com.steelrain.springboot.lilac.datamodel;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.ISBN;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,8 +17,8 @@ import java.sql.Timestamp;
  *
  */
 @Getter
-@Setter
-@Builder
+//@Setter
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString

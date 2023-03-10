@@ -18,6 +18,11 @@ import org.thymeleaf.util.StringUtils;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * 회원 서비스
+ * - 회원의 비즈니스 로직을 구현
+ * - 회원 관련된 이벤트를 처리/발행한다
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor

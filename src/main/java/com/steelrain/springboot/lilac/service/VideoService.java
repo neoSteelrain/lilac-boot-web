@@ -16,6 +16,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * 영상 서비스
+ * - 영상의 비즈니스 로직을 구현
+ * - 영상관련 이벤트를 처리/발행 한다
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -48,23 +53,11 @@ public class VideoService implements IVideoService {
         return VideoPlayListSearchResultDTO.builder()
                                         .requestKeywordCode(keywordCode)
                                         .requestKeywordType(keywordType)
+                                        .searchKeyword(searchKeyword)
                                         .pageDTO(PagingUtils.createPagingInfo(totalPlaylistCount, pageNum, playlistCount))
                                         .playList(m_videoRepository.findPlayListByKeyword(keywordStr, pageStart, playlistCount))
                                         .build();
     }
-
-    /*@Override
-    public VideoPlayListSearchResultDTO searchPlayList(int keywordCode, String searchKeyword, int pageNum, int playlistCount, SEARCH_KEYWORD_TYPE keywordType) {
-        int pageStart = (pageNum - 1) * playlistCount;
-        String keywordStr = parseKeywordCode(keywordCode, searchKeyword, keywordType);
-        int totalPlaylistCount = m_videoRepository.selectTotalPlayListCountByKeyword(keywordStr);
-        return VideoPlayListSearchResultDTO.builder()
-                .requestKeywordCode(keywordCode)
-                .requestKeywordType(keywordType)
-                .pageDTO(PagingUtils.createPagingInfo(totalPlaylistCount, pageNum, playlistCount))
-                .playList(m_videoRepository.findPlayListByKeyword(keywordStr, pageStart, playlistCount))
-                .build();
-    }*/
 
     @EventListener(VideoPlayListSearchEvent.class)
     public void handleVideoPlayListSearchEvent(VideoPlayListSearchEvent event){

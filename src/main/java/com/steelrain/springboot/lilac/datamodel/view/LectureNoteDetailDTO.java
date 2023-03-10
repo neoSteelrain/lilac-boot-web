@@ -1,8 +1,10 @@
 package com.steelrain.springboot.lilac.datamodel.view;
 
+import com.steelrain.springboot.lilac.common.PageDTO;
 import com.steelrain.springboot.lilac.datamodel.KaKaoBookDTO;
 import com.steelrain.springboot.lilac.datamodel.LicenseScheduleDTO;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -28,10 +30,19 @@ public class LectureNoteDetailDTO {
     private LicenseInfo licenseInfo;
     
     // 도서정보
-    private List<KaKaoBookDTO> kakaoBookInfo;
+    private List<LectureNoteBook> kakaoBookList;
 
     // 영상정보
     private List<LectureVideoPlayListInfo> videoPlayList;
+
+
+    @Getter
+    @SuperBuilder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class LectureNoteBook extends KaKaoBookDTO{
+        private Long lecBookId;
+    }
 
     @Getter
     @Builder

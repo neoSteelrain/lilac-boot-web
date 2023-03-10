@@ -15,7 +15,9 @@ public class LectureNoteModalDTO {
     private Long noteId;
     private String noteTitle;
     private Long playListId;
+    private Long bookId;
 
+    // 스트림 연산 또는 List 같은 자료구조에 사용될때 중복체크를 위해 equals, hashCode를 재정의 해준다
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

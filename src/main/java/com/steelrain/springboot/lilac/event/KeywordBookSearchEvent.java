@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 사용자가 직접 입력한 키워드로 도서를 검색하는 이벤트
+ */
 @Getter
 @Builder
 public class KeywordBookSearchEvent {

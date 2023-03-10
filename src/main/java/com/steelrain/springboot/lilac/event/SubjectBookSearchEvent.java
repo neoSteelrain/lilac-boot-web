@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * 미리 등록된 주제어 검색을 요청하는 이벤트
+ */
 @Getter
 @Builder
 public class SubjectBookSearchEvent {

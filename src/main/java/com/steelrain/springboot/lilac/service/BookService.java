@@ -27,6 +27,8 @@ import java.util.Objects;
 
 /**
  * 참고도서 서비스
+ * - 도서에 대한 비즈니스 로직을 처리한다
+ * - 도서와 관련된 이벤트를 처리/발행 한다
  */
 @Slf4j
 @Service
@@ -40,7 +42,7 @@ public class BookService implements IBookService{
     private final ApplicationEventPublisher m_applicationEventPublisher;
 
 
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public LicenseBookListDTO getLicenseBookList(int licenseCode, short regionCode, int detailRegionCode, int pageNum, int bookCount){
@@ -55,7 +57,7 @@ public class BookService implements IBookService{
         LicenseBookListDTO resultDTO = new LicenseBookListDTO();
         List<KaKaoBookDTO> kaKaoBookDTOList = new ArrayList<>(bookList.size());
         for(KakaoSearchedBookDTO book : bookList){
-            if(book.getPrice() <= -1 || book.getSalePrice() <= -1){ // 간혹 책가격이 -1로 설정된 책이 있으므로 빼주어야 한다.
+            if(book.getPrice() <= -1 || book.getSalePrice() <= -1){ // 간혹 책가격이 -1로 설정된 책이 있으므로 빼주어야 한다. 판매중지로 설정해줘야 할지 고민이다.
                 continue;
             }
             String tmpIsbn = book.getIsbn();
@@ -147,10 +149,6 @@ public class BookService implements IBookService{
         return result;
     }
 
-    /**
-     * SearchService의 도서키워드검색 이벤트를 처리하는 핸들러메서드
-     * @param event 도서검색키워드검색 이벤트
-     */
     @EventListener(KeywordBookSearchEvent.class)
     public void handleKeywordBookSearchEvent(KeywordBookSearchEvent event){
         SubjectBookListDTO sbjBookListDTO = getBookListByKeyword(event.getKeyword(), event.getPageNum(), event.getBookCount());
@@ -178,8 +176,6 @@ public class BookService implements IBookService{
     public void handleBookSaveEvent(KakaoBookSaveEvent event){
         m_bookRepository.saveKakaoBookList(event.getKaKaoBookList());
     }
-
-
 
     // 카카오 API로 검색된 결과를 DB에 저장하려고 할때 사용한다.
     private void publishKaKaoBookSaveEvent(List<KaKaoBookDTO> bookList){

@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 자격증에 관련된 도서검색을 요청하는 이벤트
+ */
 @Getter
 @Builder
 public class LicenseBookSearchEvent {

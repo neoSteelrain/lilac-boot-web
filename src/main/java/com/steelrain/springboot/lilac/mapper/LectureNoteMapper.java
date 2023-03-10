@@ -1,15 +1,14 @@
 package com.steelrain.springboot.lilac.mapper;
 
-import com.steelrain.springboot.lilac.datamodel.KaKaoBookDTO;
 import com.steelrain.springboot.lilac.datamodel.LectureNoteModalDTO;
 import com.steelrain.springboot.lilac.datamodel.LectureNoteDTO;
 import com.steelrain.springboot.lilac.datamodel.PlayListVideoDTO;
 import com.steelrain.springboot.lilac.datamodel.view.LectureNoteDetailDTO;
+import com.steelrain.springboot.lilac.datamodel.view.LectureNoteDetailDTO.LectureNoteBook;
 import com.steelrain.springboot.lilac.repository.LectureNoteRepository;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface LectureNoteMapper {
@@ -40,7 +39,7 @@ public interface LectureNoteMapper {
 
     boolean addVideoIdList(List<PlayListVideoDTO> videoIdLis);
 
-    List<LectureNoteModalDTO> findLectureNoteListByMember(Long memberId);
+    List<LectureNoteModalDTO> findLectureNoteListByPlayList(Long memberId);
 
     @Select("SELECT id,member_id,license_id,subject_id,title,description,reg_date,progress FROM tbl_lecture WHERE member_id=#{memberId} AND id=#{noteId}")
     LectureNoteDTO findLectureNoteByMember(Long memberId, Long noteId);
@@ -50,11 +49,15 @@ public interface LectureNoteMapper {
     List<LectureNoteRepository.ChannelTitleInfo> findChannelTitle(List<Long> channelIdList);
 
     @Select("SELECT duration FROM tbl_youtube WHERE youtube_playlist_id=#{playListId}")
-    List<String> findTotalDurationOfPlayList(Long playListId);
+    List<String> findTotalDurationOfPlayList(@Param("playListId") Long playListId);
 
     void deletePlayList(@Param("memberId") Long memberId, @Param("noteId") Long noteId, @Param("playlistId") Long playListId);
 
     void addBook(@Param("bookId") Long bookId, @Param("lectureNoteId") Long lectureNoteId, @Param("memberId") Long memberId);
 
-    List<KaKaoBookDTO> findBookListByLectureNote(Long memberId, Long noteId);
+    List<LectureNoteBook> findBookListByLectureNote(Long memberId, Long noteId);
+
+    List<LectureNoteModalDTO> findLectureNoteListByBook(@Param("memberId") Long memberId);
+
+    void deleteBook(@Param("refId") Long refId);
 }
