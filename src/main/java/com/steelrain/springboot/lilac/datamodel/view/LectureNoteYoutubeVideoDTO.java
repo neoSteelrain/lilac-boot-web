@@ -16,6 +16,7 @@ import lombok.experimental.SuperBuilder;
 public class LectureNoteYoutubeVideoDTO extends YoutubeVideoDTO {
     private Long lectureVideoId; // 강의노트에 추가된 영상ID
     private Long lectureId; // 강의노트 ID
+    private String lectureTitle;
     private Long lectureMemberId; // 회원ID
     private Long progress; // 영상의 진행률
 }

@@ -45,15 +45,26 @@
 
 <div th:replace="~{common/header::header}"></div>
 
-<section class="section blog-single" style="margin-top:30px">
+<div class="breadcrumbs">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-6 col-md-12 col-12">
-                강의노트 재생목록 재생
+        <div class="row align-items-center">
+            <div class="col-lg-6 col-md-6 col-12">
+                <div class="breadcrumbs-content">
+                    <h1 class="page-title">강의노트 재생</h1>
+                </div>
             </div>
-            <div class="col-lg-6 col-md-12 col-12" th:text="${'videoList[0].lectureVideoId : ' + videoList[0].lectureVideoId}">
+            <div class="col-lg-6 col-md-6 col-12">
+                <ul class="breadcrumb-nav">
+                    <li>노트제목</li>
+                    <li th:text="${'강의노트 제목 : '+videoList[0].lectureTitle}"></li>
+                </ul>
             </div>
         </div>
+    </div>
+</div>
+
+<section class="section blog-single">
+    <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-12 col-12">
                 <div class="single-inner">

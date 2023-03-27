@@ -22,7 +22,7 @@
     <select id="findPlayListDetailOfLectureNote" parameterType="map" resultType="LectureNoteYoutubeVideoDTO">
         SELECT pl.id as lecture_video_id,pl.lecture_id,pl.lecture_member_id,yt.id,yt.video_id,yt.channel_id,yt.youtube_playlist_id,yt.title,yt.description,yt.publish_date,
                yt.thumbnail_default,yt.thumbnail_high,yt.playlist_id,yt.view_count,yt.search_count,yt.like_count,yt.favorite_count,yt.comment_count,
-               yt.comment_disabled,yt.duration,yt.score,yt.magnitude
+               yt.comment_disabled,yt.duration,yt.score,yt.magnitude, (SELECT title FROM tbl_lecture WHERE id=pl.lecture_id) as lecture_title
         FROM ref_tbl_lecture_youtube pl INNER JOIN tbl_youtube yt
             ON pl.youtube_id=yt.id
         WHERE pl.lecture_member_id=#{memberId} AND pl.youtube_playlist_id=#{youtubePlaylistId};
