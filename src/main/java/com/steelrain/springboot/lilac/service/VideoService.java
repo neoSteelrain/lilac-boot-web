@@ -3,12 +3,13 @@ package com.steelrain.springboot.lilac.service;
 import com.steelrain.springboot.lilac.common.ICacheService;
 import com.steelrain.springboot.lilac.common.PagingUtils;
 import com.steelrain.springboot.lilac.datamodel.*;
+import com.steelrain.springboot.lilac.datamodel.view.LectureNoteYoutubeVideoDTO;
 import com.steelrain.springboot.lilac.datamodel.view.RecommendedPlayListDTO;
 import com.steelrain.springboot.lilac.datamodel.view.RecommendedVideoDTO;
 import com.steelrain.springboot.lilac.event.VideoListByPlayListEvent;
 import com.steelrain.springboot.lilac.event.VideoPlayListSearchEvent;
 import com.steelrain.springboot.lilac.exception.LilacException;
-import com.steelrain.springboot.lilac.repository.VideoRepository;
+import com.steelrain.springboot.lilac.repository.IVideoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -26,7 +27,7 @@ import java.util.List;
 @Service
 public class VideoService implements IVideoService {
 
-    private final VideoRepository m_videoRepository;
+    private final IVideoRepository m_videoRepository;
     private final ICacheService m_keywordCategoryCacheService;
 
 
@@ -99,4 +100,23 @@ public class VideoService implements IVideoService {
 
     @Override
     public boolean isExistYoutubePlayList(Long playListId){ return m_videoRepository.isExistYoutubePlayList(playListId);}
+
+    @Override
+    public boolean updateVideoPlaytime(Long lectureVideoId, Long playtime) {
+        /*
+            - 영상의 duration 값과 프런트에서 넘어온 재생시간을 비교해여 99% 까지는 100%로 인정한다.
+            - 강의노트영상의 기존 재생시간을 가져와서 99% 이상 재생된 영상이면 바로 리턴하고, 99%가 아니라면 재생시간을 업데이트한다
+         */
+        long progress = m_videoRepository.getProgress(lectureVideoId);
+        long duration = m_videoRepository.getDuration(lectureVideoId);
+        if((int)Math.floor(((double)progress / duration) * 100) >= 99){
+            return true;
+        }
+        return m_videoRepository.updateVideoPlaytime(lectureVideoId, playtime);
+    }
+
+    @Override
+    public List<LectureNoteYoutubeVideoDTO> getPlayListDetailOfLectureNote(Long memberId, Long youtubePlaylistId) {
+        return m_videoRepository.findPlayListDetailOfLectureNote(memberId, youtubePlaylistId);
+    }
 }

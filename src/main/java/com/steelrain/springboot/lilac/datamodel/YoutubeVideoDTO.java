@@ -1,39 +1,24 @@
 package com.steelrain.springboot.lilac.datamodel;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
 
-@Getter
-@ToString
-public class YoutubeVideoDTO {
-/*
-id	bigint	NO	PRI
-video_id	varchar(50)	NO	UNI
-channel_id	bigint	NO	MUL
-youtube_playlist_id	bigint	YES	MUL
-title	varchar(100)	NO	MUL
-description	varchar(5000)	YES
-publish_date	datetime	YES
-reg_date	datetime	YES
-thumbnail_default	varchar(255)	YES
-thumbnail_medium	varchar(255)	YES
-thumbnail_high	varchar(255)	YES
-playlist_id	varchar(50)	YES
-view_count	bigint	YES
-search_count	int	YES
-like_count	bigint	YES
-favorite_count	bigint	YES
-comment_count	bigint	YES
-comment_disabled	tinyint(1)	YES
-duration	varchar(40)	YES
-score	float	YES
-magnitude	float	YES
+/**
+ * 유튜브영상정보 DTO
+ * tbl_youtube 테이블에 매핑된다
  */
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@SuperBuilder
+public class YoutubeVideoDTO {
     private Long id;
     private String videoId;
     private Long channelId;

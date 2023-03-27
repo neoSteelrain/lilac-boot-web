@@ -1,11 +1,14 @@
 package com.steelrain.springboot.lilac.service;
 
 import com.steelrain.springboot.lilac.datamodel.YoutubeVideoDTO;
+import com.steelrain.springboot.lilac.datamodel.view.LectureNoteYoutubeVideoDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,7 +20,7 @@ import static org.assertj.core.api.Assertions.*;
 public class VideoServiceTests {
 
     @Autowired
-    private VideoService m_videoService;
+    private IVideoService m_videoService;
 
     @Test
     @DisplayName("재생목록의 영상들 가져오기")
@@ -37,5 +40,25 @@ public class VideoServiceTests {
 
         assertThat(dto != null);
         log.debug("영상정보 : {}", dto);
+    }
+
+    @Test
+    @Transactional
+    public void 재생시간_업데이트(){
+        m_videoService.updateVideoPlaytime(1L, 60L);
+    }
+
+    @Test
+    public void 강의노트에추가된재생목록가져오기(){
+        List<LectureNoteYoutubeVideoDTO> list = m_videoService.getPlayListDetailOfLectureNote(2L, 49L);
+
+        assertThat(list != null).isTrue();
+        list.stream().forEach(item -> log.debug(item.toString()));
+    }
+
+    @Test
+    public void 강의노트영상의Duration가져오기(){
+        boolean isUpdated = m_videoService.updateVideoPlaytime(1L, 1100L);
+        assertThat(isUpdated).isTrue();
     }
 }

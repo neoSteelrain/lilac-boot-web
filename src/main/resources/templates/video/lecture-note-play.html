@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="x-ua-compatible" content="ie=edge"/>
-    <title>재생목록 영상 재생</title>
+    <title>강의노트 영상 재생</title>
     <meta name="description" content=""/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.svg}"/>
@@ -48,6 +48,13 @@
 <section class="section blog-single" style="margin-top:30px">
     <div class="container">
         <div class="row">
+            <div class="col-lg-6 col-md-12 col-12">
+                강의노트 재생목록 재생
+            </div>
+            <div class="col-lg-6 col-md-12 col-12" th:text="${'videoList[0].lectureVideoId : ' + videoList[0].lectureVideoId}">
+            </div>
+        </div>
+        <div class="row">
             <div class="col-lg-8 col-md-12 col-12">
                 <div class="single-inner">
                     <div class="post-thumbnils ratio ratio-16x9">
@@ -66,10 +73,6 @@
                                 <li>
                                     <i class="lni lni-eye" th:text="' '+${videoList[0].viewCount}"></i>
                                 </li>
-                                <li th:if="${memberId != null}">
-                                    <a th:href="|javascript:showPlaylistAddModal('${playListId}')|"
-                                       class="reply-link"><i class="lni lni-notepad"></i> 강의노트에 추가하기</a>
-                                </li>
                             </ul>
                             <p th:utext="${videoList[0].description}"></p>
                         </div>
@@ -78,30 +81,33 @@
             </div>
             <aside class="col-lg-4 col-md-12 col-12">
                 <div class="sidebar blog-grid-page">
-                  <p>
-                    재생목록
-                  </p>
-                  <div class="messages-body">
-                    <div class="row">
-                      <div class="col-lg-12 col-12">
-                        <div class="user-list">
-                          <ul>
-                            <!-- 재생목록의 개별영상 시작 -->
-                            <li th:each="video : ${videoList}">
-                              <a th:href="|javascript:playSelectedVideo('${video.videoId}', '${video.Id}')|">
-                                <div class="image">
-                                  <img th:src="${video.thumbnailDefault}" alt="#">
+                    <p>
+                        재생목록
+                    </p>
+                    <div class="messages-body">
+                        <div class="row">
+                            <div class="col-lg-12 col-12">
+                                <div class="user-list">
+                                    <ul>
+                                        <!-- 재생목록의 개별영상 시작 -->
+                                        <li th:each="video : ${videoList}">
+                                            <a th:href="|javascript:playSelectedVideo('${video.videoId}', '${video.Id}', '${video.lectureVideoId}')|">
+                                                <div class="image">
+                                                    <img th:src="${video.thumbnailDefault}" alt="#">
+                                                </div>
+                                                <span class="short-message" th:text="${video.title}"></span>
+                                            </a>
+                                        </li>
+                                        <!-- 재생목록의 개별영상 끝 -->
+                                    </ul>
+                                    <form>
+
+                                    </form>
+                                    <input id="memberIdHidden" type="hidden" th:value="${memberId}">
                                 </div>
-                                <span class="short-message" th:text="${video.title}"></span>
-                              </a>
-                            </li>
-                            <!-- 재생목록의 개별영상 끝 -->
-                          </ul>
-                          <input id="memberIdHidden" type="hidden" th:value="${memberId}">
+                            </div>
                         </div>
-                      </div>
                     </div>
-                  </div>
                 </div>
             </aside>
         </div>
@@ -128,11 +134,13 @@
 
     let player;
     function onYouTubeIframeAPIReady() {
-        console.log("${videoList[0].videoId} : "+[[${videoList[0].videoId}]]);
+        const videoIdStr = [[${videoList[0].videoId}]];
+        console.log("videoId : "+videoIdStr);
         player = new YT.Player('player', {
-            videoId: [[${videoList[0].videoId}]],
+            videoId: videoIdStr,
             events: {
-                'onReady': onPlayerReady
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
             }
         });
     }
@@ -141,56 +149,32 @@
         event.target.playVideo();
     }
 
-    // 강의노트 모달html을 서버로 부터 받아오고 모달창을 띄운다
-    const showPlaylistAddModal = (paramPlayListId) => {
-        const memberIdVal = $("#memberIdHidden").val();
-        $.ajax({
-            type: "get",
-            url: "/lecture/modal-playlist-template",
-            dataType: "text",
-            data: {
-                memberId: memberIdVal,
-                playListId: paramPlayListId
-            },
-            success: function (data) {
-                let html = jQuery('<div>').html(data);
-                let contents = html.find("div#playlist-add-modal").html();
-                $('#div-modal-lecture-note').html(contents);
-                $("#addNoteModal").modal("show");
-
-            }, error: function (error) {
-                alert("강의노트 입력창 호출에 실패하였습니다.");
-            }
-        })
+    function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PAUSED || event.data == YT.PlayerState.ENDED) {
+            updateVideoPlaytime(getCurrentVideoId(), player.getCurrentTime());
+        }
     }
-    // playlist-add-model.html 에서 호출하는 함수
-    const addPlayListToLectureNote = () => {
-        const paramPlayListId = [[${playListId}]];
-        const paramLectureNoteId = $("#lectureNoteSelect").val(); // playlist-add-model.html에 있는 셀렉트박스 태그
+
+    // REST API 호출로 id에 해당하는 영상의 재생시간을 업데이트한다. id는 long 타입
+    const updateVideoPlaytime = (paramLectureVideoId, paramPlaytime) => {
         let param = {
-            "playListId": paramPlayListId,
-            "lectureNoteId": paramLectureNoteId
+            "lectureVideoId":paramLectureVideoId,
+            "playtime":(paramPlaytime).toFixed()
         }
         $.ajax({
-            type: "post",
-            url: "/lecture/api/addPlayList",
+            type:"post",
+            url:"/video/api/update-playtime",
             headers: {"Content-Type": "application/json"},
             data: JSON.stringify(param),
-            success: function (resultJson) {
-                alert("재생목록을 강의노트에 추가하였습니다.");
-                $("#addNoteModal").modal("hide");
-                document.location.href = "/video/lec-playlist-detail?youtubePlaylistId="+paramPlayListId;
+            success:function (result){
             },
-            error: function (jqXHR) {
-                if (jqXHR.status == 401) {
-                    alert("로그인 후 사용할 수 있습니다.");
-                }
-                alert("재생목록을 강의노트에 추가하는데 실패하였습니다.");
+            error:function (jqXHR){
+                alert(jqXHR.status);
             }
         })
     }
 
-    const playSelectedVideo = (paramVideoOriginId, paramVideoId) => {
+    const playSelectedVideo = (paramVideoOriginId, paramVideoId, paramLectureVideoId) => {
         $.ajax({
             type: "get",
             url: "/video/video-template",
@@ -200,12 +184,22 @@
                 let html = jQuery('<div>').html(result);
                 let playlist = html.find("div#video-info-template").html();
                 $("#div-video-info").html(playlist);
+                updateCurrentVideoId(paramLectureVideoId);
                 player.loadVideoById(paramVideoOriginId, 0);
             },
             error: function (error) {
                 alert("영상정보 조회중 에러");
             }
         })
+    }
+
+    const SESSION_STORAGE_KEY_VIDEO = 'lilac-play-videoId';
+    const updateCurrentVideoId = (paramLectureVideoId) => {
+        sessionStorage.setItem(SESSION_STORAGE_KEY_VIDEO,paramLectureVideoId);
+    }
+
+    const getCurrentVideoId = () =>{
+        return sessionStorage.getItem(SESSION_STORAGE_KEY_VIDEO);
     }
 </script>
 </body>

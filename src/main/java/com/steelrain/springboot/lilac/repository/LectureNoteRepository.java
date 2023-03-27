@@ -128,6 +128,16 @@ public class LectureNoteRepository implements ILectureNoteRepository {
         m_lectureNoteMapper.deleteBook(refId);
     }
 
+    @Override
+    public String[] findAllDuration(Long playlistId) {
+        return m_lectureNoteMapper.findAllDuration(playlistId);
+    }
+
+    @Override
+    public int findTotalProgress(Long memberId, Long noteId, Long playlistId) {
+        return m_lectureNoteMapper.findTotalProgress(memberId, noteId, playlistId);
+    }
+
     /**
      * 채널정보를 가져오는데 사용하는 DTO
      * LectureNoteRepository, LectureNoteMapper 에서만 사용하기 때문에 따로 dto 패키지에서 선언하지 않았다

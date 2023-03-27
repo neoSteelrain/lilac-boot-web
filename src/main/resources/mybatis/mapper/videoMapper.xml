@@ -2,17 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.steelrain.springboot.lilac.mapper.VideoMapper">
-    <!--<resultMap id="findRecommendedVideoListMap" type="RecommendedVideoDTO">
-        <id property="id" column="id" />
-        <result property="YoutubePlaylistId" column="youtube_playlist_id" />
-        <result property="title" column="video_title" />
-        <result property="thumbnailMedium" column="thumbnail_medium" />
-        <result property="viewCount" column="view_count" />
-        <result property="searchCount" column="search_count" />
-        <result property="likeCount" column="like_count" />
-        <result property="favoriteCount" column="favorite_count" />
-        <result property="channelTitle" column="channel_title" />
-    </resultMap>-->
     <select id="findRecommendedVideoList" resultType="RecommendedVideoDTO">
         SELECT youtube.id,youtube_playlist_id,youtube.title as video_title,
                youtube.thumbnail_medium,youtube.view_count,search_count,like_count,favorite_count,chn.title as channel_title
@@ -30,23 +19,21 @@
         WHERE pl.id=#{playlistId};
     </select>
 
-<!--    full text 검색으로 변경 후 주석처리-->
-<!--    <resultMap id="findPlayListByKeywordMap" type="YoutubePlayListDTO">-->
-<!--        <id property="id" column="id" />-->
-<!--        <result property="playlistId" column="playlist_id" />-->
-<!--        <result property="channelId" column="channel_id" />-->
-<!--        <result property="title" column="title" />-->
-<!--        <result property="thumbnailMedium" column="thumbnail_medium" />-->
-<!--        <result property="itemCount" column="item_count" />-->
-<!--        <result property="channelTitle" column="channel_title" />-->
-<!--    </resultMap>-->
-<!--    <select id="findPlayListByKeyword" parameterType="map"  resultMap="findPlayListByKeywordMap">-->
-<!--        SELECT pl.id,playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,item_count,chn.title as channel_title-->
-<!--        FROM tbl_youtube_playlist pl INNER JOIN tbl_youtube_channel chn-->
-<!--            ON pl.channel_id=chn.id-->
-<!--        WHERE pl.title LIKE concat('%',#{keyword},'%')-->
-<!--        ORDER BY pl.publish_date LIMIT #{offset},#{count};-->
-<!--    </select>-->
+    <select id="findPlayListDetailOfLectureNote" parameterType="map" resultType="LectureNoteYoutubeVideoDTO">
+        SELECT pl.id as lecture_video_id,pl.lecture_id,pl.lecture_member_id,yt.id,yt.video_id,yt.channel_id,yt.youtube_playlist_id,yt.title,yt.description,yt.publish_date,
+               yt.thumbnail_default,yt.thumbnail_high,yt.playlist_id,yt.view_count,yt.search_count,yt.like_count,yt.favorite_count,yt.comment_count,
+               yt.comment_disabled,yt.duration,yt.score,yt.magnitude
+        FROM ref_tbl_lecture_youtube pl INNER JOIN tbl_youtube yt
+            ON pl.youtube_id=yt.id
+        WHERE pl.lecture_member_id=#{memberId} AND pl.youtube_playlist_id=#{youtubePlaylistId};
+    </select>
+
+    <select id="findDuration" parameterType="java.lang.Long" resultType="java.lang.String">
+        SELECT yt.duration
+        FROM ref_tbl_lecture_youtube ref INNER JOIN tbl_youtube yt
+            ON ref.youtube_id=yt.id
+        WHERE ref.id=#{lectureVideoId};
+    </select>
 
     <resultMap id="findPlayListByKeywordMap" type="YoutubePlayListDTO">
         <id property="id" column="id" />
@@ -65,12 +52,6 @@
         ORDER BY pl.publish_date LIMIT #{offset}, #{count}
     </select>
 
-    <!--<resultMap id="findRecommendedPlayListMap" type="com.steelrain.springboot.lilac.datamodel.view.RecommendedPlayListDTO">
-        <result property="youtubePlaylistId" column="youtube_playlist_id" />
-        <result property="title" column="title" />
-        <result property="thumbnailMedium" column="thumbnail_medium" />
-        <result property="channelTitle" column="channel_title" />
-    </resultMap>-->
     <select id="findRecommendedPlayList" resultType="RecommendedPlayListDTO">
         SELECT tmp.id as youtube_playlist_id, tmp.title, tmp.thumbnail_medium, chn.title as channel_title
         FROM (SELECT pl.id, pl.channel_id, pl.title, pl.thumbnail_medium
@@ -79,4 +60,8 @@
         INNER JOIN tbl_youtube_channel chn
             ON tmp.channel_id = chn.id;
     </select>
+
+    <update id="updateVideoPlaytime" parameterType="map">
+       UPDATE ref_tbl_lecture_youtube SET progress=#{playtime} WHERE id=#{id}
+    </update>
 </mapper>

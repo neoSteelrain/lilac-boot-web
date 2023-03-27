@@ -5,13 +5,7 @@
     <title></title>
 </head>
 <body>
-<div id="video-play-template">
-  <div class="post-thumbnils ratio ratio-16x9">
-    <iframe id="ytplayer" type="text/html" width="1024" height="576"
-            th:src="@{'https://www.youtube.com/embed/'+${videoInfo.videoId}+'?autoplay=1&playsinline=1'}"
-            frameborder="0" allowfullscreen>
-    </iframe>
-  </div>
+<div id="video-info-template">
   <div class="post-details">
     <div class="detail-inner">
       <h5 class="post-title" th:text="${videoInfo.title}"></h5>
@@ -24,6 +18,10 @@
         </li>
         <li>
           <i class="lni lni-eye" th:text="' '+${videoInfo.viewCount}"></i>
+        </li>
+        <li th:if="${memberId != null}">
+          <a th:href="|javascript:showPlaylistAddModal('${playListId}')|"
+             class="reply-link"><i class="lni lni-notepad"></i> 강의노트에 추가하기</a>
         </li>
       </ul>
       <p th:utext="${videoInfo.description}"></p>

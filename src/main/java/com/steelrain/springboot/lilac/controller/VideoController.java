@@ -3,6 +3,7 @@ package com.steelrain.springboot.lilac.controller;
 import com.steelrain.springboot.lilac.common.SESSION_KEY;
 import com.steelrain.springboot.lilac.datamodel.MemberDTO;
 import com.steelrain.springboot.lilac.datamodel.YoutubeVideoDTO;
+import com.steelrain.springboot.lilac.datamodel.view.LectureNoteYoutubeVideoDTO;
 import com.steelrain.springboot.lilac.service.VideoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,11 +32,11 @@ public class VideoController {
 
     @GetMapping("/playlist-detail")
     public String getPlayListDetail(@RequestParam("youtubePlaylistId") Long youtubePlaylistId, Model model, HttpServletRequest servletRequest){
-        HttpSession session = servletRequest.getSession(false);
         /*
             유튜브영상 재생페이지에서 영상들을 강의노트에 추가하기 위해서는 memberId 가 필요하다.
             때문에 로그인 한 경우에는 memberId를 페이지의 hidden필드에 저장하기 위해 model에 넣어준다.
          */
+        HttpSession session = servletRequest.getSession(false);
         if(session != null && session.getAttribute(SESSION_KEY.LOGIN_MEMBER) != null){
             model.addAttribute("memberId",((MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER)).getId());
         }
@@ -45,8 +46,27 @@ public class VideoController {
         return "/video/playlist-detail";
     }
 
+    @GetMapping("/lec-playlist-detail")
+    public String getPlayListDetailOfLectureNote(@RequestParam("youtubePlaylistId") Long youtubePlaylistId, Model model, HttpServletRequest servletRequest){
+        HttpSession session = servletRequest.getSession(false);
+        MemberDTO memberDTO = null;
+        if(session != null && session.getAttribute(SESSION_KEY.LOGIN_MEMBER) != null){
+            memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
+            model.addAttribute("memberId", memberDTO.getId());
+        }
+        List<LectureNoteYoutubeVideoDTO> videoDTOList = m_videoService.getPlayListDetailOfLectureNote(memberDTO.getId(), youtubePlaylistId);
+        model.addAttribute("videoList", videoDTOList);
+        model.addAttribute("playListId", youtubePlaylistId);
+        return "/video/lecture-note-play";
+    }
+
     @GetMapping("/video-template")
-    public String getVideoTemplate(@RequestParam("videoId") Long videoId, Model model){
+    public String getVideoTemplate(@RequestParam("videoId") Long videoId, Model model, HttpServletRequest servletRequest){
+        HttpSession session = servletRequest.getSession(false);
+        if(session != null && session.getAttribute(SESSION_KEY.LOGIN_MEMBER) != null){
+            model.addAttribute("memberId",((MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER)).getId());
+        }
+
         YoutubeVideoDTO videoDTO = m_videoService.getVideoDetail(videoId);
         model.addAttribute("videoInfo", videoDTO);
         return "/video/video-play-template";

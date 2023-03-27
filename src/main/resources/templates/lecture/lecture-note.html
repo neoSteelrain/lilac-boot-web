@@ -225,10 +225,13 @@
                                                         <p>재생목록 제목</p>
                                                     </div>
                                                     <div class="col-lg-2 col-md-2 col-12">
-                                                        <p>영상개수</p>
+                                                        <p>영상</p>
                                                     </div>
-                                                    <div class="col-lg-3 col-md-3 col-12">
+                                                    <div class="col-lg-2 col-md-2 col-12">
                                                         <p>재생시간</p>
+                                                    </div>
+                                                    <div class="col-lg-1 col-md-1 col-12">
+                                                        <p>진행</p>
                                                     </div>
                                                     <div class="col-lg-1 col-md-1 col-12 align-right">
                                                         <p>삭제</p>
@@ -242,7 +245,7 @@
                                                         <div class="item-image">
                                                             <img th:src="${playlistItem.thumbnailMedium}" alt="#">
                                                             <div class="content">
-                                                                <h3 class="title"><a th:href="@{/video/playlist-detail(youtubePlaylistId=${playlistItem.playListId})}" th:text="${playlistItem.title}" ></a></h3>
+                                                                <h3 class="title"><a th:href="@{/video/lec-playlist-detail(youtubePlaylistId=${playlistItem.playListId})}" th:text="${playlistItem.title}" ></a></h3>
                                                                 <span class="price" th:text="${playlistItem.channelTitle}"></span>
                                                             </div>
                                                         </div>
@@ -250,8 +253,11 @@
                                                     <div class="col-lg-2 col-md-2 col-12">
                                                         <p th:text="${playlistItem.videoCount}"></p>
                                                     </div>
-                                                    <div class="col-lg-3 col-md-3 col-12">
+                                                    <div class="col-lg-2 col-md-2 col-12">
                                                         <p th:text="${playlistItem.totalDurationFormattedString}"></p>
+                                                    </div>
+                                                    <div class="col-lg-1 col-md-1 col-12">
+                                                        <p th:text="${playlistItem.progressStatus+'%'}"></p>
                                                     </div>
                                                     <div class="col-lg-1 col-md-1 col-12 align-right">
                                                         <ul class="action-btn">

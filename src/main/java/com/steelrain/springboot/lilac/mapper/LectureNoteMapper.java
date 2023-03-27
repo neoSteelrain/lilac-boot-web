@@ -60,4 +60,10 @@ public interface LectureNoteMapper {
     List<LectureNoteModalDTO> findLectureNoteListByBook(@Param("memberId") Long memberId);
 
     void deleteBook(@Param("refId") Long refId);
+
+    @Select("SELECT duration FROM tbl_youtube WHERE youtube_playlist_id=#{playlistid}")
+    String[] findAllDuration(Long playlistId);
+
+    @Select("SELECT ifnull(sum(progress), 0) FROM ref_tbl_lecture_youtube WHERE lecture_member_id=#{memberId} AND lecture_id=#{noteId} AND youtube_playlist_id=#{playlistId}")
+    int findTotalProgress(Long memberId, Long noteId, Long playlistId);
 }

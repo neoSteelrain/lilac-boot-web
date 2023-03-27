@@ -5,6 +5,7 @@ import com.steelrain.springboot.lilac.datamodel.KaKaoBookDTO;
 import com.steelrain.springboot.lilac.datamodel.LicenseScheduleDTO;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.format.annotation.NumberFormat;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -84,6 +85,7 @@ public class LectureNoteDetailDTO {
         private Timestamp regDate;
 
         // 화면에 보여질 가공된 정보들
+        @NumberFormat(pattern = "###.#")
         @Setter
         private Double progressStatus; // 진행상황
         @Setter

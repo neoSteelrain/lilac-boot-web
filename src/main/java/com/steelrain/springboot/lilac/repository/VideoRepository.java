@@ -2,12 +2,14 @@ package com.steelrain.springboot.lilac.repository;
 
 import com.steelrain.springboot.lilac.datamodel.YoutubePlayListDTO;
 import com.steelrain.springboot.lilac.datamodel.YoutubeVideoDTO;
+import com.steelrain.springboot.lilac.datamodel.view.LectureNoteYoutubeVideoDTO;
 import com.steelrain.springboot.lilac.datamodel.view.RecommendedPlayListDTO;
 import com.steelrain.springboot.lilac.datamodel.view.RecommendedVideoDTO;
 import com.steelrain.springboot.lilac.mapper.VideoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.Duration;
 import java.util.List;
 
 
@@ -37,6 +39,21 @@ public class VideoRepository implements IVideoRepository {
         return m_videoMapper.selectTotalPlayListCountByKeyword(keyword);
     }
 
+    @Override
+    public List<LectureNoteYoutubeVideoDTO> findPlayListDetailOfLectureNote(Long memberId, Long youtubePlaylistId) {
+        return m_videoMapper.findPlayListDetailOfLectureNote(memberId, youtubePlaylistId);
+    }
+
+    @Override
+    public long getDuration(Long lectureVideoId) {
+        return Duration.parse(m_videoMapper.findDuration(lectureVideoId)).toSeconds();
+    }
+
+    @Override
+    public long getProgress(Long lectureVideoId) {
+        return m_videoMapper.findProgress(lectureVideoId);
+    }
+
     public YoutubeVideoDTO findVideoDetail(Long videoId) {
         return m_videoMapper.findVideoDetail(videoId);
     }
@@ -47,6 +64,11 @@ public class VideoRepository implements IVideoRepository {
 
     public boolean isExistYoutubePlayList(Long playListId){
         return m_videoMapper.isExistYoutubePlayList(playListId);
+    }
+
+    @Override
+    public boolean updateVideoPlaytime(Long id, Long playtime) {
+        return m_videoMapper.updateVideoPlaytime(id, playtime) > 0;
     }
 
     public List<RecommendedPlayListDTO> findRecommendedPlayList() {

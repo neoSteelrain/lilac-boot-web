@@ -24,9 +24,9 @@
     </update>
 
     <insert id="addVideoIdList" parameterType="PlayListVideoDTO" >
-        INSERT INTO ref_tbl_lecture_youtube(lecture_id,lecture_member_id,youtube_id) VALUES
+        INSERT INTO ref_tbl_lecture_youtube(lecture_id,lecture_member_id,youtube_id,youtube_playlist_id) VALUES
             <foreach item="item" collection="list" separator=",">
-                (#{item.lectureId},#{item.lectureMemberId},#{item.youtubeId})
+                (#{item.lectureId},#{item.lectureMemberId},#{item.youtubeId},#{item.playlistId})
             </foreach>
     </insert>
 

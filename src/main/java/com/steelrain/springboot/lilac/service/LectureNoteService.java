@@ -18,10 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * 강의노트 서비스
@@ -116,11 +113,12 @@ public class LectureNoteService implements ILectureNoteService{
         List<Long> videoIdList = event.getVideoDTOList();
         List<PlayListVideoDTO> paramList = new ArrayList<>(videoIdList.size());
         for(Long videoId : videoIdList){
-            PlayListVideoDTO dto = new PlayListVideoDTO();
-            dto.setLectureId(lectureNoteId);
-            dto.setLectureMemberId(memberId);
-            dto.setYoutubeId(videoId);
-            paramList.add(dto);
+            paramList.add(PlayListVideoDTO.builder()
+                                        .lectureId(lectureNoteId)
+                                        .lectureMemberId(memberId)
+                                        .youtubeId(videoId)
+                                        .playlistId(playListId)
+                                        .build());
         }
         return  m_lectureNoteRepository.addVideoIdList(paramList);
     }
@@ -273,13 +271,35 @@ public class LectureNoteService implements ILectureNoteService{
     private LectureNoteDetailDTO initVideoInfoByLectureNote(Long memberId, Long noteId, final LectureNoteDetailDTO noteDetailDTO){
         List<LectureNoteDetailDTO.LectureVideoPlayListInfo> playlist = m_lectureNoteRepository.findVideoInfoByLectureNote(memberId, noteId);
         // 재생목록의 진행상황을 설정해야 하지만 아직 유튜브 플레이어에서 재생된 시간을 가져오는 방법을 모르기 때문에 일단 재생목록의 전체 재생시간으로 대체한다
+        // TODO 재생목록의 전체 재생시간을 구해야 한다
         for (LectureNoteDetailDTO.LectureVideoPlayListInfo info : playlist) {
             Duration totalDuration = m_lectureNoteRepository.findTotalDurationOfPlayList(info.getPlayListId());
             info.setTotalDuration(totalDuration.toSeconds()); // 유튜브는 초단위 까지만 사용하기 때문에 전체재생시간은 초단위로 설정
             info.setTotalDurationFormattedString(String.format("%d시간:%d분:%d초", totalDuration.toHoursPart(),totalDuration.toMinutesPart(), totalDuration.toSecondsPart()));
+            long tmpTotalDuration = getTotalDuration(info);
+            info.setTotalDuration(tmpTotalDuration);
+            info.setProgressStatus(calcTotalProgress(memberId, noteId, info.getPlayListId(), tmpTotalDuration));
         }
         noteDetailDTO.setVideoPlayList(playlist);
         return noteDetailDTO;
+    }
+
+    private long getTotalDuration(LectureNoteDetailDTO.LectureVideoPlayListInfo listInfo){
+        /*
+            - 재생목록의 duration 합 구하기
+            - 강의노트영상목록의 progress 합 구하기
+         */
+        String[] durations = m_lectureNoteRepository.findAllDuration(listInfo.getPlayListId());
+        long result = 0L;
+        for(String item : durations){
+            result += Duration.parse(item).toSeconds();
+        }
+        return result;
+    }
+
+    private double calcTotalProgress(Long memberId, Long noteId, Long playlistId, long totalDuration){
+        int totalProgress = m_lectureNoteRepository.findTotalProgress(memberId, noteId, playlistId);
+        return ((double)totalProgress / totalDuration) * 100;
     }
 
     /*

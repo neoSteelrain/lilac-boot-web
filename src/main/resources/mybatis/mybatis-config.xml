@@ -17,5 +17,6 @@
         <typeAlias type="com.steelrain.springboot.lilac.datamodel.view.LectureNoteDetailDTO$LectureVideoPlayListInfo" alias="LectureVideoPlayListInfo"></typeAlias>
         <typeAlias type="com.steelrain.springboot.lilac.datamodel.view.LectureNoteDetailDTO$LectureNoteBook" alias="LectureNoteBook"></typeAlias>
         <typeAlias type="com.steelrain.springboot.lilac.datamodel.KaKaoBookDTO" alias="KaKaoBookDTO"></typeAlias>
+        <typeAlias type="com.steelrain.springboot.lilac.datamodel.view.LectureNoteYoutubeVideoDTO" alias="LectureNoteYoutubeVideoDTO"></typeAlias>
     </typeAliases>
 </configuration>

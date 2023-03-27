@@ -41,4 +41,8 @@ public interface ILectureNoteRepository {
     List<LectureNoteModalDTO> findLectureNoteListByBook(Long memberId);
 
     void deleteBook(Long refId);
+
+    String[] findAllDuration(Long playlistId);
+
+    int findTotalProgress(Long memberId, Long noteId, Long playlistId);
 }
