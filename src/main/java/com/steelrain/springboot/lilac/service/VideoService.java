@@ -138,7 +138,10 @@ public class VideoService implements IVideoService {
          */
         Optional<Boolean> res = m_videoRepository.findVideoLikeStatus(memberId, videoId);
         if(res.isPresent()){
-            if(!res.get().booleanValue()){
+            if(res.get().booleanValue()){
+                m_videoRepository.decreaseLikeCount(videoId);
+                m_videoRepository.deleteLikeVideo(memberId, videoId);
+            }else{
                 m_videoRepository.updateLikeVideo(memberId, videoId, true);
                 m_videoRepository.increaseLikeCount(videoId);
                 m_videoRepository.decreaseDislikeCount(videoId);
@@ -158,6 +161,9 @@ public class VideoService implements IVideoService {
                 m_videoRepository.updateLikeVideo(memberId, videoId, false);
                 m_videoRepository.increaseDislikeCount(videoId);
                 m_videoRepository.decreaseLikeCount(videoId);
+            }else{
+                m_videoRepository.decreaseDislikeCount(videoId);
+                m_videoRepository.deleteLikeVideo(memberId, videoId);
             }
         }else{
             m_videoRepository.setLikeStatus(memberId, videoId, false);

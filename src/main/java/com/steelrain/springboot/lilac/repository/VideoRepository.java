@@ -113,6 +113,11 @@ public class VideoRepository implements IVideoRepository {
         return m_videoMapper.updateVideoPlaytime(id, playtime) > 0;
     }
 
+    @Override
+    public void deleteLikeVideo(Long memberId, Long videoId) {
+        m_videoMapper.deleteLikeVideo(memberId, videoId);
+    }
+
     public List<RecommendedPlayListDTO> findRecommendedPlayList() {
         return m_videoMapper.findRecommendedPlayList();
     }

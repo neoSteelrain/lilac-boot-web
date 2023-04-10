@@ -5,6 +5,7 @@ import com.steelrain.springboot.lilac.datamodel.YoutubeVideoDTO;
 import com.steelrain.springboot.lilac.datamodel.view.LectureNoteYoutubeVideoDTO;
 import com.steelrain.springboot.lilac.datamodel.view.RecommendedPlayListDTO;
 import com.steelrain.springboot.lilac.datamodel.view.RecommendedVideoDTO;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -58,4 +59,7 @@ public interface VideoMapper {
     void decreaseLikeCount(Long videoId);
 
     Map<String, Long> selectLikeCountMap(Long videoId);
+
+    @Delete("DELETE FROM tbl_youtube_like WHERE member_id=#{memberId} AND youtube_id=#{videoId}")
+    void deleteLikeVideo(Long memberId, Long videoId);
 }

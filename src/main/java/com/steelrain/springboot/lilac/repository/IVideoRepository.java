@@ -50,4 +50,6 @@ public interface IVideoRepository {
     void decreaseLikeCount(Long videoId);
 
     Map<String, Long> selectLikeCountMap(Long videoId);
+
+    void deleteLikeVideo(Long memberId, Long videoId);
 }
