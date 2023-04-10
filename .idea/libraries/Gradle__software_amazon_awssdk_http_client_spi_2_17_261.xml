@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: software.amazon.awssdk:http-client-spi:2.17.261" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="software.amazon.awssdk" artifactId="http-client-spi" version="2.17.261" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/software.amazon.awssdk/http-client-spi/2.17.261/e548c8fcfc6b7f899d7070f084988b600954c2da/http-client-spi-2.17.261.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/software.amazon.awssdk/http-client-spi/2.17.261/9b2d41f948964ec2835a3bf391355a7f10e2104e/http-client-spi-2.17.261-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

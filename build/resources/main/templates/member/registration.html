@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>회원가입</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.svg}" />
+    <!-- Place favicon.ico in the root directory -->
+
+    <!-- Web Font -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+
+    <!-- ========================= CSS here ========================= -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/LineIcons.2.0.css}" />
+    <link rel="stylesheet" th:href="@{/css/animate.css}" />
+    <link rel="stylesheet" th:href="@{/css/tiny-slider.css}" />
+    <link rel="stylesheet" th:href="@{/css/glightbox.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
+</head>
+
+<body>
+    <!--[if lte IE 9]>
+      <p class="browserupgrade">
+        You are using an <strong>outdated</strong> browser. Please
+        <a href="https://browsehappy.com/">upgrade your browser</a> to improve
+        your experience and security.
+      </p>
+    <![endif]-->
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-inner">
+            <div class="preloader-icon">
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+    <!-- /End Preloader -->
+
+    <!-- Start Header Area -->
+    <div th:replace="~{common/header::header}"></div>
+    <!-- End Header Area -->
+
+    <!-- start Registration section -->
+    <section class="login registration section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-12">
+                    <div class="form-head">
+                        <h6 class="title">회원가입</h6>
+                        <form action="/member/registration" th:object="${memberReg}" method="post">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="ipt-nickname" th:field="*{nickname}" min="1" maxlength="20" placeholder="닉네임" onblur="checkDuplicatedId()" >
+                                <label for="ipt-nickname">닉네임</label>
+<!--                                <span id="nickNameNotice" class="ui-state-error-text" th:errors="*{nickname}"></span>-->
+                                <span id="nickNameNoticeJs" class="text-danger"></span>
+                                <span id="nickNameNotice" th:each="err : ${#fields.errors('nickname')}" th:if="${errStat.first}" th:text="${err}" class="text-danger"></span>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="ipt-email" th:field="*{email}" min="5" maxlength="100" placeholder="이메일" onblur="checkDuplicatedEmail()">
+                                <label for="ipt-email">이메일</label>
+<!--                                <span id="emailNotice" th:errors="*{email}"></span>-->
+                                <span id="emailNoticeJs" class="text-danger"></span>
+                                <span id="emailNotice" th:each="err : ${#fields.errors('email')}" th:if="${errStat.first}" th:text="${err}" class="text-danger"></span>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" id="ipt-password" th:field="*{password}" min="6" maxlength="19"
+                                       placeholder="password" onblur="checkPassword()">
+                                <label for="ipt-password">비밀번호</label>
+<!--                                <span id="pwNotice" th:errors="*{password}"></span>-->
+                                <span id="pwNoticeJs" class="text-danger"></span>
+                                <span id="pwNotice" th:each="err : ${#fields.errors('password')}" th:if="${errStat.first}" th:text="${err}" class="text-danger"></span>
+                            </div>
+                            <hr class="my-2">
+                            <div class="button">
+                                <button type="submit" id="btn-registration" class="btn">회원가입</button>
+                            </div>
+                            <div class="socila-login" style="margin-top: 10px">
+                                <ul>
+<!--                                    <li><a href="javascript:void(0)" class="google"><i class="lni lni-bitcoin"></i>카카오 로그인</a></li>-->
+                                    <li><a href="javascript:void(0)" class="google"><i class="lni lni-google"></i>구글 로그인</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <p class="outer-link">이미 가입이 되어 있으신가요? <a href="/member/login"> 로그인</a>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Registration section -->
+
+    <!-- Start Footer Area -->
+    <th:block th:replace="~{common/footer::footer}"></th:block>
+    <!--/ End Footer Area -->
+
+    <!-- ========================= JS here ========================= -->
+    <script th:src="@{/js/jquery.3.6.1.min.js}"></script>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/wow.min.js}"></script>
+    <script th:src="@{/js/tiny-slider.js}"></script>
+    <script th:src="@{/js/glightbox.min.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+    <script th:inline="javascript">
+        const checkDuplicatedId = () => {
+            const nickNameInput = $('#ipt-nickname').val();
+            const nickNameNotice = $('#nickNameNoticeJs');
+            if (nickNameInput == "") {
+                nickNameNotice.attr('class','text-danger');
+                nickNameNotice.html('닉네임은 필수입력입니다')
+                return;
+            }
+            const nickNameRegex = /^([가-힝a-zA-Z0-9]){1,20}$/u;
+            if (!nickNameRegex.test(nickNameInput)) {
+                nickNameNotice.attr('class','text-danger');
+                nickNameNotice.html('닉네임형식에 어긋납니다')
+                $('#ipt-nickname').focus();
+                return;
+            }
+            $.ajax({
+                type: "get",
+                url: "/member/duplicated-nickname/" + nickNameInput,
+                success: function (data) {
+                    nickNameNotice.attr('class','text-success');
+                    nickNameNotice.html('사용가능한 닉네임입니다.');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    if(jqXHR.status == 409){
+                        nickNameNotice.attr('class','text-danger');
+                        nickNameNotice.html('중복된 닉네임입니다.');
+                    }else if(jqXHR.status == 400){
+                        nickNameNotice.attr('class','text-danger');
+                        nickNameNotice.html('닉네임 길이는 20자를 넘을 수 없습니다.');
+                    }else {
+                        alert('닉네임 검증에서 오류가 발생하였습니다');
+                    }
+                }
+            });
+        }
+
+        const checkDuplicatedEmail = () => {
+            const emailInput = $('#ipt-email').val();
+            const emailNotice = $('#emailNoticeJs');
+            if (emailInput == "") {
+                emailNotice.attr('class','text-danger');
+                emailNotice.html('이메일 주소는 필수입력입니다')
+                return;
+            }
+            const emailRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}(.[a-zA-Z]{2,3})?$/u;
+            if (!emailRegex.test(emailInput)) {
+                emailNotice.attr('class','text-danger');
+                emailNotice.html('이메일 주소형식에 어긋납니다')
+                $('#ipt-email').focus();
+                return;
+            }
+            $.ajax({
+                type: "get",
+                url: "/member/duplicated-email/" + emailInput,
+                success: function (data) {
+                    emailNotice.attr('class','text-success');
+                    emailNotice.html('사용가능한 이메일입니다.');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    if(jqXHR.status == 409){
+                        emailNotice.attr('class','text-danger');
+                        emailNotice.html('중복된 이메일입니다.');
+                    }else if(jqXHR.status == 400){
+                        emailNotice.attr('class','text-danger');
+                        emailNotice.html('이메일 길이는 100자를 넘을 수 없습니다.');
+                    }else {
+                        alert('이메일 검증에서 오류가 발생하였습니다');
+                    }
+                }
+            });
+        }
+        const checkPassword = () => {
+            const pwTag = $('#ipt-password');
+            const pw = $('#ipt-password').val();
+            const pwNotice = $('#pwNotice');
+            const pwRegex = /^([a-zA-Z0-9]){5,19}$/;
+            if(pw != "" && !pwRegex.test(pw)) {
+                pwNotice.html('비밀번호는 영문대,소문자,숫자 조합으로 6-19자 입니다.');
+                pwTag.val('');
+                pwTag.focus();
+            }else{
+                pwNotice.html('');
+            }
+        }
+    </script>
+</body>
+</html>

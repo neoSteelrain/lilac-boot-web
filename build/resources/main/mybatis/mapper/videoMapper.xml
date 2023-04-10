@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.steelrain.springboot.lilac.mapper.VideoMapper">
+    <select id="findRecommendedVideoList" resultType="RecommendedVideoDTO">
+        SELECT youtube.id,youtube_playlist_id,youtube.title as video_title,
+               youtube.thumbnail_medium,youtube.view_count,search_count,like_count,favorite_count,chn.title as channel_title
+        FROM tbl_recommended_video rvideo INNER JOIN tbl_youtube youtube INNER JOIN tbl_youtube_channel chn
+            ON rvideo.youtube_id=youtube.id
+                AND youtube.channel_id=chn.id;
+    </select>
+
+    <select id="findPlayListDetail" parameterType="java.lang.Long" resultType="YoutubeVideoDTO">
+        SELECT yt.id,yt.video_id,yt.channel_id,yt.youtube_playlist_id,yt.title,yt.description,yt.publish_date,
+               yt.thumbnail_default,yt.thumbnail_high,yt.playlist_id,yt.view_count,yt.search_count,yt.like_count,yt.favorite_count,yt.comment_count,
+               yt.comment_disabled,yt.duration,yt.score,yt.magnitude,yt.lilac_like_count,yt.lilac_dislike_count
+        FROM tbl_youtube yt INNER JOIN tbl_youtube_playlist pl
+            ON yt.youtube_playlist_id=pl.id
+        WHERE pl.id=#{playlistId};
+    </select>
+
+    <select id="findPlayListDetailOfLectureNote" parameterType="map" resultType="LectureNoteYoutubeVideoDTO">
+        SELECT pl.id as lecture_video_id,pl.lecture_id,pl.lecture_member_id,yt.id,yt.video_id,yt.channel_id,yt.youtube_playlist_id,yt.title,yt.description,yt.publish_date,
+               yt.thumbnail_default,yt.thumbnail_high,yt.playlist_id,yt.view_count,yt.search_count,yt.like_count,yt.favorite_count,yt.comment_count,
+               yt.comment_disabled,yt.duration,yt.score,yt.magnitude, (SELECT title FROM tbl_lecture WHERE id=pl.lecture_id) as lecture_title
+        FROM ref_tbl_lecture_youtube pl INNER JOIN tbl_youtube yt
+            ON pl.youtube_id=yt.id
+        WHERE pl.lecture_member_id=#{memberId} AND pl.youtube_playlist_id=#{youtubePlaylistId};
+    </select>
+
+    <select id="findDuration" parameterType="java.lang.Long" resultType="java.lang.String">
+        SELECT yt.duration
+        FROM ref_tbl_lecture_youtube ref INNER JOIN tbl_youtube yt
+            ON ref.youtube_id=yt.id
+        WHERE ref.id=#{lectureVideoId};
+    </select>
+
+    <resultMap id="findPlayListByKeywordMap" type="YoutubePlayListDTO">
+        <id property="id" column="id" />
+        <result property="playlistId" column="playlist_id" />
+        <result property="channelId" column="channel_id" />
+        <result property="title" column="title" />
+        <result property="thumbnailMedium" column="thumbnail_medium" />
+        <result property="itemCount" column="item_count" />
+        <result property="channelTitle" column="channel_title" />
+    </resultMap>
+    <select id="findPlayListByKeyword" parameterType="map"  resultMap="findPlayListByKeywordMap">
+        SELECT pl.id,playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,item_count,chn.title as channel_title
+        FROM tbl_youtube_playlist pl INNER JOIN tbl_youtube_channel chn
+                                                ON pl.channel_id=chn.id
+        WHERE MATCH(pl.title) AGAINST (#{keyword})
+        ORDER BY pl.publish_date LIMIT #{offset}, #{count}
+    </select>
+
+    <select id="findRecommendedPlayList" resultType="RecommendedPlayListDTO">
+        SELECT tmp.id as youtube_playlist_id, tmp.title, tmp.thumbnail_medium, chn.title as channel_title
+        FROM (SELECT pl.id, pl.channel_id, pl.title, pl.thumbnail_medium
+              FROM tbl_recommended_playlist rpl INNER JOIN tbl_youtube_playlist pl
+                ON rpl.youtube_playlist_id = pl.id) as tmp
+        INNER JOIN tbl_youtube_channel chn
+            ON tmp.channel_id = chn.id;
+    </select>
+
+    <update id="updateVideoPlaytime" parameterType="map">
+       UPDATE ref_tbl_lecture_youtube SET progress=#{playtime} WHERE id=#{id}
+    </update>
+
+    <insert id="setLikeStatus" parameterType="map">
+        INSERT INTO tbl_youtube_like(youtube_id,member_id,like_status) VALUE (#{videoId},#{memberId},#{likeStatus})
+    </insert>
+
+    <update id="updateLikeVideo" parameterType="map">
+        UPDATE tbl_youtube_like SET like_status=#{likeStatus} WHERE member_id=#{memberId} AND youtube_id=#{videoId}
+    </update>
+
+    <update id="increaseLikeCount" parameterType="long">
+        UPDATE tbl_youtube SET lilac_like_count=lilac_like_count+1 WHERE id=#{videoId}
+    </update>
+
+    <update id="increaseDislikeCount" parameterType="long">
+        UPDATE tbl_youtube SET lilac_dislike_count=lilac_dislike_count+1 WHERE id=#{videoId}
+    </update>
+
+    <update id="decreaseLikeCount" parameterType="long">
+        UPDATE tbl_youtube SET lilac_like_count=lilac_like_count-1 WHERE id=#{videoId}
+    </update>
+
+    <update id="decreaseDislikeCount" parameterType="long">
+        UPDATE tbl_youtube SET lilac_dislike_count=lilac_dislike_count-1 WHERE id=#{videoId}
+    </update>
+
+    <select id="selectLikeCountMap" parameterType="long" resultType="map">
+        SELECT lilac_like_count, lilac_dislike_count FROM tbl_youtube WHERE id=#{videoId}
+    </select>
+</mapper>

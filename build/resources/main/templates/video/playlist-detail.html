@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <title>재생목록 영상 재생</title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.svg}"/>
+    <!-- Place favicon.ico in the root directory -->
+
+    <!-- Web Font -->
+    <link
+            href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+            rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+
+    <!-- ========================= CSS here ========================= -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/LineIcons.2.0.css}"/>
+    <link rel="stylesheet" th:href="@{/css/animate.css}"/>
+    <link rel="stylesheet" th:href="@{/css/tiny-slider.css}"/>
+    <link rel="stylesheet" th:href="@{/css/glightbox.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<!--[if lte IE 9]>
+<p class="browserupgrade">
+    You are using an <strong>outdated</strong> browser. Please
+    <a href="https://browsehappy.com/">upgrade your browser</a> to improve
+    your experience and security.
+</p>
+<![endif]-->
+
+<!-- Preloader -->
+<div class="preloader">
+    <div class="preloader-inner">
+        <div class="preloader-icon">
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- /End Preloader -->
+
+<div th:replace="~{common/header::header}"></div>
+
+<section class="section blog-single" style="margin-top:30px">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-12 col-12">
+                <div class="single-inner">
+                    <div class="post-thumbnils ratio ratio-16x9">
+                        <div id="player"></div>
+                    </div>
+                    <div id="div-video-info" class="post-details">
+                        <div class="detail-inner">
+                            <h5 class="post-title" th:text="${videoList[0].title}"></h5>
+                            <ul class="custom-flex post-meta">
+                                <li>
+                                    <i class="lni lni-calendar" th:text="' '+${{videoList[0].publishDate}}"></i>
+                                </li>
+                                <li>
+                                    <i class="lni lni-comments" th:text="' '+${videoList[0].commentCount}"></i>
+                                </li>
+                                <li>
+                                    <i class="lni lni-eye" th:text="' '+${videoList[0].viewCount}"></i>
+                                </li>
+                                <li>
+                                    <i class="lni lni-star" th:text="' '+${videoList[0].likeCount}" ></i>
+                                </li>
+                                <li>
+                                    <a th:href="|javascript:likeVideo('${videoList[0].id}')|">
+                                        <i id="img-like-count" class="lni lni-thumbs-up" th:style="${(isLikeVideo != null && isLikeVideo) ? 'color:red':''}" th:text="' '+${videoList[0].lilacLikeCount}"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a th:href="|javascript:dislikeVideo('${videoList[0].id}')|">
+                                        <i id="img-dislike-count" class="lni lni-thumbs-down" th:style="${(isLikeVideo != null && !isLikeVideo) ? 'color:red':''}" th:text="' '+${videoList[0].lilacDislikeCount}"></i>
+                                    </a>
+                                </li>
+                                <li th:if="${memberId != null}">
+                                    <a th:href="|javascript:showPlaylistAddModal('${playListId}')|"
+                                       class="reply-link"><i class="lni lni-notepad"></i> 강의노트에 추가하기</a>
+                                </li>
+                            </ul>
+                            <p th:utext="${videoList[0].description}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <aside class="col-lg-4 col-md-12 col-12">
+                <div class="sidebar blog-grid-page">
+                  <p>
+                    재생목록
+                  </p>
+                  <div class="messages-body">
+                    <div class="row">
+                      <div class="col-lg-12 col-12">
+                        <div class="user-list">
+                          <ul>
+                            <!-- 재생목록의 개별영상 시작 -->
+                            <li th:each="video : ${videoList}">
+                              <a th:href="|javascript:playSelectedVideo('${video.videoId}', '${video.Id}')|">
+                                <div class="image">
+                                  <img th:src="${video.thumbnailDefault}" alt="#">
+                                </div>
+                                <span class="short-message" th:text="${video.title}"></span>
+                              </a>
+                            </li>
+                            <!-- 재생목록의 개별영상 끝 -->
+                          </ul>
+                          <input id="memberIdHidden" type="hidden" th:value="${memberId}">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
+
+<div id="div-modal-lecture-note">
+</div>
+
+<th:block th:replace="~{common/footer::footer}"></th:block>
+
+<script th:src="@{/js/jquery.3.6.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/wow.min.js}"></script>
+<script th:src="@{/js/tiny-slider.js}"></script>
+<script th:src="@{/js/glightbox.min.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/lilac-common.js}"></script>
+<script th:inline="javascript">
+    let tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    let firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    let player;
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+            videoId: [[${videoList[0].videoId}]],
+            events: {
+                'onReady': onPlayerReady
+            }
+        });
+    }
+
+    function onPlayerReady(event) {
+        event.target.playVideo();
+    }
+
+    // 강의노트 모달html을 서버로 부터 받아오고 모달창을 띄운다
+    const showPlaylistAddModal = (paramPlayListId) => {
+        const memberIdVal = $("#memberIdHidden").val();
+        $.ajax({
+            type: "get",
+            url: "/lecture/modal-playlist-template",
+            dataType: "text",
+            data: {
+                memberId: memberIdVal,
+                playListId: paramPlayListId
+            },
+            success: function (data) {
+                let html = jQuery('<div>').html(data);
+                let contents = html.find("div#playlist-add-modal").html();
+                $('#div-modal-lecture-note').html(contents);
+                $("#addNoteModal").modal("show");
+
+            }, error: function (error) {
+                alert("강의노트 입력창 호출에 실패하였습니다.");
+            }
+        })
+    }
+    // playlist-add-model.html 에서 호출하는 함수
+    const addPlayListToLectureNote = () => {
+        const paramPlayListId = [[${playListId}]];
+        const paramLectureNoteId = $("#lectureNoteSelect").val(); // playlist-add-model.html에 있는 셀렉트박스 태그
+        let param = {
+            "playListId": paramPlayListId,
+            "lectureNoteId": paramLectureNoteId
+        }
+        $.ajax({
+            type: "post",
+            url: "/lecture/api/addPlayList",
+            headers: {"Content-Type": "application/json"},
+            data: JSON.stringify(param),
+            success: function (resultJson) {
+                alert("재생목록을 강의노트에 추가하였습니다.");
+                $("#addNoteModal").modal("hide");
+                document.location.href = "/video/lec-playlist-detail?youtubePlaylistId="+paramPlayListId;
+            },
+            error: function (jqXHR) {
+                if (jqXHR.status == 401) {
+                    alert("로그인 후 사용할 수 있습니다.");
+                }
+                alert("재생목록을 강의노트에 추가하는데 실패하였습니다.");
+            }
+        })
+    }
+
+    const playSelectedVideo = (paramVideoOriginId, paramVideoId) => {
+        $.ajax({
+            type:"get",
+            url:"/video/video-template",
+            dataType:"text",
+            data:{videoId: paramVideoId},
+            success: function (result) {
+                let html = jQuery('<div>').html(result);
+                let playlist = html.find("div#video-info-template").html();
+                $("#div-video-info").html(playlist);
+                player.loadVideoById(paramVideoOriginId, 0);
+            },
+            error: function (error) {
+                alert("영상정보 조회중 에러");
+            }
+        })
+    }
+    const likeVideo = (paramVideoId) => {
+        let param = {
+            "videoId":paramVideoId
+        }
+        $.ajax({
+            type:"post",
+            url:"/video/api/like-video",
+            headers: {"Content-Type": "application/json"},
+            data:JSON.stringify(param),
+            success:function (result){
+                $("#img-like-count").css("color", "red");
+                $("#img-dislike-count").css("color", "black");
+                $("#img-like-count").text(' '+result.likeCount);
+                $("#img-dislike-count").text(' '+result.dislikeCount);
+            },
+            error:function(err){
+                alert(err);
+            }
+        })
+    }
+    const dislikeVideo = (paramVideoId) => {
+        let param = {
+            "videoId":paramVideoId
+        }
+        $.ajax({
+            type:"post",
+            url:"/video/api/dislike-video",
+            headers: {"Content-Type": "application/json"},
+            data:JSON.stringify(param),
+            success:function (result){
+                $("#img-like-count").css("color", "black");
+                $("#img-dislike-count").css("color", "red");
+                $("#img-like-count").text(' '+result.likeCount);
+                $("#img-dislike-count").text(' '+result.dislikeCount);
+            },
+            error:function(err){
+                alert(err);
+            }
+        })
+    }
+</script>
+</body>
+</html>

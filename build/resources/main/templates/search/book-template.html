@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<!-- licenseBookInfo -->
+<div id="library-book-template">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-4 col-12">
+                <div class="category-sidebar">
+                    <!-- Start Single Widget -->
+                    <div class="single-widget">
+                        <h3 th:text="${licenseBookInfo.regionName}+'-'+${licenseBookInfo.detailRegionName}+' 도서관목록'"></h3>
+                        <ul class="list">
+                            <li th:each="library : ${licenseBookInfo.libraryList}">
+                                <a href="javascript:void(0)" th:text="${library.name}"><i class="lni lni-library"></i><span>0</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- End Single Widget -->
+                    <!-- Start Single Widget -->
+                    <!--<div class="single-widget range">
+                        <h3>가격</h3>
+                        <input type="range" class="form-range" name="range" step="1" min="100" max="10000"
+                               value="10" onchange="rangePrimary.value=value">
+                        <div class="range-inner">
+                            <label>원</label>
+                            <input type="text" id="rangePrimary" placeholder="10000" />
+                        </div>
+                    </div>-->
+                    <!-- End Single Widget -->
+                    <!-- Start Single Widget -->
+                    <!--<div class="single-widget condition">
+                        <h3>기타 조건</h3>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1">
+                            <label class="form-check-label" for="flexCheckDefault1">
+                                조건1
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault2">
+                            <label class="form-check-label" for="flexCheckDefault2">
+                                조건2
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault3">
+                            <label class="form-check-label" for="flexCheckDefault3">
+                                조건3
+                            </label>
+                        </div>
+                    </div>-->
+                    <!-- End Single Widget -->
+                </div>
+            </div>
+            <div class="col-lg-9 col-md-8 col-12">
+                <div class="category-grid-list">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="category-grid-topbar">
+                                <div class="row align-items-center">
+                                    <div class="col-lg-6 col-md-6 col-12">
+                                        <h3 class="title" th:text="${licenseBookInfo.keyword} + ' 키워드로 검색된 책목록' + ' , 검색된 도서수 :' + ${licenseBookInfo.totalBookCount} + ' 권'"></h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-content" id="nav-tabContent">
+                                <div class="tab-pane fade show active" id="nav-grid" role="tabpanel"
+                                     aria-labelledby="nav-grid-tab">
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-6 col-12" th:each="kakaoBook : ${licenseBookInfo.kakaoBookList}">
+                                            <!-- Start Single Item -->
+                                            <div class="single-item-grid">
+                                                <div class="image">
+                                                    <a th:href="@{/search/book-detail(isbn=${kakaoBook.isbn13Long},region=${licenseBookInfo.regionCode},detailRegion=${licenseBookInfo.detailRegionCode})}" ><img th:src="${kakaoBook.thumbnail}" alt="#"></a>
+                                                    <span th:if="${kakaoBook.salePrice > 0}" class="flat-badge sale">할인중</span>
+                                                </div>
+                                                <div class="content text-wrap">
+                                                    <h6 class="title" th:text="${kakaoBook.title}"></h6>
+                                                    <ul class="info">
+                                                        <li class="info" th:text="${{kakaoBook.price}} +' -> '+ ${{kakaoBook.salePrice}}+' 원'"></li>
+                                                        <li class="like"><a th:href="${kakaoBook.url}" target="_blank"><i
+                                                                class="lni lni-link"></i></a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <!-- End Single Item -->
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <th:block th:if="${licenseBookInfo.kakaoBookList.size() > 0}"> <!-- 검색결과가 없으면 안나오게 처리 -->
+                                                <div class="pagination left" th:with="page=${licenseBookInfo.pageInfo.page}" >
+                                                    <ul class="pagination-list">
+                                                        <li><a th:if="${page <= 1}"><i class="lni lni-chevron-left"></i></a></li> <!-- const refreshLicenseBookList = (argLicenseCode, argRegionCode, argDetailRegionCode, argPageNum)  -->
+                                                        <li><a th:unless="${page <= 1}" th:href="|javascript:refreshLicenseBookList('${licenseBookInfo.licenseCode}', '${licenseBookInfo.regionCode}', '${licenseBookInfo.detailRegionCode}', '${licenseBookInfo.pageInfo.page-1}')|"><i class="lni lni-chevron-left"></i></a></li>
+                                                        <th:block th:each="idx : ${#numbers.sequence(licenseBookInfo.pageInfo.startPage, licenseBookInfo.pageInfo.endPage)}">
+                                                            <li th:if="${idx == page}" class="active"><a th:href="|javascript:refreshLicenseBookList('${licenseBookInfo.licenseCode}', '${licenseBookInfo.regionCode}', '${licenseBookInfo.detailRegionCode}',  '${idx}')|" th:text="${idx}"></a></li>
+                                                            <li th:unless="${idx == page}" ><a th:href="|javascript:refreshLicenseBookList('${licenseBookInfo.licenseCode}', '${licenseBookInfo.regionCode}', '${licenseBookInfo.detailRegionCode}',  '${idx}')|" th:text="${idx}"></a></li>
+                                                        </th:block>
+                                                        <li><a th:if="${page >= licenseBookInfo.pageInfo.maxPage}"><i class="lni lni-chevron-right"></i></a></li>
+                                                        <li><a th:unless="${page >= licenseBookInfo.pageInfo.maxPage}" th:href="|javascript:refreshLicenseBookList('${licenseBookInfo.licenseCode}', '${licenseBookInfo.regionCode}', '${licenseBookInfo.detailRegionCode}', ' ${licenseBookInfo.pageInfo.page+1}')|"><i class="lni lni-chevron-right"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

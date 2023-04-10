@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+    <typeAliases>
+        <typeAlias type="com.steelrain.springboot.lilac.datamodel.MemberDTO" alias="MemberDTO"></typeAlias>
+        <typeAlias type="com.steelrain.springboot.lilac.datamodel.LectureNoteDTO" alias="LectureNoteDTO"></typeAlias>
+        <typeAlias type="com.steelrain.springboot.lilac.datamodel.YoutubeVideoDTO" alias="YoutubeVideoDTO"></typeAlias>
+        <typeAlias type="com.steelrain.springboot.lilac.datamodel.YoutubePlayListDTO" alias="YoutubePlayListDTO"></typeAlias>
+        <typeAlias type="com.steelrain.springboot.lilac.datamodel.view.RecommendedVideoDTO" alias="RecommendedVideoDTO"></typeAlias>
+        <typeAlias type="com.steelrain.springboot.lilac.datamodel.view.RecommendedPlayListDTO" alias="RecommendedPlayListDTO"></typeAlias>
+        <typeAlias type="com.steelrain.springboot.lilac.datamodel.PlayListVideoDTO" alias="PlayListVideoDTO"></typeAlias>
+        <typeAlias type="com.steelrain.springboot.lilac.datamodel.LectureNoteModalDTO" alias="LectureNoteModalDTO"></typeAlias>
+        <typeAlias type="com.steelrain.springboot.lilac.datamodel.view.LectureNoteDetailDTO$LectureVideoPlayListInfo" alias="LectureVideoPlayListInfo"></typeAlias>
+        <typeAlias type="com.steelrain.springboot.lilac.datamodel.view.LectureNoteDetailDTO$LectureNoteBook" alias="LectureNoteBook"></typeAlias>
+        <typeAlias type="com.steelrain.springboot.lilac.datamodel.KaKaoBookDTO" alias="KaKaoBookDTO"></typeAlias>
+        <typeAlias type="com.steelrain.springboot.lilac.datamodel.view.LectureNoteYoutubeVideoDTO" alias="LectureNoteYoutubeVideoDTO"></typeAlias>
+    </typeAliases>
+</configuration>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.steelrain.springboot.lilac.mapper.LectureNoteMapper">
+    <insert id="saveDefaultLectureNote" useGeneratedKeys="true" keyProperty="id" parameterType="LectureNoteDTO">
+        INSERT INTO tbl_lecture(member_id,title) VALUE(#{memberId},#{title})
+    </insert>
+
+    <insert id="saveLectureNote" useGeneratedKeys="true" keyProperty="id" parameterType="LectureNoteDTO">
+        INSERT INTO tbl_lecture(member_id,title,description,license_id,subject_id) VALUE
+            (#{memberId},#{title},#{description},#{licenseId},#{subjectId})
+    </insert>
+
+    <delete id="deleteLectureNote" parameterType="java.lang.Long">
+        DELETE FROM tbl_lecture WHERE id=#{noteId}
+    </delete>
+
+    <delete id="deleteBook" parameterType="java.lang.Long">
+        DELETE FROM ref_tbl_lecture_book WHERE id=#{refId};
+    </delete>
+
+    <update id="updateLectureNote" parameterType="LectureNoteDTO">
+        UPDATE tbl_lecture SET title=#{title} , description=#{description} WHERE id = #{id};
+    </update>
+
+    <insert id="addVideoIdList" parameterType="PlayListVideoDTO" >
+        INSERT INTO ref_tbl_lecture_youtube(lecture_id,lecture_member_id,youtube_id,youtube_playlist_id) VALUES
+            <foreach item="item" collection="list" separator=",">
+                (#{item.lectureId},#{item.lectureMemberId},#{item.youtubeId},#{item.playlistId})
+            </foreach>
+    </insert>
+
+    <insert id="addBook" parameterType="map">
+        INSERT INTO ref_tbl_lecture_book(lecture_id, lecture_member_id, book_id) VALUE
+            (#{lectureNoteId}, #{memberId}, #{bookId})
+    </insert>
+
+    <resultMap id="findLectureNoteListByPlayListMap" type="LectureNoteModalDTO">
+        <result property="noteId" column="id" />
+        <result property="noteTitle" column="title" />
+        <result property="playListId" column="youtube_playlist_id" />
+    </resultMap>
+    <select id="findLectureNoteListByPlayList" parameterType="java.lang.Long" resultMap="findLectureNoteListByPlayListMap">
+        SELECT tmp.id, tmp.title, IFNULL(yt.youtube_playlist_id, -1) AS youtube_playlist_id
+        FROM (SELECT lec.id, lec.title, ref.youtube_id
+              FROM tbl_lecture lec LEFT JOIN ref_tbl_lecture_youtube ref
+                ON lec.id = ref.lecture_id
+              WHERE lec.member_id = #{memberId}) as tmp LEFT JOIN tbl_youtube yt
+        ON tmp.youtube_id = yt.id
+        GROUP BY tmp.id, yt.youtube_playlist_id
+    </select>
+
+    <resultMap id="findLectureNoteListByBookMap" type="LectureNoteModalDTO">
+        <result property="noteId" column="lec_id"/>
+        <result property="noteTitle" column="lec_title"/>
+        <result property="bookId" column="book_id"/>
+    </resultMap>
+    <select id="findLectureNoteListByBook" parameterType="java.lang.Long" resultMap="findLectureNoteListByBookMap">
+        SELECT tmp.id as lec_id, tmp.title as lec_title, IFNULL(tmp.book_id, -1) as book_id
+        FROM (SELECT lec.id, lec.title, ref.book_id
+              FROM tbl_lecture lec LEFT JOIN ref_tbl_lecture_book ref
+                ON lec.id=ref.lecture_id
+              WHERE lec.member_id=#{memberId}) as tmp LEFT JOIN tbl_book tb
+        ON tmp.book_id=tb.id
+    </select>
+
+    <resultMap id="findVideoInfoByLectureNoteMap" type="LectureVideoPlayListInfo">
+        <result property="noteId" column="note_id" />
+        <result property="playListId" column="youtube_playlist_id" />
+        <result property="originalPlayListId" column="playlist_id" />
+        <result property="channelId" column="channel_id" />
+        <result property="title" column="title" />
+        <result property="publishDate" column="publish_date" />
+        <result property="thumbnailMedium" column="thumbnail_medium" />
+        <result property="videoCount" column="item_count" />
+        <result property="regDate" column="reg_date" />
+    </resultMap>
+    <select id="findVideoInfoByLectureNote" parameterType="map" resultMap="findVideoInfoByLectureNoteMap">
+        SELECT npl.note_id, pl.id as youtube_playlist_id,playlist_id,
+               channel_id,
+               title,publish_date,thumbnail_medium,item_count,reg_date
+        FROM tbl_youtube_playlist pl
+                 INNER JOIN (
+            SELECT tmp.id as note_id , IFNULL(yt.youtube_playlist_id, -1) AS youtube_playlist_id
+            FROM (SELECT lec.id, ref.youtube_id
+                  FROM tbl_lecture lec
+                           LEFT JOIN ref_tbl_lecture_youtube ref
+                                     ON lec.id = ref.lecture_id
+                  WHERE lec.member_id = #{memberId} AND lec.id = #{noteId}) as tmp LEFT JOIN tbl_youtube yt
+                ON tmp.youtube_id = yt.id
+            GROUP BY tmp.id, yt.youtube_playlist_id ) as npl
+        ON npl.youtube_playlist_id=pl.id;
+    </select>
+
+    <resultMap id="findBookListByLectureNoteMap" type="LectureNoteBook">
+        <result property="lecBookId" column="id" />
+        <result property="id" column="book_id" />
+        <result property="isbn13" column="isbn13" />
+        <result property="title" column="title" />
+        <result property="contents" column="contents" />
+        <result property="url" column="url" />
+        <result property="publishDate" column="publish_date" />
+        <result property="authors" column="authors" />
+        <result property="publisher" column="publisher" />
+        <result property="translators" column="translators" />
+        <result property="price" column="price" />
+        <result property="salePrice" column="sale_price" />
+        <result property="thumbnail" column="thumbnail" />
+        <result property="status" column="status" />
+        <result property="regDate" column="reg_date" />
+    </resultMap>
+    <select id="findBookListByLectureNote" parameterType="map" resultMap="findBookListByLectureNoteMap">
+        SELECT refb.id, tb.id as book_id, tb.isbn13, tb.title, tb.contents, tb.url, tb.publish_date, tb.authors, tb.publisher, tb.translators, tb.price, tb.sale_price, tb.thumbnail, tb.status, tb.reg_date
+        FROM ref_tbl_lecture_book refb INNER JOIN tbl_book tb
+            ON refb.lecture_member_id=#{memberId}
+                AND refb.lecture_id=#{noteId}
+                AND refb.book_id = tb.id;
+    </select>
+
+    <resultMap id="findChannelTitleMap" type="com.steelrain.springboot.lilac.repository.LectureNoteRepository$ChannelTitleInfo">
+        <result property="channelId" column="id" />
+        <result property="channelTitle" column="title" />
+    </resultMap>
+    <select id="findChannelTitle" parameterType="list" resultMap="findChannelTitleMap">
+        SELECT chn.id, chn.title
+        FROM tbl_youtube_channel chn
+        WHERE chn.id IN
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <delete id="deletePlayList" parameterType="map">
+        DELETE FROM ref_tbl_lecture_youtube
+        WHERE id IN (
+            SELECT id
+            FROM
+                (SELECT id
+                 FROM ref_tbl_lecture_youtube ref
+                 WHERE ref.lecture_member_id=#{memberId}
+                   AND ref.lecture_id=#{noteId}
+                   AND EXISTS (
+                         SELECT id AS videoId
+                         FROM tbl_youtube
+                         WHERE youtube_playlist_id=#{playlistId})) AS tmp)
+    </delete>
+</mapper>

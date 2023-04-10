@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.steelrain.springboot.lilac.mapper.AdminMapper">
+    <insert id="insertRecommendedPlayList" parameterType="Long">
+        INSERT INTO tbl_recommended_playlist(youtube_playlist_id) VALUES
+        <foreach collection="list" item="item" separator=",">
+        (#{item})
+        </foreach>
+    </insert>
+</mapper>

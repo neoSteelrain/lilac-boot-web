@@ -1,0 +1,19 @@
+spring:
+  config:
+    activate:
+      on-profile: aws
+
+  datasource:
+    # mysql ver8 이상 com.mysql.cj.jdbc.Driver
+    # 이하 com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://steelrain-db.crcqrunyt6y1.ap-northeast-2.rds.amazonaws.com:3306/db_lilac_boot?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: user_lilac_boot
+    password: steelraindb
+
+logging:
+  file:
+    path: C:\lilac-web-log
+  level:
+    root: info
+    com.steelrain.springboot.lilac: debug

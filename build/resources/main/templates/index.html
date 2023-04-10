@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org" >
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>첫화면</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.svg}" />
+    <!-- Place favicon.ico in the root directory -->
+
+    <!-- Web Font -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+
+    <!-- ========================= CSS here ========================= -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/LineIcons.2.0.css}" />
+    <link rel="stylesheet" th:href="@{/css/animate.css}" />
+    <link rel="stylesheet" th:href="@{/css/tiny-slider.css}" />
+    <link rel="stylesheet" th:href="@{/css/glightbox.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
+</head>
+
+<body>
+    <!--[if lte IE 9]>
+      <p class="browserupgrade">
+        You are using an <strong>outdated</strong> browser. Please
+        <a href="https://browsehappy.com/">upgrade your browser</a> to improve
+        your experience and security.
+      </p>
+    <![endif]-->
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-inner">
+            <div class="preloader-icon">
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+    <!-- /End Preloader -->
+
+    <!-- Start Header Area -->
+    <div th:replace="~{common/header::header}"></div>
+    <!-- End Header Area -->
+
+    <!-- Start Hero Area -->
+    <section class="hero-area style2 overlay">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7 col-md-12 col-12">
+                    <div class="hero-text wow fadeInLeft" data-wow-delay=".3s">
+                        <!-- Start Hero Text -->
+                        <div class="section-heading">
+                            <h2>라일락</h2>
+                            <p>유튜브, 카카오 도서, 자격증 일정 검색기능을 제공합니다. <br>여러분의 자격증 취득에 도움이 되었으면 좋겠습니다.</p>
+                        </div>
+                        <!-- End Hero Text -->
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-12 col-12">
+                    <!-- Start Search Form -->
+                    <div class="search-form style2 wow fadeInRight" data-wow-delay=".5s">
+                        <h3 class="heading-title">검색</h3>
+<!--                        <p class="sub-heding-text">검색 안내문구</p>-->
+                        <p class="text-danger" id="searchInputNotice" ></p>
+                        <div class="row">
+                            <div class="col-12 ">
+                                <div class="search-input">
+                                    <label for="keyword"><i class="lni lni-search-alt theme-color"></i></label>
+                                    <input type="text" name="keyword" id="keyword" placeholder="검색어" onchange="changeKeyword(this)">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="search-input">
+                                    <label for="license"><i class="lni lni-grid-alt theme-color"></i></label>
+                                        <select name="license" id="license" th:field="*{licenseCodes}" onchange="changeLicense(this)">
+                                            <option value="-1">--- 자격증 선택 ---</option>
+                                            <option th:each="licenseCode : ${licenseCodes}" th:value="${licenseCode.code}" th:text="${licenseCode.name}"></option>
+                                        </select>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="search-input">
+                                    <label for="location-main"><i class="lni lni-map-marker theme-color"></i></label>
+                                        <select name="location-main" id="location-main" th:field="*{libRegionCodes}" th:onchange="changeLibRegionCode()">
+                                            <option value="-1">--- 지역정보 ---</option>
+                                            <option th:each="libRegionCode : ${libRegionCodes}" th:value="${libRegionCode.code}" th:text="${libRegionCode.name}"></option>
+                                        </select>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="search-input">
+                                    <label for="location-sub"><i class="lni lni-map-marker theme-color"></i></label>
+                                    <select name="location-sub" id="location-sub" onchange="changeDetailRegionCode()">
+                                        <option value="-1">--- 세부지역 ---</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="search-btn button">
+                                    <button class="btn" id="search" onclick="searchHandler()"><i class="lni lni-search-alt"></i> 검색</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Search Form -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Hero Area -->
+
+    <!-- 키워드 목록 시작 -->
+    <section class="categories style2">
+        <div class="container">
+            <div class="cat-inner">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="section-title">
+                            <h2 class="wow fadeInUp" data-wow-delay=".4s">키워드 목록</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row"> <!-- (argSubjectCode, argOffset, argKeywordType) -->
+                    <div th:each="subject : ${subjectCodes}" class="col-lg-2 col-md-3 col-12">
+                        <a th:href="|javascript:refreshPageBySubject('${subject.code}', 1)|" class="single-cat wow fadeInUp" data-wow-delay=".2s">
+                            <div class="icon">
+                                <img th:src="@{/images/subject/java.png}" alt="#">
+                            </div>
+                            <h3 th:text="${subject.name}"></h3>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 키워드 목록 끝 -->
+
+    <!-- 자격증 일정 시작 -->
+    <section class="dashboard section" id="section-license">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-12">
+                    <div class="main-content">
+                        <div class="dashboard-block mt-0">
+                            <h3 class="block-title">자격증 시험일정 정보</h3>
+                            <div class="my-items">
+                                <th:block th:if="${session.LOGIN_MEMBER == null}">
+                                    <div class="item-list-title">
+                                        <div class="row align-items-center">
+                                            <div class="col-lg-7 col-md-7 col-12">
+                                                <p>설명</p>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-12">
+                                                <p>진행단계</p>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-12">
+                                                <p>종료일자</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th:block>
+                                <th:block th:unless="${session.LOGIN_MEMBER == null}">
+                                    <div class="item-list-title">
+                                        <div class="row align-items-center">
+                                            <div class="col-lg-7 col-md-7 col-12">
+                                                <p>설명</p>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-12">
+                                                <p>진행단계</p>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-12">
+                                                <p>종료일자</p>
+                                            </div>
+                                            <div class="col-lg-1 col-md-1 col-12 align-right">
+                                                <p>강의노트</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th:block>
+                                <div id="license-div">
+                                </div>
+                            </div>
+                            <!-- End Items Area -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 자격증 일정 끝 -->
+
+    <!-- 도서관 정보 시작 -->
+    <section class="category-page section" id="div-library-book">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-4 col-12">
+                    <div class="category-sidebar">
+                        <!-- Start Single Widget -->
+                        <div class="single-widget">
+                            <h3>도서관</h3>
+                            <!--<ul class="list">
+                                <li>
+                                    <a href="javascript:void(0)"><i class="lni lni-library"></i> 도서관<span>0</span></a>
+                                </li>
+                            </ul>-->
+                        </div>
+                        <!-- End Single Widget -->
+                        <!-- Start Single Widget -->
+                        <!--<div class="single-widget range">
+                            <h3>가격</h3>
+                            <input type="range" class="form-range" name="range" step="1" min="100" max="10000"
+                                   value="10" onchange="rangePrimary.value=value">
+                            <div class="range-inner">
+                                <label>원</label>
+                                <input type="text" id="rangePrimary" placeholder="10000" />
+                            </div>
+                        </div>-->
+                        <!-- End Single Widget -->
+                        <!-- Start Single Widget -->
+                        <!--<div class="single-widget condition">
+                            <h3>기타 조건</h3>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1">
+                                <label class="form-check-label" for="flexCheckDefault1">
+                                    조건1
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault2">
+                                <label class="form-check-label" for="flexCheckDefault2">
+                                    조건2
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault3">
+                                <label class="form-check-label" for="flexCheckDefault3">
+                                    조건3
+                                </label>
+                            </div>
+                        </div>-->
+                        <!-- End Single Widget -->
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-8 col-12">
+                    <div class="category-grid-list">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="category-grid-topbar">
+                                    <div class="row align-items-center">
+                                        <div class="col-lg-6 col-md-6 col-12">
+                                            <h3 class="title">키워드로 검색된 책목록</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-content" id="nav-tabContent">
+                                    <div class="tab-pane fade show active" id="nav-grid" role="tabpanel"
+                                         aria-labelledby="nav-grid-tab">
+                                        <div class="row">
+                                            <div th:each="kakaoBook : ${recommendedBookList.kakaoBookList}" class="col-lg-4 col-md-6 col-12">
+                                                <div class="single-item-grid">
+                                                    <div class="image">
+                                                        <a href="javascript:void(0)"><img  th:src="${kakaoBook.thumbnail}"></a>
+                                                        <span th:if="${kakaoBook.salePrice > 0}" class="flat-badge sale">할인중</span>
+                                                    </div>
+                                                    <div class="content text-wrap">
+                                                        <h6 class="title" th:text="${kakaoBook.title}"></h6>
+                                                        <ul class="info">
+                                                            <li class="info" th:text="${{kakaoBook.price}} +' -> '+ ${{kakaoBook.salePrice}}+' 원'"></li>
+                                                            <li class="like"><a th:href="${kakaoBook.url}" target="_blank"><i
+                                                                    class="lni lni-link"></i></a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 도서관 정보 끝 -->
+
+    <!-- 유튜브 정보 시작 -->
+    <section class="items-tab section">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-title">
+                        <h2 class="wow fadeInUp" data-wow-delay=".4s">유튜브</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="tab-content" id="nav-tabContent-youtube">
+                        <div class="tab-pane fade show active" id="nav-latest" role="tabpanel"
+                            aria-labelledby="nav-latest-tab">
+                            <!-- 추천영상 목록 시작 -->
+                            <div id="div-playlist" class="row">
+                                <div class="col-lg-3 col-md-4 col-12" th:each="playlist : ${recommendedPlayList}">
+                                    <div class="single-item-grid">
+                                        <div class="image">
+                                            <a th:href="@{/video/playlist-detail(youtubePlaylistId=${playlist.youtubePlaylistId})}"><img th:src="${playlist.thumbnailMedium}" alt="#"></a>
+                                            <span class="flat-badge sale" >추천</span>
+                                        </div>
+                                        <div class="content text-wrap">
+                                            <a href="javascript:void(0)" class="title" th:text="${playlist.title}"></a>
+                                            <p th:text="${playlist.channelTitle}"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 추천영상 목록 끝 -->
+                            <div class="row">
+                                <div class="col-12" id="playlist-paging-template">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 유튜브 정보 끝 -->
+
+    <!-- 강의노트 모달 시작 -->
+    <div class="modal fade" id="addNoteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title fs-5" id="staticBackdropLabel">강의노트를 선택하세요</h4><br>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <select id="lectureNoteSelect" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"></select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">취소</button>
+                    <button id="btn-lecture-add" type="button" class="btn btn-primary btn-sm" onclick="addLicenseToLectureNote()">추가</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 강의노트 모달 끝-->
+
+    <!-- Start Footer Area -->
+    <th:block th:replace="~{common/footer::footer}"></th:block>
+    <!--/ End Footer Area -->
+
+    <!-- ========================= scroll-top ========================= -->
+    <a href="#" class="scroll-top btn-hover">
+        <i class="lni lni-chevron-up"></i>
+    </a>
+
+    <!-- ========================= JS here ========================= -->
+    <script th:src="@{/js/jquery.3.6.1.min.js}"></script>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/wow.min.js}"></script>
+    <script th:src="@{/js/tiny-slider.js}"></script>
+    <script th:src="@{/js/glightbox.min.js}"></script>
+    <script th:src="@{/js/count-up.min.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/js/lilac-common.js}"></script>
+    <script th:inline="javascript">
+
+        const changeKeyword = (keywordTag) => {
+            if(keywordTag.value == ""){
+                $("#license").attr("disabled", false);
+            }else{
+                $("#license").attr("disabled", true);
+            }
+        }
+
+        const changeLicense = (licenseTag) => {
+            if(licenseTag.value > -1){
+                $("#keyword").attr("disabled", true);
+            }else if(licenseTag.value == -1){
+                $("#keyword").attr("disabled", false);
+            }
+        }
+
+        const showAddLicenseToNote = () => {
+            $.ajax({
+                type:"get",
+                url:"/lecture/api/noteList",
+                headers:{"Content-Type":"application/json"},
+                success:function (result) {
+                    appendNoteList(result);
+                    $("#addNoteModal").modal("show");
+                },
+                error:function (jqXHR){
+                    if(jqXHR.status == 401){
+                        alert("로그인 후 사용할 수 있습니다.");
+                    }else{
+                        alert("강의노트목록을 불러오는데 실패하였습니다.");
+                    }
+                }
+            })
+        }
+        const appendNoteList = (jsonResult) => {
+            const noteListTag = document.querySelector('#lectureNoteSelect');
+
+            for(let i in jsonResult.noteList){
+                if(i == 0){
+                    let opDefault = document.createElement('option');
+                    opDefault.setAttributeNode(document.createAttribute('selected'));
+                    opDefault.textContent='강의노트 선택';
+                    noteListTag.appendChild(opDefault);
+                }
+
+                let op = document.createElement('option');
+                op.textContent=jsonResult.noteList[i]['title'];
+                let val = document.createAttribute('value');
+                val.value = jsonResult.noteList[i]['id'];
+                op.setAttributeNode(val);
+                noteListTag.appendChild(op);
+            }
+        }
+
+        const changeLibRegionCode = () => {
+            const m_selectedRegion = $('#location-main').val();
+            $.ajax({
+                type:"get",
+                url:"/search/dtl-region-code",
+                dataType:"json",
+                data:{ regionCode: m_selectedRegion },
+                success:(result) => {
+                    initDetailRegionCode(result);
+                },
+                error:(err) => {
+                }
+            });
+        }
+
+        const initDetailRegionCode = (detailRegionCodes) => {
+            /*
+                템플릿 문자열 = 백틱 기호호 감싼다. ``
+                `<option value='세부지역코드'>세부지역명</option>`
+                선택하지 않은 값은 -1 로 설정
+             */
+            $("#location-sub").empty();
+            $("#location-sub").append('<option value="-1">--- 세부지역 ---</option>');
+            for(const region of detailRegionCodes){
+                $("#location-sub").append(`<option value=${region.code}>${region.detailName}</option>`);
+            }
+        }
+
+        const changeDetailRegionCode = () => {
+            const m_detailRegion = $('#location-sub').val();
+        }
+        // 검색버튼 클릭 이벤트 처리 함수 : 키워드, 카테고리 검색을 처리한다
+        const searchHandler = () => {
+            /*
+                - 검색어가 있으면 카테고리는 무시하고 검색어로 처리
+                - 카테고리를 선택하면 검색어는 무시하고 카테고리로 처리
+                - 카테고리를 선택하면 검색어는 지워버림
+                - 카테고리검색할때 지역정보는 필수, 세부지역은 선택
+            */
+            const m_keyword = $("#keyword").val();
+            console.log("m_keyword : "+m_keyword);
+            if(m_keyword != ""){
+                // 검색어 처리
+                refreshSearchBookList(m_keyword, 1);
+                refreshPlayList(0, m_keyword, 1, 0);
+                moveScrollToBookList();
+                return;
+            }
+            const m_regionCode = $("#location-main option:selected").val();
+            // searchInputNotice
+            if(m_keyword == "" && m_regionCode == -1){
+                $("#searchInputNotice").text("지역정보는 필수입력입니다");
+                return;
+            }
+            // 이제는 카테고리 선택으로 검색처리
+            $("#searchInputNotice").text(""); // 경고문구는 지워준다
+            const m_licenseCode = $("#license option:selected").val();
+            searchLicenseSchedulesByLicenseCode(m_licenseCode);
+
+            const m_detailRegionCode = $("#location-sub option:selected").val();
+            refreshLicenseBookList(m_licenseCode, m_regionCode, m_detailRegionCode, 1);
+
+            refreshPlaylistByLicense(m_licenseCode, 1); // 첫번째 페이지를 시작으로 재생목록을 업데이트
+
+            moveScrollToLicenseScheduleList();
+        }
+
+        const moveScrollToLicenseScheduleList = () => {
+            // 자격증 시험일정 태그로 스크롤 이동
+            let offset = $("#section-license").offset();
+            $("html, body").animate({scrollTop: offset.top}, 300);
+        }
+
+        // 자격증 시험일정 정보를 업데이트하는 함수
+        const searchLicenseSchedulesByLicenseCode = (argLicenseCode) => {
+            if(argLicenseCode == undefined || argLicenseCode <= -1){ // 자격증카테고리를 선택하지 않으면 실행하지 않는다.
+                return;
+            }
+            $.ajax({
+                type: "get",
+                url: "/search/license-schedule",
+                data: { licenseCode: argLicenseCode },
+                dataType: "text",
+                success: function (result){
+                    let html = jQuery("<div>").html(result);
+                    let contents = html.find("div#lic-schedule-template").html();
+                    $("#license-div").html(contents);
+                },
+                error: (errMsg) => {
+                    alert("검색도중 예외가 발생하였습니다");
+                }
+            });
+        }
+        // 도서관, 카카오도서 목록을 업데이트하는 함수
+        const refreshLicenseBookList = (argLicenseCode, argRegionCode, argDetailRegionCode, argPageNum) => {
+            $.ajax({
+                type:"get",
+                url:"/search/license-book-list",
+                data:{
+                    licenseCode:argLicenseCode,
+                    regionCode:argRegionCode,
+                    detailRegionCode:argDetailRegionCode,
+                    pageNum:argPageNum,
+                    bookCount:9 // 아직 화면이 없으므로 임시로 9
+                },
+                dataType:"text",
+                success:function (result){
+                    let html = jQuery("<div>").html(result);
+                    let contents = html.find("div#library-book-template").html();
+                    $("#div-library-book").html(contents);
+
+                    // 도서정보 태그로 스크롤 이동
+                    moveScrollToBookList();
+                },
+                error:(errMSg) => {
+                    alert("검색도중 예외가 발생하였습니다");
+                }
+            });
+        }
+        // 키워드목록의 주제어를 처리하는 함수 const refreshPlayList = (argKeywordCode, argOffset, argKeywordType)
+        const refreshPageBySubject = (argSubjectCode, argOffset) =>{
+
+            refreshSubjectBookList(argSubjectCode, argOffset);
+            refreshPlayList(argSubjectCode, null, argOffset, 2);
+        }
+        const moveScrollToBookList = () => {
+            // 도서정보 태그로 스크롤 이동
+            let offset = $("#div-library-book").offset();
+            $("html, body").animate({scrollTop: offset.top}, 300);
+        }
+
+        const refreshSubjectBookList = (argSubjectCode, argPageNum) => {
+            $.ajax({
+                type:"get",
+                url:"/search/subject-book-list",
+                data:{
+                    subjectCode:argSubjectCode,
+                    pageNum:argPageNum,
+                    bookCount:9
+                },
+                dataType:"text",
+                success:function (result){
+                    let html = jQuery("<div>").html(result);
+                    let contents = html.find("div#subject-book-template").html();
+                    $("#div-library-book").html(contents);
+
+                    // 도서정보 태그로 스크롤 이동
+                    moveScrollToBookList();
+                },
+                error:(errMSg) => {
+                    alert("도서검색 에러 발생");
+                }
+            });
+        }
+
+        const refreshSearchBookList = (argKeyword, argPageNum) => {
+            if(argKeyword == undefined || argKeyword == ""){
+                return;
+            }
+            $.ajax({
+                type:"get",
+                url:"/search/keyword-book-list",
+                data:{
+                    keyword:argKeyword,
+                    // regionCode:argRegionCode,
+                    // detailRegionCode:argDetailRegionCode,
+                    pageNum:argPageNum,
+                    bookCount:9 // 아직 화면이 없으므로 임시로 9
+                },
+                dataType:"text",
+                success: function (result) {
+                    let html = jQuery("<div>").html(result);
+                    let contents = html.find("div#subject-book-template").html();
+                    $("#div-library-book").html(contents);
+                },
+                error:function (){
+                    alert("검색도중 예외가 발생하였습니다");
+                }
+            })
+        }
+
+        const refreshPlaylistByLicense = (argLicenseCode, argOffset) => {
+            if(argLicenseCode <= 0){
+                return;
+            }
+            refreshPlayList(argLicenseCode, null, argOffset, 1);
+        }
+
+        // 동영상 재생목록을 코드기반으로 업데이트하는 함수
+        const refreshPlayList = (argKeywordCode, argSearchKeyword, argOffset, argKeywordType) => {
+            $.ajax({
+                type:"get",
+                url:"/search/playlist",
+                data:{
+                    keywordCode:argKeywordCode,
+                    searchKeyword:argSearchKeyword,
+                    pageNum:argOffset,
+                    keywordType:argKeywordType
+                },
+                dataType:"text",
+                success:function (result) {
+                    let html = jQuery('<div>').html(result);
+                    let playlist = html.find("div#playlist-template").html();
+                    $("#div-playlist").html(playlist);
+
+                    let playlistPaging = html.find("div#playlist-paging-template").html();
+                    $("#playlist-paging-template").html(playlistPaging);
+                },error:function (error) {
+                    alert("재생목록 에러 발생");
+                }
+            })
+        }
+    </script>
+</body>
+
+</html>

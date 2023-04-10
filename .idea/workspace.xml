@@ -1,0 +1,824 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="7217f439-6cb4-4199-8da2-d2416749267b" name="Changes" comment="fix : 스프링 프로파일 분리&#10;- dev : 개발 및 테스트 버전&#10;- aws : AWS 배포용 버전" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="lilac-springboot-web" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="Class" />
+        <option value="HTML File" />
+        <option value="JUnit5 Test Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="lilac.springboot.web.dev" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2KAwnbA6QYL94pMgcwYfY24UW5s" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;ToolWindowRun.ShowToolbar&quot;: &quot;false&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;last_opened_file_path&quot;: &quot;H:/final-project/lilac-springboot-web/src/main/resources&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;Console&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;bc58ca36c7b2469e41aa55f38ed2c4eb&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.steelrain.springboot.lilac.interceptor" />
+      <recent name="com.steelrain.springboot.lilac.api" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="H:\final-project\lilac-springboot-web\src\main\resources\templates\error" />
+      <recent name="H:\final-project\lilac-springboot-web\src\main\resources\templates\lecture" />
+      <recent name="H:\final-project\lilac-springboot-web\src\main\resources\static\images" />
+      <recent name="H:\final-project\lilac-springboot-web\src\main\resources\static\images\subject" />
+      <recent name="H:\final-project\lilac-springboot-web\src\main\resources" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="H:\final-project\lilac-springboot-web\src\main\resources" />
+      <recent name="H:\final-project\lilac-springboot-web\src\main\resources\templates\search\ajax-template" />
+      <recent name="H:\final-project\lilac-springboot-web\src\main\resources\templates\common" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="ExtractSuperBase.RECENT_KEYS">
+      <recent name="com.steelrain.springboot.lilac.repository" />
+      <recent name="com.steelrain.springboot.lilac.service" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.steelrain.springboot.lilac.common" />
+      <recent name="com.steelrain.springboot.lilac.datamodel.view" />
+      <recent name="com.steelrain.springboot.lilac.exception" />
+      <recent name="com.steelrain.springboot.lilac.api" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.steelrain.springboot.lilac.repository" />
+      <recent name="com.steelrain.springboot.lilac.service" />
+      <recent name="com.steelrain.springboot.lilac.common" />
+      <recent name="com.steelrain.springboot.lilac.api" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Spring Boot.Application">
+    <configuration name="LectureNoteRepositoryTest.findTotalProgress" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.steelrain.springboot.lilac.repository.LectureNoteRepositoryTest.findTotalProgress&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="VideoServiceTests.강의노트에추가된재생목록가져오기" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.steelrain.springboot.lilac.service.VideoServiceTests.강의노트에추가된재생목록가져오기&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="VideoServiceTests.강의노트영상의Duration가져오기" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.steelrain.springboot.lilac.service.VideoServiceTests.강의노트영상의Duration가져오기&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="VideoServiceTests.재생시간_업데이트" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.steelrain.springboot.lilac.service.VideoServiceTests.재생시간_업데이트&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="VideoServiceTests.좋아요영상처리후_결과맵가져오기" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.steelrain.springboot.lilac.service.VideoServiceTests.좋아요영상처리후_결과맵가져오기&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>true</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="lilac-springboot-web.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.steelrain.springboot.lilac.Application" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.LectureNoteRepositoryTest.findTotalProgress" />
+        <item itemvalue="Gradle.VideoServiceTests.강의노트영상의Duration가져오기" />
+        <item itemvalue="Gradle.VideoServiceTests.강의노트에추가된재생목록가져오기" />
+        <item itemvalue="Gradle.VideoServiceTests.재생시간_업데이트" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7217f439-6cb4-4199-8da2-d2416749267b" name="Changes" comment="" />
+      <created>1673430864949</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1673430864949</updated>
+      <workItem from="1673430872585" duration="1029000" />
+      <workItem from="1673454265181" duration="8177000" />
+      <workItem from="1673463513338" duration="34000" />
+      <workItem from="1673490867886" duration="26974000" />
+      <workItem from="1674638089303" duration="111000" />
+      <workItem from="1674670373733" duration="86000" />
+      <workItem from="1674670473045" duration="2000" />
+      <workItem from="1674676904951" duration="290000" />
+      <workItem from="1674726512952" duration="13000" />
+      <workItem from="1674726530247" duration="2000" />
+      <workItem from="1674811206069" duration="6732000" />
+      <workItem from="1674833296028" duration="4077000" />
+      <workItem from="1674875989825" duration="53443000" />
+      <workItem from="1674961837867" duration="28723000" />
+      <workItem from="1675068754518" duration="8107000" />
+      <workItem from="1675090042234" duration="23000" />
+      <workItem from="1675155136177" duration="14191000" />
+      <workItem from="1675173888219" duration="3037000" />
+      <workItem from="1675177110454" duration="12623000" />
+      <workItem from="1675193013869" duration="5000" />
+      <workItem from="1675225129681" duration="597000" />
+      <workItem from="1675258979896" duration="2335000" />
+      <workItem from="1675267858920" duration="15000" />
+      <workItem from="1675275973837" duration="756000" />
+      <workItem from="1675330332407" duration="385000" />
+      <workItem from="1675424934591" duration="1484000" />
+      <workItem from="1675426437593" duration="7990000" />
+      <workItem from="1675443705673" duration="600000" />
+      <workItem from="1675471844349" duration="7043000" />
+      <workItem from="1675491117812" duration="32990000" />
+      <workItem from="1675525575593" duration="274000" />
+      <workItem from="1675526074891" duration="2520000" />
+      <workItem from="1675530450743" duration="1775000" />
+      <workItem from="1675566968356" duration="41637000" />
+      <workItem from="1675613234829" duration="13000" />
+      <workItem from="1675613560599" duration="3116000" />
+      <workItem from="1675617632973" duration="65000" />
+      <workItem from="1675620253991" duration="7000" />
+      <workItem from="1675623946258" duration="4294000" />
+      <workItem from="1675674768165" duration="5490000" />
+      <workItem from="1675761363778" duration="1878000" />
+      <workItem from="1675778418807" duration="74000" />
+      <workItem from="1675848022236" duration="14000" />
+      <workItem from="1675848040741" duration="25731000" />
+      <workItem from="1675907831640" duration="49201000" />
+      <workItem from="1675965495430" duration="174000" />
+      <workItem from="1675994818175" duration="45395000" />
+      <workItem from="1676058556927" duration="7145000" />
+      <workItem from="1676093196079" duration="34006000" />
+      <workItem from="1676163378927" duration="42242000" />
+      <workItem from="1676278280491" duration="8670000" />
+      <workItem from="1676287407514" duration="1214000" />
+      <workItem from="1676291628431" duration="1098000" />
+      <workItem from="1676367776617" duration="2946000" />
+      <workItem from="1676430647396" duration="8036000" />
+      <workItem from="1676511553532" duration="15328000" />
+      <workItem from="1676698920127" duration="1834000" />
+      <workItem from="1676725987063" duration="1288000" />
+      <workItem from="1676792810655" duration="3727000" />
+      <workItem from="1676876658957" duration="4410000" />
+      <workItem from="1676951053250" duration="2641000" />
+      <workItem from="1676980934243" duration="8000" />
+      <workItem from="1677066204522" duration="1285000" />
+      <workItem from="1677217954908" duration="3209000" />
+      <workItem from="1677293272400" duration="1259000" />
+      <workItem from="1677302796549" duration="8112000" />
+      <workItem from="1677383106616" duration="3997000" />
+      <workItem from="1677470370986" duration="8317000" />
+      <workItem from="1677531194811" duration="11147000" />
+      <workItem from="1677568161123" duration="12119000" />
+      <workItem from="1677644741563" duration="31998000" />
+      <workItem from="1677697932829" duration="5720000" />
+      <workItem from="1677738492896" duration="2270000" />
+      <workItem from="1677768202782" duration="364000" />
+      <workItem from="1677828873560" duration="18000" />
+      <workItem from="1677854974212" duration="2258000" />
+      <workItem from="1677936451937" duration="274000" />
+      <workItem from="1677949108519" duration="46000" />
+      <workItem from="1677984265402" duration="36675000" />
+      <workItem from="1678025892475" duration="170000" />
+      <workItem from="1678070984455" duration="366000" />
+      <workItem from="1678094608445" duration="162000" />
+      <workItem from="1678094854000" duration="54000" />
+      <workItem from="1678102797021" duration="1289000" />
+      <workItem from="1678171566834" duration="5844000" />
+      <workItem from="1678192455568" duration="4274000" />
+      <workItem from="1678209652529" duration="3503000" />
+      <workItem from="1678222234176" duration="1689000" />
+      <workItem from="1678244661314" duration="19456000" />
+      <workItem from="1678336653170" duration="7096000" />
+      <workItem from="1678351976273" duration="9911000" />
+      <workItem from="1678423621816" duration="10508000" />
+      <workItem from="1678442799487" duration="18000" />
+      <workItem from="1678840126392" duration="46000" />
+      <workItem from="1679137131245" duration="1161000" />
+      <workItem from="1679162772306" duration="1204000" />
+      <workItem from="1679178460434" duration="10727000" />
+      <workItem from="1679221449407" duration="3000" />
+      <workItem from="1679221791822" duration="17031000" />
+      <workItem from="1679291375724" duration="124000" />
+      <workItem from="1679294269237" duration="14443000" />
+      <workItem from="1679472401900" duration="28000" />
+      <workItem from="1679581090627" duration="1216000" />
+      <workItem from="1679622623484" duration="243000" />
+      <workItem from="1679765532830" duration="2872000" />
+      <workItem from="1679867457348" duration="1182000" />
+      <workItem from="1679870329773" duration="17000" />
+      <workItem from="1679871708754" duration="20561000" />
+      <workItem from="1679919880430" duration="332000" />
+      <workItem from="1679925061119" duration="2778000" />
+      <workItem from="1679983333959" duration="6000" />
+      <workItem from="1680136216012" duration="1806000" />
+      <workItem from="1680140692816" duration="41000" />
+      <workItem from="1680238290407" duration="10000" />
+      <workItem from="1680855958553" duration="4509000" />
+      <workItem from="1680918677499" duration="128000" />
+      <workItem from="1680918856263" duration="15000" />
+      <workItem from="1680929900907" duration="124000" />
+      <workItem from="1680930331953" duration="24000" />
+      <workItem from="1680930898915" duration="58000" />
+      <workItem from="1680930987724" duration="700000" />
+      <workItem from="1680931702470" duration="44000" />
+      <workItem from="1680931826227" duration="13260000" />
+      <workItem from="1680952488698" duration="25486000" />
+      <workItem from="1681089148064" duration="1957000" />
+      <workItem from="1681091885006" duration="16167000" />
+      <workItem from="1681109540328" duration="921000" />
+      <workItem from="1681120187264" duration="139000" />
+    </task>
+    <task id="LOCAL-00001" summary="feat : 공공데이터 자격증시험일정 조회 API 호출 구현/테스트 완료">
+      <created>1673460703954</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1673460703954</updated>
+    </task>
+    <task id="LOCAL-00002" summary="feat : LicenseMapper 추가">
+      <created>1673462637891</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1673462637891</updated>
+    </task>
+    <task id="LOCAL-00003" summary="feat : LicenseService - 자격증시험 접수 상황 알아내기 기능 추가">
+      <created>1673526279827</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1673526279827</updated>
+    </task>
+    <task id="LOCAL-00004" summary="feat : 자격증 정보 text 파일 추가">
+      <created>1673526405368</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1673526405368</updated>
+    </task>
+    <task id="LOCAL-00005" summary="feat : 자격증시험일정 검색 기능 완료&#10;- front end : index.html 수정, license-template.html 추가, jquery ajax 추가&#10;- back end : 자격증시험일정 검색기능 구현">
+      <created>1674911327536</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1674911327536</updated>
+    </task>
+    <task id="LOCAL-00006" summary="chore : 카카오북, 나루도서관 API 연동 구현 중간 커밋&#10;- front end : book-template.html 추가, jquery ajax 추가&#10;- back end : 책검색 controller 추가 및 service 수정&#10;- 중요한이슈 : API 호출로 한번에 50개 이상 가져오려는 경우 http connection timeout 발생.">
+      <created>1674932628080</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1674932628080</updated>
+    </task>
+    <task id="LOCAL-00007" summary="chore : 카카오북, 나루도서관 API 연동 구현&#10;- front end : book-detail.html 추가 &#10;- back end : 카카오 책검색, 나루도서관 API를 한번하 호출하지 않고, 따로 호출하도록 분리&#10;- 중요한이슈 : 카카오 책,나루도서관 상세정보를 호출하려면 책정보를 어딘가에 저장해야 한다">
+      <created>1674981148228</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1674981148228</updated>
+    </task>
+    <task id="LOCAL-00008" summary="chore : 회원가입 구현 중, 중간 커밋&#10;- front end : 회원가입 페이지 추가 &#10;- back end : 회원가입 controller, service, repository 추가">
+      <created>1674999177965</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1674999177966</updated>
+    </task>
+    <task id="LOCAL-00009" summary="feat : 로그아웃 구현 - 검증로직 없는 버전&#10;etc - 테스트코드 연습">
+      <created>1675089274660</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1675089274660</updated>
+    </task>
+    <task id="LOCAL-00010" summary="feat : 강의노트 back-end 구현, 강의노트/회원정보 html 페이지 추가">
+      <created>1675170510901</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1675170510901</updated>
+    </task>
+    <task id="LOCAL-00011" summary="feat : 강의노트 생성용 모달창 추가">
+      <created>1675173375533</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1675173375533</updated>
+    </task>
+    <task id="LOCAL-00012" summary="fix : index페이지 로딩시 키워드,지역코드를 로딩이 가끔 안되던 부분 수정 및 업데이트&#10;- 초기로딩하는 List, Map을 static 으로 변경&#10;- 강의노트 기능 구현 중">
+      <created>1675176909180</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1675176909180</updated>
+    </task>
+    <task id="LOCAL-00013" summary="add : 강의노트 back-end 구현. controller, service, reposiotry&#10;- 모달창에서 빈 검증 기능 테스트&#10;- 강의노트 삭제용 REST API 테스트 : 테스트만 진행하고 사용하지는 않음&#10;- 깃 컨벤션 변경 : 이전보다 알아보기 쉬워 보이는 것으로 변경&#10;### 변경된 깃 컨벤션 ###&#10;# Fix : 수정&#10;# Add : 추가&#10;# Remove : 삭제&#10;# Simplify : 단순화&#10;# Update : 보완&#10;# Implement : 구현&#10;# Prevent : 방지&#10;# Move : 이동&#10;# Rename : 이름변경">
+      <created>1675192078950</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1675192078950</updated>
+    </task>
+    <task id="LOCAL-00014" summary="fix : 헤더 페이지 이동링크, 첫화면 유튜브 섹션 수정">
+      <created>1675261453452</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1675261453452</updated>
+    </task>
+    <task id="LOCAL-00015" summary="add : 유튜브 재생목록 검색, 페이징 기능 추가&#10;- 첫화면에는 추천영상, 자격증 카테고리 선택 후 검색하면 재생목록으로 검색">
+      <created>1675516151035</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1675516151035</updated>
+    </task>
+    <task id="LOCAL-00016" summary="add : 재생목록의 영상재생 페이지 구현&#10;- 유튜브 재생목록 영상 플레이와 비슷하게 구성&#10;- 자동재생은 아직 안됨 : 원인파악 중">
+      <created>1675523607327</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1675523607327</updated>
+    </task>
+    <task id="LOCAL-00017" summary="add : 강의노트 추가 REST API 수정&#10;- 예외처리 수정">
+      <created>1675612301439</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1675612301439</updated>
+    </task>
+    <task id="LOCAL-00018" summary="add : 자격증을 강의노트에 추가하는 기능구현 중 중간 커밋&#10;- 자격증목록을 API로 가져와서 동적으로 태그 생성 및 삭제 구현중">
+      <created>1675616594651</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1675616594651</updated>
+    </task>
+    <task id="LOCAL-00019" summary="add : 강의노트 페이지 수정버전 임시 커밋&#10;- 강의노트 정보페이지 수정">
+      <created>1675633412168</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1675633412168</updated>
+    </task>
+    <task id="LOCAL-00020" summary="fix : 강의노트 추가 및 수정을 위한 모달창 구현 중 임시커밋&#10;- 모달창 내용을 채울 div 태그를 서버에서 만들어서 text 로 반환한다">
+      <created>1675682189142</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1675682189142</updated>
+    </task>
+    <task id="LOCAL-00021" summary="fix : 회원등급 쿼리 수정&#10;- 회원등급은 not null 로 수정">
+      <created>1675778484010</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1675778484010</updated>
+    </task>
+    <task id="LOCAL-00022" summary="add : 재생목록 페이지에서 강의노트에 추가하는 기능 구현">
+      <created>1675876106646</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1675876106646</updated>
+    </task>
+    <task id="LOCAL-00023" summary="add : 강의노트 관련 기본기능 구현 완료&#10;- 미구현 기능&#10; 1. 강의노트 재생목록의 진행단계 계산 및 표시&#10; 2. 진행중, 완료된 강의노트 표시&#10; 3. 도서관련 기능 미구현">
+      <created>1676046485757</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1676046485757</updated>
+    </task>
+    <task id="LOCAL-00024" summary="fix : 첫화면에서 키워드 검색이 가능하도록 수정&#10;- 검색방식을 like 방식에서 full text search 로 변경">
+      <created>1676125141204</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1676125141204</updated>
+    </task>
+    <task id="LOCAL-00025" summary="fix : 키워드 검색관련 DB 테이블 수정, 키워드 검색 소스코드 수정&#10;- tbl_subject 테이블 수정&#10;- 키워드검색을 위한 별도의 DB 컬럼 추가 : key_word_book&#10;- 키워드 코드 DB 컬럼 추가 : code&#10;- 기본의 키워드 id 기반에서 키워드 code 기반으로 동작하도록 수정">
+      <created>1676175211282</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1676175211282</updated>
+    </task>
+    <task id="LOCAL-00026" summary="fix : 자격증, 주제어 검색을 코드 기반으로 검색하도록 수정 완료&#10;- 추천 재생목록 테이블 추가&#10;- 키워드 캐시서비스, 상수값 관련 클래스들은 공통 패키지로 이동&#10;- 페이징 관련 소스 수정">
+      <created>1676213036705</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1676213036705</updated>
+    </task>
+    <task id="LOCAL-00027" summary="add : 도서의 상세정보 기능 수정 및 추가&#10;- kakao API로 얻은 정보를 도서의 상세보기 데이터에 사용&#10;- 도서를 소장하고 있고 대출이 가능한지 알수있는 도서관 목록&#10;- 도서관의 위치정보를 알 수 있는 지도 기능 추가 할 수 있도록 HTML태그만 추가">
+      <created>1676288611535</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1676288611536</updated>
+    </task>
+    <task id="LOCAL-00028" summary="add : 추천 재생목록 수정 완료">
+      <created>1676437195836</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1676437195836</updated>
+    </task>
+    <task id="LOCAL-00029" summary="add : 아파치 HttpClient에 커넥션풀 설정 추가">
+      <created>1676532838098</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1676532838098</updated>
+    </task>
+    <task id="LOCAL-00030" summary="add : 회원가입 닉네임 중복 체크 추가">
+      <created>1676549524818</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1676549524818</updated>
+    </task>
+    <task id="LOCAL-00031" summary="add : 로그인 인터셉터 추가">
+      <created>1676980892672</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1676980892672</updated>
+    </task>
+    <task id="LOCAL-00032" summary="add : 빈 검증 시퀀스 추가 - 구현중&#10;- 한번에 하나의 검증에러 메시지가 나오도록 수정중">
+      <created>1677399730752</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1677399730752</updated>
+    </task>
+    <task id="LOCAL-00033" summary="add : 회원 프로필 이미지를 AWS S3에 저장하는 기능 추가">
+      <created>1677701586342</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1677701586342</updated>
+    </task>
+    <task id="LOCAL-00034" summary="refactor : 불필요한 파일 정리">
+      <created>1677703240463</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1677703240463</updated>
+    </task>
+    <task id="LOCAL-00035" summary="add : 에러 페이지 추가&#10;- 주석처리 수정&#10;- DB raw 데이터 수정">
+      <created>1677857747889</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1677857747889</updated>
+    </task>
+    <task id="LOCAL-00036" summary="fix : 추천 도서 출력페이지 수정, 가격/날짜 포맷팅 수정&#10;- 랜딩페이지에 추천도서목록이 나오도록 수정&#10;- 도서가격을 '원' 단위로 표시하도록 수정&#10;- 날짜를 yyyy-MM-dd HH:mm:ss 로 출력하도록 수정">
+      <created>1677992339697</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1677992339697</updated>
+    </task>
+    <task id="LOCAL-00037" summary="fix : 자격증의 날짜 포매팅 수정, 주석들을 추가&#10;- 날짜포맷을 &quot;yyyyMMdd&quot; 에서 &quot;yyyy-MM-dd&quot; 형식으로 수정&#10;- common 패키지의 클래스들에 주석을 추가">
+      <created>1678000171368</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1678000171368</updated>
+    </task>
+    <task id="LOCAL-00038" summary="add : 검색어처리 기능 추가&#10;- TODO : int 형으로 검색타입을 처리하지만 enum 형으로 처리하는 부분 필요">
+      <created>1678024853811</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1678024853811</updated>
+    </task>
+    <task id="LOCAL-00039" summary="fix : DB 생성 SQL 파일 - 최종버전으로 업데이트&#10;- 2.14일 버전 DDL">
+      <created>1678025077893</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1678025077893</updated>
+    </task>
+    <task id="LOCAL-00040" summary="fix : BookService 의 ISBN 문자열 trim 처리 누락된것 수정&#10;- 필요없는 HTML 소스 삭제&#10;- 주석 수정">
+      <created>1678071322730</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1678071322731</updated>
+    </task>
+    <task id="LOCAL-00041" summary="fix : 강의노트에 도서정보 포함, 서비스 클래스 수정&#10;# 서비스 클래스 수정&#10;- 서비스 사이의 이벤트 핸들러를 서비스에서 바로 처리하도록 수정&#10;- 이벤트핸들러 클래스들은 삭제">
+      <created>1678212266011</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1678212266011</updated>
+    </task>
+    <task id="LOCAL-00042" summary="fix : 필요없는 import문 정리">
+      <created>1678212980623</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1678212980623</updated>
+    </task>
+    <task id="LOCAL-00043" summary="fix : 강의노트의 도서정보 삭제 기능 수정, 주석 추가">
+      <created>1678436383527</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1678436383527</updated>
+    </task>
+    <task id="LOCAL-00044" summary="fix : 강의노트 진행률 표시 기능 수정">
+      <created>1679895478617</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1679895478617</updated>
+    </task>
+    <task id="LOCAL-00045" summary="fix : 강의노트 재생 페이지 수정&#10;- 강의노트 제목표시 추가">
+      <created>1679927831181</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1679927831181</updated>
+    </task>
+    <task id="LOCAL-00046" summary="add : 영상의 좋아요 싫어요 기능 추가">
+      <created>1681108736430</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1681108736430</updated>
+    </task>
+    <task id="LOCAL-00047" summary="fix : 스프링 프로파일 분리&#10;- dev : 개발 및 테스트 버전&#10;- aws : AWS 배포용 버전">
+      <created>1681108894520</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1681108894520</updated>
+    </task>
+    <option name="localTasksCounter" value="48" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-core" />
+    <option featureType="dependencySupport" implementationName="java:jakarta.validation:jakarta.validation-api" />
+    <option featureType="dependencySupport" implementationName="java:software.amazon.awssdk:sdk-core" />
+    <option featureType="dependencySupport" implementationName="java:org.hibernate.validator:hibernate-validator" />
+    <option featureType="dependencySupport" implementationName="java:org.thymeleaf:thymeleaf" />
+    <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot" />
+    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-webmvc" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="lilac.springboot.web.dev" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="add : 강의노트 관련 기본기능 구현 완료&#10;- 미구현 기능&#10; 1. 강의노트 재생목록의 진행단계 계산 및 표시&#10; 2. 진행중, 완료된 강의노트 표시&#10; 3. 도서관련 기능 미구현" />
+    <MESSAGE value="fix : 첫화면에서 키워드 검색이 가능하도록 수정&#10;- 검색방식을 like 방식에서 full text search 로 변경" />
+    <MESSAGE value="fix : 키워드 검색관련 DB 테이블 수정, 키워드 검색 소스코드 수정&#10;- tbl_subject 테이블 수정&#10;- 키워드검색을 위한 별도의 DB 컬럼 추가 : key_word_book&#10;- 키워드 코드 DB 컬럼 추가 : code&#10;- 기본의 키워드 id 기반에서 키워드 code 기반으로 동작하도록 수정" />
+    <MESSAGE value="fix : 자격증, 주제어 검색을 코드 기반으로 검색하도록 수정 완료&#10;- 추천 재생목록 테이블 추가&#10;- 키워드 캐시서비스, 상수값 관련 클래스들은 공통 패키지로 이동&#10;- 페이징 관련 소스 수정" />
+    <MESSAGE value="add : 도서의 상세정보 기능 수정 및 추가&#10;- kakao API로 얻은 정보를 도서의 상세보기 데이터에 사용&#10;- 도서를 소장하고 있고 대출이 가능한지 알수있는 도서관 목록&#10;- 도서관의 위치정보를 알 수 있는 지도 기능 추가 할 수 있도록 HTML태그만 추가" />
+    <MESSAGE value="add : 추천 재생목록 수정 완료" />
+    <MESSAGE value="add : 아파치 HttpClient에 커넥션풀 설정 추가" />
+    <MESSAGE value="add : 회원가입 닉네임 중복 체크 추가" />
+    <MESSAGE value="add : 로그인 인터셉터 추가" />
+    <MESSAGE value="add : 빈 검증 시퀀스 추가 - 구현중&#10;- 한번에 하나의 검증에러 메시지가 나오도록 수정중" />
+    <MESSAGE value="add : 회원 프로필 이미지를 AWS S3에 저장하는 기능 추가" />
+    <MESSAGE value="refactor : 불필요한 파일 정리" />
+    <MESSAGE value="add : 에러 페이지 추가&#10;- 주석처리 수정&#10;- DB raw 데이터 수정" />
+    <MESSAGE value="fix : 추천 도서 출력페이지 수정, 가격/날짜 포맷팅 수정&#10;- 랜딩페이지에 추천도서목록이 나오도록 수정&#10;- 도서가격을 '원' 단위로 표시하도록 수정&#10;- 날짜를 yyyy-MM-dd HH:mm:ss 로 출력하도록 수정" />
+    <MESSAGE value="fix : 자격증의 날짜 포매팅 수정, 주석들을 추가&#10;- 날짜포맷을 &quot;yyyyMMdd&quot; 에서 &quot;yyyy-MM-dd&quot; 형식으로 수정&#10;- common 패키지의 클래스들에 주석을 추가" />
+    <MESSAGE value="add : 검색어처리 기능 추가&#10;- TODO : int 형으로 검색타입을 처리하지만 enum 형으로 처리하는 부분 필요" />
+    <MESSAGE value="fix : DB 생성 SQL 파일 - 최종버전으로 업데이트&#10;- 2.14일 버전 DDL" />
+    <MESSAGE value="fix : BookService 의 ISBN 문자열 trim 처리 누락된것 수정&#10;- 필요없는 HTML 소스 삭제&#10;- 주석 수정" />
+    <MESSAGE value="fix : 강의노트에 도서정보 포함, 서비스 클래스 수정&#10;# 서비스 클래스 수정&#10;- 서비스 사이의 이벤트 핸들러를 서비스에서 바로 처리하도록 수정&#10;- 이벤트핸들러 클래스들은 삭제" />
+    <MESSAGE value="fix : 필요없는 import문 정리" />
+    <MESSAGE value="fix : 강의노트의 도서정보 삭제 기능 수정, 주석 추가" />
+    <MESSAGE value="fix : 강의노트 진행률 표시 기능 수정" />
+    <MESSAGE value="fix : 강의노트 재생 페이지 수정&#10;- 강의노트 제목표시 추가" />
+    <MESSAGE value="add : 영상의 좋아요 싫어요 기능 추가" />
+    <MESSAGE value="fix : 스프링 프로파일 분리&#10;- dev : 개발 및 테스트 버전&#10;- aws : AWS 배포용 버전" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix : 스프링 프로파일 분리&#10;- dev : 개발 및 테스트 버전&#10;- aws : AWS 배포용 버전" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/steelrain/springboot/lilac/service/LectureNoteService.java</url>
+          <line>216</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="software.amazon.awssdk.services.s3.model.PutObjectResponse" memberName="AwsResponse.responseMetadata" />
+        <PinnedItemInfo parentTag="org.apache.catalina.connector.RequestFacade" memberName="request" />
+        <PinnedItemInfo parentTag="software.amazon.awssdk.http.DefaultSdkHttpFullResponse" memberName="statusText" />
+        <PinnedItemInfo parentTag="software.amazon.awssdk.services.s3.model.PutObjectResponse" memberName="sseCustomerKeyMD5" />
+      </pinned-members>
+    </pin-to-top-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

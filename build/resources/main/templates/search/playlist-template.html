@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<!-- 재생목록 템플릿 시작 -->
+<div id="playlist-template">
+    <div class="col-lg-3 col-md-4 col-12" th:each="item : ${searchResult.playList}">
+        <div class="single-item-grid">
+            <div class="image">
+                <a th:href="@{/video/playlist-detail(youtubePlaylistId=${item.id})}"><img th:src="${item.thumbnailMedium}" alt="#"></a>
+            </div>
+            <div class="content text-wrap">
+                <a href="javascript:void(0)" class="title" th:text="${item.title}"></a>
+                <p th:text="${item.channelTitle}"></p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 재생목록 템플릿 끝 -->
+
+<!-- 재생목록 페이징 템플릿 시작 const refreshPlayList = (argKeywordCode, argOffset, argKeywordType) -->
+<div id="playlist-paging-template">
+    <th:block th:if="${searchResult.playList.size() > 0}"> <!-- 검색결과가 없으면 안나오게 처리 -->
+        <div class="pagination left" th:with="page=${searchResult.pageDTO.page}" >
+            <ul class="pagination-list">
+                <li><a th:if="${page <= 1}"><i class="lni lni-chevron-left"></i></a></li>
+                <li><a th:unless="${page <= 1}" th:href="|javascript:refreshPlayList('${searchResult.requestKeywordCode}','${searchResult.searchKeyword}','${page-1}','${searchResult.requestKeywordType}')|"><i class="lni lni-chevron-left"></i></a></li>
+                <th:block th:each="idx : ${#numbers.sequence(searchResult.pageDTO.startPage, searchResult.pageDTO.endPage)}">
+                    <li th:if="${idx == page}" class="active"><a th:href="|javascript:refreshPlayList('${searchResult.requestKeywordCode}','${searchResult.searchKeyword}','${idx}','${searchResult.requestKeywordType}')|" th:text="${idx}"></a></li>
+                    <li th:unless="${idx == page}" ><a th:href="|javascript:refreshPlayList('${searchResult.requestKeywordCode}','${searchResult.searchKeyword}','${idx}','${searchResult.requestKeywordType}')|" th:text="${idx}"></a></li>
+                </th:block>
+                <li><a th:if="${page >= searchResult.pageDTO.maxPage}"><i class="lni lni-chevron-right"></i></a></li>
+                <li><a th:unless="${page >= searchResult.pageDTO.maxPage}" th:href="|javascript:refreshPlayList('${searchResult.requestKeywordCode}','${searchResult.searchKeyword}','${page+1}', '${searchResult.requestKeywordType}')|"><i class="lni lni-chevron-right"></i></a></li>
+            </ul>
+        </div>
+    </th:block>
+</div>
+<!-- 재생목록 페이징 템플릿 끝 -->
+</body>
+</html>

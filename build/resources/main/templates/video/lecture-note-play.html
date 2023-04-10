@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <title>강의노트 영상 재생</title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.svg}"/>
+    <!-- Place favicon.ico in the root directory -->
+
+    <!-- Web Font -->
+    <link
+            href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+            rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+
+    <!-- ========================= CSS here ========================= -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/LineIcons.2.0.css}"/>
+    <link rel="stylesheet" th:href="@{/css/animate.css}"/>
+    <link rel="stylesheet" th:href="@{/css/tiny-slider.css}"/>
+    <link rel="stylesheet" th:href="@{/css/glightbox.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<!--[if lte IE 9]>
+<p class="browserupgrade">
+    You are using an <strong>outdated</strong> browser. Please
+    <a href="https://browsehappy.com/">upgrade your browser</a> to improve
+    your experience and security.
+</p>
+<![endif]-->
+
+<!-- Preloader -->
+<div class="preloader">
+    <div class="preloader-inner">
+        <div class="preloader-icon">
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- /End Preloader -->
+
+<div th:replace="~{common/header::header}"></div>
+
+<div class="breadcrumbs">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 col-md-6 col-12">
+                <div class="breadcrumbs-content">
+                    <h1 class="page-title">강의노트 재생</h1>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-12">
+                <ul class="breadcrumb-nav">
+                    <li>노트제목</li>
+                    <li th:text="${'강의노트 제목 : '+videoList[0].lectureTitle}"></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="section blog-single">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-12 col-12">
+                <div class="single-inner">
+                    <div class="post-thumbnils ratio ratio-16x9">
+                        <div id="player"></div>
+                    </div>
+                    <div id="div-video-info" class="post-details">
+                        <div class="detail-inner">
+                            <h5 class="post-title" th:text="${videoList[0].title}"></h5>
+                            <ul class="custom-flex post-meta">
+                                <li>
+                                    <i class="lni lni-calendar" th:text="' '+${{videoList[0].publishDate}}"></i>
+                                </li>
+                                <li>
+                                    <i class="lni lni-comments" th:text="' '+${videoList[0].commentCount}"></i>
+                                </li>
+                                <li>
+                                    <i class="lni lni-eye" th:text="' '+${videoList[0].viewCount}"></i>
+                                </li>
+                            </ul>
+                            <p th:utext="${videoList[0].description}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <aside class="col-lg-4 col-md-12 col-12">
+                <div class="sidebar blog-grid-page">
+                    <p>
+                        재생목록
+                    </p>
+                    <div class="messages-body">
+                        <div class="row">
+                            <div class="col-lg-12 col-12">
+                                <div class="user-list">
+                                    <ul>
+                                        <!-- 재생목록의 개별영상 시작 -->
+                                        <li th:each="video : ${videoList}">
+                                            <a th:href="|javascript:playSelectedVideo('${video.videoId}', '${video.Id}', '${video.lectureVideoId}')|">
+                                                <div class="image">
+                                                    <img th:src="${video.thumbnailDefault}" alt="#">
+                                                </div>
+                                                <span class="short-message" th:text="${video.title}"></span>
+                                            </a>
+                                        </li>
+                                        <!-- 재생목록의 개별영상 끝 -->
+                                    </ul>
+                                    <form>
+
+                                    </form>
+                                    <input id="memberIdHidden" type="hidden" th:value="${memberId}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
+
+<div id="div-modal-lecture-note">
+</div>
+
+<th:block th:replace="~{common/footer::footer}"></th:block>
+
+<script th:src="@{/js/jquery.3.6.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/wow.min.js}"></script>
+<script th:src="@{/js/tiny-slider.js}"></script>
+<script th:src="@{/js/glightbox.min.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/lilac-common.js}"></script>
+<script th:inline="javascript">
+    let tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    let firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    let player;
+    function onYouTubeIframeAPIReady() {
+        const videoIdStr = [[${videoList[0].videoId}]];
+        console.log("videoId : "+videoIdStr);
+        player = new YT.Player('player', {
+            videoId: videoIdStr,
+            events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
+            }
+        });
+    }
+
+    function onPlayerReady(event) {
+        event.target.playVideo();
+    }
+
+    function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PAUSED || event.data == YT.PlayerState.ENDED) {
+            updateVideoPlaytime(getCurrentVideoId(), player.getCurrentTime());
+        }
+    }
+
+    // REST API 호출로 id에 해당하는 영상의 재생시간을 업데이트한다. id는 long 타입
+    const updateVideoPlaytime = (paramLectureVideoId, paramPlaytime) => {
+        let param = {
+            "lectureVideoId":paramLectureVideoId,
+            "playtime":(paramPlaytime).toFixed()
+        }
+        $.ajax({
+            type:"post",
+            url:"/video/api/update-playtime",
+            headers: {"Content-Type": "application/json"},
+            data: JSON.stringify(param),
+            success:function (result){
+            },
+            error:function (jqXHR){
+                alert(jqXHR.status);
+            }
+        })
+    }
+
+    const playSelectedVideo = (paramVideoOriginId, paramVideoId, paramLectureVideoId) => {
+        $.ajax({
+            type: "get",
+            url: "/video/video-template",
+            dataType: "text",
+            data: {videoId: paramVideoId},
+            success: function (result) {
+                let html = jQuery('<div>').html(result);
+                let playlist = html.find("div#video-info-template").html();
+                $("#div-video-info").html(playlist);
+                updateCurrentVideoId(paramLectureVideoId);
+                player.loadVideoById(paramVideoOriginId, 0);
+            },
+            error: function (error) {
+                alert("영상정보 조회중 에러");
+            }
+        })
+    }
+
+    const SESSION_STORAGE_KEY_VIDEO = 'lilac-play-videoId';
+    const updateCurrentVideoId = (paramLectureVideoId) => {
+        sessionStorage.setItem(SESSION_STORAGE_KEY_VIDEO,paramLectureVideoId);
+    }
+
+    const getCurrentVideoId = () =>{
+        return sessionStorage.getItem(SESSION_STORAGE_KEY_VIDEO);
+    }
+</script>
+</body>
+</html>

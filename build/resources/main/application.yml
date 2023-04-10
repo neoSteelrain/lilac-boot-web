@@ -1,0 +1,23 @@
+spring:
+  profiles:
+    active: dev
+
+  thymeleaf:
+    cache: false
+
+  messages:
+    basename: errors
+
+server:
+  servlet:
+    session:
+      tracking-modes: cookie
+
+mybatis:
+  config-location: classpath:/mybatis/mybatis-config.xml
+  mapper-locations: classpath:/mybatis/mapper/**/*.xml
+
+thread:
+  pool:
+    size: 5
+
