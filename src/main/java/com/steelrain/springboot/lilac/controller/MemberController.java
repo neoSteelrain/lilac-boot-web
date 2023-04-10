@@ -73,6 +73,9 @@ public class MemberController {
         if(memberDTO != null){
             HttpSession session = servletRequest.getSession();
             session.setAttribute(SESSION_KEY.LOGIN_MEMBER, memberDTO);
+            if(memberDTO.getGrade() == 1){
+                return "redirect:/admin/admin-menu";
+            }
             return "redirect:" + redirectURL;
         }else{
             return "/member/login";

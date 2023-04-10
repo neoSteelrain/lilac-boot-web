@@ -53,6 +53,9 @@
                 <li class="nav-item">
                   <a href="/member/profile" aria-label="Toggle navigation">회원정보</a>
                 </li>
+                <li class="nav-item">
+                  <a href="/admin/admin-menu" aria-label="Toggle navigation">관리자</a>
+                </li>
               </ul>
             </div> <!-- navbar collapse -->
             <div class="login-button">
@@ -67,7 +70,7 @@
                 </th:block>
                 <th:block th:unless="${session.LOGIN_MEMBER == null}">
                   <li>
-                    <i class="lni lni-user" th:text="${session.LOGIN_MEMBER.nickname}"></i>
+                    <i class="lni lni-user" th:text="' '+${session.LOGIN_MEMBER.nickname}"></i>
                     <a href="javascript:logout()"><i class="lni lni-exit"> 로그아웃</i></a>
                   </li>
                 </th:block>

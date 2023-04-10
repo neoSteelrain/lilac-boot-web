@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+  <title>관리자 페이지</title>
+  <meta name="description" content=""/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.svg}"/>
+  <!-- Place favicon.ico in the root directory -->
+
+  <!-- Web Font -->
+  <link
+          href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+
+  <!-- ========================= CSS here ========================= -->
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+  <link rel="stylesheet" th:href="@{/css/LineIcons.2.0.css}"/>
+  <link rel="stylesheet" th:href="@{/css/animate.css}"/>
+  <link rel="stylesheet" th:href="@{/css/tiny-slider.css}"/>
+  <link rel="stylesheet" th:href="@{/css/glightbox.min.css}"/>
+  <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<div class="preloader">
+  <div class="preloader-inner">
+    <div class="preloader-icon">
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</div>
+
+<div th:replace="~{common/header::header}"></div>
+
+<section class="dashboard section">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3 col-md-12 col-12">
+        <!-- Start Dashboard Sidebar -->
+        <div class="dashboard-sidebar">
+          <div class="user-image">
+            <img src="https://via.placeholder.com/300x300" alt="#">
+            <h3>관리자 메뉴</h3>
+          </div>
+          <div class="dashboard-menu">
+            <ul>
+              <li><a class="active" href="dashboard.html"><i class="lni lni-youtube"></i> 추천영상</a></li>
+              <li><a href="profile-settings.html"><i class="lni lni-bookmark"></i> 추천도서</a></li>
+            </ul>
+          </div>
+        </div>
+        <!-- Start Dashboard Sidebar -->
+      </div>
+      <div class="col-lg-9 col-md-12 col-12">
+        <div class="main-content">
+          <div class="dashboard-block mt-0">
+            <h3 class="block-title">추천영상 편집</h3>
+            <nav class="list-nav">
+              <ul>
+                <li class="active"><a href="javascript:void(0)">오늘 추가된 재생목록 <span>-</span></a></li>
+                <li><a href="javascript:void(0)">모든 재생목록 <span>-</span></a></li>
+                <li><a href="javascript:void(0)">추천설정된 재생목록 </a></li>
+                <li><a href="javascript:void(0)">가장 많이본 재생목록 </a></li>
+                <li><a href="javascript:void(0)">가장 적게본 재생목록 </a></li>
+              </ul>
+            </nav>
+            <nav class="list-nav">
+              <ul>
+                <li>선택된 재생목록 개수 : 0/8 </li>
+                <li><a href="javascript:void(0)"><i class="lni lni-alarm"></i> 편집완료 </a></li>
+              </ul>
+
+            </nav>
+            <!-- Start Items Area -->
+            <div class="my-items">
+              <!-- Start Item List Title -->
+              <div class="item-list-title">
+                <div class="row align-items-center">
+                  <div class="col-lg-7 col-md-7 col-12">
+                    <p>제목</p>
+                  </div>
+                  <div class="col-lg-2 col-md-2 col-12">
+                    <p>영상개수</p>
+                  </div>
+                  <div class="col-lg-2 col-md-2 col-12">
+                    <p>총 재생시간</p>
+                  </div>
+                  <div class="col-lg-1 col-md-1 col-12 align-right">
+                    <p>추가</p>
+                  </div>
+                </div>
+              </div>
+              <!-- End List Title -->
+              <!-- Start Single List -->
+              <div class="single-item-list">
+                <div class="row align-items-center">
+                  <div class="col-lg-7 col-md-7 col-12">
+                    <div class="item-image">
+                      <img src="https://via.placeholder.com/100x100" alt="#">
+                      <div class="content">
+                        <h3 class="title"><a href="javascript:void(0)">영상제목</a></h3>
+                        <span class="price">영상설명...</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-2 col-md-2 col-12">
+                    <p>20</p>
+                  </div>
+                  <div class="col-lg-2 col-md-2 col-12">
+                    <p>10시간 13분 14초</p>
+                  </div>
+                  <div class="col-lg-1 col-md-1 col-12 align-right">
+                    <ul class="action-btn">
+                      <li><input type="checkbox"></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <!-- End Single List -->
+              <!-- Pagination -->
+              <div class="pagination left">
+                <ul class="pagination-list">
+                  <li><a href="javascript:void(0)"><i class="lni lni-chevron-left"></i></a></li>
+                  <li><a href="javascript:void(0)">1</a></li>
+                  <li class="active"><a href="javascript:void(0)">2</a></li>
+                  <li><a href="javascript:void(0)">3</a></li>
+                  <li><a href="javascript:void(0)">4</a></li>
+                  <li><a href="javascript:void(0)"><i class="lni lni-chevron-right"></i></a></li>
+                </ul>
+              </div>
+              <!--/ End Pagination -->
+            </div>
+            <!-- End Items Area -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<th:block th:replace="~{common/footer::footer}"></th:block>
+
+<!-- ========================= scroll-top ========================= -->
+<a href="#" class="scroll-top btn-hover">
+  <i class="lni lni-chevron-up"></i>
+</a>
+
+<script th:src="@{/js/jquery.3.6.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/wow.min.js}"></script>
+<script th:src="@{/js/tiny-slider.js}"></script>
+<script th:src="@{/js/glightbox.min.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/lilac-common.js}"></script>
+<script th:inline="javascript">
+
+</script>
+</body>
+</html>

@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -103,6 +104,9 @@ public class VideoService implements IVideoService {
     @Override
     public boolean isExistYoutubePlayList(Long playListId){ return m_videoRepository.isExistYoutubePlayList(playListId);}
 
+    /*
+        영상의 재생시간을 처리한다
+     */
     @Override
     public boolean updateVideoPlaytime(Long lectureVideoId, Long playtime) {
         /*
@@ -127,15 +131,12 @@ public class VideoService implements IVideoService {
         return m_videoRepository.findVideoLikeStatus(memberId, videoId).orElse(null);
     }
 
+    /*
+        유튜브 영상의 좋아요 처리
+     */
     @Override
+    @Transactional
     public Map<String, Long> updateLikeVideo(Long videoId, Long memberId) {
-        /*
-            - like count 는 유튜브영상의 좋아요, favorite count는 라일락 사이트의 좋아요
-            - 이미 좋아요가 설정된 영상인지 검사
-            - 좋아요가 설정된 영상이면 바로 리턴
-            - 좋아요가 설정안되고 null 이면 insert
-            - 회원은 좋아요 싫어요를 여러번 하는 경우에도 카운트는 1번만 실행해야 한다
-         */
         Optional<Boolean> res = m_videoRepository.findVideoLikeStatus(memberId, videoId);
         if(res.isPresent()){
             if(res.get().booleanValue()){
@@ -153,7 +154,11 @@ public class VideoService implements IVideoService {
         return m_videoRepository.selectLikeCountMap(videoId);
     }
 
+    /*
+        유튜브 영상의 싫어요 처리
+     */
     @Override
+    @Transactional
     public Map<String, Long> updateDislikeVideo(Long videoId, Long memberId) {
         Optional<Boolean> res = m_videoRepository.findVideoLikeStatus(memberId, videoId);
         if(res.isPresent()){
