@@ -65,8 +65,9 @@
                     <a href="/member/registration"><i class="lni lni-user"></i> 회원가입</a>
                   </li>
                 </th:block>
-                <th:block th:unless="${session.LOGIN_MEMBER == null}"> <!-- <button type="button" class="btn btn-link">Link</button> -->
-                  <li> <!-- <a href="#" th:onclick="@{'deletetag(' + ${tag.id} + ');'}">  -->
+                <th:block th:unless="${session.LOGIN_MEMBER == null}">
+                  <li>
+                    <i class="lni lni-user" th:text="${session.LOGIN_MEMBER.nickname}"></i>
                     <a href="javascript:logout()"><i class="lni lni-exit"> 로그아웃</i></a>
                   </li>
                 </th:block>

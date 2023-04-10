@@ -57,7 +57,7 @@ public class MemberController {
     public String loginForm(@RequestParam(value = "redirectURL", defaultValue = "/") String redirectURL, Model model){
         model.addAttribute("memberLogin", new MemberLoginDTO());
         model.addAttribute("redirectURL", redirectURL);
-        return "member/login";
+        return "/member/login";
     }
 
     @PostMapping("/login")
@@ -82,7 +82,7 @@ public class MemberController {
     @GetMapping("/registration")
     public String registerForm(Model model){
         model.addAttribute("memberReg", new MemberRegDTO());
-        return "member/registration";
+        return "/member/registration";
     }
 
     @PostMapping("/registration")
@@ -98,7 +98,7 @@ public class MemberController {
                 .password(memberRegDTO.getPassword())
                 .grade(2) // 1번은 관리자, 2번은 일반회원이므로 기본값으로 2를 설정해준다
                 .build();
-        return  m_memberService.registerMember(memberDTO) ? "redirect:/member/registration" : "redirect:/";
+        return  m_memberService.registerMember(memberDTO) ? "redirect:/member/login" : "redirect:/member/registration";
     }
 
     @GetMapping("/profile")
@@ -119,7 +119,7 @@ public class MemberController {
         memberEditDTO.setRegDate(memberDTO.getRegDate());
         model.addAttribute("memberInfo", memberEditDTO);
 
-        return "member/profile";
+        return "/member/profile";
     }
 
     @PostMapping("/profile")
