@@ -66,6 +66,19 @@
                                 <li>
                                     <i class="lni lni-eye" th:text="' '+${videoList[0].viewCount}"></i>
                                 </li>
+                                <li>
+                                    <i class="lni lni-star" th:text="' '+${videoList[0].likeCount}" ></i>
+                                </li>
+                                <li>
+                                    <a th:href="|javascript:likeVideo('${videoList[0].id}')|">
+                                        <i id="img-like-count" class="lni lni-thumbs-up" th:style="${(isLikeVideo != null && isLikeVideo) ? 'color:red':''}" th:text="' '+${videoList[0].lilacLikeCount}"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a th:href="|javascript:dislikeVideo('${videoList[0].id}')|">
+                                        <i id="img-dislike-count" class="lni lni-thumbs-down" th:style="${(isLikeVideo != null && !isLikeVideo) ? 'color:red':''}" th:text="' '+${videoList[0].lilacDislikeCount}"></i>
+                                    </a>
+                                </li>
                                 <li th:if="${memberId != null}">
                                     <a th:href="|javascript:showPlaylistAddModal('${playListId}')|"
                                        class="reply-link"><i class="lni lni-notepad"></i> 강의노트에 추가하기</a>
@@ -128,7 +141,6 @@
 
     let player;
     function onYouTubeIframeAPIReady() {
-        console.log("${videoList[0].videoId} : "+[[${videoList[0].videoId}]]);
         player = new YT.Player('player', {
             videoId: [[${videoList[0].videoId}]],
             events: {
@@ -192,10 +204,10 @@
 
     const playSelectedVideo = (paramVideoOriginId, paramVideoId) => {
         $.ajax({
-            type: "get",
-            url: "/video/video-template",
-            dataType: "text",
-            data: {videoId: paramVideoId},
+            type:"get",
+            url:"/video/video-template",
+            dataType:"text",
+            data:{videoId: paramVideoId},
             success: function (result) {
                 let html = jQuery('<div>').html(result);
                 let playlist = html.find("div#video-info-template").html();
@@ -204,6 +216,46 @@
             },
             error: function (error) {
                 alert("영상정보 조회중 에러");
+            }
+        })
+    }
+    const likeVideo = (paramVideoId) => {
+        let param = {
+            "videoId":paramVideoId
+        }
+        $.ajax({
+            type:"post",
+            url:"/video/api/like-video",
+            headers: {"Content-Type": "application/json"},
+            data:JSON.stringify(param),
+            success:function (result){
+                $("#img-like-count").css("color", "red");
+                $("#img-dislike-count").css("color", "black");
+                $("#img-like-count").text(' '+result.likeCount);
+                $("#img-dislike-count").text(' '+result.dislikeCount);
+            },
+            error:function(err){
+                alert(err);
+            }
+        })
+    }
+    const dislikeVideo = (paramVideoId) => {
+        let param = {
+            "videoId":paramVideoId
+        }
+        $.ajax({
+            type:"post",
+            url:"/video/api/dislike-video",
+            headers: {"Content-Type": "application/json"},
+            data:JSON.stringify(param),
+            success:function (result){
+                $("#img-like-count").css("color", "black");
+                $("#img-dislike-count").css("color", "red");
+                $("#img-like-count").text(' '+result.likeCount);
+                $("#img-dislike-count").text(' '+result.dislikeCount);
+            },
+            error:function(err){
+                alert(err);
             }
         })
     }

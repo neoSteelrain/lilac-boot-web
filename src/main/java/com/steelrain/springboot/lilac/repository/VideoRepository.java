@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 
 @Repository
@@ -52,6 +54,46 @@ public class VideoRepository implements IVideoRepository {
     @Override
     public long getProgress(Long lectureVideoId) {
         return m_videoMapper.findProgress(lectureVideoId);
+    }
+
+    @Override
+    public Optional<Boolean> findVideoLikeStatus(Long id, Long videoId) {
+        return m_videoMapper.findVideoLikeStatus(id, videoId);
+    }
+
+    @Override
+    public void setLikeStatus(Long memberId, Long videoId, boolean likeStatus) {
+        m_videoMapper.setLikeStatus(memberId, videoId, likeStatus);
+    }
+
+    @Override
+    public void increaseLikeCount(Long videoId) {
+        m_videoMapper.increaseLikeCount(videoId);
+    }
+
+    @Override
+    public void updateLikeVideo(Long memberId, Long videoId, boolean likeStatus) {
+        m_videoMapper.updateLikeVideo(memberId, videoId, likeStatus);
+    }
+
+    @Override
+    public void decreaseLikeCount(Long videoId) {
+        m_videoMapper.decreaseLikeCount(videoId);
+    }
+
+    @Override
+    public void decreaseDislikeCount(Long videoId) {
+        m_videoMapper.decreaseDislikeCount(videoId);
+    }
+
+    @Override
+    public void increaseDislikeCount(Long videoId) {
+        m_videoMapper.increaseDislikeCount(videoId);
+    }
+
+    @Override
+    public Map<String, Long> selectLikeCountMap(Long videoId) {
+        return m_videoMapper.selectLikeCountMap(videoId);
     }
 
     public YoutubeVideoDTO findVideoDetail(Long videoId) {

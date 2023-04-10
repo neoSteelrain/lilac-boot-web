@@ -7,6 +7,8 @@ import com.steelrain.springboot.lilac.datamodel.view.RecommendedPlayListDTO;
 import com.steelrain.springboot.lilac.datamodel.view.RecommendedVideoDTO;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public interface IVideoRepository {
     List<RecommendedVideoDTO> findRecommendedVideoList();
@@ -32,4 +34,20 @@ public interface IVideoRepository {
     long getDuration(Long lectureVideoId);
 
     long getProgress(Long lectureVideoId);
+
+    Optional<Boolean> findVideoLikeStatus(Long memberId, Long videoId);
+
+    void setLikeStatus(Long memberId, Long videoId, boolean likeStatus);
+
+    void increaseLikeCount(Long videoId);
+
+    void updateLikeVideo(Long memberId, Long videoId, boolean likeStatus);
+
+    void decreaseDislikeCount(Long videoId);
+
+    void increaseDislikeCount(Long videoId);
+
+    void decreaseLikeCount(Long videoId);
+
+    Map<String, Long> selectLikeCountMap(Long videoId);
 }

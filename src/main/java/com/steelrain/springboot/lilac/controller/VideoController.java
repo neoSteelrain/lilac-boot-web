@@ -31,24 +31,25 @@ public class VideoController {
 
 
     @GetMapping("/playlist-detail")
-    public String getPlayListDetail(@RequestParam("youtubePlaylistId") Long youtubePlaylistId, Model model, HttpServletRequest servletRequest){
+    public String getPlayListDetail(@RequestParam("youtubePlaylistId") Long youtubePlaylistId, Model model, HttpSession session){
         /*
             유튜브영상 재생페이지에서 영상들을 강의노트에 추가하기 위해서는 memberId 가 필요하다.
             때문에 로그인 한 경우에는 memberId를 페이지의 hidden필드에 저장하기 위해 model에 넣어준다.
          */
-        HttpSession session = servletRequest.getSession(false);
+        MemberDTO memberDTO = null;
         if(session != null && session.getAttribute(SESSION_KEY.LOGIN_MEMBER) != null){
-            model.addAttribute("memberId",((MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER)).getId());
+            memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
+            model.addAttribute("memberId",memberDTO.getId());
         }
         List<YoutubeVideoDTO> videoDTOList = m_videoService.getPlayListDetail(youtubePlaylistId);
         model.addAttribute("videoList", videoDTOList);
         model.addAttribute("playListId", youtubePlaylistId);
+        model.addAttribute("isLikeVideo", m_videoService.getLikeStatus(memberDTO.getId(),  videoDTOList.get(0).getId()));
         return "/video/playlist-detail";
     }
 
     @GetMapping("/lec-playlist-detail")
-    public String getPlayListDetailOfLectureNote(@RequestParam("youtubePlaylistId") Long youtubePlaylistId, Model model, HttpServletRequest servletRequest){
-        HttpSession session = servletRequest.getSession(false);
+    public String getPlayListDetailOfLectureNote(@RequestParam("youtubePlaylistId") Long youtubePlaylistId, Model model, HttpSession session){
         MemberDTO memberDTO = null;
         if(session != null && session.getAttribute(SESSION_KEY.LOGIN_MEMBER) != null){
             memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
@@ -61,14 +62,15 @@ public class VideoController {
     }
 
     @GetMapping("/video-template")
-    public String getVideoTemplate(@RequestParam("videoId") Long videoId, Model model, HttpServletRequest servletRequest){
-        HttpSession session = servletRequest.getSession(false);
+    public String getVideoTemplate(@RequestParam("videoId") Long videoId, Model model, HttpSession session){
+        MemberDTO memberDTO = null;
         if(session != null && session.getAttribute(SESSION_KEY.LOGIN_MEMBER) != null){
-            model.addAttribute("memberId",((MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER)).getId());
+            memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
+            model.addAttribute("memberId",memberDTO.getId());
         }
-
         YoutubeVideoDTO videoDTO = m_videoService.getVideoDetail(videoId);
         model.addAttribute("videoInfo", videoDTO);
+        model.addAttribute("isLikeVideo", m_videoService.getLikeStatus(memberDTO.getId(), videoId));
         return "/video/video-play-template";
     }
 }

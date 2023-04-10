@@ -16,6 +16,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * 영상 서비스
@@ -118,5 +120,49 @@ public class VideoService implements IVideoService {
     @Override
     public List<LectureNoteYoutubeVideoDTO> getPlayListDetailOfLectureNote(Long memberId, Long youtubePlaylistId) {
         return m_videoRepository.findPlayListDetailOfLectureNote(memberId, youtubePlaylistId);
+    }
+
+    @Override
+    public Boolean getLikeStatus(Long memberId, Long videoId) {
+        return m_videoRepository.findVideoLikeStatus(memberId, videoId).orElse(null);
+    }
+
+    @Override
+    public Map<String, Long> updateLikeVideo(Long videoId, Long memberId) {
+        /*
+            - like count 는 유튜브영상의 좋아요, favorite count는 라일락 사이트의 좋아요
+            - 이미 좋아요가 설정된 영상인지 검사
+            - 좋아요가 설정된 영상이면 바로 리턴
+            - 좋아요가 설정안되고 null 이면 insert
+            - 회원은 좋아요 싫어요를 여러번 하는 경우에도 카운트는 1번만 실행해야 한다
+         */
+        Optional<Boolean> res = m_videoRepository.findVideoLikeStatus(memberId, videoId);
+        if(res.isPresent()){
+            if(!res.get().booleanValue()){
+                m_videoRepository.updateLikeVideo(memberId, videoId, true);
+                m_videoRepository.increaseLikeCount(videoId);
+                m_videoRepository.decreaseDislikeCount(videoId);
+            }
+        }else{
+            m_videoRepository.setLikeStatus(memberId, videoId, true);
+            m_videoRepository.increaseLikeCount(videoId);
+        }
+        return m_videoRepository.selectLikeCountMap(videoId);
+    }
+
+    @Override
+    public Map<String, Long> updateDislikeVideo(Long videoId, Long memberId) {
+        Optional<Boolean> res = m_videoRepository.findVideoLikeStatus(memberId, videoId);
+        if(res.isPresent()){
+            if(res.get().booleanValue()){
+                m_videoRepository.updateLikeVideo(memberId, videoId, false);
+                m_videoRepository.increaseDislikeCount(videoId);
+                m_videoRepository.decreaseLikeCount(videoId);
+            }
+        }else{
+            m_videoRepository.setLikeStatus(memberId, videoId, false);
+            m_videoRepository.increaseDislikeCount(videoId);
+        }
+        return m_videoRepository.selectLikeCountMap(videoId);
     }
 }

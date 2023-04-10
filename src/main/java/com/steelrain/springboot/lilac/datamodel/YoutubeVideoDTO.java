@@ -44,4 +44,7 @@ public class YoutubeVideoDTO {
     private String duration;
     private Float score;
     private Float magnitude;
+
+    private Long lilacLikeCount;
+    private Long lilacDislikeCount;
 }

@@ -170,10 +170,17 @@
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/lilac-common.js}"></script>
 <script th:inline="javascript">
+    const FILE_SIZE = 1024 * 1024;
     const changeProfileImg = () => {
         let files = $('#profileImage').prop('files');
-        if(files == undefined)
+        if(files == undefined && files.length == 0){
             return;
+        }
+        if(files[0].size > FILE_SIZE){
+            alert('이미지 용량은 1MB 이하여야 합니다');
+            $('#profileImage').val('');
+            return;
+        }
         let reader = new FileReader();
         reader.onload = (e) => {
             $('#profileImgPreViewLg').attr('src', e.target.result);

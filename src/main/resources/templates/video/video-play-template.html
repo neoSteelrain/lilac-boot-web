@@ -11,13 +11,28 @@
       <h5 class="post-title" th:text="${videoInfo.title}"></h5>
       <ul class="custom-flex post-meta">
         <li>
-          <i class="lni lni-calendar" th:text="' '+${videoInfo.publishDate}"></i>
+          <i class="lni lni-calendar" th:text="' '+${{videoInfo.publishDate}}"></i>
         </li>
         <li>
           <i class="lni lni-comments" th:text="' '+${videoInfo.commentCount}"></i>
         </li>
         <li>
           <i class="lni lni-eye" th:text="' '+${videoInfo.viewCount}"></i>
+        </li>
+        <li>
+          <i class="lni lni-star" th:text="' '+${videoInfo.likeCount}" ></i>
+        </li>
+        <li>
+          <a th:href="|javascript:likeVideo('${videoInfo.id}')|">
+            <i th:if="${isLikeVideo != null && isLikeVideo}" class="lni lni-checkmark"></i>
+            <i class="lni lni-thumbs-up" th:text="' '+${videoInfo.lilacLikeCount}"></i>
+          </a>
+        </li>
+        <li>
+          <a th:href="|javascript:dislikeVideo('${videoInfo.id}')|">
+            <i th:if="${isLikeVideo != null && !isLikeVideo}" class="lni lni-checkmark"></i>
+            <i class="lni lni-thumbs-down" th:text="' '+${videoInfo.lilacDislikeCount}"></i>
+          </a>
         </li>
         <li th:if="${memberId != null}">
           <a th:href="|javascript:showPlaylistAddModal('${playListId}')|"

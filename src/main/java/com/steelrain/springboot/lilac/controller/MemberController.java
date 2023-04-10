@@ -96,6 +96,7 @@ public class MemberController {
                 .nickname(memberRegDTO.getNickname())
                 .email(memberRegDTO.getEmail())
                 .password(memberRegDTO.getPassword())
+                .grade(2) // 1번은 관리자, 2번은 일반회원이므로 기본값으로 2를 설정해준다
                 .build();
         return  m_memberService.registerMember(memberDTO) ? "redirect:/member/registration" : "redirect:/";
     }

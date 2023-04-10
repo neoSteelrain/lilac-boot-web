@@ -7,6 +7,7 @@ import com.steelrain.springboot.lilac.datamodel.VideoPlayListSearchResultDTO;
 import com.steelrain.springboot.lilac.datamodel.YoutubeVideoDTO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IVideoService {
     List<RecommendedVideoDTO> getRecommendedVideoList();
@@ -19,4 +20,10 @@ public interface IVideoService {
     boolean isExistYoutubePlayList(Long playListId);
     boolean updateVideoPlaytime(Long id, Long playtime);
     List<LectureNoteYoutubeVideoDTO> getPlayListDetailOfLectureNote(Long memberId, Long youtubePlaylistId);
+
+    Map<String, Long> updateLikeVideo(Long videoId, Long memberId);
+
+    Map<String, Long> updateDislikeVideo(Long videoId, Long id);
+
+    Boolean getLikeStatus(Long memberId, Long videoId);
 }

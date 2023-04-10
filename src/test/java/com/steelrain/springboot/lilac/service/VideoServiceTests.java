@@ -11,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -60,5 +62,16 @@ public class VideoServiceTests {
     public void 강의노트영상의Duration가져오기(){
         boolean isUpdated = m_videoService.updateVideoPlaytime(1L, 1100L);
         assertThat(isUpdated).isTrue();
+    }
+
+    @Test
+    public void 좋아요영상처리후_결과맵가져오기(){
+        Map<String, Long> res = m_videoService.updateLikeVideo(187L, 2L);
+        res.keySet().forEach(key -> System.out.println("키값 : "+key));
+        res.values().forEach(val -> System.out.println("값 : "+val));
+
+        System.out.println("lilac_like_count : "+res.get("lilac_like_count"));
+        System.out.println("lilac_dislike_count : "+res.get("lilac_dislike_count"));
+        assertThat(Objects.nonNull(res)).isTrue();
     }
 }

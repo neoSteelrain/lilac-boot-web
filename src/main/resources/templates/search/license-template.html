@@ -23,7 +23,7 @@
       <div class="col-lg-2 col-md-2 col-12">
         <p th:text="${licenseInfo.licEndDate}"></p>
       </div>
-      <div class="col-lg-1 col-md-2 col-12 align-right">
+      <div th:if="${session.LOGIN_MEMBER != null}" class="col-lg-1 col-md-2 col-12 align-right">
         <ul class="action-btn">
           <li><a href="javascript:showAddLicenseToNote()"><i class="lni lni-notepad"></i></a></li>
         </ul>

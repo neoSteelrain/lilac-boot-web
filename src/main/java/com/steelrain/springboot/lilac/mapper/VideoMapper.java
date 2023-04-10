@@ -10,6 +10,8 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Mapper
 public interface VideoMapper {
@@ -20,9 +22,9 @@ public interface VideoMapper {
     List<YoutubePlayListDTO> findPlayListByKeyword(@Param("keyword") String keyword, @Param("offset") int offset, @Param("count") int count);
 
     @Select("SELECT count(id) FROM tbl_youtube_playlist WHERE MATCH(title) AGAINST (#{keyword})")
-    int selectTotalPlayListCountByKeyword(@Param("keyword") String keyword);
+    int selectTotalPlayListCountByKeyword(String keyword);
 
-    @Select("SELECT video_id, title, publish_date, comment_count, view_count, description FROM tbl_youtube WHERE id=#{videoId}")
+    @Select("SELECT id, video_id, title, publish_date, comment_count, view_count, like_count, description, lilac_like_count, lilac_dislike_count FROM tbl_youtube WHERE id=#{videoId}")
     YoutubeVideoDTO findVideoDetail(Long videoId);
 
     @Select("SELECT id FROM tbl_youtube WHERE youtube_playlist_id=#{playListId}")
@@ -39,4 +41,21 @@ public interface VideoMapper {
 
     @Select("SELECT ifnull(progress, 0) FROM ref_tbl_lecture_youtube WHERE id=#{lectureVideoId}")
     long findProgress(Long lectureVideoId);
+
+    @Select("SELECT like_status FROM tbl_youtube_like WHERE member_id=#{memberId} AND youtube_id=#{videoId}")
+    Optional<Boolean> findVideoLikeStatus(Long memberId, Long videoId);
+
+    void setLikeStatus(Long memberId, Long videoId, boolean likeStatus);
+
+    void increaseLikeCount(Long videoId);
+
+    void updateLikeVideo(Long memberId, Long videoId, boolean likeStatus);
+
+    void decreaseDislikeCount(Long videoId);
+
+    void increaseDislikeCount(Long videoId);
+
+    void decreaseLikeCount(Long videoId);
+
+    Map<String, Long> selectLikeCountMap(Long videoId);
 }
