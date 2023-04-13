@@ -29,4 +29,14 @@ public class PagingUtils {
                 .maxPage(maxPage)
                 .build();
     }
+
+    /**
+     * 페이징 시작번호를 계산한다.
+     * @param pageNum 시작할 페이지 번호
+     * @param pageCount 한페이지에 들어갈 페이지의 개수
+     * @return 시작할 페이지 번호
+     */
+    public static int calcStartPage(int pageNum, int pageCount){
+        return (pageNum <= 0 ) ? 0 : (pageNum -1) * pageCount;
+    }
 }

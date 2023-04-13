@@ -8,4 +8,194 @@
         (#{item})
         </foreach>
     </insert>
+
+    <select id="findAllPlayList" parameterType="map" resultType="YoutubePlayListDTO">
+        SELECT id,playlist_id,channel_id,license_id,subject_id,title,thumbnail_medium,item_count,reg_date
+        FROM tbl_youtube_playlist
+        ORDER BY reg_date DESC LIMIT #{pageNum}, #{pageCount};
+    </select>
+
+    <select id="findPlayListByRange" parameterType="map" resultType="YoutubePlayListDTO">
+        SELECT id,playlist_id,channel_id,license_id,subject_id,title,thumbnail_medium,item_count,reg_date
+        FROM tbl_youtube_playlist
+        <![CDATA[WHERE reg_date > #{start} AND reg_date <= #{end}]]>
+        ORDER BY reg_date DESC LIMIT #{pageNum}, #{pageCount}
+    </select>
+
+    <select id="findTotalLicPlCount" parameterType="map" resultType="int">
+        SELECT count(pl.id)
+        FROM tbl_youtube_playlist pl INNER JOIN tbl_license lic
+            ON pl.license_id = lic.id
+        WHERE lic.id IN (
+        <foreach collection="licenseIds" item="item" index="index" separator=",">
+            #{item}
+        </foreach>)
+    </select>
+
+    <select id="findTotalLicPlayList" parameterType="map" resultType="YoutubePlayListDTO">
+        SELECT pl.id,pl.playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,pl.item_count,pl.reg_date
+        FROM tbl_youtube_playlist pl INNER JOIN tbl_license lic
+            ON pl.license_id = lic.id
+        WHERE lic.id IN (
+        <foreach collection="licenseIds" item="item" index="index" separator=",">
+            #{item}
+        </foreach>) ORDER BY reg_date DESC LIMIT #{pageNum},#{pageCount}
+    </select>
+
+    <select id="findTotalSubPlCount" parameterType="map" resultType="int">
+        SELECT count(pl.id)
+        FROM tbl_youtube_playlist pl INNER JOIN tbl_subject sub
+            ON pl.subject_id = sub.id
+        WHERE sub.id IN (
+        <foreach collection="subjectIds" item="item" index="index" separator=",">
+            #{item}
+        </foreach>)
+    </select>
+
+    <select id="findTotalSubPlayList" parameterType="map" resultType="YoutubePlayListDTO">
+        SELECT pl.id,pl.playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,pl.item_count,pl.reg_date
+        FROM tbl_youtube_playlist pl INNER JOIN tbl_subject sub
+            ON pl.subject_id = sub.id
+        WHERE sub.id IN (
+        <foreach collection="subjectIds" item="item" index="index" separator=",">
+            #{item}
+        </foreach>) ORDER BY reg_date DESC LIMIT #{pageNum},#{pageCount}
+    </select>
+
+    <select id="findTotalLicSubCount" parameterType="map" resultType="int">
+        SELECT count(tmp.id) FROM (
+          SELECT pl.id
+          FROM tbl_youtube_playlist pl INNER JOIN tbl_license lic
+            ON pl.license_id = lic.id
+          WHERE lic.id IN (
+              <foreach collection="licenseIds" item="item" index="index" separator=",">
+                #{item}
+              </foreach>)
+          UNION
+          SELECT pl.id
+          FROM tbl_youtube_playlist pl INNER JOIN tbl_subject sub
+            ON pl.subject_id = sub.id
+          WHERE sub.id IN (
+            <foreach collection="subjectIds" item="item" index="index" separator=",">
+                #{item}
+            </foreach>)) as tmp
+    </select>
+
+    <select id="findTotalLicSubPlayList" parameterType="map" resultType="YoutubePlayListDTO">
+        SELECT tmp.id,tmp.playlist_id,tmp.channel_id,tmp.title,tmp.thumbnail_medium,tmp.item_count,tmp.reg_date
+        FROM (
+             SELECT pl.id,pl.playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,pl.item_count,pl.reg_date
+             FROM tbl_youtube_playlist pl INNER JOIN tbl_license lic
+               ON pl.license_id = lic.id
+             WHERE lic.id IN (
+                <foreach collection="licenseIds" item="item" index="index" separator=",">
+                    #{item}
+                </foreach>)
+             UNION
+             SELECT pl.id,pl.playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,pl.item_count,pl.reg_date
+             FROM tbl_youtube_playlist pl INNER JOIN tbl_subject sub
+               ON pl.subject_id = sub.id
+             WHERE sub.id IN (
+                <foreach collection="subjectIds" item="item" index="index" separator=",">
+                    #{item}
+                </foreach>)) as tmp
+        ORDER BY tmp.reg_date DESC LIMIT #{pageNum},#{pageCount}
+    </select>
+
+    <select id="findTodayLicPlCount" parameterType="map" resultType="int">
+        SELECT count(id)
+        FROM tbl_youtube_playlist
+        <![CDATA[WHERE reg_date > #{startDay} AND reg_date <= #{endDay}]]>
+            AND license_id IN (
+                <foreach collection="licenseIds" item="item" index="index" separator=",">
+                    #{item}
+                </foreach>)
+    </select>
+
+    <select id="findLicPlByRange" parameterType="map" resultType="YoutubePlayListDTO">
+        SELECT id,playlist_id,channel_id,license_id,subject_id,title,thumbnail_medium,item_count,reg_date
+        FROM tbl_youtube_playlist
+        <![CDATA[WHERE reg_date > #{fromDate} AND reg_date <= #{toDate}]]>
+            AND license_id IN (
+                <foreach collection="licenseIds" item="item" index="index" separator=",">
+                    #{item}
+                </foreach>)
+        ORDER BY reg_date DESC LIMIT #{pageNum}, #{pageCount}
+    </select>
+
+    <select id="findSubPlByRange" parameterType="map" resultType="YoutubePlayListDTO">
+        SELECT id,playlist_id,channel_id,license_id,subject_id,title,thumbnail_medium,item_count,reg_date
+        FROM tbl_youtube_playlist
+        <![CDATA[WHERE reg_date > #{fromDate} AND reg_date <= #{toDate}]]>
+            AND subject_id IN (
+            <foreach collection="subjectIds" item="item" index="index" separator=",">
+                #{item}
+            </foreach>)
+        ORDER BY reg_date DESC LIMIT #{pageNum}, #{pageCount}
+    </select>
+
+    <select id="findLicSubPlByRange" parameterType="map" resultType="YoutubePlayListDTO">
+        SELECT tmp.id,tmp.playlist_id,tmp.channel_id,tmp.title,tmp.thumbnail_medium,tmp.item_count,tmp.reg_date
+        FROM (
+            SELECT pl.id,pl.playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,pl.item_count,pl.reg_date
+            FROM tbl_youtube_playlist pl INNER JOIN tbl_license lic
+                ON pl.license_id = lic.id
+                <![CDATA[WHERE pl.reg_date > #{fromDate} AND pl.reg_date <= #{toDate}]]>
+                AND lic.id IN (
+                <foreach collection="licenseIds" item="item" index="index" separator=",">
+                    #{item}
+                </foreach>)
+            UNION
+            SELECT pl.id,pl.playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,pl.item_count,pl.reg_date
+            FROM tbl_youtube_playlist pl INNER JOIN tbl_subject sub
+                ON pl.subject_id = sub.id
+                <![CDATA[WHERE pl.reg_date > #{fromDate} AND pl.reg_date <= #{toDate}]]>
+                AND sub.id IN (
+                <foreach collection="subjectIds" item="item" index="index" separator=",">
+                    #{item}
+                </foreach>)) as tmp
+        ORDER BY tmp.reg_date DESC LIMIT #{pageNum}, #{pageCount}
+    </select>
+
+    <select id="findTotalLicSubPlCountByRange" parameterType="map" resultType="int">
+        SELECT count(tmp.id) FROM (
+            SELECT pl.id
+            FROM tbl_youtube_playlist pl INNER JOIN tbl_license lic
+            ON pl.license_id = lic.id
+            <![CDATA[WHERE pl.reg_date > #{fromDate} AND pl.reg_date <= #{toDate}]]>
+                AND lic.id IN (
+                <foreach collection="licenseIds" item="item" index="index" separator=",">
+                    #{item}
+                </foreach>)
+            UNION
+            SELECT pl.id
+            FROM tbl_youtube_playlist pl INNER JOIN tbl_subject sub
+            ON pl.subject_id = sub.id
+            <![CDATA[WHERE pl.reg_date > #{fromDate} AND pl.reg_date <= #{toDate}]]>
+                AND sub.id IN (
+                <foreach collection="subjectIds" item="item" index="index" separator=",">
+                    #{item}
+                </foreach>)
+        ) as tmp
+    </select>
+
+    <select id="findLicPlCountByRange" parameterType="map" resultType="int">
+        SELECT count(id)
+        FROM tbl_youtube_playlist
+        <![CDATA[WHERE reg_date > #{fromDate} AND reg_date <= #{toDate}]]>
+        AND license_id IN (
+            <foreach collection="licenseIds" item="item" index="index" separator=",">
+                #{item}
+            </foreach>)
+    </select>
+
+    <select id="findSubPlCountByRange" parameterType="map" resultType="int">
+        SELECT count(id)
+        FROM tbl_youtube_playlist
+        <![CDATA[WHERE reg_date > #{fromDate} AND reg_date <= #{toDate}]]>
+        AND subject_id IN (
+            <foreach collection="subjectIds" item="item" index="index" separator=",">
+                #{item}
+            </foreach>)
+    </select>
 </mapper>

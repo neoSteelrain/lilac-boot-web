@@ -10,9 +10,7 @@
   <!-- Place favicon.ico in the root directory -->
 
   <!-- Web Font -->
-  <link
-          href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-          rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
 
   <!-- ========================= CSS here ========================= -->
@@ -47,9 +45,74 @@
           </div>
           <div class="dashboard-menu">
             <ul>
-              <li><a class="active" href="dashboard.html"><i class="lni lni-youtube"></i> 추천영상</a></li>
+              <li><a class="active" href="dashboard.html"><i class="lni lni-youtube"></i> 추천재생목록</a></li>
               <li><a href="profile-settings.html"><i class="lni lni-bookmark"></i> 추천도서</a></li>
             </ul>
+          </div>
+        </div>
+        <div class="category-sidebar" style="margin-top: 10px;">
+          <div class="single-widget condition">
+            <h3>자격증</h3>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="lic-1" id="junbogisa">
+              <label class="form-check-label" for="junbogisa">
+                정보처리기사
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="lic-2" id="junbosangisa">
+              <label class="form-check-label" for="junbosangisa">
+                정보처리산업기사
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="lic-3" id="junboginueng">
+              <label class="form-check-label" for="junboginueng">
+                정보처리기능사
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="category-sidebar" style="margin-top: 10px;">
+          <div class="single-widget condition">
+            <h3>키워드</h3>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="sub-1" id="java">
+              <label class="form-check-label" for="java">
+                자바
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="sub-2" id="js">
+              <label class="form-check-label" for="js">
+                자바스크립트
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="sub-3" id="springfw">
+              <label class="form-check-label" for="springfw">
+                스프링 프레임워크
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="sub-4" id="sql">
+              <label class="form-check-label" for="sql">
+                SQL
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="sub-5" id="db">
+              <label class="form-check-label" for="db">
+                데이터베이스
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="sub-6" id="cote">
+              <label class="form-check-label" for="cote">
+                코딩테스트
+              </label>
+            </div>
           </div>
         </div>
         <!-- Start Dashboard Sidebar -->
@@ -57,83 +120,133 @@
       <div class="col-lg-9 col-md-12 col-12">
         <div class="main-content">
           <div class="dashboard-block mt-0">
-            <h3 class="block-title">추천영상 편집</h3>
-            <nav class="list-nav">
-              <ul>
-                <li class="active"><a href="javascript:void(0)">오늘 추가된 재생목록 <span>-</span></a></li>
-                <li><a href="javascript:void(0)">모든 재생목록 <span>-</span></a></li>
-                <li><a href="javascript:void(0)">추천설정된 재생목록 </a></li>
-                <li><a href="javascript:void(0)">가장 많이본 재생목록 </a></li>
-                <li><a href="javascript:void(0)">가장 적게본 재생목록 </a></li>
-              </ul>
-            </nav>
-            <nav class="list-nav">
-              <ul>
-                <li>선택된 재생목록 개수 : 0/8 </li>
-                <li><a href="javascript:void(0)"><i class="lni lni-alarm"></i> 편집완료 </a></li>
-              </ul>
-
-            </nav>
-            <!-- Start Items Area -->
-            <div class="my-items">
-              <!-- Start Item List Title -->
-              <div class="item-list-title">
-                <div class="row align-items-center">
-                  <div class="col-lg-7 col-md-7 col-12">
-                    <p>제목</p>
+            <div class="inner-block" style="margin-top: 10px">
+              <div class="post-ad-tab">
+                <nav>
+                  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <button class="nav-link active" id="nav-item-info-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-item-info" type="button" role="tab"
+                            aria-controls="nav-item-info" aria-selected="true">
+                      <span class="serial">01</span>
+                      추전재생목록 편집
+                      <span class="sub-title">재생목록 선택</span>
+                    </button>
+                    <button class="nav-link" id="nav-item-details-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-item-details" type="button" role="tab"
+                            aria-controls="nav-item-details" aria-selected="false">
+                      <span class="serial">02</span>
+                      추천재생목록 보기
+                      <span class="sub-title">편집완료된 목록</span>
+                    </button>
                   </div>
-                  <div class="col-lg-2 col-md-2 col-12">
-                    <p>영상개수</p>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-12">
-                    <p>총 재생시간</p>
-                  </div>
-                  <div class="col-lg-1 col-md-1 col-12 align-right">
-                    <p>추가</p>
-                  </div>
-                </div>
-              </div>
-              <!-- End List Title -->
-              <!-- Start Single List -->
-              <div class="single-item-list">
-                <div class="row align-items-center">
-                  <div class="col-lg-7 col-md-7 col-12">
-                    <div class="item-image">
-                      <img src="https://via.placeholder.com/100x100" alt="#">
-                      <div class="content">
-                        <h3 class="title"><a href="javascript:void(0)">영상제목</a></h3>
-                        <span class="price">영상설명...</span>
-                      </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                  <div class="tab-pane fade show active" id="nav-item-info" role="tabpanel" aria-labelledby="nav-item-info-tab">
+                    <div class="step-one-content">
+                      <form class="default-form-style" method="post" action="#">
+                        <nav class="list-nav">
+                          <ul>
+                            <li id="li-all" class="active"><a href="javascript:changePlayList(1)">모든 재생목록 <span th:text="${totalPlcnt}"></span></a>
+                            <li id="li-today"><a href="javascript:changePlayList(2)">오늘 추가된 재생목록<span th:text="${todayPlcnt}"></span></a></li>
+                            <li id="li-week"><a href="javascript:changePlayList(3)">1주일간 추가된 재생목록<span th:text="${weekPlcnt}"></span></a></li>
+                            <li id="li-month"><a href="javascript:changePlayList(4)">1달간 추가된 재생목록<span th:text="${monthPlcnt}"></span></a></li></li>
+                            <li><a href="javascript:void(0)">많이 추천된 재생목록 </a></li>
+                            <li><a href="javascript:void(0)">가장 많이본 재생목록 </a></li>
+                            <li><a href="javascript:void(0)">가장 적게본 재생목록 </a></li>
+                          </ul>
+                        </nav>
+                        <nav class="list-nav">
+                          <ul>
+                            <li>선택된 재생목록 개수 : 0/8 </li>
+                            <li><a href="javascript:void(0)"><i class="lni lni-alarm"></i> 편집완료 </a></li>
+                          </ul>
+                        </nav>
+                        <div class="my-items">
+                          <div class="item-list-title">
+                            <div class="row align-items-center">
+                              <div class="col-lg-7 col-md-7 col-12">
+                                <p>제목</p>
+                              </div>
+                              <div class="col-lg-2 col-md-2 col-12">
+                                <p>영상개수</p>
+                              </div>
+                              <div class="col-lg-2 col-md-2 col-12">
+                                <p>등록일</p>
+                              </div>
+                              <div class="col-lg-1 col-md-1 col-12 align-right">
+                                <p>추가</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div id="div-playlist">
+                          </div>
+                        </div>
+                      </form>
                     </div>
                   </div>
-                  <div class="col-lg-2 col-md-2 col-12">
-                    <p>20</p>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-12">
-                    <p>10시간 13분 14초</p>
-                  </div>
-                  <div class="col-lg-1 col-md-1 col-12 align-right">
-                    <ul class="action-btn">
-                      <li><input type="checkbox"></li>
-                    </ul>
+                  <!-- 재생목록 보기 -->
+                  <div class="tab-pane fade" id="nav-item-details" role="tabpanel" aria-labelledby="nav-item-details-tab">
+                    <div class="step-two-content">
+                      <form class="default-form-style" method="post" action="#">
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="my-items">
+                              <div class="item-list-title">
+                                <div class="row align-items-center">
+                                  <div class="col-lg-7 col-md-7 col-12">
+                                    <p>제목</p>
+                                  </div>
+                                  <div class="col-lg-2 col-md-2 col-12">
+                                    <p>영상개수</p>
+                                  </div>
+                                  <div class="col-lg-2 col-md-2 col-12">
+                                    <p>등록일</p>
+                                  </div>
+                                  <div class="col-lg-1 col-md-1 col-12 align-right">
+                                    <p>삭제</p>
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- 재생목록 리스트 시작 -->
+                              <div class="single-item-list">
+                                <div class="row align-items-center">
+                                  <div class="col-lg-7 col-md-7 col-12">
+                                    <div class="item-image">
+                                      <img src="https://via.placeholder.com/100x100" alt="#">
+                                      <div class="content">
+                                        <h3 class="title"><a href="|javascript:void(0)|" >제목</a>
+                                        </h3>
+                                        <span class="price">채널명</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-lg-2 col-md-2 col-12">
+                                    <p>10</p>
+                                  </div>
+                                  <div class="col-lg-2 col-md-2 col-12">
+                                    <p>--</p>
+                                  </div>
+                                  <div class="col-lg-1 col-md-1 col-12 align-right">
+                                    <ul class="action-btn">
+                                      <!--<li><a
+                                              th:href="|javascript:removeBook('${bookInfo.lecBookId}', '${noteDetail.noteId}')|"><i
+                                              class="lni lni-trash"></i></a>
+                                      </li>-->
+                                      <li><a href="javascript:void(0)"><i class="lni lni-trash"></i></a></li>
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- 재생목록 리스트 끝 -->
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
                   </div>
                 </div>
               </div>
-              <!-- End Single List -->
-              <!-- Pagination -->
-              <div class="pagination left">
-                <ul class="pagination-list">
-                  <li><a href="javascript:void(0)"><i class="lni lni-chevron-left"></i></a></li>
-                  <li><a href="javascript:void(0)">1</a></li>
-                  <li class="active"><a href="javascript:void(0)">2</a></li>
-                  <li><a href="javascript:void(0)">3</a></li>
-                  <li><a href="javascript:void(0)">4</a></li>
-                  <li><a href="javascript:void(0)"><i class="lni lni-chevron-right"></i></a></li>
-                </ul>
-              </div>
-              <!--/ End Pagination -->
             </div>
-            <!-- End Items Area -->
           </div>
         </div>
       </div>
@@ -156,7 +269,120 @@
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/lilac-common.js}"></script>
 <script th:inline="javascript">
+  const SESSION_KEY_PL_TYPE = "ss_pl_type";
+  const SESSION_KEY_KEYWORD_TYPE = "ss_keyword_type";
 
+  window.addEventListener("load", function (event){
+    changePlayList(1); // 페이지의 첫시작은 모든재생목록으로 시작하기 위해 1을 준다
+
+    $("#junbogisa").on("change", function(){chkBoxHandler()});
+    $("#junbosangisa").on("change", function(){chkBoxHandler()});
+    $("#junboginueng").on("change", function(){chkBoxHandler()});
+
+    $("#java").on("change", function(){chkBoxHandler()});
+    $("#js").on("change", function(){chkBoxHandler()});
+    $("#springfw").on("change", function(){chkBoxHandler()});
+    $("#sql").on("change", function(){chkBoxHandler()});
+    $("#db").on("change", function(){chkBoxHandler()});
+    $("#cote").on("change", function(){chkBoxHandler()});
+  });
+
+  // 표시할 재생목록 타입을 변경하고 시작페이지를 1로 설정한다
+  function changePlayList(plType){
+    sessionStorage.setItem(SESSION_KEY_PL_TYPE, plType); // 현재 선택되어 있는 재생목록 타입을 기억하지 위해 저장하는 키값: 모든 재생목록, 오늘 추가된 재생목록... 같은 타입
+    console.log("plType : "+plType);
+    console.log("plType type : "+ typeof(plType));
+    // TODO 하드코딩을 수정하자
+    switch (plType){
+      case 1:
+        $("#li-all").addClass("active");
+        $("#li-today").removeClass("active");
+        $("#li-week").removeClass("active");
+        $("#li-month").removeClass("active");
+        break;
+      case 2:
+        $("#li-all").removeClass("active");
+        $("#li-today").addClass("active");
+        $("#li-week").removeClass("active");
+        $("#li-month").removeClass("active");
+        break;
+      case 3:
+        $("#li-all").removeClass("active");
+        $("#li-today").removeClass("active");
+        $("#li-week").addClass("active");
+        $("#li-month").removeClass("active");
+        break;
+      case 4:
+        $("#li-all").removeClass("active");
+        $("#li-today").removeClass("active");
+        $("#li-week").removeClass("active");
+        $("#li-month").addClass("active");
+        break;
+      default: break;
+    }
+
+    // ajax 호출로 재생목록리스트 갱신
+    refreshAdminPlaylist(1); // 시작페이지를 1로 시작
+  }
+
+  // 재생목록 리스트와 페이징 요소를 업데이트한다.
+  function refreshAdminPlaylist(paramPageNum){
+    let paramPlType = sessionStorage.getItem(SESSION_KEY_PL_TYPE);
+    let arrLic = new Array();
+    if($("#junbogisa").is(":checked")){
+      arrLic.push(1);
+    }
+    if($("#junbosangisa").is(":checked")){
+      arrLic.push(2);
+    }
+    if($("#junboginueng").is(":checked")){
+      arrLic.push(3);
+    }
+    let arrSub = new Array();
+    if($("#java").is(":checked")){
+      arrSub.push(1);
+    }
+    if($("#js").is(":checked")){
+      arrSub.push(2);
+    }
+    if($("#springfw").is(":checked")){
+      arrSub.push(3);
+    }
+    if($("#sql").is(":checked")){
+      arrSub.push(4);
+    }
+    if($("#db").is(":checked")){
+      arrSub.push(5);
+    }
+    if($("#cote").is(":checked")){
+      arrSub.push(6);
+    }
+    $.ajax({
+      type:"post",
+      url:"/admin/admin-playlist-template",
+      traditional:true,
+      data:{
+        plType:paramPlType,
+        pageNum:paramPageNum,
+        licenseIds:arrLic,
+        subjectIds:arrSub
+      },
+      dataType:"text",
+      success:function (result){
+        let html = jQuery('<div>').html(result);
+        let playlist = html.find("div#playlist-template").html();
+        $("#div-playlist").html(playlist);
+      },
+      error:function(err){
+        alert("재생목록 조회에 실패하였습니다.");
+      }
+    })
+  }
+
+  function chkBoxHandler() {
+    // 검색조건 체크박스가 변경되면, 새로운조건이므로 무조건 1페이지 부터 시작한다
+    refreshAdminPlaylist(1);
+  }
 </script>
 </body>
 </html>

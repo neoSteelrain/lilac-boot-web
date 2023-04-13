@@ -1,4 +1,4 @@
-const logout = () => {
+function logout(){
     $.ajax({
         type:"post",
         url:"/member/logout",
@@ -11,7 +11,7 @@ const logout = () => {
     });
 }
 
-const validateString = (str) => {
+function validateString(str) {
 
     if (str === null) return false;
     if (typeof str === 'string' && str === '') return false;

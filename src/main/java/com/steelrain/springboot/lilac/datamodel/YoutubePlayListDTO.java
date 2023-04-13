@@ -11,6 +11,8 @@ public class YoutubePlayListDTO {
     private Long id;
     private String playlistId;
     private Long channelId;
+    private Integer licenseId;
+    private Integer subjectId;
     private String title;
     private Timestamp publishDate;
     private String thumbnailMedium;

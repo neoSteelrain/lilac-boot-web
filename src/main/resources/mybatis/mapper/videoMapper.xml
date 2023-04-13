@@ -35,16 +35,7 @@
         WHERE ref.id=#{lectureVideoId};
     </select>
 
-    <resultMap id="findPlayListByKeywordMap" type="YoutubePlayListDTO">
-        <id property="id" column="id" />
-        <result property="playlistId" column="playlist_id" />
-        <result property="channelId" column="channel_id" />
-        <result property="title" column="title" />
-        <result property="thumbnailMedium" column="thumbnail_medium" />
-        <result property="itemCount" column="item_count" />
-        <result property="channelTitle" column="channel_title" />
-    </resultMap>
-    <select id="findPlayListByKeyword" parameterType="map"  resultMap="findPlayListByKeywordMap">
+    <select id="findPlayListByKeyword" parameterType="map"  resultType="YoutubePlayListDTO">
         SELECT pl.id,playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,item_count,chn.title as channel_title
         FROM tbl_youtube_playlist pl INNER JOIN tbl_youtube_channel chn
                                                 ON pl.channel_id=chn.id

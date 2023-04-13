@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org" >
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<body>
+<div id="playlist-template">
+  <div class="single-item-list" th:each="item : ${plInfo.playlist}">
+    <div class="row align-items-center">
+      <div class="col-lg-7 col-md-7 col-12">
+        <div class="item-image">
+          <img th:src="${item.thumbnailMedium}" alt="#">
+          <div class="content">
+            <h3 class="title"><a href="javascript:void(0)" th:text="${item.title}"></a></h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-2 col-12">
+        <p th:text="${item.itemCount}"></p>
+      </div>
+      <div class="col-lg-2 col-md-2 col-12">
+        <p th:text="${item.regDate}"></p>
+      </div>
+      <div class="col-lg-1 col-md-1 col-12 align-right">
+        <ul class="action-btn">
+          <li><a href="javascript:void(0)"><i class="lni lni-plus"></i></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- th:href="|javascript:refreshPlayList('${searchResult.requestKeywordCode}','${searchResult.searchKeyword}','${page-1}','${searchResult.requestKeywordType}')|" -->
+  <th:block th:if="${plInfo.playlist.size() > 0}">
+    <div class="pagination left" th:with="page=${plInfo.pageDTO.page}">
+      <ul class="pagination-list">
+        <li><a th:if="${page <= 1}"><i class="lni lni-chevron-left"></i></a></li>
+        <li><a th:unless="${page <= 1}" th:href="|javascript:refreshAdminPlaylist('${page-1}')|"><i class="lni lni-chevron-left"></i></a></li>
+        <th:block th:each="idx : ${#numbers.sequence(plInfo.pageDTO.startPage, plInfo.pageDTO.endPage)}">
+          <li th:if="${idx == page}" class="active"><a th:href="|javascript:refreshAdminPlaylist('${idx}')|" th:text="${idx}"></a></li>
+          <li th:unless="${idx == page}"><a th:href="|javascript:refreshAdminPlaylist('${idx}')|" th:text="${idx}"></a></li>
+        </th:block>
+        <li><a th:if="${page >= plInfo.pageDTO.maxPage}"><i class="lni lni-chevron-right"></i></a></li>
+        <li><a th:unless="${page >= plInfo.pageDTO.maxPage}" th:href="|javascript:refreshAdminPlaylist('${page+1}')|" ><i class="lni lni-chevron-right"></i></a></li>
+      </ul>
+    </div>
+  </th:block>
+</div>
+</body>
+</html>
