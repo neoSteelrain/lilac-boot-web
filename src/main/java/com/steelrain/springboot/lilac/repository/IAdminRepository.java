@@ -55,11 +55,13 @@ public interface IAdminRepository {
 
     void deleteAllRecommendPlayList();
 
-    void deleteAllCandiRecommendPlayList();
-
     List<AdminYoutubePlayListDTO> findRecommendPlayList();
 
     List<Long> findCandidateIdList();
 
     List<Long> findRecommendIdList();
+
+    void deleteFinalCandiPlayList(List<Long> plList);
+
+    void removeRecommendPlayList(Long playListId);
 }

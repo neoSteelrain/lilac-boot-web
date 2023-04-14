@@ -1,6 +1,7 @@
 package com.steelrain.springboot.lilac.service;
 
 import com.steelrain.springboot.lilac.datamodel.AdminPlayListSearchResultDTO;
+import com.steelrain.springboot.lilac.datamodel.AdminYoutubePlayListDTO;
 import com.steelrain.springboot.lilac.datamodel.YoutubePlayListDTO;
 
 import java.util.List;
@@ -30,4 +31,8 @@ public interface IAdminService {
     AdminPlayListSearchResultDTO removeCandiPlayList(Long playlistId);
 
     AdminPlayListSearchResultDTO updateRecommendPlayList(List<Long> plList);
+
+    AdminPlayListSearchResultDTO getRecommendPlayList();
+
+    AdminPlayListSearchResultDTO removeRecommendPlayList(Long playListId);
 }

@@ -253,13 +253,13 @@ public class AdminService implements IAdminService {
         return m_adminRepository.findMonthPlayListCount();
     }
 
-    @Transactional
     @Override
+    @Transactional
     public boolean addCandiPlayList(Long playListId) {
         return m_adminRepository.addCandiPlayList(playListId) > 0;
     }
 
-    // 추천재생목록 후보 목록을 가져온다
+    // 추천재생목록 후보목록을 가져온다
     @Override
     public AdminPlayListSearchResultDTO getCandiPlayList() {
         return AdminPlayListSearchResultDTO.builder()
@@ -267,7 +267,22 @@ public class AdminService implements IAdminService {
                 .build();
     }
 
-    // 추천재생목록 후보를 삭제한 다음, 후보 목록을 가져온다
+    @Override
+    public AdminPlayListSearchResultDTO getRecommendPlayList() {
+        return AdminPlayListSearchResultDTO.builder()
+                .playlist(m_adminRepository.findRecommendPlayList())
+                .build();
+    }
+
+    @Override
+    public AdminPlayListSearchResultDTO removeRecommendPlayList(Long playListId) {
+        m_adminRepository.removeRecommendPlayList(playListId);
+        return AdminPlayListSearchResultDTO.builder()
+                .playlist(m_adminRepository.findRecommendPlayList())
+                .build();
+    }
+
+    // 추천재생목록 후보를 삭제한 다음, 추천후보목록을 가져온다
     @Override
     @Transactional
     public AdminPlayListSearchResultDTO removeCandiPlayList(Long playlistId) {
@@ -277,17 +292,21 @@ public class AdminService implements IAdminService {
                 .build();
     }
 
+    /*
+        - 파라미터로 넘어온 추천재생목록 후보목록을 추천후보목록 테이블에서 삭제
+        - 추천재생목록후보를 추천재생목록에 업데이트
+        - 추천재생목록 목록을 반환
+     */
     @Override
+    @Transactional
     public AdminPlayListSearchResultDTO updateRecommendPlayList(List<Long> plList) {
-        /*
-            - 현재 추천재생목록을 전부 삭제
-            - 추천재생목록후보를 추천재생목록에 업데이트
-            - 추천재생목록후보 목록을 전부삭제
-            - 추천재생목록 목록을 반환
-         */
+        // 파라미터로 넘어온 추천재생목록 후보목록을 추천후보목록 테이블에서 삭제
+        m_adminRepository.deleteFinalCandiPlayList(plList);
+        // 추천재생목록 테이블 초기화
         m_adminRepository.deleteAllRecommendPlayList();
+        // 추천재생목록후보를 추천재생목록에 업데이트
         m_adminRepository.insertRecommendedPlayList(plList);
-        m_adminRepository.deleteAllCandiRecommendPlayList();
+        // 추천재생목록 목록을 반환
         List<AdminYoutubePlayListDTO> pl = m_adminRepository.findRecommendPlayList();
         return AdminPlayListSearchResultDTO.builder()
                 .playlist(pl)

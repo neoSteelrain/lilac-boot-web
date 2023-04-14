@@ -131,13 +131,13 @@ public class AdminRepository implements IAdminRepository {
     }
 
     @Override
-    public void deleteAllRecommendPlayList() {
-        m_adminMapper.deleteAllRecommendPlayList();
+    public void removeRecommendPlayList(Long playListId) {
+        m_adminMapper.removeRecommendPlayList(playListId);
     }
 
     @Override
-    public void deleteAllCandiRecommendPlayList() {
-        m_adminMapper.deleteAllCandiRecommendPlayList();
+    public void deleteAllRecommendPlayList() {
+        m_adminMapper.deleteAllRecommendPlayList();
     }
 
     @Override
@@ -153,5 +153,10 @@ public class AdminRepository implements IAdminRepository {
     @Override
     public List<Long> findRecommendIdList() {
         return m_adminMapper.findRecommendIdList();
+    }
+
+    @Override
+    public void deleteFinalCandiPlayList(List<Long> plList) {
+        m_adminMapper.deleteFinalCandiPlayList(plList);
     }
 }

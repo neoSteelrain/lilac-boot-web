@@ -214,4 +214,12 @@
         FROM tbl_recommended_playlist rp INNER JOIN tbl_youtube_playlist pl
             ON rp.youtube_playlist_id=pl.id
     </select>
+
+    <delete id="deleteFinalCandiPlayList" parameterType="list">
+        DELETE FROM tbl_candi_recommend_playlist
+        WHERE youtube_playlist_id IN (
+            <foreach collection="plList" item="item" separator=",">
+                #{item}
+            </foreach>)
+    </delete>
 </mapper>

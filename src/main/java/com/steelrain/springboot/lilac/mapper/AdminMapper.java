@@ -57,9 +57,6 @@ public interface AdminMapper {
     @Delete("DELETE FROM tbl_recommended_playlist")
     void deleteAllRecommendPlayList();
 
-    @Delete("DELETE FROM tbl_candi_recommend_playlist")
-    void deleteAllCandiRecommendPlayList();
-
     List<AdminYoutubePlayListDTO> findRecommendPlayList();
 
     @Select("SELECT youtube_playlist_id FROM tbl_candi_recommend_playlist")
@@ -67,4 +64,9 @@ public interface AdminMapper {
 
     @Select("SELECT youtube_playlist_id FROM tbl_recommended_playlist")
     List<Long> findRecommendIdList();
+
+    void deleteFinalCandiPlayList(@Param("plList")List<Long> plList);
+
+    @Delete("DELETE FROM tbl_recommended_playlist WHERE youtube_playlist_id=#{playlistId}")
+    void removeRecommendPlayList(Long playListId);
 }

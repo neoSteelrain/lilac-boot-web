@@ -2,7 +2,6 @@ package com.steelrain.springboot.lilac.controller;
 
 import com.steelrain.springboot.lilac.datamodel.AdminPlayListRequest;
 import com.steelrain.springboot.lilac.datamodel.AdminPlayListSearchResultDTO;
-import com.steelrain.springboot.lilac.datamodel.YoutubePlayListDTO;
 import com.steelrain.springboot.lilac.service.IAdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -79,7 +78,19 @@ public class AdminController {
 
     @PostMapping("/update-recommend-pl")
     public String udpateRecommendPlayList(@RequestParam(value="cplArray[]") List<Long> cplList, Model model){
-        // model.addAttribute("cpl", m_adminService.updateRecommendPlayList(cplList));
+        model.addAttribute("rpl", m_adminService.updateRecommendPlayList(cplList));
+        return "admin/recommend-pl-template";
+    }
+
+    @GetMapping("/recommend-pl")
+    public String recommendPlayListTemplate(Model model){
+        model.addAttribute("rpl", m_adminService.getRecommendPlayList());
+        return "admin/recommend-pl-template";
+    }
+
+    @PostMapping("/remove-recommend-pl")
+    public String removeRecommendPlayList(@RequestParam("plId")Long playListId, Model model){
+        model.addAttribute("rpl", m_adminService.removeRecommendPlayList(playListId));
         return "admin/recommend-pl-template";
     }
     /*
