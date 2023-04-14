@@ -12,7 +12,7 @@ import lombok.Setter;
 @Builder
 public class VideoPlayListSearchEvent {
 
-    private String keyword;
+    protected String keyword;
     private int keywordCode;
     private int pageNum;
     private int playlistCount;

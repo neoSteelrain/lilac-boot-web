@@ -10,5 +10,5 @@ import java.util.List;
 @Builder
 public class AdminPlayListSearchResultDTO {
     private PageDTO pageDTO;
-    private List<YoutubePlayListDTO> playlist;
+    private List<AdminYoutubePlayListDTO> playlist;
 }

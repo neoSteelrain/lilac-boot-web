@@ -4,18 +4,18 @@
 <mapper namespace="com.steelrain.springboot.lilac.mapper.AdminMapper">
     <insert id="insertRecommendedPlayList" parameterType="Long">
         INSERT INTO tbl_recommended_playlist(youtube_playlist_id) VALUES
-        <foreach collection="list" item="item" separator=",">
+        <foreach collection="plIdList" item="item" separator=",">
         (#{item})
         </foreach>
     </insert>
 
-    <select id="findAllPlayList" parameterType="map" resultType="YoutubePlayListDTO">
+    <select id="findAllPlayList" parameterType="map" resultType="AdminYoutubePlayListDTO">
         SELECT id,playlist_id,channel_id,license_id,subject_id,title,thumbnail_medium,item_count,reg_date
         FROM tbl_youtube_playlist
         ORDER BY reg_date DESC LIMIT #{pageNum}, #{pageCount};
     </select>
 
-    <select id="findPlayListByRange" parameterType="map" resultType="YoutubePlayListDTO">
+    <select id="findPlayListByRange" parameterType="map" resultType="AdminYoutubePlayListDTO">
         SELECT id,playlist_id,channel_id,license_id,subject_id,title,thumbnail_medium,item_count,reg_date
         FROM tbl_youtube_playlist
         <![CDATA[WHERE reg_date > #{start} AND reg_date <= #{end}]]>
@@ -32,7 +32,7 @@
         </foreach>)
     </select>
 
-    <select id="findTotalLicPlayList" parameterType="map" resultType="YoutubePlayListDTO">
+    <select id="findTotalLicPlayList" parameterType="map" resultType="AdminYoutubePlayListDTO">
         SELECT pl.id,pl.playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,pl.item_count,pl.reg_date
         FROM tbl_youtube_playlist pl INNER JOIN tbl_license lic
             ON pl.license_id = lic.id
@@ -52,7 +52,7 @@
         </foreach>)
     </select>
 
-    <select id="findTotalSubPlayList" parameterType="map" resultType="YoutubePlayListDTO">
+    <select id="findTotalSubPlayList" parameterType="map" resultType="AdminYoutubePlayListDTO">
         SELECT pl.id,pl.playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,pl.item_count,pl.reg_date
         FROM tbl_youtube_playlist pl INNER JOIN tbl_subject sub
             ON pl.subject_id = sub.id
@@ -81,7 +81,7 @@
             </foreach>)) as tmp
     </select>
 
-    <select id="findTotalLicSubPlayList" parameterType="map" resultType="YoutubePlayListDTO">
+    <select id="findTotalLicSubPlayList" parameterType="map" resultType="AdminYoutubePlayListDTO">
         SELECT tmp.id,tmp.playlist_id,tmp.channel_id,tmp.title,tmp.thumbnail_medium,tmp.item_count,tmp.reg_date
         FROM (
              SELECT pl.id,pl.playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,pl.item_count,pl.reg_date
@@ -112,7 +112,7 @@
                 </foreach>)
     </select>
 
-    <select id="findLicPlByRange" parameterType="map" resultType="YoutubePlayListDTO">
+    <select id="findLicPlByRange" parameterType="map" resultType="AdminYoutubePlayListDTO">
         SELECT id,playlist_id,channel_id,license_id,subject_id,title,thumbnail_medium,item_count,reg_date
         FROM tbl_youtube_playlist
         <![CDATA[WHERE reg_date > #{fromDate} AND reg_date <= #{toDate}]]>
@@ -123,7 +123,7 @@
         ORDER BY reg_date DESC LIMIT #{pageNum}, #{pageCount}
     </select>
 
-    <select id="findSubPlByRange" parameterType="map" resultType="YoutubePlayListDTO">
+    <select id="findSubPlByRange" parameterType="map" resultType="AdminYoutubePlayListDTO">
         SELECT id,playlist_id,channel_id,license_id,subject_id,title,thumbnail_medium,item_count,reg_date
         FROM tbl_youtube_playlist
         <![CDATA[WHERE reg_date > #{fromDate} AND reg_date <= #{toDate}]]>
@@ -134,7 +134,7 @@
         ORDER BY reg_date DESC LIMIT #{pageNum}, #{pageCount}
     </select>
 
-    <select id="findLicSubPlByRange" parameterType="map" resultType="YoutubePlayListDTO">
+    <select id="findLicSubPlByRange" parameterType="map" resultType="AdminYoutubePlayListDTO">
         SELECT tmp.id,tmp.playlist_id,tmp.channel_id,tmp.title,tmp.thumbnail_medium,tmp.item_count,tmp.reg_date
         FROM (
             SELECT pl.id,pl.playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,pl.item_count,pl.reg_date
@@ -197,5 +197,21 @@
             <foreach collection="subjectIds" item="item" index="index" separator=",">
                 #{item}
             </foreach>)
+    </select>
+
+    <insert id="addCandiPlayList" parameterType="long">
+        INSERT INTO tbl_candi_recommend_playlist(youtube_playlist_id) VALUE (#{playListId})
+    </insert>
+
+    <select id="findCandiPlayList" resultType="AdminYoutubePlayListDTO">
+        SELECT pl.id,pl.playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,pl.item_count,pl.reg_date
+        FROM tbl_candi_recommend_playlist cpl INNER JOIN tbl_youtube_playlist pl
+            ON cpl.youtube_playlist_id=pl.id
+    </select>
+
+    <select id="findRecommendPlayList" resultType="AdminYoutubePlayListDTO">
+        SELECT pl.id,pl.playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,pl.item_count,pl.reg_date
+        FROM tbl_recommended_playlist rp INNER JOIN tbl_youtube_playlist pl
+            ON rp.youtube_playlist_id=pl.id
     </select>
 </mapper>

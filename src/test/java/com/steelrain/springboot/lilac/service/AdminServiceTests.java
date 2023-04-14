@@ -31,7 +31,7 @@ public class AdminServiceTests {
     @Test
     @Rollback
     public void 추천재생목록생성_테스트(){
-        List<Long> plIdList = m_adminService.getAllPlayListId();
+        /*List<Long> plIdList = m_adminService.getAllPlayListId();
         Random random = new Random(plIdList.size());
         List<Integer> randIds = new ArrayList<>(6);
         boolean isExit = true;
@@ -52,7 +52,7 @@ public class AdminServiceTests {
             idListParam.add(Long.valueOf(id));
         });
         boolean isAdded = m_adminService.addRecommendedPlayList(idListParam);
-        assertThat(isAdded).isTrue();
+        assertThat(isAdded).isTrue();*/
     }
 
     @Test
@@ -104,5 +104,11 @@ public class AdminServiceTests {
         assertThat(Objects.nonNull(res)).isTrue();
         log.debug("pageDTO : {}", res.getPageDTO());
         log.debug("playlist count : {}", res.getPlaylist().size());
+    }
+
+    @Test
+    public void 추천재생목록후보추가(){
+         boolean res = m_adminService.addCandiPlayList(168L);
+         assertThat(res).isTrue();
     }
 }

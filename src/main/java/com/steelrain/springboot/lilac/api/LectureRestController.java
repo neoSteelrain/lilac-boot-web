@@ -3,10 +3,12 @@ package com.steelrain.springboot.lilac.api;
 import com.steelrain.springboot.lilac.common.SESSION_KEY;
 import com.steelrain.springboot.lilac.datamodel.LectureNoteDTO;
 import com.steelrain.springboot.lilac.datamodel.MemberDTO;
+import com.steelrain.springboot.lilac.datamodel.rest.BaseRestAPIResponse;
 import com.steelrain.springboot.lilac.exception.LectureNoteException;
 import com.steelrain.springboot.lilac.exception.ValidationErrorException;
 import com.steelrain.springboot.lilac.service.ILectureNoteService;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.http.HttpStatus;
@@ -135,12 +137,8 @@ public class LectureRestController {
 
     @Getter
     @ToString
-    @Builder
-    static class BookAddResponse{
-        private Object requestParameter;
-        private int code;
-        private String message;
-        private String status;
+    @SuperBuilder
+    static class BookAddResponse extends BaseRestAPIResponse {
     }
 
     @Getter
@@ -151,12 +149,8 @@ public class LectureRestController {
 
     @Getter
     @ToString
-    @Builder
-    static class YoutubePlayListAddResponse{
-        private Object requestParameter;
-        private int code;
-        private String message;
-        private String status;
+    @SuperBuilder
+    static class YoutubePlayListAddResponse extends BaseRestAPIResponse{
     }
 
     @Getter
@@ -184,12 +178,8 @@ public class LectureRestController {
 
     @Getter
     @ToString
-    @Builder
-    static class LectureAddResponse{
-        private Object requestParameter;
-        private int code;
-        private String message;
-        private String status;
+    @SuperBuilder
+    static class LectureAddResponse extends BaseRestAPIResponse{
     }
 
     /*

@@ -1,20 +1,19 @@
 package com.steelrain.springboot.lilac.mapper;
 
+import com.steelrain.springboot.lilac.datamodel.AdminYoutubePlayListDTO;
 import com.steelrain.springboot.lilac.datamodel.YoutubePlayListDTO;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
 @Mapper
 public interface AdminMapper {
-    int insertRecommendedPlayList(List<Long> videoIdList);
+    int insertRecommendedPlayList(@Param("plIdList") List<Long> plIdList);
 
     @Select("SELECT id FROM tbl_youtube_playlist")
     List<Long> selectAllPlayListLId();
 
-    List<YoutubePlayListDTO> findAllPlayList(@Param("pageNum") int pageNum, @Param("pageCount") int pageCount);
+    List<AdminYoutubePlayListDTO> findAllPlayList(@Param("pageNum") int pageNum, @Param("pageCount") int pageCount);
 
     @Select("SELECT count(id) FROM tbl_youtube_playlist")
     int findTotalPlayListCnt();
@@ -22,31 +21,50 @@ public interface AdminMapper {
     @Select("SELECT count(id) FROM tbl_youtube_playlist WHERE reg_date > #{fromDate} AND reg_date <= #{toDate}")
     int findPlayListCount(@Param("fromDate")String fromDate, @Param("toDate")String toDate);
 
-    List<YoutubePlayListDTO> findPlayListByRange(@Param("start") String start, @Param("end") String end, @Param("pageNum") int pageNum, @Param("pageCount") int pageCount);
+    List<AdminYoutubePlayListDTO> findPlayListByRange(@Param("start") String start, @Param("end") String end, @Param("pageNum") int pageNum, @Param("pageCount") int pageCount);
 
-    int findTotalLicPlCount(int[] licenseIds);
+    int findTotalLicPlCount(@Param("licenseIds") int[] licenseIds);
 
-    List<YoutubePlayListDTO> findTotalLicPlayList(int[] licenseIds, int pageNum, int pageCount);
+    List<AdminYoutubePlayListDTO> findTotalLicPlayList(@Param("licenseIds") int[] licenseIds,@Param("pageNum") int pageNum,@Param("pageCount") int pageCount);
 
-    int findTotalSubPlCount(int[] subjectIds);
+    int findTotalSubPlCount(@Param("subjectIds") int[] subjectIds);
 
-    List<YoutubePlayListDTO> findTotalSubPlayList(int[] subjectIds, int pageNum, int pageCount);
+    List<AdminYoutubePlayListDTO> findTotalSubPlayList(@Param("subjectIds") int[] subjectIds,@Param("pageNum") int pageNum,@Param("pageCount") int pageCount);
 
-    int findTotalLicSubCount(int[] licenseIds, int[] subjectIds);
+    int findTotalLicSubCount(@Param("licenseIds") int[] licenseIds, @Param("subjectIds") int[] subjectIds);
 
-    List<YoutubePlayListDTO> findTotalLicSubPlayList(int[] licenseIds, int[] subjectIds, int pageNum, int pageCount);
+    List<AdminYoutubePlayListDTO> findTotalLicSubPlayList(@Param("licenseIds") int[] licenseIds,@Param("subjectIds") int[] subjectIds,@Param("pageNum") int pageNum,@Param("pageCount") int pageCount);
 
-    int findTodayLicPlCount(int[] licenseIds);
-
-    List<YoutubePlayListDTO> findLicPlByRange(@Param("licenseIds") int[] licenseIds,@Param("fromDate") String fromDate,@Param("toDate") String toDate,@Param("pageNum") int pageNum,@Param("pageCount") int pageCount);
+    List<AdminYoutubePlayListDTO> findLicPlByRange(@Param("licenseIds") int[] licenseIds,@Param("fromDate") String fromDate,@Param("toDate") String toDate,@Param("pageNum") int pageNum,@Param("pageCount") int pageCount);
 
     int findLicPlCountByRange(@Param("licenseIds")int[] licenseIds,@Param("fromDate") String fromDate,@Param("toDate") String toDate);
 
     int findSubPlCountByRange(@Param("subjectIds") int[] subjectIds,@Param("fromDate") String fromDate,@Param("toDate") String toDate);
 
-    List<YoutubePlayListDTO> findSubPlByRange(@Param("subjectIds")int[] subjectIds,@Param("fromDate") String fromDate,@Param("toDate") String toDate,@Param("pageNum") int pageNum,@Param("pageCount") int pageCount);
+    List<AdminYoutubePlayListDTO> findSubPlByRange(@Param("subjectIds")int[] subjectIds,@Param("fromDate") String fromDate,@Param("toDate") String toDate,@Param("pageNum") int pageNum,@Param("pageCount") int pageCount);
 
     int findTotalLicSubPlCountByRange(@Param("licenseIds")int[] licenseIds, @Param("subjectIds") int[] subjectIds, @Param("fromDate") String fromDate, @Param("toDate") String toDate);
 
-    List<YoutubePlayListDTO> findLicSubPlByRange(@Param("licenseIds")int[] licenseIds,@Param("subjectIds") int[] subjectIds,@Param("fromDate") String fromDate,@Param("toDate") String toDate,@Param("pageNum") int pageNum,@Param("pageCount") int pageCount);
+    List<AdminYoutubePlayListDTO> findLicSubPlByRange(@Param("licenseIds")int[] licenseIds,@Param("subjectIds") int[] subjectIds,@Param("fromDate") String fromDate,@Param("toDate") String toDate,@Param("pageNum") int pageNum,@Param("pageCount") int pageCount);
+
+    int addCandiPlayList(@Param("playListId")Long playListId);
+
+    List<AdminYoutubePlayListDTO> findCandiPlayList();
+
+    @Delete("DELETE FROM tbl_candi_recommend_playlist WHERE youtube_playlist_id=#{playlistId}")
+    void removeCandiPlayList(@Param("playlistId") Long playlistId);
+
+    @Delete("DELETE FROM tbl_recommended_playlist")
+    void deleteAllRecommendPlayList();
+
+    @Delete("DELETE FROM tbl_candi_recommend_playlist")
+    void deleteAllCandiRecommendPlayList();
+
+    List<AdminYoutubePlayListDTO> findRecommendPlayList();
+
+    @Select("SELECT youtube_playlist_id FROM tbl_candi_recommend_playlist")
+    List<Long> findCandidateIdList();
+
+    @Select("SELECT youtube_playlist_id FROM tbl_recommended_playlist")
+    List<Long> findRecommendIdList();
 }

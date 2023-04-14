@@ -2,13 +2,18 @@ package com.steelrain.springboot.lilac.controller;
 
 import com.steelrain.springboot.lilac.datamodel.AdminPlayListRequest;
 import com.steelrain.springboot.lilac.datamodel.AdminPlayListSearchResultDTO;
+import com.steelrain.springboot.lilac.datamodel.YoutubePlayListDTO;
 import com.steelrain.springboot.lilac.service.IAdminService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
+
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin")
@@ -60,6 +65,23 @@ public class AdminController {
         return "admin/playlist-template";
     }
 
+    @GetMapping("/candi-pl")
+    public String candiPlayListTemplate(Model model){
+        model.addAttribute("cpl", m_adminService.getCandiPlayList());
+        return "admin/candi-pl-template";
+    }
+
+    @PostMapping("/remove-candi-pl")
+    public String removeCandiPlayList(@RequestParam("plId") Long playlistId, Model model){
+        model.addAttribute("cpl", m_adminService.removeCandiPlayList(playlistId));
+        return "admin/candi-pl-template";
+    }
+
+    @PostMapping("/update-recommend-pl")
+    public String udpateRecommendPlayList(@RequestParam(value="cplArray[]") List<Long> cplList, Model model){
+        // model.addAttribute("cpl", m_adminService.updateRecommendPlayList(cplList));
+        return "admin/recommend-pl-template";
+    }
     /*
         - 프런트에서 jQuery ajax로 licenseIds, subjectIds 배열을 넘길때 null 로 설정해서 보냈을때
           컨트롤러에서 null 로 받지않고 길이가 0 인 int 배열로 받아진다.

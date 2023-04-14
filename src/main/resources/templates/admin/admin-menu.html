@@ -124,24 +124,31 @@
               <div class="post-ad-tab">
                 <nav>
                   <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <button class="nav-link active" id="nav-item-info-tab" data-bs-toggle="tab"
+                    <button class="nav-link active" id="nav-item-pl-tab" data-bs-toggle="tab"
                             data-bs-target="#nav-item-info" type="button" role="tab"
                             aria-controls="nav-item-info" aria-selected="true">
                       <span class="serial">01</span>
-                      추전재생목록 편집
-                      <span class="sub-title">재생목록 선택</span>
+                      재생목록 보기
+                      <span class="sub-title">추천목록을 선택하세요</span>
                     </button>
-                    <button class="nav-link" id="nav-item-details-tab" data-bs-toggle="tab"
+                    <button class="nav-link" id="nav-item-pl-candi-tab" data-bs-toggle="tab"
                             data-bs-target="#nav-item-details" type="button" role="tab"
                             aria-controls="nav-item-details" aria-selected="false">
                       <span class="serial">02</span>
-                      추천재생목록 보기
-                      <span class="sub-title">편집완료된 목록</span>
+                      재생목록 선택
+                      <span class="sub-title">8개를 선택하세요</span>
+                    </button>
+                    <button class="nav-link" id="nav-user-pl-comp-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-user-info" type="button" role="tab"
+                            aria-controls="nav-user-info" aria-selected="false">
+                      <span class="serial">03</span>
+                      재생목록 선정완료
+                      <span class="sub-title"></span>
                     </button>
                   </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
-                  <div class="tab-pane fade show active" id="nav-item-info" role="tabpanel" aria-labelledby="nav-item-info-tab">
+                  <div class="tab-pane fade show active" id="nav-item-info" role="tabpanel" aria-labelledby="nav-item-pl-tab">
                     <div class="step-one-content">
                       <form class="default-form-style" method="post" action="#">
                         <nav class="list-nav">
@@ -153,12 +160,6 @@
                             <li><a href="javascript:void(0)">많이 추천된 재생목록 </a></li>
                             <li><a href="javascript:void(0)">가장 많이본 재생목록 </a></li>
                             <li><a href="javascript:void(0)">가장 적게본 재생목록 </a></li>
-                          </ul>
-                        </nav>
-                        <nav class="list-nav">
-                          <ul>
-                            <li>선택된 재생목록 개수 : 0/8 </li>
-                            <li><a href="javascript:void(0)"><i class="lni lni-alarm"></i> 편집완료 </a></li>
                           </ul>
                         </nav>
                         <div class="my-items">
@@ -184,9 +185,47 @@
                       </form>
                     </div>
                   </div>
-                  <!-- 재생목록 보기 -->
-                  <div class="tab-pane fade" id="nav-item-details" role="tabpanel" aria-labelledby="nav-item-details-tab">
+                  <!-- 추천재생목록 후보목록 -->
+                  <div class="tab-pane fade" id="nav-item-details" role="tabpanel" aria-labelledby="nav-item-pl-candi-tab">
                     <div class="step-two-content">
+                      <form class="default-form-style" method="post" action="#">
+                        <nav class="list-nav">
+                          <ul>
+                            <li><label>선택된 재생목록 개수 :</label><label id="lbl-selected-cpl">0/8</label></li>
+                            <li><a href="javascript:saveSelectedCpl()"><i class="lni lni-alarm"></i> 편집완료 </a></li>
+                          </ul>
+                        </nav>
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="my-items">
+                              <div class="item-list-title">
+                                <div class="row align-items-center">
+                                  <div class="col-lg-7 col-md-7 col-12">
+                                    <p>제목</p>
+                                  </div>
+                                  <div class="col-lg-2 col-md-2 col-12">
+                                    <p>영상개수</p>
+                                  </div>
+                                  <div class="col-lg-2 col-md-2 col-12">
+                                    <p>총 재생시간</p>
+                                  </div>
+                                  <div class="col-lg-1 col-md-1 col-12 align-right">
+                                    <p>선택</p>
+                                  </div>
+                                </div>
+                              </div>
+                              <div id="div-cpl-template">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="nav-user-info" role="tabpanel"
+                       aria-labelledby="nav-user-pl-comp-tab">
+                    <!-- Start Post Ad Step Three Content -->
+                    <div class="step-three-content">
                       <form class="default-form-style" method="post" action="#">
                         <div class="row">
                           <div class="col-12">
@@ -200,49 +239,21 @@
                                     <p>영상개수</p>
                                   </div>
                                   <div class="col-lg-2 col-md-2 col-12">
-                                    <p>등록일</p>
+                                    <p>총 재생시간</p>
                                   </div>
                                   <div class="col-lg-1 col-md-1 col-12 align-right">
                                     <p>삭제</p>
                                   </div>
                                 </div>
                               </div>
-                              <!-- 재생목록 리스트 시작 -->
-                              <div class="single-item-list">
-                                <div class="row align-items-center">
-                                  <div class="col-lg-7 col-md-7 col-12">
-                                    <div class="item-image">
-                                      <img src="https://via.placeholder.com/100x100" alt="#">
-                                      <div class="content">
-                                        <h3 class="title"><a href="|javascript:void(0)|" >제목</a>
-                                        </h3>
-                                        <span class="price">채널명</span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="col-lg-2 col-md-2 col-12">
-                                    <p>10</p>
-                                  </div>
-                                  <div class="col-lg-2 col-md-2 col-12">
-                                    <p>--</p>
-                                  </div>
-                                  <div class="col-lg-1 col-md-1 col-12 align-right">
-                                    <ul class="action-btn">
-                                      <!--<li><a
-                                              th:href="|javascript:removeBook('${bookInfo.lecBookId}', '${noteDetail.noteId}')|"><i
-                                              class="lni lni-trash"></i></a>
-                                      </li>-->
-                                      <li><a href="javascript:void(0)"><i class="lni lni-trash"></i></a></li>
-                                    </ul>
-                                  </div>
-                                </div>
+                              <div id="div-rpl-template">
                               </div>
-                              <!-- 재생목록 리스트 끝 -->
                             </div>
                           </div>
                         </div>
                       </form>
                     </div>
+                    <!-- Start Post Ad Step Three Content -->
                   </div>
                 </div>
               </div>
@@ -270,7 +281,15 @@
 <script th:src="@{/js/lilac-common.js}"></script>
 <script th:inline="javascript">
   const SESSION_KEY_PL_TYPE = "ss_pl_type";
-  const SESSION_KEY_KEYWORD_TYPE = "ss_keyword_type";
+  const SESSION_KET_PAGE_NUM = "ss_page_num";
+
+  $("#nav-item-pl-tab").on("click", function(){
+    showAdminPlaylist(null, "false");
+  });
+
+  $("#nav-item-pl-candi-tab").on("click", function (){
+    showCandiPlaylist();
+  });
 
   window.addEventListener("load", function (event){
     changePlayList(1); // 페이지의 첫시작은 모든재생목록으로 시작하기 위해 1을 준다
@@ -290,8 +309,6 @@
   // 표시할 재생목록 타입을 변경하고 시작페이지를 1로 설정한다
   function changePlayList(plType){
     sessionStorage.setItem(SESSION_KEY_PL_TYPE, plType); // 현재 선택되어 있는 재생목록 타입을 기억하지 위해 저장하는 키값: 모든 재생목록, 오늘 추가된 재생목록... 같은 타입
-    console.log("plType : "+plType);
-    console.log("plType type : "+ typeof(plType));
     // TODO 하드코딩을 수정하자
     switch (plType){
       case 1:
@@ -320,13 +337,17 @@
         break;
       default: break;
     }
-
     // ajax 호출로 재생목록리스트 갱신
-    refreshAdminPlaylist(1); // 시작페이지를 1로 시작
+    sessionStorage.setItem(SESSION_KET_PAGE_NUM, "1");
+    showAdminPlaylist(null, "false"); // 시작페이지를 1로 시작
   }
 
   // 재생목록 리스트와 페이징 요소를 업데이트한다.
-  function refreshAdminPlaylist(paramPageNum){
+  function showAdminPlaylist(paramPageNum, isPaging){
+    if(isPaging != undefined && isPaging == "false"){
+      paramPageNum = sessionStorage.getItem(SESSION_KET_PAGE_NUM);
+    }
+    sessionStorage.setItem(SESSION_KET_PAGE_NUM, paramPageNum);
     let paramPlType = sessionStorage.getItem(SESSION_KEY_PL_TYPE);
     let arrLic = new Array();
     if($("#junbogisa").is(":checked")){
@@ -369,7 +390,7 @@
       },
       dataType:"text",
       success:function (result){
-        let html = jQuery('<div>').html(result);
+        let html = jQuery("<div>").html(result);
         let playlist = html.find("div#playlist-template").html();
         $("#div-playlist").html(playlist);
       },
@@ -381,7 +402,95 @@
 
   function chkBoxHandler() {
     // 검색조건 체크박스가 변경되면, 새로운조건이므로 무조건 1페이지 부터 시작한다
-    refreshAdminPlaylist(1);
+    sessionStorage.setItem(SESSION_KET_PAGE_NUM, "1");
+    showAdminPlaylist(null, "false");
+  }
+
+  // 관리자가 선택한 추천재생목록 후보를 서버에 등록한다
+  function addPlayList(plId){
+    let param = {
+      "playListId": plId
+    }
+    $.ajax({
+      type:"post",
+      url:"/admin/api/add-pl",
+      headers:{"Content-Type":"application/json"},
+      data:JSON.stringify(param),
+      success:function(result){
+        alert("등록하였습니다.");
+        showAdminPlaylist(null, "false");
+      },
+      error:function(err){
+        alert("등록에 실패하였습니다.");
+      }
+    })
+  }
+
+  // 추천재생목록 후보에 추가한다
+  function showCandiPlaylist(){
+    $.ajax({
+      type:"get",
+      url:"/admin/candi-pl",
+      success:function(result){
+        let html = jQuery("<div>").html(result);
+        let playlist = html.find("div#cpl-template").html();
+        $("#div-cpl-template").html(playlist);
+      },
+      error:function(err){
+        alert("추천재생목록 후보목록을 불러오지 못했습니다.");
+      }
+    })
+  }
+
+  // 추천재생목록 후보에서 삭제한다
+  function removeCandiPlaylist(paramPlId){
+    $.ajax({
+      type:"post",
+      url:"/admin/remove-candi-pl",
+      data:{plId:paramPlId},
+      success:function(result){
+        let html = jQuery("<div>").html(result);
+        let playlist = html.find("div#cpl-template").html();
+        $("#div-cpl-template").html(playlist);
+      },
+      error:function(err){
+        alert("추천재생목록 후보을 삭제하지 못했습니다.");
+      }
+    })
+  }
+
+  // 추천재생목록 후보를 체크시 선택목록 개수를 업데이트한다
+  function updateSelectedCpl(chkbox){
+    let checkedCplCnt = $("input:checkbox[name=cpl-checkbox]:checked").length;
+    if(checkedCplCnt > 8){
+      chkbox.checked = false;
+      alert("재생목록은 8개 까지만 선택할 수 있습니다.");
+      return;
+    }
+    $("#lbl-selected-cpl").text(checkedCplCnt + "/8");
+  }
+
+  // 선택된 추천재생목록을 서버에 업데이트한다
+  function saveSelectedCpl(){
+    let checkedCplArray = new Array();
+    $("input:checkbox[name=cpl-checkbox]").each(function(){
+      if($(this).is(":checked") == true){
+        checkedCplArray.push($(this).val());
+      }
+    });
+    $.ajax({
+      type:"post",
+      url:"/admin/update-recommend-pl",
+      data:{cplArray:checkedCplArray},
+      success:function(result){
+        /*let html = jQuery("<div>").html(result);
+        let playlist = html.find("div#cpl-template").html();
+        $("#div-cpl-template").html(playlist);*/
+      },
+      error:function(err){
+        alert("추천재생목록 후보를 불러오지 못했습니다.");
+      }
+    })
   }
 </script>
 </body>

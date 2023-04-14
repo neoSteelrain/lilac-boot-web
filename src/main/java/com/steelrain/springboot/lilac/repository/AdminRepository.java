@@ -1,6 +1,7 @@
 package com.steelrain.springboot.lilac.repository;
 
 import com.steelrain.springboot.lilac.common.DateUtils;
+import com.steelrain.springboot.lilac.datamodel.AdminYoutubePlayListDTO;
 import com.steelrain.springboot.lilac.datamodel.YoutubePlayListDTO;
 import com.steelrain.springboot.lilac.mapper.AdminMapper;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class AdminRepository implements IAdminRepository {
     }
 
     @Override
-    public List<YoutubePlayListDTO> findAllPlayList(int pageNum, int pageCount) {
+    public List<AdminYoutubePlayListDTO> findAllPlayList(int pageNum, int pageCount) {
         return m_adminMapper.findAllPlayList(pageNum, pageCount);
     }
 
@@ -46,17 +47,17 @@ public class AdminRepository implements IAdminRepository {
     }
 
     @Override
-    public List<YoutubePlayListDTO> findTotalLicPlayList(int[] licenseIds, int pageNum, int pageCount) {
+    public List<AdminYoutubePlayListDTO> findTotalLicPlayList(int[] licenseIds, int pageNum, int pageCount) {
         return m_adminMapper.findTotalLicPlayList(licenseIds, pageNum, pageCount);
     }
 
     @Override
-    public List<YoutubePlayListDTO> findTotalSubPlayList(int[] subjectIds, int pageNum, int pageCount) {
+    public List<AdminYoutubePlayListDTO> findTotalSubPlayList(int[] subjectIds, int pageNum, int pageCount) {
         return m_adminMapper.findTotalSubPlayList(subjectIds, pageNum, pageCount);
     }
 
     @Override
-    public List<YoutubePlayListDTO> findTotalLicSubPlayList(int[] licenseIds, int[] subjectIds, int pageNum, int pageCount) {
+    public List<AdminYoutubePlayListDTO> findTotalLicSubPlayList(int[] licenseIds, int[] subjectIds, int pageNum, int pageCount) {
         return m_adminMapper.findTotalLicSubPlayList(licenseIds, subjectIds, pageNum, pageCount);
     }
 
@@ -95,22 +96,62 @@ public class AdminRepository implements IAdminRepository {
     }
 
     @Override
-    public List<YoutubePlayListDTO> findPlayListByRange(String start, String end, int pageNum, int pageCount) {
+    public List<AdminYoutubePlayListDTO> findPlayListByRange(String start, String end, int pageNum, int pageCount) {
         return m_adminMapper.findPlayListByRange(start, end, pageNum, pageCount);
     }
 
     @Override
-    public List<YoutubePlayListDTO> findLicPlByRange(int[] licenseIds, String fromDate, String toDate, int pageNum, int pageCount) {
+    public List<AdminYoutubePlayListDTO> findLicPlByRange(int[] licenseIds, String fromDate, String toDate, int pageNum, int pageCount) {
         return m_adminMapper.findLicPlByRange(licenseIds, fromDate, toDate, pageNum, pageCount);
     }
 
     @Override
-    public List<YoutubePlayListDTO> findSubPlByRange(int[] subjectIds, String fromDate, String toDate, int pageNum, int pageCount) {
+    public List<AdminYoutubePlayListDTO> findSubPlByRange(int[] subjectIds, String fromDate, String toDate, int pageNum, int pageCount) {
         return m_adminMapper.findSubPlByRange(subjectIds, fromDate, toDate, pageNum, pageCount);
     }
 
     @Override
-    public List<YoutubePlayListDTO> findLicSubPlByRange(int[] licenseIds, int[] subjectIds, String fromDate, String toDate, int pageNum, int pageCount) {
+    public List<AdminYoutubePlayListDTO> findLicSubPlByRange(int[] licenseIds, int[] subjectIds, String fromDate, String toDate, int pageNum, int pageCount) {
         return m_adminMapper.findLicSubPlByRange(licenseIds, subjectIds, fromDate, toDate, pageNum, pageCount);
+    }
+
+    @Override
+    public int addCandiPlayList(Long playListId) {
+        return m_adminMapper.addCandiPlayList(playListId);
+    }
+
+    @Override
+    public List<AdminYoutubePlayListDTO> findCandiPlayList() {
+        return m_adminMapper.findCandiPlayList();
+    }
+
+    @Override
+    public void removeCandiPlayList(Long playlistId) {
+        m_adminMapper.removeCandiPlayList(playlistId);
+    }
+
+    @Override
+    public void deleteAllRecommendPlayList() {
+        m_adminMapper.deleteAllRecommendPlayList();
+    }
+
+    @Override
+    public void deleteAllCandiRecommendPlayList() {
+        m_adminMapper.deleteAllCandiRecommendPlayList();
+    }
+
+    @Override
+    public List<AdminYoutubePlayListDTO> findRecommendPlayList() {
+        return m_adminMapper.findRecommendPlayList();
+    }
+
+    @Override
+    public List<Long> findCandidateIdList() {
+        return m_adminMapper.findCandidateIdList();
+    }
+
+    @Override
+    public List<Long> findRecommendIdList() {
+        return m_adminMapper.findRecommendIdList();
     }
 }

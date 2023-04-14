@@ -1,10 +1,9 @@
 package com.steelrain.springboot.lilac.api;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.steelrain.springboot.lilac.common.SESSION_KEY;
 import com.steelrain.springboot.lilac.datamodel.MemberDTO;
+import com.steelrain.springboot.lilac.datamodel.rest.BaseRestAPIResponse;
 import com.steelrain.springboot.lilac.service.IVideoService;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 
@@ -34,7 +32,7 @@ public class VideoRestController {
      */
     @PostMapping("/update-playtime")
     public ResponseEntity<UpdateVideoPlaytimeResponse> updateVideoPlaytime(@RequestBody UpdateVideoPlaytimeRequest request){
-        boolean isUpdated = m_videoService.updateVideoPlaytime(request.lectureVideoId, request.playtime);
+        m_videoService.updateVideoPlaytime(request.lectureVideoId, request.playtime);
         return new ResponseEntity<>(UpdateVideoPlaytimeResponse.builder()
                 .requestParameter(request)
                 .code(HttpStatus.OK.value())
@@ -84,15 +82,6 @@ public class VideoRestController {
     }
 
     @Getter
-    @SuperBuilder
-    static class BaseResponse{
-        protected Object requestParameter;
-        protected int code;
-        protected String message;
-        protected String status;
-    }
-
-    @Getter
     static class UpdateVideoPlaytimeRequest {
         // ref_tbl_lecture_youtube 테이블의 id 값
         private Long lectureVideoId;
@@ -101,19 +90,19 @@ public class VideoRestController {
 
     @Getter
     @SuperBuilder
-    static class UpdateVideoPlaytimeResponse extends BaseResponse {
+    static class UpdateVideoPlaytimeResponse extends BaseRestAPIResponse {
     }
 
     @Getter
     @SuperBuilder
-    static class LikeVideoResponse extends BaseResponse {
+    static class LikeVideoResponse extends BaseRestAPIResponse {
         private Long likeCount;
         private Long dislikeCount;
     }
 
     @Getter
     @SuperBuilder
-    static class DisLikeVideoResponse extends BaseResponse{
+    static class DisLikeVideoResponse extends BaseRestAPIResponse{
         private Long likeCount;
         private Long dislikeCount;
     }
