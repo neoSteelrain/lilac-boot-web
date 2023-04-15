@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.repository;
 
+import com.steelrain.springboot.lilac.common.DateUtils;
 import com.steelrain.springboot.lilac.datamodel.LectureNoteModalDTO;
 import com.steelrain.springboot.lilac.datamodel.LectureNoteDTO;
 import com.steelrain.springboot.lilac.datamodel.PlayListVideoDTO;
@@ -96,11 +97,7 @@ public class LectureNoteRepository implements ILectureNoteRepository {
     @Override
     public Duration findTotalDurationOfPlayList(Long playListId) {
         List<String> durationList = m_lectureNoteMapper.findTotalDurationOfPlayList(playListId);
-        long totalDurationValue = 0;
-        for (String videoDuration : durationList) {
-            totalDurationValue += Duration.parse(videoDuration).toSeconds();
-        }
-        return Duration.ofSeconds(totalDurationValue);
+        return DateUtils.getSumOfDuration(durationList);
     }
 
     @Override

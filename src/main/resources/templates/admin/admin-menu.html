@@ -40,7 +40,7 @@
         <!-- Start Dashboard Sidebar -->
         <div class="dashboard-sidebar">
           <div class="user-image">
-            <img src="https://via.placeholder.com/300x300" alt="#">
+            <img src="/images/default-profile.jpg" alt="#">
             <h3>관리자 메뉴</h3>
           </div>
           <div class="dashboard-menu">
@@ -544,6 +544,10 @@
     let checkedCplCnt = $("input:checkbox[name=cpl-checkbox]:checked").length;
     console.log("checkedCplCnt : "+checkedCplCnt);
     $("#lbl-selected-cpl").text(checkedCplCnt+"/8");
+  }
+
+  function openPlayList(plId){
+    window.open("/video/admin-playlist-detail?plId="+plId, "_blank");
   }
 </script>
 </body>

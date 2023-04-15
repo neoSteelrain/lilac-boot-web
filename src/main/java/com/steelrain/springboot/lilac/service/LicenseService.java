@@ -129,7 +129,7 @@ public class LicenseService implements ILicenseService{
     }
 
     private String convertDateFormat(String src){
-        Optional<String> result = StringFormatter.toDateFormattedString(src);
+        Optional<String> result = StringFormatter.toFormattedDateString(src);
         return result.isPresent() ? result.get() : src;
     }
 
@@ -153,12 +153,12 @@ public class LicenseService implements ILicenseService{
             // TODO :날짜 포매팅을 에너테이션으로 처리하는 방법을 찾아보자
             resultList.add(LicenseScheduleDTO.builder()
                             .category(String.format("%s년 정기 %s %d회", schedule.getImplyy(), getLicenseCategoryName(schedule.getDescription()), schedule.getImplSeq()))
-                            .docRegPeriod(StringFormatter.toDateFormattedString(schedule.getDocRegStartDt()).get() + " - " + StringFormatter.toDateFormattedString(schedule.getDocRegEndDt()).get())
-                            .docExam(StringFormatter.toDateFormattedString(schedule.getDocExamStartDt()) .get()+ " - " + StringFormatter.toDateFormattedString(schedule.getDocExamEndDt()).get())
-                            .docPass(StringFormatter.toDateFormattedString(schedule.getDocPassDt()).get())
-                            .pracReg(StringFormatter.toDateFormattedString(schedule.getPracRegStartDt()).get() + " - " + StringFormatter.toDateFormattedString(schedule.getPracRegEndDt()).get())
-                            .pracExam(StringFormatter.toDateFormattedString(schedule.getPracExamStartDt()).get() + " - " + StringFormatter.toDateFormattedString(schedule.getPracExamEndDt()).get())
-                            .pracPass(StringFormatter.toDateFormattedString(schedule.getPracPassDt()).get())
+                            .docRegPeriod(StringFormatter.toFormattedDateString(schedule.getDocRegStartDt()).get() + " - " + StringFormatter.toFormattedDateString(schedule.getDocRegEndDt()).get())
+                            .docExam(StringFormatter.toFormattedDateString(schedule.getDocExamStartDt()) .get()+ " - " + StringFormatter.toFormattedDateString(schedule.getDocExamEndDt()).get())
+                            .docPass(StringFormatter.toFormattedDateString(schedule.getDocPassDt()).get())
+                            .pracReg(StringFormatter.toFormattedDateString(schedule.getPracRegStartDt()).get() + " - " + StringFormatter.toFormattedDateString(schedule.getPracRegEndDt()).get())
+                            .pracExam(StringFormatter.toFormattedDateString(schedule.getPracExamStartDt()).get() + " - " + StringFormatter.toFormattedDateString(schedule.getPracExamEndDt()).get())
+                            .pracPass(StringFormatter.toFormattedDateString(schedule.getPracPassDt()).get())
                             .build());
         }
         return resultList;

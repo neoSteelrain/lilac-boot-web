@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/admin")
 public class AdminController {
-    private final static int PAGE_COUNT = 3;
+    private final static int PAGE_COUNT = 10;
     private final IAdminService m_adminService;
 
 

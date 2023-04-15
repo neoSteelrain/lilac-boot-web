@@ -12,7 +12,7 @@
         <div class="item-image">
           <img th:src="${item.thumbnailMedium}" alt="#">
           <div class="content">
-            <h3 class="title"><a href="javascript:void(0)" th:text="${item.title}"></a></h3>
+            <h3 class="title"><a th:href="|javascript:openPlayList('${item.id}')|" th:text="${item.title}"></a></h3>
           </div>
         </div>
       </div>
@@ -20,7 +20,7 @@
         <p th:text="${item.itemCount}"></p>
       </div>
       <div class="col-lg-2 col-md-2 col-12">
-        <p th:text="${item.regDate}"></p>
+        <p th:text="${{item.regDate}}"></p>
       </div>
       <div class="col-lg-1 col-md-1 col-12 align-right">
         <ul class="action-btn">

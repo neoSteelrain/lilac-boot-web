@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.service;
 
+import com.steelrain.springboot.lilac.common.StringFormatter;
 import com.steelrain.springboot.lilac.datamodel.*;
 import com.steelrain.springboot.lilac.datamodel.view.BookAddModalDTO;
 import com.steelrain.springboot.lilac.datamodel.view.LectureNoteDetailDTO;
@@ -275,7 +276,7 @@ public class LectureNoteService implements ILectureNoteService{
         for (LectureNoteDetailDTO.LectureVideoPlayListInfo info : playlist) {
             Duration totalDuration = m_lectureNoteRepository.findTotalDurationOfPlayList(info.getPlayListId());
             info.setTotalDuration(totalDuration.toSeconds()); // 유튜브는 초단위 까지만 사용하기 때문에 전체재생시간은 초단위로 설정
-            info.setTotalDurationFormattedString(String.format("%d시간:%d분:%d초", totalDuration.toHoursPart(),totalDuration.toMinutesPart(), totalDuration.toSecondsPart()));
+            info.setTotalDurationFormattedString(StringFormatter.toFormattedDuration(totalDuration));
             long tmpTotalDuration = getTotalDuration(info);
             info.setTotalDuration(tmpTotalDuration);
             info.setProgressStatus(calcTotalProgress(memberId, noteId, info.getPlayListId(), tmpTotalDuration));

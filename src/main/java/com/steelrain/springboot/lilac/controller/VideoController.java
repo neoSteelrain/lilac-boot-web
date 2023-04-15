@@ -48,6 +48,15 @@ public class VideoController {
         return "/video/playlist-detail";
     }
 
+    @GetMapping("/admin-playlist-detail")
+    public String getAdminPlayListDetail(@RequestParam("plId") Long plId, Model model){
+        List<YoutubeVideoDTO> videoDTOList = m_videoService.getPlayListDetail(plId);
+        model.addAttribute("videoList", videoDTOList);
+        model.addAttribute("playListId", plId);
+        model.addAttribute("isLikeVideo", null);
+        return "/video/playlist-detail";
+    }
+
     @GetMapping("/lec-playlist-detail")
     public String getPlayListDetailOfLectureNote(@RequestParam("youtubePlaylistId") Long youtubePlaylistId, Model model, HttpSession session){
         MemberDTO memberDTO = null;

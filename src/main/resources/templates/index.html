@@ -109,7 +109,7 @@
     <!-- End Hero Area -->
 
     <!-- 키워드 목록 시작 -->
-    <section class="categories style2">
+    <section class="categories style2" style="padding-top: 40px;padding-bottom: 20px">
         <div class="container">
             <div class="cat-inner">
                 <div class="row">
@@ -135,7 +135,7 @@
     <!-- 키워드 목록 끝 -->
 
     <!-- 자격증 일정 시작 -->
-    <section class="dashboard section" id="section-license">
+    <section class="dashboard section" id="section-license" style="padding-top: 20px;padding-bottom: 20px">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-12">
@@ -189,7 +189,7 @@
     <!-- 자격증 일정 끝 -->
 
     <!-- 도서관 정보 시작 -->
-    <section class="category-page section" id="div-library-book">
+    <section class="category-page section" id="div-library-book" style="padding-top: 20px; padding-bottom: 20px">
         <div class="container">
             <div class="row">
                 <div class="col-lg-3 col-md-4 col-12">
@@ -258,7 +258,7 @@
                                             <div th:each="kakaoBook : ${recommendedBookList.kakaoBookList}" class="col-lg-4 col-md-6 col-12">
                                                 <div class="single-item-grid">
                                                     <div class="image">
-                                                        <a href="javascript:void(0)"><img  th:src="${kakaoBook.thumbnail}"></a>
+                                                        <a href="javascript:void(0)"><img th:src="${kakaoBook.thumbnail}" alt="#"></a>
                                                         <span th:if="${kakaoBook.salePrice > 0}" class="flat-badge sale">할인중</span>
                                                     </div>
                                                     <div class="content text-wrap">
@@ -285,7 +285,7 @@
     <!-- 도서관 정보 끝 -->
 
     <!-- 유튜브 정보 시작 -->
-    <section class="items-tab section">
+    <section class="items-tab section" style="padding-top: 20px; padding-bottom: 20px">
         <div class="container">
             <div class="row">
                 <div class="col-12">
@@ -499,6 +499,9 @@
 
         // 자격증 시험일정 정보를 업데이트하는 함수
         const searchLicenseSchedulesByLicenseCode = (argLicenseCode) => {
+            if(argLicenseCode != undefined && argLicenseCode == 0){
+                $("#license-div").html("");
+            }
             if(argLicenseCode == undefined || argLicenseCode <= -1){ // 자격증카테고리를 선택하지 않으면 실행하지 않는다.
                 return;
             }
@@ -548,6 +551,7 @@
 
             refreshSubjectBookList(argSubjectCode, argOffset);
             refreshPlayList(argSubjectCode, null, argOffset, 2);
+            searchLicenseSchedulesByLicenseCode(0);
         }
         const moveScrollToBookList = () => {
             // 도서정보 태그로 스크롤 이동

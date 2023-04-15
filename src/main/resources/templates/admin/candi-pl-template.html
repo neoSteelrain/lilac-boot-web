@@ -13,7 +13,6 @@
           <img th:src="${pl.thumbnailMedium}" alt="#">
           <div class="content">
             <h3 class="title"><a href="javascript:void(0)" th:text="${pl.title}"></a></h3>
-            <span class="price" th:text="${pl.regDate}"></span>
           </div>
         </div>
       </div>
@@ -21,7 +20,7 @@
         <p th:text="${pl.itemCount}"></p>
       </div>
       <div class="col-lg-2 col-md-2 col-12">
-        <p th:text="${pl.regDate}"></p>
+        <p th:text="${{pl.regDate}}"></p>
       </div>
       <div class="col-lg-1 col-md-1 col-12 align-right">
         <ul class="action-btn">

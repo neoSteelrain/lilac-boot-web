@@ -2,6 +2,7 @@ package com.steelrain.springboot.lilac.common;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
@@ -19,7 +20,7 @@ public class StringFormatter {
      * @param src 변경할 날짜형식의 문자열, "yyyyMMdd" 형식이어야 한다. 예) "2022-01-21"
      * @return "yyyy-MM-dd" 형식으로 바뀐 날짜문자열
      */
-    public static Optional<String> toDateFormattedString(String src){
+    public static Optional<String> toFormattedDateString(String src){
         if(Objects.isNull(src)){
             return Optional.empty();
         }
@@ -29,5 +30,14 @@ public class StringFormatter {
         } catch (ParseException | RuntimeException ex) {
             return Optional.empty();
         }
+    }
+
+    /**
+     * Duration 객체를 시:분:초 형식으 문자열로 변환한다
+     * @param date Duration 객체
+     * @return 'n시간:n분:n초' 형식의 문자열
+     */
+    public static String toFormattedDuration(Duration date){
+        return String.format("%d시간:%d분:%d초", date.toHoursPart(),date.toMinutesPart(), date.toSecondsPart());
     }
 }
