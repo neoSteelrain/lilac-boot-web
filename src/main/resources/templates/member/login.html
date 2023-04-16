@@ -47,15 +47,18 @@
             <div class="row">
                 <div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-12">
                     <div class="form-head">
-                        <h4 class="title">로그인</h4>
-<!--                        <div th:if="${#fields.hasGlobalErrors()}">-->
-<!--                            <p class="invalid-feedback">올바르지 않은 로그인 정보입니다</p>-->
-<!--                        </div>-->
+                        <!--<h4 class="title">로그인</h4>
+                        <div th:if="${#fields.hasGlobalErrors()}">
+                            <p class="invalid-feedback" th:each="gerr: ${#fields.globalErrors()}" th:if="${gerrStat.first}" th:text="${gerr}"></p>
+                        </div>-->
                         <form action="/member/login" th:object="${memberLogin}" method="post">
+                            <h4 class="title">로그인</h4>
+                            <div th:if="${#fields.hasGlobalErrors()}">
+                                <p class="text-danger" th:each="gerr: ${#fields.globalErrors()}" th:if="${gerrStat.first}" th:text="${gerr}"></p>
+                            </div>
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="email" th:field="*{email}" min="5" maxlength="100" placeholder="이메일" onblur="checkEmail()">
                                 <label for="email">이메일</label>
-<!--                                <span id="emailNotice" th:errors="*{email}"></span>-->
                                 <span id="emailNoticeJs" class="text-danger"></span>
                                 <span id="emailNotice" th:each="err : ${#fields.errors('email')}" th:if="${errStat.first}" th:text="${err}"class="text-danger" ></span>
                             </div>
@@ -63,7 +66,6 @@
                                 <input type="password" class="form-control" id="password" th:field="*{password}" min="6" maxlength="19"
                                        placeholder="비밀번호" onblur="checkPassword()">
                                 <label for="password">비밀번호</label>
-<!--                                <span id="pwNotice" th:errors="*{password}"></span>-->
                                 <span id="pwNoticeJs" class="text-danger"></span>
                                 <span id="pwNotice" th:each="err : ${#fields.errors('password')}" th:if="${errStat.first}" th:text="${err}" class="text-danger"></span>
                             </div>

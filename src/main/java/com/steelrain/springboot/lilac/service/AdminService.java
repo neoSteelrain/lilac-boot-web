@@ -16,8 +16,6 @@ import java.util.List;
 /**
  * 관리자 서비스
  * - 관리자의 비즈니스 로직을 구현
- * - 관리자 서비스는 다른 서비스를 이용하거나 기능을 위임하지 않는다
- * - 기능이 다른 서비스와 유사하거나 겹치더라도 독립적으로 동작하도록 구현한다
  */
 @Slf4j
 @Service
@@ -26,13 +24,6 @@ public class AdminService implements IAdminService {
 
     private final IAdminRepository m_adminRepository;
 
-
-    public boolean addRecommendedPlayList(List<Long> videoIdList){
-        /*
-            - 추천재생목록
-         */
-        return m_adminRepository.insertRecommendedPlayList(videoIdList) == videoIdList.size();
-    }
 
     @Override
     public AdminPlayListSearchResultDTO getAllPlayList(int pageNum, int pageCount, int[] licenseIds, int[] subjectIds) {

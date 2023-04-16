@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -78,6 +79,7 @@ public class MemberController {
             }
             return "redirect:" + redirectURL;
         }else{
+            bindingResult.addError(new ObjectError("LOGIN-ERR","아이디 또는 비밀번호가 맞지않습니다."));
             return "/member/login";
         }
     }
