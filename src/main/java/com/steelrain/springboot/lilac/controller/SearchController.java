@@ -54,17 +54,26 @@ public class SearchController {
                                      @RequestParam("regionCode") short regionCode,
                                      @RequestParam("detailRegionCode") int detailRegionCode,
                                      @RequestParam("pageNum") int pageNum,
-                                     @RequestParam("bookCount") int bookCount, Model model){
+                                     @RequestParam("bookCount") int bookCount, Model model, HttpSession session){
+        MemberDTO memberDTO = (MemberDTO)session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
+        boolean isLogin = Objects.nonNull(memberDTO);
         if(regionCode <= -1){
-            log.error("지역코드 입력에러 - 필수입력 지역코드 없음 : 입력된 지역코드 = {}", regionCode);
-            return "redirect:/";
+            if(isLogin){
+                regionCode = memberDTO.getRegion();
+            }else{
+                log.error("지역코드 입력에러 - 필수입력 지역코드 없음 : 입력된 지역코드 = {}", regionCode);
+                return "redirect:/";
+            }
         }
         if(regionCode <= -1 && detailRegionCode < -1){
-            log.error("지역코드 입력에러 - 지역코드,세부지역코드 없음 : 입력된 지역코드 = {} , 입력된 세부지역코드 = {}", regionCode, detailRegionCode);
-            return "redirect:/";
+            if(isLogin){
+                detailRegionCode = memberDTO.getDtlRegion();
+            }else{
+                log.error("지역코드 입력에러 - 지역코드,세부지역코드 없음 : 입력된 지역코드 = {} , 입력된 세부지역코드 = {}", regionCode, detailRegionCode);
+                return "redirect:/";
+            }
         }
-        model.addAttribute("licenseBookInfo", m_searchService.getLicenseBookList(licenseCode, regionCode, detailRegionCode,
-                                                                                             pageNum, bookCount));
+        model.addAttribute("licenseBookInfo", m_searchService.getLicenseBookList(licenseCode, regionCode, detailRegionCode, pageNum, bookCount));
         model.addAttribute("region", regionCode);
         model.addAttribute("detailRegion", detailRegionCode);
         return "/search/book-template";

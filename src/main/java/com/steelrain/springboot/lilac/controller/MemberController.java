@@ -28,6 +28,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Controller
@@ -73,6 +74,7 @@ public class MemberController {
         MemberDTO memberDTO = m_memberService.loginMember(loginDTO.getEmail(), loginDTO.getPassword());
         if(memberDTO != null){
             HttpSession session = servletRequest.getSession();
+            memberDTO.setPassword(null); // 패스워드까지는 세션에 넣지 않는다
             session.setAttribute(SESSION_KEY.LOGIN_MEMBER, memberDTO);
             if(memberDTO.getGrade() == 1){
                 return "redirect:/admin/admin-menu";
@@ -102,8 +104,8 @@ public class MemberController {
                 .nickname(memberRegDTO.getNickname())
                 .email(memberRegDTO.getEmail())
                 .password(memberRegDTO.getPassword())
-                .region(memberRegDTO.getRegion())
-                .dtlRegion(memberRegDTO.getDtlRegion())
+                .region(Objects.isNull(m_keywordCategoryCacheService.getRegionName(memberRegDTO.getRegion())) ? null : memberRegDTO.getRegion())
+                .dtlRegion(Objects.isNull(m_keywordCategoryCacheService.getDetailRegionName(memberRegDTO.getRegion(), memberRegDTO.getDtlRegion())) ? null : memberRegDTO.getDtlRegion())
                 .grade(2) // 1번은 관리자, 2번은 일반회원이므로 기본값으로 2를 설정해준다
                 .build();
         return  m_memberService.registerMember(memberDTO) ? "redirect:/member/login" : "redirect:/member/registration";

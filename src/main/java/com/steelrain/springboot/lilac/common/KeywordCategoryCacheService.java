@@ -7,6 +7,7 @@ import com.steelrain.springboot.lilac.datamodel.SubjectCodeDTO;
 import com.steelrain.springboot.lilac.mapper.SearchMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -69,7 +70,7 @@ public class KeywordCategoryCacheService implements ICacheService {
                 .filter(license -> license.getCode().intValue() == licenseCode)
                 .map(LicenseCodeDTO::getKeyWord)
                 .findFirst()
-                .get();
+                .orElse(null);
     }
 
     @Override
@@ -78,15 +79,19 @@ public class KeywordCategoryCacheService implements ICacheService {
                 .filter(regionDTO -> (regionDTO.getCode() == region))
                 .map(LibraryRegionCodeDTO::getName)
                 .findFirst()
-                .get();
+                .orElse(null);
     }
 
     @Override
     public String getDetailRegionName(short region, int detailRegion) {
-        return ((List<LibraryDetailRegionCodeDTO>) m_libDetailRegionCodeMap.get(region)).stream()
-                .filter(detailRegionDTO -> (detailRegionDTO.getCode() == detailRegion))
-                .map(LibraryDetailRegionCodeDTO::getDetailName)
-                .collect(Collectors.joining());
+        if(Objects.isNull(m_libDetailRegionCodeMap.get(region))){
+            return null;
+        }
+        String result = ((List<LibraryDetailRegionCodeDTO>) m_libDetailRegionCodeMap.get(region)).stream()
+                            .filter(detailRegionDTO -> (detailRegionDTO.getCode() == detailRegion))
+                            .map(LibraryDetailRegionCodeDTO::getDetailName)
+                            .collect(Collectors.joining());
+        return StringUtils.hasText(result) ? result : null;
     }
 
     @Override

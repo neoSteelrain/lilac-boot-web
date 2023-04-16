@@ -16,8 +16,6 @@ import com.steelrain.springboot.lilac.validate.RegistrationValidateGroups.*;
                 PasswordLengthCheck.class,
                 PasswordPatternCheck.class,
                 RegionNotNullCheck.class,
-                RegionPositiveOrZeroCheck.class,
-                DtlRegionNotNullCheck.class,
-                DtlRegionPositiveOrZeroCheck.class})
+                RegionPositiveOrZeroCheck.class})
 public interface RegistrationValidateSequence {
 }

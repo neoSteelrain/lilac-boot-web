@@ -31,7 +31,5 @@ public class MemberRegDTO {
     @PositiveOrZero(groups= RegionPositiveOrZeroCheck.class)
     private Short region;
 
-    @NotNull(groups = DtlRegionNotNullCheck.class)
-    @PositiveOrZero(groups = DtlRegionPositiveOrZeroCheck.class)
     private Integer dtlRegion;
 }

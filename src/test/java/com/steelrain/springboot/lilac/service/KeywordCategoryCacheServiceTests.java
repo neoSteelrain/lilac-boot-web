@@ -10,6 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Objects;
+
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
@@ -44,7 +46,7 @@ public class KeywordCategoryCacheServiceTests {
     @DisplayName("지역코드로 지역이름 얻어내기")
     public void testGetRegionName(){
         String name = mgr.getRegionName((short)11);
-        assertThat(StringUtils.hasText(name));
+        assertThat(StringUtils.hasText(name)).isTrue();
         System.out.println(name);
     }
     
@@ -52,7 +54,23 @@ public class KeywordCategoryCacheServiceTests {
     @DisplayName("세부지역코드로 세부지역이름 얻어내기")
     public void testGetDetailRegion(){
         String name = mgr.getDetailRegionName((short)11, 11220);
-        assertThat(StringUtils.hasText(name));
+        assertThat(StringUtils.hasText(name)).isTrue();
         System.out.println(name);
+    }
+
+    @Test
+    @DisplayName("쓰레기값으로 지역이름 얻어내기")
+    public void testGetRegionNameByGarage(){
+        String name = mgr.getRegionName((short)-1);
+        assertThat(StringUtils.hasText(name)).isFalse();
+        assertThat(Objects.isNull(name)).isTrue();
+    }
+
+    @Test
+    @DisplayName("쓰레기값으로 세부지역이름 얻어내기")
+    public void testGetDetailRegionNameByGarbage(){
+        String name = mgr.getDetailRegionName((short)11, -100);
+        assertThat(StringUtils.hasText(name)).isFalse();
+        assertThat(Objects.isNull(name)).isTrue();
     }
 }

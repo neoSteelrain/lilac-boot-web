@@ -427,6 +427,7 @@
 
         // 검색버튼 클릭 이벤트 처리 함수 : 키워드, 카테고리 검색을 처리한다
         function searchHandler(){
+            const isLogin = [[${isLogin}]];
             /*
                 - 검색어가 있으면 카테고리는 무시하고 검색어로 처리
                 - 카테고리를 선택하면 검색어는 무시하고 카테고리로 처리
@@ -434,30 +435,29 @@
                 - 카테고리검색할때 지역정보는 필수, 세부지역은 선택
             */
             const m_keyword = $("#keyword").val();
-            console.log("m_keyword : "+m_keyword);
+            const m_licenseCode = $("#license option:selected").val();
+            if(m_keyword == "" && m_licenseCode == -1){
+                $("#searchInputNotice").text("검색어를 입력하시거나, 자격증선택을 하셔야 합니다");
+                return;
+            }
+            // 키워드 검색 처리
             if(m_keyword != ""){
-                // 검색어 처리
                 refreshSearchBookList(m_keyword, 1);
                 refreshPlayList(0, m_keyword, 1, 0);
                 moveScrollToBookList();
                 return;
             }
+            // 카테고리 선택으로 검색처리
             const m_regionCode = $("#location-main option:selected").val();
-            // searchInputNotice
-            if(m_keyword == "" && m_regionCode == -1){
-                $("#searchInputNotice").text("지역정보는 필수입력입니다");
+            if(m_keyword == "" && m_regionCode == -1 && isLogin == "0"){
+                $("#searchInputNotice").text("지역정보를 입력하세요");
                 return;
             }
-            // 이제는 카테고리 선택으로 검색처리
             $("#searchInputNotice").text(""); // 경고문구는 지워준다
-            const m_licenseCode = $("#license option:selected").val();
+            let m_detailRegionCode = $("#location-sub option:selected").val();
             searchLicenseSchedulesByLicenseCode(m_licenseCode);
-
-            const m_detailRegionCode = $("#location-sub option:selected").val();
             refreshLicenseBookList(m_licenseCode, m_regionCode, m_detailRegionCode, 1);
-
             refreshPlaylistByLicense(m_licenseCode, 1); // 첫번째 페이지를 시작으로 재생목록을 업데이트
-
             moveScrollToLicenseScheduleList();
         }
 

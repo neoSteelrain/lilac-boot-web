@@ -2,12 +2,17 @@ package com.steelrain.springboot.lilac.controller;
 
 
 import com.steelrain.springboot.lilac.common.ICacheService;
+import com.steelrain.springboot.lilac.common.SESSION_KEY;
 import com.steelrain.springboot.lilac.service.IBookService;
 import com.steelrain.springboot.lilac.service.IVideoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
@@ -19,13 +24,13 @@ public class HomeController {
 
 
     @GetMapping("/")
-    public String index(Model model){
+    public String index(Model model, HttpServletRequest request){
         model.addAttribute("subjectCodes",m_keywordCategoryCacheService.getSubjectCodeList());
         model.addAttribute("libRegionCodes",m_keywordCategoryCacheService.getLibraryRegionCodeList());
         model.addAttribute("licenseCodes",m_keywordCategoryCacheService.getLicenseCodeList());
         model.addAttribute("recommendedPlayList", m_videoService.getRecommendedPlayList());
         model.addAttribute("recommendedBookList", m_bookService.getRecommendedBookList());
-
+        model.addAttribute("isLogin", Objects.isNull(request.getSession().getAttribute(SESSION_KEY.LOGIN_MEMBER)) ? "0":"1");
         return "index";
     }
 
