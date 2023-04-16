@@ -147,7 +147,7 @@
     }
 
     // 강의노트 모달html을 서버로 부터 받아오고 모달창을 띄운다
-    const showPlaylistAddModal = (paramPlayListId) => {
+    function showPlaylistAddModal(paramPlayListId){
         const memberIdVal = $("#memberIdHidden").val();
         $.ajax({
             type: "get",
@@ -169,7 +169,7 @@
         })
     }
     // playlist-add-model.html 에서 호출하는 함수
-    const addPlayListToLectureNote = () => {
+    function addPlayListToLectureNote(){
         const paramPlayListId = [[${playListId}]];
         const paramLectureNoteId = $("#lectureNoteSelect").val(); // playlist-add-model.html에 있는 셀렉트박스 태그
         let param = {
@@ -195,7 +195,7 @@
         })
     }
 
-    const playSelectedVideo = (paramVideoOriginId, paramVideoId) => {
+    function playSelectedVideo(paramVideoOriginId, paramVideoId){
         $.ajax({
             type:"get",
             url:"/video/video-template",
@@ -212,7 +212,7 @@
             }
         })
     }
-    const likeVideo = (paramVideoId) => {
+    function likeVideo(paramVideoId){
         let param = {
             "videoId":paramVideoId
         }
@@ -237,7 +237,7 @@
             }
         })
     }
-    const dislikeVideo = (paramVideoId) => {
+    function dislikeVideo(paramVideoId){
         let param = {
             "videoId":paramVideoId
         }

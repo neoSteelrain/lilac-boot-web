@@ -353,7 +353,7 @@
 <script th:src="@{/js/lilac-common.js}"></script>
 <script th:inline="javascript">
 
-    const editLectureNoteModal = (argNoteId) => {
+    function editLectureNoteModal(argNoteId){
         $.ajax({
             type:"get",
             url:"/lecture/edit-note",
@@ -371,11 +371,11 @@
         })
     }
 
-    const noteTitleClickArrow = (aTag) => {
+    function noteTitleClickArrow(aTag){
         aTag.classList.toggle('active');
     }
 
-    const checkLicenseSelectBox = () => {
+    function checkLicenseSelectBox(){
         const selectedVal = $("#license").val();
         if (selectedVal == -1) {
             $("#subject").attr("disabled", false);
@@ -384,7 +384,7 @@
         }
     }
 
-    const checkSubjectSelectBox = () => {
+    function checkSubjectSelectBox(){
         const selectedVal = $("#subject").val();
         if (selectedVal == -1) {
             $("#license").attr("disabled", false);
@@ -393,13 +393,13 @@
         }
     }
 
-    const showAddLectureNoteModal = () => {
+    function showAddLectureNoteModal(){
         $("#titleNotice").html('');
         $("#descNotice").html('');
         $("#lectureNoteAddModal").modal("show");
     }
 
-    const addLectureNote = () => {
+    function addLectureNote(){
         const noteTile = $("#noteTitle").val();
         const noteDesc = $("#noteDesc").val();
         const licenseId = $("#license").val();

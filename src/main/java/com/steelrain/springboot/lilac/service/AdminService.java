@@ -258,6 +258,10 @@ public class AdminService implements IAdminService {
                 .build();
     }
 
+    /*
+        - 추천재생목록을 가져온다
+        - 사용자에게 실제로 보여지는 정보이다.
+     */
     @Override
     public AdminPlayListSearchResultDTO getRecommendPlayList() {
         return AdminPlayListSearchResultDTO.builder()

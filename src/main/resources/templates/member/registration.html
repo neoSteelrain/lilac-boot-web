@@ -52,14 +52,12 @@
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="ipt-nickname" th:field="*{nickname}" min="1" maxlength="20" placeholder="닉네임" onblur="checkDuplicatedId()" >
                                 <label for="ipt-nickname">닉네임</label>
-<!--                                <span id="nickNameNotice" class="ui-state-error-text" th:errors="*{nickname}"></span>-->
                                 <span id="nickNameNoticeJs" class="text-danger"></span>
                                 <span id="nickNameNotice" th:each="err : ${#fields.errors('nickname')}" th:if="${errStat.first}" th:text="${err}" class="text-danger"></span>
                             </div>
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="ipt-email" th:field="*{email}" min="5" maxlength="100" placeholder="이메일" onblur="checkDuplicatedEmail()">
                                 <label for="ipt-email">이메일</label>
-<!--                                <span id="emailNotice" th:errors="*{email}"></span>-->
                                 <span id="emailNoticeJs" class="text-danger"></span>
                                 <span id="emailNotice" th:each="err : ${#fields.errors('email')}" th:if="${errStat.first}" th:text="${err}" class="text-danger"></span>
                             </div>
@@ -67,9 +65,29 @@
                                 <input type="password" class="form-control" id="ipt-password" th:field="*{password}" min="6" maxlength="19"
                                        placeholder="password" onblur="checkPassword()">
                                 <label for="ipt-password">비밀번호</label>
-<!--                                <span id="pwNotice" th:errors="*{password}"></span>-->
                                 <span id="pwNoticeJs" class="text-danger"></span>
                                 <span id="pwNotice" th:each="err : ${#fields.errors('password')}" th:if="${errStat.first}" th:text="${err}" class="text-danger"></span>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="search-input">
+                                        <label for="location-main"><i class="lni lni-map-marker theme-color"></i></label>
+                                        <select name="region" id="location-main" onchange="changeLibRegionCode()">
+                                            <option value="-1">--- 지역정보 ---</option>
+                                            <option th:each="libRegionCode : ${libRegionCodes}" th:value="${libRegionCode.code}" th:text="${libRegionCode.name}"></option>
+                                        </select>
+                                    </div>
+                                    <span id="regionNotice" th:each="err : ${#fields.errors('region')}" th:if="${errStat.first}" th:text="${err}" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <div class="search-input">
+                                        <label for="location-sub"><i class="lni lni-map-marker theme-color"></i></label>
+                                        <select name="dtlRegion" id="location-sub">
+                                            <option value="-1">--- 세부지역 ---</option>
+                                        </select>
+                                    </div>
+                                    <span id="dtlRegionNotice" th:each="err : ${#fields.errors('dtlRegion')}" th:if="${errStat.first}" th:text="${err}" class="text-danger"></span>
+                                </div>
                             </div>
                             <hr class="my-2">
                             <div class="button">
@@ -78,7 +96,7 @@
                             <div class="socila-login" style="margin-top: 10px">
                                 <ul>
 <!--                                    <li><a href="javascript:void(0)" class="google"><i class="lni lni-bitcoin"></i>카카오 로그인</a></li>-->
-                                    <li><a href="javascript:void(0)" class="google"><i class="lni lni-google"></i>구글 로그인</a>
+<!--                                    <li><a href="javascript:void(0)" class="google"><i class="lni lni-google"></i>구글 로그인</a>-->
                                     </li>
                                 </ul>
                             </div>
@@ -103,8 +121,9 @@
     <script th:src="@{/js/tiny-slider.js}"></script>
     <script th:src="@{/js/glightbox.min.js}"></script>
     <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/js/lilac-lib-region.js}"></script>
     <script th:inline="javascript">
-        const checkDuplicatedId = () => {
+        function checkDuplicatedId(){
             const nickNameInput = $('#ipt-nickname').val();
             const nickNameNotice = $('#nickNameNoticeJs');
             if (nickNameInput == "") {
@@ -140,7 +159,7 @@
             });
         }
 
-        const checkDuplicatedEmail = () => {
+        function checkDuplicatedEmail(){
             const emailInput = $('#ipt-email').val();
             const emailNotice = $('#emailNoticeJs');
             if (emailInput == "") {
@@ -175,7 +194,7 @@
                 }
             });
         }
-        const checkPassword = () => {
+        function checkPassword(){
             const pwTag = $('#ipt-password');
             const pw = $('#ipt-password').val();
             const pwNotice = $('#pwNotice');

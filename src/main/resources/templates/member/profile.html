@@ -164,7 +164,7 @@
 <script th:src="@{/js/lilac-common.js}"></script>
 <script th:inline="javascript">
     const FILE_SIZE = 1024 * 1024;
-    const changeProfileImg = () => {
+    function changeProfileImg(){
         let files = $('#profileImage').prop('files');
         if(files == undefined && files.length == 0){
             return;

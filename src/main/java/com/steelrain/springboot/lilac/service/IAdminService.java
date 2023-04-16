@@ -1,8 +1,11 @@
 package com.steelrain.springboot.lilac.service;
 
+/**
+ * 관리자 서비스 인터페이스
+ */
+
 import com.steelrain.springboot.lilac.datamodel.AdminPlayListSearchResultDTO;
-import com.steelrain.springboot.lilac.datamodel.AdminYoutubePlayListDTO;
-import com.steelrain.springboot.lilac.datamodel.YoutubePlayListDTO;
+
 
 import java.util.List;
 

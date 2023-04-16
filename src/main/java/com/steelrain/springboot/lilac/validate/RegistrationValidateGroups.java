@@ -13,4 +13,8 @@ public interface RegistrationValidateGroups {
     public interface PasswordNotBlankCheck {};
     public interface PasswordLengthCheck {};
     public interface PasswordPatternCheck {};
+    public interface RegionNotNullCheck {};
+    public interface RegionPositiveOrZeroCheck{};
+    public interface DtlRegionNotNullCheck{};
+    public interface DtlRegionPositiveOrZeroCheck{};
 }

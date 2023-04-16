@@ -271,8 +271,6 @@ public class LectureNoteService implements ILectureNoteService{
      */
     private LectureNoteDetailDTO initVideoInfoByLectureNote(Long memberId, Long noteId, final LectureNoteDetailDTO noteDetailDTO){
         List<LectureNoteDetailDTO.LectureVideoPlayListInfo> playlist = m_lectureNoteRepository.findVideoInfoByLectureNote(memberId, noteId);
-        // 재생목록의 진행상황을 설정해야 하지만 아직 유튜브 플레이어에서 재생된 시간을 가져오는 방법을 모르기 때문에 일단 재생목록의 전체 재생시간으로 대체한다
-        // TODO 재생목록의 전체 재생시간을 구해야 한다
         for (LectureNoteDetailDTO.LectureVideoPlayListInfo info : playlist) {
             Duration totalDuration = m_lectureNoteRepository.findTotalDurationOfPlayList(info.getPlayListId());
             info.setTotalDuration(totalDuration.toSeconds()); // 유튜브는 초단위 까지만 사용하기 때문에 전체재생시간은 초단위로 설정

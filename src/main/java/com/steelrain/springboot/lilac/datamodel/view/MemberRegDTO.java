@@ -6,9 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 
 @Getter
 @Setter
@@ -28,4 +26,12 @@ public class MemberRegDTO {
     @Length(min=6,max=19, groups = PasswordLengthCheck.class)
     @Pattern(regexp = MEMBER_FILED_REGEXP.PASSWORD, groups = PasswordPatternCheck.class)
     private String password;
+
+    @NotNull(groups = RegionNotNullCheck.class)
+    @PositiveOrZero(groups= RegionPositiveOrZeroCheck.class)
+    private Short region;
+
+    @NotNull(groups = DtlRegionNotNullCheck.class)
+    @PositiveOrZero(groups = DtlRegionPositiveOrZeroCheck.class)
+    private Integer dtlRegion;
 }

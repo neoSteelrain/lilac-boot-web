@@ -80,7 +80,7 @@
                             <div class="col-6">
                                 <div class="search-input">
                                     <label for="location-main"><i class="lni lni-map-marker theme-color"></i></label>
-                                        <select name="location-main" id="location-main" th:field="*{libRegionCodes}" th:onchange="changeLibRegionCode()">
+                                        <select name="location-main" id="location-main" th:field="*{libRegionCodes}" onchange="changeLibRegionCode()">
                                             <option value="-1">--- 지역정보 ---</option>
                                             <option th:each="libRegionCode : ${libRegionCodes}" th:value="${libRegionCode.code}" th:text="${libRegionCode.name}"></option>
                                         </select>
@@ -89,7 +89,7 @@
                             <div class="col-6">
                                 <div class="search-input">
                                     <label for="location-sub"><i class="lni lni-map-marker theme-color"></i></label>
-                                    <select name="location-sub" id="location-sub" onchange="changeDetailRegionCode()">
+                                    <select name="location-sub" id="location-sub">
                                         <option value="-1">--- 세부지역 ---</option>
                                     </select>
                                 </div>
@@ -368,9 +368,10 @@
     <script th:src="@{/js/count-up.min.js}"></script>
     <script th:src="@{/js/main.js}"></script>
     <script th:src="@{/js/lilac-common.js}"></script>
+    <script th:src="@{/js/lilac-lib-region.js}"></script>
     <script th:inline="javascript">
 
-        const changeKeyword = (keywordTag) => {
+        function changeKeyword(keywordTag){
             if(keywordTag.value == ""){
                 $("#license").attr("disabled", false);
             }else{
@@ -378,7 +379,7 @@
             }
         }
 
-        const changeLicense = (licenseTag) => {
+        function changeLicense(licenseTag){
             if(licenseTag.value > -1){
                 $("#keyword").attr("disabled", true);
             }else if(licenseTag.value == -1){
@@ -386,7 +387,7 @@
             }
         }
 
-        const showAddLicenseToNote = () => {
+        function showAddLicenseToNote() {
             $.ajax({
                 type:"get",
                 url:"/lecture/api/noteList",
@@ -404,7 +405,7 @@
                 }
             })
         }
-        const appendNoteList = (jsonResult) => {
+        function appendNoteList(jsonResult){
             const noteListTag = document.querySelector('#lectureNoteSelect');
 
             for(let i in jsonResult.noteList){
@@ -424,39 +425,8 @@
             }
         }
 
-        const changeLibRegionCode = () => {
-            const m_selectedRegion = $('#location-main').val();
-            $.ajax({
-                type:"get",
-                url:"/search/dtl-region-code",
-                dataType:"json",
-                data:{ regionCode: m_selectedRegion },
-                success:(result) => {
-                    initDetailRegionCode(result);
-                },
-                error:(err) => {
-                }
-            });
-        }
-
-        const initDetailRegionCode = (detailRegionCodes) => {
-            /*
-                템플릿 문자열 = 백틱 기호호 감싼다. ``
-                `<option value='세부지역코드'>세부지역명</option>`
-                선택하지 않은 값은 -1 로 설정
-             */
-            $("#location-sub").empty();
-            $("#location-sub").append('<option value="-1">--- 세부지역 ---</option>');
-            for(const region of detailRegionCodes){
-                $("#location-sub").append(`<option value=${region.code}>${region.detailName}</option>`);
-            }
-        }
-
-        const changeDetailRegionCode = () => {
-            const m_detailRegion = $('#location-sub').val();
-        }
         // 검색버튼 클릭 이벤트 처리 함수 : 키워드, 카테고리 검색을 처리한다
-        const searchHandler = () => {
+        function searchHandler(){
             /*
                 - 검색어가 있으면 카테고리는 무시하고 검색어로 처리
                 - 카테고리를 선택하면 검색어는 무시하고 카테고리로 처리
@@ -491,14 +461,14 @@
             moveScrollToLicenseScheduleList();
         }
 
-        const moveScrollToLicenseScheduleList = () => {
+        function moveScrollToLicenseScheduleList(){
             // 자격증 시험일정 태그로 스크롤 이동
             let offset = $("#section-license").offset();
             $("html, body").animate({scrollTop: offset.top}, 300);
         }
 
         // 자격증 시험일정 정보를 업데이트하는 함수
-        const searchLicenseSchedulesByLicenseCode = (argLicenseCode) => {
+        function searchLicenseSchedulesByLicenseCode(argLicenseCode){
             if(argLicenseCode != undefined && argLicenseCode == 0){
                 $("#license-div").html("");
             }
@@ -521,7 +491,7 @@
             });
         }
         // 도서관, 카카오도서 목록을 업데이트하는 함수
-        const refreshLicenseBookList = (argLicenseCode, argRegionCode, argDetailRegionCode, argPageNum) => {
+        function refreshLicenseBookList(argLicenseCode, argRegionCode, argDetailRegionCode, argPageNum){
             $.ajax({
                 type:"get",
                 url:"/search/license-book-list",
@@ -547,19 +517,19 @@
             });
         }
         // 키워드목록의 주제어를 처리하는 함수 const refreshPlayList = (argKeywordCode, argOffset, argKeywordType)
-        const refreshPageBySubject = (argSubjectCode, argOffset) =>{
+        function refreshPageBySubject(argSubjectCode, argOffset){
 
             refreshSubjectBookList(argSubjectCode, argOffset);
             refreshPlayList(argSubjectCode, null, argOffset, 2);
             searchLicenseSchedulesByLicenseCode(0);
         }
-        const moveScrollToBookList = () => {
+        function moveScrollToBookList(){
             // 도서정보 태그로 스크롤 이동
             let offset = $("#div-library-book").offset();
             $("html, body").animate({scrollTop: offset.top}, 300);
         }
 
-        const refreshSubjectBookList = (argSubjectCode, argPageNum) => {
+        function refreshSubjectBookList(argSubjectCode, argPageNum){
             $.ajax({
                 type:"get",
                 url:"/search/subject-book-list",
@@ -583,7 +553,7 @@
             });
         }
 
-        const refreshSearchBookList = (argKeyword, argPageNum) => {
+        function refreshSearchBookList(argKeyword, argPageNum){
             if(argKeyword == undefined || argKeyword == ""){
                 return;
             }
@@ -609,7 +579,7 @@
             })
         }
 
-        const refreshPlaylistByLicense = (argLicenseCode, argOffset) => {
+        function refreshPlaylistByLicense(argLicenseCode, argOffset){
             if(argLicenseCode <= 0){
                 return;
             }
@@ -617,7 +587,7 @@
         }
 
         // 동영상 재생목록을 코드기반으로 업데이트하는 함수
-        const refreshPlayList = (argKeywordCode, argSearchKeyword, argOffset, argKeywordType) => {
+        function refreshPlayList(argKeywordCode, argSearchKeyword, argOffset, argKeywordType){
             $.ajax({
                 type:"get",
                 url:"/search/playlist",
