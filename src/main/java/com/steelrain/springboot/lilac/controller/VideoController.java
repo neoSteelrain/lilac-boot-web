@@ -36,15 +36,12 @@ public class VideoController {
             유튜브영상 재생페이지에서 영상들을 강의노트에 추가하기 위해서는 memberId 가 필요하다.
             때문에 로그인 한 경우에는 memberId를 페이지의 hidden필드에 저장하기 위해 model에 넣어준다.
          */
-        MemberDTO memberDTO = null;
-        if(session != null && session.getAttribute(SESSION_KEY.LOGIN_MEMBER) != null){
-            memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
-            model.addAttribute("memberId",memberDTO.getId());
-        }
+        Long memberId = (Long) session.getAttribute(SESSION_KEY.MEMBER_ID);
+        model.addAttribute("memberId", memberId);
         List<YoutubeVideoDTO> videoDTOList = m_videoService.getPlayListDetail(youtubePlaylistId);
         model.addAttribute("videoList", videoDTOList);
         model.addAttribute("playListId", youtubePlaylistId);
-        model.addAttribute("isLikeVideo", m_videoService.getLikeStatus(memberDTO.getId(),  videoDTOList.get(0).getId()));
+        model.addAttribute("isLikeVideo", m_videoService.getLikeStatus(memberId,  videoDTOList.get(0).getId()));
         return "/video/playlist-detail";
     }
 
@@ -59,12 +56,9 @@ public class VideoController {
 
     @GetMapping("/lec-playlist-detail")
     public String getPlayListDetailOfLectureNote(@RequestParam("youtubePlaylistId") Long youtubePlaylistId, Model model, HttpSession session){
-        MemberDTO memberDTO = null;
-        if(session != null && session.getAttribute(SESSION_KEY.LOGIN_MEMBER) != null){
-            memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
-            model.addAttribute("memberId", memberDTO.getId());
-        }
-        List<LectureNoteYoutubeVideoDTO> videoDTOList = m_videoService.getPlayListDetailOfLectureNote(memberDTO.getId(), youtubePlaylistId);
+        Long memberId = (Long) session.getAttribute(SESSION_KEY.MEMBER_ID);
+        model.addAttribute("memberId", memberId);
+        List<LectureNoteYoutubeVideoDTO> videoDTOList = m_videoService.getPlayListDetailOfLectureNote(memberId, youtubePlaylistId);
         model.addAttribute("videoList", videoDTOList);
         model.addAttribute("playListId", youtubePlaylistId);
         return "/video/lecture-note-play";
@@ -72,14 +66,10 @@ public class VideoController {
 
     @GetMapping("/video-template")
     public String getVideoTemplate(@RequestParam("videoId") Long videoId, Model model, HttpSession session){
-        MemberDTO memberDTO = null;
-        if(session != null && session.getAttribute(SESSION_KEY.LOGIN_MEMBER) != null){
-            memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
-            model.addAttribute("memberId",memberDTO.getId());
-        }
+        Long memberId = (Long) session.getAttribute(SESSION_KEY.MEMBER_ID);
         YoutubeVideoDTO videoDTO = m_videoService.getVideoDetail(videoId);
         model.addAttribute("videoInfo", videoDTO);
-        model.addAttribute("isLikeVideo", m_videoService.getLikeStatus(memberDTO.getId(), videoId));
+        model.addAttribute("isLikeVideo", m_videoService.getLikeStatus(memberId, videoId));
         return "/video/video-play-template";
     }
 }

@@ -43,24 +43,35 @@
             </button>
             <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
               <ul id="nav" class="navbar-nav ms-auto">
-                <li class="nav-item">
-                  <a href="/" aria-label="Toggle navigation">첫화면</a>
-                </li>
-                </li>
-                <li class="nav-item">
-                  <a href="/lecture/lecture-note" aria-label="Toggle navigation">강의노트</a>
-                </li>
-                <li class="nav-item">
-                  <a href="/member/profile" aria-label="Toggle navigation">회원정보</a>
-                </li>
-                <li class="nav-item">
-                  <a href="/admin/admin-menu" aria-label="Toggle navigation">관리자</a>
-                </li>
+                <th:block th:if="${session.MEMBER_ID == null}">
+                  <li class="nav-item">
+                    <a href="/" aria-label="Toggle navigation">검색</a>
+                  </li>
+                </th:block>
+                <th:block th:unless="${session.MEMBER_ID == null}">
+                  <th:block th:if="${session.MEMBER_GRADE == 1}">
+                    <li class="nav-item">
+                      <a href="/admin/admin-menu" aria-label="Toggle navigation">관리자</a>
+                    </li>
+                  </th:block>
+                  <th:block th:if="${session.MEMBER_GRADE == 2}">
+                    <li class="nav-item">
+                      <a href="/" aria-label="Toggle navigation">검색</a>
+                    </li>
+                    </li>
+                    <li class="nav-item">
+                      <a href="/lecture/lecture-note" aria-label="Toggle navigation">강의노트</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="/member/profile" aria-label="Toggle navigation">회원정보</a>
+                    </li>
+                  </th:block>
+                </th:block>
               </ul>
-            </div> <!-- navbar collapse -->
+            </div>
             <div class="login-button">
               <ul>
-                <th:block th:if="${session.LOGIN_MEMBER == null}">
+                <th:block th:if="${session.MEMBER_ID == null}">
                   <li>
                     <a href="/member/login"><i class="lni lni-enter"></i> 로그인</a>
                   </li>
@@ -68,19 +79,19 @@
                     <a href="/member/registration"><i class="lni lni-user"></i> 회원가입</a>
                   </li>
                 </th:block>
-                <th:block th:unless="${session.LOGIN_MEMBER == null}">
+                <th:block th:unless="${session.MEMBER_ID == null}">
                   <li>
-                    <i class="lni lni-user" th:text="' '+${session.LOGIN_MEMBER.nickname}"></i>
+                    <i class="lni lni-user" th:text="' '+${session.MEMBER_NICKNAME}"></i>
                     <a href="javascript:logout()"><i class="lni lni-exit"> 로그아웃</i></a>
                   </li>
                 </th:block>
               </ul>
             </div>
-          </nav> <!-- navbar -->
+          </nav>
         </div>
       </div>
-    </div> <!-- row -->
-  </div> <!-- container -->
+    </div>
+  </div>
 </header>
 
 <script th:src="@{/js/jquery.3.6.1.min.js}"></script>

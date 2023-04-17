@@ -1,7 +1,6 @@
 package com.steelrain.springboot.lilac.repository;
 
 import com.steelrain.springboot.lilac.datamodel.KaKaoBookDTO;
-import com.steelrain.springboot.lilac.datamodel.view.RecommendedBookListDTO;
 import com.steelrain.springboot.lilac.mapper.LicenseBookMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

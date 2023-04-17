@@ -12,4 +12,5 @@ public interface IMemberRepository {
     int updateMemberInfo(MemberDTO memberDTO);
     int findMemberByNickName(String nickName);
     int updateMemberProfile(Long memberId, String originalProfileName, String uploadedUrl);
+    MemberDTO findMemberInfo(Long memberId);
 }

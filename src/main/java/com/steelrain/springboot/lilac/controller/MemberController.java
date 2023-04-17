@@ -74,8 +74,10 @@ public class MemberController {
         MemberDTO memberDTO = m_memberService.loginMember(loginDTO.getEmail(), loginDTO.getPassword());
         if(memberDTO != null){
             HttpSession session = servletRequest.getSession();
-            memberDTO.setPassword(null); // 패스워드까지는 세션에 넣지 않는다
-            session.setAttribute(SESSION_KEY.LOGIN_MEMBER, memberDTO);
+            session.setAttribute(SESSION_KEY.MEMBER_ID, memberDTO.getId());
+            session.setAttribute(SESSION_KEY.MEMBER_NICKNAME, memberDTO.getNickname());
+            session.setAttribute(SESSION_KEY.MEMBER_EMAIL, memberDTO.getEmail());
+            session.setAttribute(SESSION_KEY.MEMBER_GRADE, memberDTO.getGrade());
             if(memberDTO.getGrade() == 1){
                 return "redirect:/admin/admin-menu";
             }
@@ -112,12 +114,8 @@ public class MemberController {
     }
 
     @GetMapping("/profile")
-    public String profileForm(HttpServletRequest servletRequest, Model model){
-        HttpSession session = servletRequest.getSession(false);
-        if(session == null){
-            return "redirect:/";
-        }
-        MemberDTO memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
+    public String profileForm(HttpSession session, Model model){
+        MemberDTO memberDTO = m_memberService.getMemberInfo((Long)session.getAttribute(SESSION_KEY.MEMBER_ID));
         MemberProfileEditDTO memberEditDTO = new MemberProfileEditDTO();
         memberEditDTO.setNickname(memberDTO.getNickname());
         memberEditDTO.setEmail(memberDTO.getEmail());
@@ -134,17 +132,13 @@ public class MemberController {
 
     @PostMapping("/profile")
     public RedirectView editMemberProfile(@Validated @ModelAttribute("memberInfo") MemberProfileEditDTO editDTO, BindingResult bindingResult,
-                                          HttpServletRequest servletRequest, RedirectAttributes attributes){
+                                          HttpSession session, RedirectAttributes attributes){
         if(bindingResult.hasErrors()){
             log.error("회원정보 수정 에러 : {}", bindingResult);
             return new RedirectView("/member/profile");
         }
-        HttpSession session = servletRequest.getSession(false);
-        if(session == null){
-            return new RedirectView("/");
-        }
-        MemberDTO memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
-        m_memberService.updateMemberInfo(memberDTO, editDTO);
+        MemberDTO memberDTO = m_memberService.getMemberInfo((Long)session.getAttribute(SESSION_KEY.MEMBER_ID));
+        m_memberService.updateMemberInfo(memberDTO, editDTO, session);
 
         return new RedirectView("/member/profile");
     }

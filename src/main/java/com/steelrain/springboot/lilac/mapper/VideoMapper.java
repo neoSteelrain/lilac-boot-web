@@ -36,7 +36,7 @@ public interface VideoMapper {
 
     int updateVideoPlaytime(Long id, Long playtime);
 
-    List<LectureNoteYoutubeVideoDTO> findPlayListDetailOfLectureNote(Long memberId, Long youtubePlaylistId);
+    List<LectureNoteYoutubeVideoDTO> findPlayListDetailOfLectureNote(@Param("memberId")Long memberId, @Param("youtubePlaylistId") Long youtubePlaylistId);
 
     String findDuration(Long lectureVideoId);
 
@@ -44,7 +44,7 @@ public interface VideoMapper {
     long findProgress(Long lectureVideoId);
 
     @Select("SELECT like_status FROM tbl_youtube_like WHERE member_id=#{memberId} AND youtube_id=#{videoId}")
-    Optional<Boolean> findVideoLikeStatus(Long memberId, Long videoId);
+    Optional<Boolean> findVideoLikeStatus(@Param("memberId") Long memberId, @Param("videoId") Long videoId);
 
     void setLikeStatus(Long memberId, Long videoId, boolean likeStatus);
 
@@ -61,5 +61,5 @@ public interface VideoMapper {
     Map<String, Long> selectLikeCountMap(Long videoId);
 
     @Delete("DELETE FROM tbl_youtube_like WHERE member_id=#{memberId} AND youtube_id=#{videoId}")
-    void deleteLikeVideo(Long memberId, Long videoId);
+    void deleteLikeVideo(@Param("memberId") Long memberId,@Param("videoId") Long videoId);
 }

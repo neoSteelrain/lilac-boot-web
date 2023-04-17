@@ -6,6 +6,7 @@ import com.steelrain.springboot.lilac.datamodel.LectureNoteDTO;
 import com.steelrain.springboot.lilac.datamodel.MemberDTO;
 import com.steelrain.springboot.lilac.datamodel.view.*;
 import com.steelrain.springboot.lilac.service.ILectureNoteService;
+import com.steelrain.springboot.lilac.service.IMemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -28,24 +29,19 @@ import java.util.Objects;
 public class LectureController {
 
     private final ILectureNoteService m_lectureService;
+    private final IMemberService m_memberService;
     private final ICacheService m_keywordCategoryCacheService;
 
 
     @GetMapping("/lecture-note")
-    public String lectureNoteForm(HttpServletRequest servletRequest, Model model){
-        HttpSession session = servletRequest.getSession(false);
-        if(session == null){
-            return "redirect:/";
-        }
-        MemberDTO memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
-        if(memberDTO == null){
-            return "redirect:/member/login";
-        }
-
+    public String lectureNoteForm(HttpSession session, Model model){
+        MemberDTO memberDTO = m_memberService.getMemberInfo((Long) session.getAttribute(SESSION_KEY.MEMBER_ID));
         List<LectureNoteDTO> noteDTOList = m_lectureService.getLectureListByMember(memberDTO.getId());
         model.addAttribute("lectureNoteList", noteDTOList);
         model.addAttribute("noteAdd", new LectureNoteAddDTO());
-        model.addAttribute("memberInfo", memberDTO);
+        model.addAttribute("memberNickname", memberDTO.getNickname());
+        model.addAttribute("memberEmail", memberDTO.getEmail());
+        model.addAttribute("memberProfile", memberDTO.getProfileSave());
 
         // 강의노트 상세정보 설정
         LectureNoteDetailDTO noteDetailDTO = m_lectureService.getLectureNoteDetailInfoByMember(memberDTO.getId(), noteDTOList.get(0).getId());
@@ -58,16 +54,8 @@ public class LectureController {
     }
 
     @GetMapping("/lecture-note-member")
-    public String lectureNoteDetail(@RequestParam("noteId") Long noteId, HttpServletRequest servletRequest, Model model){
-        HttpSession session = servletRequest.getSession(false);
-        if(session == null){
-            return "redirect:/";
-        }
-        MemberDTO memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
-        if(memberDTO == null){
-            return "redirect:/member/login";
-        }
-
+    public String lectureNoteDetail(@RequestParam("noteId") Long noteId, HttpSession session, Model model){
+        MemberDTO memberDTO = m_memberService.getMemberInfo((Long)session.getAttribute(SESSION_KEY.MEMBER_ID));
         List<LectureNoteDTO> noteDTOList = m_lectureService.getLectureListByMember(memberDTO.getId());
         model.addAttribute("lectureNoteList", noteDTOList);
         model.addAttribute("noteAdd", new LectureNoteAddDTO());
@@ -84,16 +72,11 @@ public class LectureController {
     }
 
     @PostMapping("/remove-playlist")
-    public RedirectView removePlayList(@RequestParam("noteId") Long noteId, @RequestParam("playListId") Long playListId, HttpServletRequest servletRequest, RedirectAttributes attributes){
-        HttpSession session = servletRequest.getSession(false);
-        if(session == null){
-            return new RedirectView("/");
-        }
-        MemberDTO memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
-        if(memberDTO == null){
-            return new RedirectView("/member/login");
-        }
-        m_lectureService.removePlayList(memberDTO.getId(), noteId, playListId);
+    public RedirectView removePlayList(@RequestParam("noteId") Long noteId,
+                                       @RequestParam("playListId") Long playListId,
+                                       HttpSession session, RedirectAttributes attributes){
+        Long memberId = (Long) session.getAttribute(SESSION_KEY.MEMBER_ID);
+        m_lectureService.removePlayList(memberId, noteId, playListId);
         attributes.addAttribute("noteId", noteId);
 
         return new RedirectView("/lecture/lecture-note-member");
@@ -101,15 +84,8 @@ public class LectureController {
 
     @PostMapping("/remove-book")
     public RedirectView removeBook(@RequestParam("refId") Long refId,
-                                   @RequestParam("noteId") Long noteId, HttpServletRequest servletRequest, RedirectAttributes attributes){
-        HttpSession session = servletRequest.getSession(false);
-        if(session == null){
-            return new RedirectView("/");
-        }
-        MemberDTO memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
-        if(memberDTO == null){
-            return new RedirectView("/member/login");
-        }
+                                   @RequestParam("noteId") Long noteId,
+                                   RedirectAttributes attributes){
         m_lectureService.removeBook(refId);
         attributes.addAttribute("noteId", noteId);
 
@@ -117,17 +93,13 @@ public class LectureController {
     }
 
     @GetMapping("/edit-note")
-    public String editNoteTemplate(@RequestParam("noteId") Long noteId, HttpServletRequest servletRequest, Model model){
-        HttpSession session = servletRequest.getSession(false);
-        if(session == null){
-            return "redirect:/";
-        }
-        MemberDTO memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
-        if(memberDTO == null){
+    public String editNoteTemplate(@RequestParam("noteId") Long noteId, HttpSession session, Model model){
+        Long memberId = (Long) session.getAttribute(SESSION_KEY.MEMBER_ID);
+        if(memberId == null){
             return "redirect:/member/login";
         }
 
-        LectureNoteDTO noteDTO = m_lectureService.getLectureNoteByMember(memberDTO.getId(), noteId);
+        LectureNoteDTO noteDTO = m_lectureService.getLectureNoteByMember(memberId, noteId);
         LectureNoteEditDTO editDTO = new LectureNoteEditDTO();
         editDTO.setNoteId(noteId);
         editDTO.setNoteTitle(noteDTO.getTitle());
@@ -145,19 +117,10 @@ public class LectureController {
 
     @PostMapping("/edit-note")
     public RedirectView editLectureNote(@Validated @ModelAttribute("noteEditDTO")LectureNoteEditDTO noteEditDTO,
-                                        BindingResult bindingResult, HttpServletRequest servletRequest, RedirectAttributes attributes){
+                                        BindingResult bindingResult, RedirectAttributes attributes){
         if(bindingResult.hasErrors()){
             log.info("강의노트 수정에러 : {}", bindingResult);
             return new RedirectView("/lecture/lecture-note");
-        }
-        
-        HttpSession session = servletRequest.getSession(false);
-        if(session == null){
-            return new RedirectView("/");
-        }
-        MemberDTO memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
-        if(memberDTO == null){
-            return new RedirectView("/member/login");
         }
 
         LectureNoteDTO noteDTO = new LectureNoteDTO();
@@ -180,27 +143,16 @@ public class LectureController {
 
     @GetMapping("modal-playlist-template")
     public String getLectureNoteListByPlayListModal(@RequestParam("memberId") Long memberId,
-                                                    @RequestParam("playListId") Long playListId, Model model, HttpServletRequest servletRequest){
-        HttpSession session = servletRequest.getSession(false);
-        if(session == null){
-            return "redirect:/";
-        }
+                                                    @RequestParam("playListId") Long playListId, Model model){
         List<PlayListAddModalDTO> noteDTOList = m_lectureService.getLectureNoteListByPlayListModal(memberId, playListId);
         model.addAttribute("lectureNoteList", noteDTOList);
         return "/lecture/playlist-add-modal";
     }
 
     @GetMapping("model-book-template")
-    public String getLectureNoteListByBookModal(@RequestParam("bookId") Long bookId, Model model, HttpServletRequest servletRequest){
-        HttpSession session = servletRequest.getSession(false);
-        if(session == null){
-            return "redirect:/";
-        }
-        MemberDTO memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
-        if(Objects.isNull(memberDTO)){
-            return "redirect:/member/login";
-        }
-        List<BookAddModalDTO> bookDTOList = m_lectureService.getLectureNoteListByBookModal(memberDTO.getId(), bookId);
+    public String getLectureNoteListByBookModal(@RequestParam("bookId") Long bookId, Model model, HttpSession session){
+        Long memberId = (Long)session.getAttribute(SESSION_KEY.MEMBER_ID);
+        List<BookAddModalDTO> bookDTOList = m_lectureService.getLectureNoteListByBookModal(memberId, bookId);
         model.addAttribute("lectureNoteList", bookDTOList);
         return "/lecture/book-add-modal";
     }

@@ -46,12 +46,15 @@
         <div class="top-area">
             <div class="row">
                 <div class="col-lg-6 col-md-12 col-12">
-                    <div class="product-images">
+                    <!--<div class="product-images">
                         <main id="gallery">
                             <div class="main-img">
                                 <img th:src="${bookDetailInfo.bookDTO.thumbnail}" id="current" alt="#">
                             </div>
                         </main>
+                    </div>-->
+                    <div class="item-image">
+                        <img th:src="${bookDetailInfo.bookDTO.thumbnail}" alt="#">
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12 col-12">
@@ -81,54 +84,42 @@
         </div>
         <div class="item-details-blocks">
             <div class="row">
-                <div class="col-lg-8 col-md-7 col-12">
-                    <!-- Start Single Block -->
+                <div class="col-lg-12 col-md-12 col-12">
                     <div class="single-block description">
                         <h3>도서 소개</h3>
                         <p th:text="${bookDetailInfo.bookDTO.contents}"></p>
                     </div>
-                    <!-- End Single Block -->
-                    <!-- Start Single Block -->
-                    <th:block th:if="${bookDetailInfo.libraryList.size() > 0}">
-                        <div class="single-block comments">
-                            <h3>도서관 이름</h3>
-                            <div class="single-comment">
-                                <img src="https://via.placeholder.com/300x300" alt="#">
-                                <div class="content">
-                                    <table>
-                                        <tbody>
-                                        <tr>
-                                            <td>주소</td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>전화번호</td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>FAX 번호</td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>휴관일</td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>운영시간</td>
-                                            <td></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                    <a href="javascript:void(0)" class="reply"><i class="lni lni-link"></i> 홈페이지</a>
+                    <div class="single-block comments">
+                        <h3>소장도서관 목록</h3>
+                        <th:block th:if="${bookDetailInfo.getLibraryList().size() == 0}">
+                            <h6>소장도서관이 없습니다</h6>
+                        </th:block>
+                        <div th:each="lib: ${bookDetailInfo.libraryList}">
+                            <div class="product-info">
+                                <div class="list-info">
+                                    <h4 th:text="${lib.name}"></h4>
+                                    <ul>
+                                        <li><span >주소</span> [[${lib.address}]]</li>
+                                        <li><span>전화번호</span> [[${lib.tel}]]</li>
+                                        <li><span>FAX</span> [[${lib.fax}]]</li>
+                                        <li><span>휴관일</span> [[${lib.closed}]]</li>
+                                        <li><span>운영시간</span> [[${lib.operatingTime}]]</li>
+                                        <li th:utext="'<span>소장여부</span> '+${lib.hasBook ? '예':'아니오'}"></li>
+                                        <li th:utext="'<span>대출가능여부</span> '+${lib.loanAvailable ? '예':'아니오'}"></li>
+                                    </ul>
+                                </div>
+                                <div class="social-share">
+                                    <h4>홈페이지</h4>
+                                    <ul>
+                                        <li><a th:href="${lib.homepage}" target="_blank"><i class="lni lni-link"></i></a></li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
-                    </th:block>
-                    <!-- End Single Block -->
+                    </div>
                 </div>
-                <div class="col-lg-4 col-md-5 col-12">
+                <!--<div class="col-lg-4 col-md-5 col-12">
                     <div class="item-details-sidebar">
-                        <!-- Start Single Block -->
                         <div class="single-block ">
                             <h3>위치</h3>
                             <div class="mapouter">
@@ -136,8 +127,7 @@
                                     <iframe width="100%" height="300" id="gmap_canvas"
                                             src="https://maps.google.com/maps?q=2880%20Broadway,%20New%20York&t=&z=13&ie=UTF8&iwloc=&output=embed"
                                             frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
-                                    <a
-                                            href="https://putlocker-is.org"></a><br>
+                                    <a href="https://putlocker-is.org"></a><br>
                                     <style>
                                         .mapouter {
                                             position: relative;
@@ -158,9 +148,8 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- End Single Block -->
                     </div>
-                </div>
+                </div>-->
             </div>
         </div>
     </div>

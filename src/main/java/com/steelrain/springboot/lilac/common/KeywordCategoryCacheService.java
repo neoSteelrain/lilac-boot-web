@@ -118,6 +118,39 @@ public class KeywordCategoryCacheService implements ICacheService {
                 .get().getKeyWordBook();
     }
 
+    /**
+     * 가장작은 지역코드를 반환한다
+     * @return 지역코드. 예) 서울 - 11, 부산 - 21
+     */
+    @Override
+    public short getLeastRegionCode(){
+        return findLeastRegionCode();
+    }
+    
+    // 지역코드를 계산하는 헬퍼메서드
+    private short findLeastRegionCode(){
+        return m_libRegionCodeList.stream()
+                .map(LibraryRegionCodeDTO::getCode)
+                .min(Short::compare)
+                .get().shortValue();
+    }
+
+    /**
+     * 가장작은 세부지역코드를 반환한다
+     * @param regionCode 지역코드. 예) 서울 - 11, 부산 - 21
+     * @return 지역코드에 속하는 가장작은 세부지역코드. 예) 서울특별시 종로구의 세부지역코드 - 11010
+     */
+    @Override
+    public int getLeastDetailRegionCode(short regionCode) {
+        if(regionCode < findLeastRegionCode()){
+            return -1;
+        }
+        return ((List<LibraryDetailRegionCodeDTO>) m_libDetailRegionCodeMap.get(regionCode)).stream()
+                .map(LibraryDetailRegionCodeDTO::getCode)
+                .min(Integer::compare)
+                .get().intValue();
+    }
+
     private void initKeywordMap(){
         // 주제분류 초기화
         m_subjectCodeList = m_searchMapper.getSubjectCodes();

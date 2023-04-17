@@ -27,7 +27,7 @@ public class AdminRestController {
 
     @PostMapping("/add-pl")
     public ResponseEntity<AddCandiPlayListResponse> addCandiPlayList(@RequestBody AddCandiPlayListRequest request, HttpSession session){
-        if(session.getAttribute(SESSION_KEY.LOGIN_MEMBER) == null){
+        if(session.getAttribute(SESSION_KEY.MEMBER_ID) == null){
             return new ResponseEntity<>(AddCandiPlayListResponse.builder()
                     .requestParameter(request)
                     .code(HttpStatus.UNAUTHORIZED.value())

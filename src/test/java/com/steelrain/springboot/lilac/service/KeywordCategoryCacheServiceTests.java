@@ -73,4 +73,18 @@ public class KeywordCategoryCacheServiceTests {
         assertThat(StringUtils.hasText(name)).isFalse();
         assertThat(Objects.isNull(name)).isTrue();
     }
+    
+    @Test
+    @DisplayName("가장작은 지역코드값 얻어내기")
+    public void testLeastRegionCode(){
+        short val = mgr.getLeastRegionCode();
+        assertThat(val == 11).isTrue();
+    }
+
+    @Test
+    @DisplayName("가장작은 세부직역코드값 얻어내기")
+    public void testLeastDetailRegionCode(){
+        int val = mgr.getLeastDetailRegionCode((short) 11);
+        assertThat(val == 11010);
+    }
 }

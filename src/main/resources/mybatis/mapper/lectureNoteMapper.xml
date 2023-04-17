@@ -131,17 +131,11 @@
     </select>
 
     <delete id="deletePlayList" parameterType="map">
-        DELETE FROM ref_tbl_lecture_youtube
-        WHERE id IN (
-            SELECT id
-            FROM
-                (SELECT id
-                 FROM ref_tbl_lecture_youtube ref
-                 WHERE ref.lecture_member_id=#{memberId}
-                   AND ref.lecture_id=#{noteId}
-                   AND EXISTS (
-                         SELECT id AS videoId
-                         FROM tbl_youtube
-                         WHERE youtube_playlist_id=#{playlistId})) AS tmp)
+        DELETE ref1
+        FROM ref_tbl_lecture_youtube ref1 INNER JOIN ref_tbl_lecture_youtube ref2
+            ON ref1.id=ref2.id
+        WHERE ref2.lecture_id=#{noteId}
+            AND ref2.lecture_member_id=#{memberId}
+            AND ref2.youtube_playlist_id=#{playlistId}
     </delete>
 </mapper>

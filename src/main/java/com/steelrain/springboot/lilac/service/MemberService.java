@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.service;
 
+import com.steelrain.springboot.lilac.common.SESSION_KEY;
 import com.steelrain.springboot.lilac.datamodel.MemberDTO;
 import com.steelrain.springboot.lilac.datamodel.view.MemberProfileEditDTO;
 import com.steelrain.springboot.lilac.event.MemberRegistrationEvent;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,6 +36,11 @@ public class MemberService implements IMemberService {
 
 
     @Override
+    public MemberDTO getMemberInfo(Long memberId) {
+        return m_memberRepository.findMemberInfo(memberId);
+    }
+
+    @Override
     public boolean checkDuplicatedEmail(String email) {
         return m_memberRepository.findMemberByEmail(email) > 0;
     }
@@ -42,7 +49,6 @@ public class MemberService implements IMemberService {
     public boolean checkDuplicatedNickName(String nickName) {
         return m_memberRepository.findMemberByNickName(nickName) > 0 ;
     }
-
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -68,12 +74,17 @@ public class MemberService implements IMemberService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updateMemberInfo(MemberDTO memberDTO, MemberProfileEditDTO editDTO) {
+    public void updateMemberInfo(MemberDTO memberDTO, MemberProfileEditDTO editDTO, HttpSession session) {
         memberDTO.setNickname(editDTO.getNickname());
         memberDTO.setEmail(editDTO.getEmail());
         memberDTO.setDescription(editDTO.getDescription());
         memberDTO.setProfileOriginal(editDTO.getProfileImage().getOriginalFilename());
         memberDTO.setProfileSave(updateMemberProfile(editDTO.getProfileImage(), memberDTO.getId(), memberDTO.getProfileSave()));
+
+        // 세션정보도 같이 업데이트 해준다
+        session.setAttribute(SESSION_KEY.MEMBER_NICKNAME, editDTO.getNickname());
+        session.setAttribute(SESSION_KEY.MEMBER_EMAIL, editDTO.getEmail());
+
         m_memberRepository.updateMemberInfo(memberDTO);
     }
 

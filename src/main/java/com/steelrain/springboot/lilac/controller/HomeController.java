@@ -30,7 +30,7 @@ public class HomeController {
         model.addAttribute("licenseCodes",m_keywordCategoryCacheService.getLicenseCodeList());
         model.addAttribute("recommendedPlayList", m_videoService.getRecommendedPlayList());
         model.addAttribute("recommendedBookList", m_bookService.getRecommendedBookList());
-        model.addAttribute("isLogin", Objects.isNull(request.getSession().getAttribute(SESSION_KEY.LOGIN_MEMBER)) ? "0":"1");
+        model.addAttribute("isLogin", Objects.isNull(request.getSession().getAttribute(SESSION_KEY.MEMBER_ID)) ? "0":"1");
         return "index";
     }
 

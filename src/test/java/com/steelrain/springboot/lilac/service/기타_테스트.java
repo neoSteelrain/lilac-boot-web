@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,5 +42,12 @@ public class 기타_테스트 {
     public void UUID_테스트(){
         UUID uuid = UUID.fromString("파일이름");
         log.debug("uuid : {}", uuid.toString());
+    }
+
+    @Test
+    public void hhhhhhh(){
+        Long id = (Long) null;
+        assertThat(Objects.isNull(id)).isTrue();
+        log.debug("id : {}", id);
     }
 }

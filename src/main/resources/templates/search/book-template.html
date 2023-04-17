@@ -13,7 +13,12 @@
                 <div class="category-sidebar">
                     <!-- Start Single Widget -->
                     <div class="single-widget">
-                        <h3 th:text="${licenseBookInfo.regionName}+'-'+${licenseBookInfo.detailRegionName}+' 도서관목록'"></h3>
+                        <th:block th:if="${licenseBookInfo.detailRegionName == null}">
+                            <h3 th:text="${licenseBookInfo.regionName}+' 도서관목록'"></h3>
+                        </th:block>
+                        <th:block th:unless="${licenseBookInfo.detailRegionName == null}">
+                            <h3 th:text="${licenseBookInfo.regionName}+'-'+${licenseBookInfo.detailRegionName}+' 도서관목록'"></h3>
+                        </th:block>
                         <ul class="list">
                             <li th:each="library : ${licenseBookInfo.libraryList}">
                                 <a href="javascript:void(0)" th:text="${library.name}"><i class="lni lni-library"></i><span>0</span></a>

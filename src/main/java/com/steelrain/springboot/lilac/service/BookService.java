@@ -64,30 +64,34 @@ public class BookService implements IBookService{
             kaKaoBookDTOList.add(convertKakaoBookDTO(book,
                                  StringUtils.containsWhitespace(tmpIsbn.trim()) ? StringUtils.tokenizeToStringArray(tmpIsbn, " ")[1] : tmpIsbn));
 
-            resultDTO.setKeyword(licenseSearchKeyword);
-            resultDTO.setRegionName(m_cacheService.getRegionName(regionCode));
+            /*resultDTO.setRegionName(m_cacheService.getRegionName(regionCode));
             if(detailRegionCode > 0){
                 resultDTO.setDetailRegionName(m_cacheService.getDetailRegionName(regionCode, detailRegionCode));
-            }
+            }*/
         }
         // 카카오책 검색결과를 DB에 저장하는 이벤트를 발생한다.
         publishKaKaoBookSaveEvent(kaKaoBookDTOList);
 
+        resultDTO.setKeyword(licenseSearchKeyword);
         resultDTO.setLicenseCode(licenseCode);
         resultDTO.setRegionCode(regionCode);
         resultDTO.setDetailRegionCode(detailRegionCode);
-        resultDTO.setDetailRegionName(m_cacheService.getRegionName(regionCode));
-        resultDTO.setDetailRegionName(m_cacheService.getDetailRegionName(regionCode, detailRegionCode));
+        resultDTO.setRegionName(m_cacheService.getRegionName(regionCode));
+
+        if(detailRegionCode > 0){
+            resultDTO.setDetailRegionName(m_cacheService.getDetailRegionName(regionCode, detailRegionCode));
+        }
+
         resultDTO.setTotalBookCount(responseDTO.getMeta().getTotalCount());
         resultDTO.setKakaoBookList(kaKaoBookDTOList);
-        resultDTO.setLibraryList(delegateLibraryByRegionList(regionCode, detailRegionCode));
+        resultDTO.setLibraryList(findLibraryByRegionList(regionCode, detailRegionCode));
         resultDTO.setPageInfo(PagingUtils.createPagingInfo(responseDTO.getMeta().getTotalCount(), pageNum, bookCount));
         return resultDTO;
     }
 
     @Override
     public List<NaruLibraryDTO> getLibraryByRegionList(short region, int detailRegion) {
-        return delegateLibraryByRegionList(region, detailRegion);
+        return findLibraryByRegionList(region, detailRegion);
     }
 
     @Override
@@ -122,15 +126,26 @@ public class BookService implements IBookService{
         return resultDTO;
     }
 
-
+    /**
+     * 도서정보와 도서를 소장하고 있는 도서관의 정보를 찾아서 반환한다.
+     * @param isbn 찾고자하는 도서의 ISBN 
+     * @param regionCode 도서관의 지역코드
+     * @param detailRegionCode 도서관의 세부지역코드
+     * @return 도서정보와 소장도서관목록
+     */
     @Override
     public BookDetailDTO getBookDetailInfo(Long isbn, short regionCode, int detailRegionCode) {
-        /*
-            도서정보와 도서를 소장하고 있는 도서관의 정보를 찾아서 반환한다.
-         */
         KaKaoBookDTO bookDTO = m_bookRepository.findKaKaoBookInfo(isbn);
         List<NaruLibraryDTO> libList = null;
-        if(regionCode == 0 || (regionCode == 0 && detailRegionCode == 0)){
+        if(regionCode <= 0 && detailRegionCode <= 0){
+            return BookDetailDTO.builder()
+                    .bookDTO(bookDTO)
+                    .libraryList(new ArrayList<>(0))
+                    .build();
+        }
+        short leastRegionCode = m_cacheService.getLeastRegionCode();
+        int leastDetailRegionCode = m_cacheService.getLeastDetailRegionCode(regionCode);
+        if(regionCode < leastRegionCode && detailRegionCode < leastDetailRegionCode){
             libList = new ArrayList<>(0);
         }else{
             NaruLibSearchByBookResponseDTO libSearchResponse = m_naruRepository.getLibraryByBook(isbn, regionCode, detailRegionCode);
@@ -191,10 +206,12 @@ public class BookService implements IBookService{
     /*
         실제로 naru API를 호출해서 결과를 반환하는 helper 메서드
      */
-    private List<NaruLibraryDTO> delegateLibraryByRegionList(short region, int detailRegion){
+    private List<NaruLibraryDTO> findLibraryByRegionList(short region, int detailRegion){
         NaruLibSearchByRegionResponseDTO naruLibResult = m_naruRepository.getLibraryByRegion(region, detailRegion);
         return convertNaruLibraryDTO(naruLibResult);
     }
+
+
 
     /*
         나루 도서관검색 API의 결과를 NaruLibraryDTO로 변환시켜준다
@@ -219,7 +236,7 @@ public class BookService implements IBookService{
         return resultDTOList;
     }
 
-    // 도서 1권에 대해 소장하고 있는 도서관 목록을 반환하는 메서드 : 로직변경으로 일단 주석처리
+    // 도서 1권에 대해 소장하고 있는 도서관 목록을 반환하는 메서드
     private List<NaruLibraryDTO> convertNaruLibraryDTO(NaruLibSearchByBookResponseDTO srcNaruDTO, Long isbn13){
         if(Objects.isNull(srcNaruDTO)){
             return new ArrayList<>(0);
@@ -238,6 +255,7 @@ public class BookService implements IBookService{
                             .libCode(library.getLibcode())
                             .name(library.getLibname())
                             .address(library.getAddress())
+                            .fax(library.getFax())
                             .tel(library.getTel())
                             .latitude(library.getLatitude())
                             .longitude(library.getLongitude())

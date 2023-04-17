@@ -43,9 +43,9 @@ public class LectureRestController {
         if(session == null){
             return new ResponseEntity<>(LectureNoteList.builder().noteList(new ArrayList<>(0)).build(), HttpStatus.UNAUTHORIZED);
         }
-        MemberDTO dto = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
+        Long memberId = (Long) session.getAttribute(SESSION_KEY.MEMBER_ID);
         return new ResponseEntity<>(LectureNoteList.builder()
-                                                .noteList(m_lectureNoteService.getLectureListByMember(dto.getId()))
+                                                .noteList(m_lectureNoteService.getLectureListByMember(memberId))
                                                 .build(), HttpStatus.OK);
     }
 
@@ -65,8 +65,8 @@ public class LectureRestController {
         if(session == null){
             throw new LectureNoteException("로그인 정보가 필요합니다.");
         }
-        MemberDTO memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
-        Long noteId = m_lectureNoteService.addLectureNote(memberDTO.getId(), request.title, request.description, request.licenseId, request.subjectId);
+        Long memberIds = (Long) session.getAttribute(SESSION_KEY.MEMBER_ID);
+        Long noteId = m_lectureNoteService.addLectureNote(memberIds, request.title, request.description, request.licenseId, request.subjectId);
         if (noteId != null) {
             return new ResponseEntity<>(LectureAddResponse.builder()
                                                         .requestParameter(request)
@@ -93,11 +93,11 @@ public class LectureRestController {
             throw new ValidationErrorException(errors, request);
         }
         HttpSession session = servletRequest.getSession(false);
-        if(session == null && Objects.isNull(session.getAttribute(SESSION_KEY.LOGIN_MEMBER))){
+        if(session == null && Objects.isNull(session.getAttribute(SESSION_KEY.MEMBER_ID))){
             return new ResponseEntity<>(YoutubePlayListAddResponse.builder().message("로그인 정보가 필요합니다.").build(), HttpStatus.UNAUTHORIZED);
         }
-        MemberDTO memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
-        if(m_lectureNoteService.addYoutubePlayListToLectureNote(request.lectureNoteId, request.playListId, memberDTO.getId())){
+        Long memberId = (Long) session.getAttribute(SESSION_KEY.MEMBER_ID);
+        if(m_lectureNoteService.addYoutubePlayListToLectureNote(request.lectureNoteId, request.playListId, memberId)){
             return new ResponseEntity<>(YoutubePlayListAddResponse.builder()
                                                                 .requestParameter(request)
                                                                 .code(HttpStatus.OK.value())
@@ -122,11 +122,11 @@ public class LectureRestController {
             throw new ValidationErrorException(errors, request);
         }
         HttpSession session = servletRequest.getSession(false);
-        if(session == null && Objects.isNull(session.getAttribute(SESSION_KEY.LOGIN_MEMBER))){
+        if(session == null && Objects.isNull(session.getAttribute(SESSION_KEY.MEMBER_ID))){
             return new ResponseEntity<>(BookAddResponse.builder().message("로그인 정보가 필요합니다.").build(), HttpStatus.UNAUTHORIZED);
         }
-        MemberDTO memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
-        m_lectureNoteService.registerBook(request.getBookId(), request.getLectureNoteId(), memberDTO.getId());
+        Long memberId = (Long) session.getAttribute(SESSION_KEY.MEMBER_ID);
+        m_lectureNoteService.registerBook(request.getBookId(), request.getLectureNoteId(), memberId);
         return new ResponseEntity<>(BookAddResponse.builder()
                 .requestParameter(request)
                 .code(HttpStatus.OK.value())
@@ -155,7 +155,6 @@ public class LectureRestController {
 
     @Getter
     @ToString
-    @Builder
     static class BookAddRequest{
         @NotNull
         private Long bookId;
@@ -166,7 +165,6 @@ public class LectureRestController {
 
     @Getter
     @ToString
-    @Builder
     static class YoutubePlayListAddRequest{
 
         @NotNull
@@ -201,7 +199,6 @@ public class LectureRestController {
 
     @Getter
     @ToString
-    @Builder
     static class LectureAddRequest{
 
         private Long memberId;

@@ -31,18 +31,17 @@ public interface LectureNoteMapper {
             @Result(property = "progress", column = "progress")
     })
     List<LectureNoteDTO> findAllNoteListByMember(Long memberId);
-    //@Select("SELECT id,member_id,license_id,subject_id,title,description,reg_date,progress FROM tbl_lecture WHERE member_id=#{memberId}")
 
 
     @Select("SELECT count(id) FROM tbl_lecture WHERE member_id=#{memberId} AND title=#{title}")
-    int findDuplicatedLectureNoteByMember(Long memberId, String title);
+    int findDuplicatedLectureNoteByMember(@Param("memberId") Long memberId, @Param("title") String title);
 
     boolean addVideoIdList(List<PlayListVideoDTO> videoIdLis);
 
     List<LectureNoteModalDTO> findLectureNoteListByPlayList(Long memberId);
 
     @Select("SELECT id,member_id,license_id,subject_id,title,description,reg_date,progress FROM tbl_lecture WHERE member_id=#{memberId} AND id=#{noteId}")
-    LectureNoteDTO findLectureNoteByMember(Long memberId, Long noteId);
+    LectureNoteDTO findLectureNoteByMember(@Param("memberId") Long memberId, @Param("noteId")Long noteId);
 
     List<LectureNoteDetailDTO.LectureVideoPlayListInfo> findVideoInfoByLectureNote(@Param("memberId")Long memberId, @Param("noteId") Long noteId);
 
@@ -55,7 +54,7 @@ public interface LectureNoteMapper {
 
     void addBook(@Param("bookId") Long bookId, @Param("lectureNoteId") Long lectureNoteId, @Param("memberId") Long memberId);
 
-    List<LectureNoteBook> findBookListByLectureNote(Long memberId, Long noteId);
+    List<LectureNoteBook> findBookListByLectureNote(@Param("memberId")Long memberId, @Param("noteId")Long noteId);
 
     List<LectureNoteModalDTO> findLectureNoteListByBook(@Param("memberId") Long memberId);
 
@@ -65,5 +64,5 @@ public interface LectureNoteMapper {
     String[] findAllDuration(Long playlistId);
 
     @Select("SELECT ifnull(sum(progress), 0) FROM ref_tbl_lecture_youtube WHERE lecture_member_id=#{memberId} AND lecture_id=#{noteId} AND youtube_playlist_id=#{playlistId}")
-    int findTotalProgress(Long memberId, Long noteId, Long playlistId);
+    int findTotalProgress(@Param("memberId")Long memberId, @Param("noteId") Long noteId, @Param("playlistId") Long playlistId);
 }

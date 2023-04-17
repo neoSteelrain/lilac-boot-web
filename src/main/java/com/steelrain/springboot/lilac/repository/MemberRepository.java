@@ -13,6 +13,12 @@ public class MemberRepository implements IMemberRepository{
 
     private final MemberMapper m_memberMapper;
 
+
+    @Override
+    public MemberDTO findMemberInfo(Long memberId) {
+        return m_memberMapper.findMemberInfo(memberId);
+    }
+
     @Override
     public int findMemberByEmail(String email) {
         return m_memberMapper.findMemberByEmail(email);

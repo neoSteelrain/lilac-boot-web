@@ -5,8 +5,8 @@ import com.steelrain.springboot.lilac.common.SESSION_KEY;
 import com.steelrain.springboot.lilac.common.YOUTUBE_PAGING_INFO;
 import com.steelrain.springboot.lilac.datamodel.*;
 import com.steelrain.springboot.lilac.datamodel.view.SubjectBookListDTO;
+import com.steelrain.springboot.lilac.service.IMemberService;
 import com.steelrain.springboot.lilac.service.ISearchService;
-import com.steelrain.springboot.lilac.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -26,6 +26,7 @@ import java.util.Objects;
 public class SearchController {
 
     private final ISearchService m_searchService;
+    private final IMemberService m_memberService;
     private final ICacheService m_keywordCategoryCacheService;
 
 
@@ -55,7 +56,7 @@ public class SearchController {
                                      @RequestParam("detailRegionCode") int detailRegionCode,
                                      @RequestParam("pageNum") int pageNum,
                                      @RequestParam("bookCount") int bookCount, Model model, HttpSession session){
-        MemberDTO memberDTO = (MemberDTO)session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
+        MemberDTO memberDTO = m_memberService.getMemberInfo((Long)session.getAttribute(SESSION_KEY.MEMBER_ID));
         boolean isLogin = Objects.nonNull(memberDTO);
         if(regionCode <= -1){
             if(isLogin){
@@ -105,8 +106,8 @@ public class SearchController {
         }
         HttpSession session = servletRequest.getSession(false);
         if(Objects.nonNull(session)){
-            MemberDTO memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
-            model.addAttribute("memberId", memberDTO.getId());
+            Long memberId = (Long) session.getAttribute(SESSION_KEY.MEMBER_ID);
+            model.addAttribute("memberId", memberId);
         }
         model.addAttribute("bookDetailInfo", m_searchService.getBookDetailInfo(isbn, region, detailRegion));
         return "/search/book-detail";

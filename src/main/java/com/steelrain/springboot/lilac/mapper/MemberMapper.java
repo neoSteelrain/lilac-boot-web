@@ -23,5 +23,8 @@ public interface MemberMapper {
     @Select("SELECT count(id) AS emailCount FROM tbl_member WHERE nickname = #{nickName}")
     int findMemberByNickName(String nickName);
 
-    int updateMemberProfile(Long memberId, String originalProfileName, String uploadedUrl);
+    int updateMemberProfile(@Param("memberId")Long memberId, @Param("originalProfileName")String originalProfileName, @Param("uploadedUrl")String uploadedUrl);
+
+    @Select("SELECT id,nickname,email,password,description,profile_original,profile_save,grade,reg_date,region,dtl_region FROM tbl_member WHERE id=#{memberId}")
+    MemberDTO findMemberInfo(Long memberId);
 }

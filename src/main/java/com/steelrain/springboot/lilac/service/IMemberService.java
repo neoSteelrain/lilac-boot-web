@@ -4,6 +4,7 @@ import com.steelrain.springboot.lilac.datamodel.MemberDTO;
 import com.steelrain.springboot.lilac.datamodel.view.MemberProfileEditDTO;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -15,5 +16,6 @@ public interface IMemberService {
     boolean registerMember(MemberDTO memberDTO);
     MemberDTO loginMember(String email, String password);
     List<MemberDTO> getAllMembers();
-    void updateMemberInfo(MemberDTO memberDTO, MemberProfileEditDTO editDTO);
+    void updateMemberInfo(MemberDTO memberDTO, MemberProfileEditDTO editDTO, HttpSession session);
+    MemberDTO getMemberInfo(Long memberId);
 }

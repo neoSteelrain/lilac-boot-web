@@ -1,6 +1,7 @@
 package com.steelrain.springboot.lilac.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
@@ -17,5 +18,5 @@ public interface LicenseMapper {
     String getLicenseScheduleJsonString(int licenseCode);
 
     @Update("UPDATE tbl_license SET schedule_json=#{jsonStr} WHERE code=#{licenseCode}")
-    int updateLicenseScheduleJsonString(int licenseCode, String jsonStr);
+    int updateLicenseScheduleJsonString(@Param("licenseCode") int licenseCode, @Param("jsonStr") String jsonStr);
 }

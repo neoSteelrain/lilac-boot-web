@@ -42,15 +42,15 @@ public class VideoRestController {
 
     @PostMapping("/like-video")
     public ResponseEntity<LikeVideoResponse> updateLikeVideo(@RequestBody LikeVideoRequest request, HttpSession session){
-        MemberDTO memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
-        if(memberDTO == null){
+        Long memberId = (Long) session.getAttribute(SESSION_KEY.MEMBER_ID);
+        if(memberId == null){
             return new ResponseEntity<>(LikeVideoResponse.builder()
                     .requestParameter(request)
                     .code(HttpStatus.UNAUTHORIZED.value())
                     .message("로그인이 필요한 서비스 입니다")
                     .build(), HttpStatus.UNAUTHORIZED);
         }
-        Map<String, Long> res = m_videoService.updateLikeVideo(request.videoId, memberDTO.getId());
+        Map<String, Long> res = m_videoService.updateLikeVideo(request.videoId, memberId);
 
         return new ResponseEntity<>(LikeVideoResponse.builder()
                 .requestParameter(request)
@@ -63,15 +63,15 @@ public class VideoRestController {
 
     @PostMapping("/dislike-video")
     public ResponseEntity<DisLikeVideoResponse> updateDislikeVideo(@RequestBody DislikeVideoRequest request, HttpSession session){
-        MemberDTO memberDTO = (MemberDTO) session.getAttribute(SESSION_KEY.LOGIN_MEMBER);
-        if(memberDTO == null){
+        Long memberId = (Long) session.getAttribute(SESSION_KEY.MEMBER_ID);
+        if(memberId == null){
             return new ResponseEntity<>(DisLikeVideoResponse.builder()
                     .requestParameter(request)
                     .code(HttpStatus.UNAUTHORIZED.value())
                     .message("로그인이 필요한 서비스 입니다")
                     .build(), HttpStatus.UNAUTHORIZED);
         }
-        Map<String, Long> res = m_videoService.updateDislikeVideo(request.videoId, memberDTO.getId());
+        Map<String, Long> res = m_videoService.updateDislikeVideo(request.videoId, memberId);
         return new ResponseEntity<>(DisLikeVideoResponse.builder()
                 .requestParameter(request)
                 .code(HttpStatus.OK.value())
