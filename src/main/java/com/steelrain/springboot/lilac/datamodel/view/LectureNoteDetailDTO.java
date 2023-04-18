@@ -1,6 +1,5 @@
 package com.steelrain.springboot.lilac.datamodel.view;
 
-import com.steelrain.springboot.lilac.common.PageDTO;
 import com.steelrain.springboot.lilac.datamodel.KaKaoBookDTO;
 import com.steelrain.springboot.lilac.datamodel.LicenseScheduleDTO;
 import lombok.*;
@@ -19,9 +18,9 @@ import java.util.List;
 public class LectureNoteDetailDTO {
     private Long noteId;
     private String noteTitle;
-    private int totalNoteCount;
-    private int inProgressNoteCount;
-    private int completedNoteCount;
+    private int totalLectureCount;
+    private int inProgressLectureCount;
+    private int completedLectureCount;
     private String noteDescription;
     private String noteLicenseName;
     
@@ -33,8 +32,8 @@ public class LectureNoteDetailDTO {
     // 도서정보
     private List<LectureNoteBook> kakaoBookList;
 
-    // 영상정보
-    private List<LectureVideoPlayListInfo> videoPlayList;
+    // 재생목록정보
+    private List<LecturePlayListInfo> videoPlayList;
 
 
     @Getter
@@ -68,7 +67,7 @@ public class LectureNoteDetailDTO {
     @RequiredArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class LectureVideoPlayListInfo {
+    public static class LecturePlayListInfo {
         // DB 컬럼에 매치되는 필드
         private Long noteId;
         private Long playListId;
@@ -89,8 +88,12 @@ public class LectureNoteDetailDTO {
         @Setter
         private Double progressStatus; // 진행상황
         @Setter
-        private long totalDuration; // 재생목록에 속한 영상들의 재생시간을 합친 전체재생시간
+        private long totalDuration; // 재생목록에 속한 영상들의 길이를 합친 값, 초단위
         @Setter
-        private String totalDurationFormattedString; // 전체재생시간을 '--시간 --분 --초' 로 포맷팅한 문자열
+        private long totalPlaytime; // 재생목록에 속한 영상의 재생시간을 합친 값, 초단위
+        @Setter
+        private String totalDurationFormattedString; // 재생목록 영상들의 길이를 '--시간 --분' 로 포맷팅한 문자열
+        @Setter
+        private String totalPlaytimeFormattedString; // 영상들의 전체재생시간을 '--시간 -- 분' 로 포맷팅한 문자열
     }
 }

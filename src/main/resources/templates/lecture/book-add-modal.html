@@ -16,15 +16,21 @@
         </div>
         <div class="modal-body">
           <div class="container">
-            <select id="lectureNoteSelect" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-              <option selected value="-1">강의노트 선택</option>
-              <option th:each="note : ${lectureNoteList}" th:value="${note.id}" th:text="${note.title}"></option>
-            </select>
+            <th:block th:if="${lectureNoteList.size() == 0}">
+              <p>추가할 강의노트가 없습니다</p>
+            </th:block>
+            <th:block th:unless="${lectureNoteList.size() == 0}">
+              <select id="lectureNoteSelect" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                <option selected value="-1">강의노트 선택</option>
+                <option th:each="note : ${lectureNoteList}" th:value="${note.id}" th:text="${note.title}"></option>
+              </select>
+            </th:block>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">취소</button>
-          <button id="btn-lecture-add" type="button" class="btn btn-primary btn-sm" onclick="addBookToLectureNote()">추가</button>
+          <button th:if="${lectureNoteList.size() == 0}" disabled type="button" class="btn btn-primary btn-sm" onclick="addBookToLectureNote()">추가</button>
+          <button th:unless="${lectureNoteList.size() == 0}" type="button" class="btn btn-primary btn-sm" onclick="addBookToLectureNote()">추가</button>
         </div>
       </div>
     </div>

@@ -20,7 +20,7 @@
     </delete>
 
     <update id="updateLectureNote" parameterType="LectureNoteDTO">
-        UPDATE tbl_lecture SET title=#{title} , description=#{description} WHERE id = #{id};
+        UPDATE tbl_lecture SET title=#{title},description=#{description},license_id=#{licenseId},subject_id=#{subjectId} WHERE id = #{id};
     </update>
 
     <insert id="addVideoIdList" parameterType="PlayListVideoDTO" >
@@ -64,7 +64,7 @@
         ON tmp.book_id=tb.id
     </select>
 
-    <resultMap id="findVideoInfoByLectureNoteMap" type="LectureVideoPlayListInfo">
+    <resultMap id="findPlayListInfoByLectureNoteMap" type="LecturePlayListInfo">
         <result property="noteId" column="note_id" />
         <result property="playListId" column="youtube_playlist_id" />
         <result property="originalPlayListId" column="playlist_id" />
@@ -75,7 +75,7 @@
         <result property="videoCount" column="item_count" />
         <result property="regDate" column="reg_date" />
     </resultMap>
-    <select id="findVideoInfoByLectureNote" parameterType="map" resultMap="findVideoInfoByLectureNoteMap">
+    <select id="findPlayListInfoByLectureNote" parameterType="map" resultMap="findPlayListInfoByLectureNoteMap">
         SELECT npl.note_id, pl.id as youtube_playlist_id,playlist_id,
                channel_id,
                title,publish_date,thumbnail_medium,item_count,reg_date

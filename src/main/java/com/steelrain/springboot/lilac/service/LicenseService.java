@@ -84,38 +84,51 @@ public class LicenseService implements ILicenseService{
         // 문자열 보다는 숫자로 하는 비교가 더 확실하므로 자격증날짜와 비교할 현재날짜를 int값으로 구한다.
         int now = Integer.parseInt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         //int now = 0102; 테스트용 날짜값
-        licenseDTO.setLicenseDesc(String.format(scheduleList.get(0).getDescription()));
         for(LicenseScheduleResponseDTO.LicenseSchedule schedule : scheduleList){
+            if(schedule.getImplSeq() <= 0){
+                continue;
+            }
             // 필기시험 단계 검사 0110, 0113, now 0112, 0116, 0119
-            if(Integer.parseInt(schedule.getDocRegStartDt()) <= now && Integer.parseInt(schedule.getDocRegEndDt()) >= now ){
+            // 간혹 날짜 데이터가 들어있지 않고 ""으로 들어있는 경우가 있으므로 체크해준다
+            if(StringUtils.hasText(schedule.getDocRegStartDt()) && StringUtils.hasText(schedule.getDocRegEndDt()) &&
+                    Integer.parseInt(schedule.getDocRegStartDt()) <= now && Integer.parseInt(schedule.getDocRegEndDt()) >= now ){
                 licenseDTO.setLicStep(schedule.getImplSeq() + "회차 필기시험 접수중");
                 licenseDTO.setLicEndDate(convertDateFormat(schedule.getDocRegEndDt()));
+                licenseDTO.setLicenseDesc(schedule.getDescription());
                 continue;
             }
-            if(Integer.parseInt(schedule.getDocExamStartDt()) <= now && Integer.parseInt(schedule.getDocExamEndDt()) >= now ){
+            if(StringUtils.hasText(schedule.getDocExamStartDt()) && StringUtils.hasText(schedule.getDocExamEndDt()) &&
+                    Integer.parseInt(schedule.getDocExamStartDt()) <= now && Integer.parseInt(schedule.getDocExamEndDt()) >= now ){
                 licenseDTO.setLicStep(schedule.getImplSeq() + "회차 필기시험 진행중");
                 licenseDTO.setLicEndDate(convertDateFormat(schedule.getDocExamEndDt()));
+                licenseDTO.setLicenseDesc(schedule.getDescription());
                 continue;
             }
-            if(Integer.parseInt(schedule.getDocPassDt()) == now){
+            if(StringUtils.hasText(schedule.getDocPassDt()) && Integer.parseInt(schedule.getDocPassDt()) == now){
                 licenseDTO.setLicStep(schedule.getImplSeq() + "회차 필기시험 결과발표");
                 licenseDTO.setLicEndDate(convertDateFormat(schedule.getDocPassDt()));
+                licenseDTO.setLicenseDesc(schedule.getDescription());
                 continue;
             }
             // 실기시험 단계 검사
-            if(Integer.parseInt(schedule.getPracRegStartDt()) <= now && Integer.parseInt(schedule.getPracRegEndDt()) >= now ){
+            if(StringUtils.hasText(schedule.getPracRegStartDt()) && StringUtils.hasText(schedule.getPracRegEndDt()) &&
+                    Integer.parseInt(schedule.getPracRegStartDt()) <= now && Integer.parseInt(schedule.getPracRegEndDt()) >= now ){
                 licenseDTO.setLicStep(schedule.getImplSeq() + "회차 실기시험 접수중");
                 licenseDTO.setLicEndDate(convertDateFormat(schedule.getPracRegEndDt()));
+                licenseDTO.setLicenseDesc(schedule.getDescription());
                 continue;
             }
-            if(Integer.parseInt(schedule.getPracExamStartDt()) <= now && Integer.parseInt(schedule.getPracExamEndDt()) >= now ){
+            if(StringUtils.hasText(schedule.getPracExamStartDt()) && StringUtils.hasText(schedule.getPracExamEndDt()) &&
+                    Integer.parseInt(schedule.getPracExamStartDt()) <= now && Integer.parseInt(schedule.getPracExamEndDt()) >= now ){
                 licenseDTO.setLicStep(schedule.getImplSeq() + "회차 실기시험 진행중");
                 licenseDTO.setLicEndDate(convertDateFormat(schedule.getPracExamEndDt()));
+                licenseDTO.setLicenseDesc(schedule.getDescription());
                 continue;
             }
-            if(Integer.parseInt(schedule.getPracPassDt()) == now){
+            if(StringUtils.hasText(schedule.getPracPassDt()) && Integer.parseInt(schedule.getPracPassDt()) == now){
                 licenseDTO.setLicStep(schedule.getImplSeq() + "회차 실기시험 결과발표");
                 licenseDTO.setLicEndDate(convertDateFormat(schedule.getPracPassDt()));
+                licenseDTO.setLicenseDesc(schedule.getDescription());
                 continue;
             }
             /*
@@ -150,15 +163,17 @@ public class LicenseService implements ILicenseService{
         List<LicenseScheduleResponseDTO.LicenseSchedule> schedules = responseDTO.getBody().getScheduleList();
 
         for(LicenseScheduleResponseDTO.LicenseSchedule schedule : schedules){
-            // TODO :날짜 포매팅을 에너테이션으로 처리하는 방법을 찾아보자
+            if(schedule.getImplSeq() <= 0){
+                continue;
+            }
             resultList.add(LicenseScheduleDTO.builder()
-                            .category(String.format("%s년 정기 %s %d회", schedule.getImplyy(), getLicenseCategoryName(schedule.getDescription()), schedule.getImplSeq()))
-                            .docRegPeriod(StringFormatter.toFormattedDateString(schedule.getDocRegStartDt()).get() + " - " + StringFormatter.toFormattedDateString(schedule.getDocRegEndDt()).get())
-                            .docExam(StringFormatter.toFormattedDateString(schedule.getDocExamStartDt()) .get()+ " - " + StringFormatter.toFormattedDateString(schedule.getDocExamEndDt()).get())
-                            .docPass(StringFormatter.toFormattedDateString(schedule.getDocPassDt()).get())
-                            .pracReg(StringFormatter.toFormattedDateString(schedule.getPracRegStartDt()).get() + " - " + StringFormatter.toFormattedDateString(schedule.getPracRegEndDt()).get())
-                            .pracExam(StringFormatter.toFormattedDateString(schedule.getPracExamStartDt()).get() + " - " + StringFormatter.toFormattedDateString(schedule.getPracExamEndDt()).get())
-                            .pracPass(StringFormatter.toFormattedDateString(schedule.getPracPassDt()).get())
+                            .category(String.format("%s년 정기 %s", schedule.getImplyy(), getLicenseCategoryName(schedule.getDescription())))
+                            .docRegPeriod(StringUtils.hasText(schedule.getDocRegStartDt()) ? StringFormatter.toFormattedDateString(schedule.getDocRegStartDt()).get() + " - " + StringFormatter.toFormattedDateString(schedule.getDocRegEndDt()).get() : "미정")
+                            .docExam(StringUtils.hasText(schedule.getDocExamStartDt()) ? StringFormatter.toFormattedDateString(schedule.getDocExamStartDt()) .get()+ " - " + StringFormatter.toFormattedDateString(schedule.getDocExamEndDt()).get() : "미정")
+                            .docPass(StringUtils.hasText(schedule.getDocPassDt()) ? StringFormatter.toFormattedDateString(schedule.getDocPassDt()).get() : "미정")
+                            .pracReg(StringUtils.hasText(schedule.getPracRegStartDt()) ? StringFormatter.toFormattedDateString(schedule.getPracRegStartDt()).get() + " - " + StringFormatter.toFormattedDateString(schedule.getPracRegEndDt()).get() : "미정")
+                            .pracExam(StringUtils.hasText(schedule.getPracExamStartDt()) ? StringFormatter.toFormattedDateString(schedule.getPracExamStartDt()).get() + " - " + StringFormatter.toFormattedDateString(schedule.getPracExamEndDt()).get() : "미정")
+                            .pracPass(StringUtils.hasText(schedule.getPracPassDt()) ? StringFormatter.toFormattedDateString(schedule.getPracPassDt()).get() : "미정")
                             .build());
         }
         return resultList;

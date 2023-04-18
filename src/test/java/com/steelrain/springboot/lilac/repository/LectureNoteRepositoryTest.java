@@ -13,7 +13,7 @@ class LectureNoteRepositoryTest {
 
     @Test
     void findTotalProgress() {
-        int tmp = m_lectureNoteRepository.findTotalProgress(2L, 9L, 23L);
+        long tmp = m_lectureNoteRepository.findTotalProgress(2L, 9L, 23L);
         assertThat(tmp >= 0).isTrue();
     }
 }

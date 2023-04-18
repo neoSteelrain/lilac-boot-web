@@ -50,7 +50,7 @@ public class MemberService implements IMemberService {
         return m_memberRepository.findMemberByNickName(nickName) > 0 ;
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     @Override
     public boolean registerMember(MemberDTO memberDTO) {
         boolean isRegistered = m_memberRepository.saveMember(memberDTO) > 0;
@@ -72,7 +72,7 @@ public class MemberService implements IMemberService {
         return m_memberRepository.findAllMembers();
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     @Override
     public void updateMemberInfo(MemberDTO memberDTO, MemberProfileEditDTO editDTO, HttpSession session) {
         memberDTO.setNickname(editDTO.getNickname());

@@ -110,6 +110,13 @@ public class KeywordCategoryCacheService implements ICacheService {
                 .get().getName();
     }
 
+    public String getSubjectNameById(int subjectId){
+        return m_subjectCodeList.stream()
+                .filter(subject -> subject.getId() == subjectId)
+                .findFirst()
+                .get().getName();
+    }
+
     @Override
     public String getSubjectKeywordBook(int subjectCode) {
         return m_subjectCodeList.stream()

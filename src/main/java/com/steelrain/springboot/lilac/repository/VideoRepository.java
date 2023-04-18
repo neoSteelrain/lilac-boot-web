@@ -42,8 +42,8 @@ public class VideoRepository implements IVideoRepository {
     }
 
     @Override
-    public List<LectureNoteYoutubeVideoDTO> findPlayListDetailOfLectureNote(Long memberId, Long youtubePlaylistId) {
-        return m_videoMapper.findPlayListDetailOfLectureNote(memberId, youtubePlaylistId);
+    public List<LectureNoteYoutubeVideoDTO> findPlayListDetailOfLectureNote(Long memberId, Long youtubePlaylistId, Long noteId) {
+        return m_videoMapper.findPlayListDetailOfLectureNote(memberId, youtubePlaylistId, noteId);
     }
 
     @Override

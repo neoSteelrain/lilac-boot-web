@@ -270,6 +270,7 @@ public class AdminService implements IAdminService {
     }
 
     @Override
+    @Transactional
     public AdminPlayListSearchResultDTO removeRecommendPlayList(Long playListId) {
         m_adminRepository.removeRecommendPlayList(playListId);
         return AdminPlayListSearchResultDTO.builder()

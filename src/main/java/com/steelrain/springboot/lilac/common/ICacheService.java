@@ -18,6 +18,7 @@ public interface ICacheService {
     String getDetailRegionName(short region, int detailRegion);
     String getSubjectKeyword(int subjectCode);
     String getSubjectName(int subjectCode);
+    String getSubjectNameById(int subjectId);
     String getSubjectKeywordBook(int subjectCode);
     short getLeastRegionCode();
     int getLeastDetailRegionCode(short regionCode);

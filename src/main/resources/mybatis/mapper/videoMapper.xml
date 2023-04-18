@@ -7,7 +7,7 @@
                youtube.thumbnail_medium,youtube.view_count,search_count,like_count,favorite_count,chn.title as channel_title
         FROM tbl_recommended_video rvideo INNER JOIN tbl_youtube youtube INNER JOIN tbl_youtube_channel chn
             ON rvideo.youtube_id=youtube.id
-                AND youtube.channel_id=chn.id;
+                AND youtube.channel_id=chn.id
     </select>
 
     <select id="findPlayListDetail" parameterType="java.lang.Long" resultType="YoutubeVideoDTO">
@@ -16,23 +16,24 @@
                yt.comment_disabled,yt.duration,yt.score,yt.magnitude,yt.lilac_like_count,yt.lilac_dislike_count
         FROM tbl_youtube yt INNER JOIN tbl_youtube_playlist pl
             ON yt.youtube_playlist_id=pl.id
-        WHERE pl.id=#{playlistId};
+        WHERE pl.id=#{playlistId}
     </select>
 
     <select id="findPlayListDetailOfLectureNote" parameterType="map" resultType="LectureNoteYoutubeVideoDTO">
         SELECT pl.id as lecture_video_id,pl.lecture_id,pl.lecture_member_id,yt.id,yt.video_id,yt.channel_id,yt.youtube_playlist_id,yt.title,yt.description,yt.publish_date,
                yt.thumbnail_default,yt.thumbnail_high,yt.playlist_id,yt.view_count,yt.search_count,yt.like_count,yt.favorite_count,yt.comment_count,
-               yt.comment_disabled,yt.duration,yt.score,yt.magnitude, (SELECT title FROM tbl_lecture WHERE id=pl.lecture_id) as lecture_title
+               yt.comment_disabled,yt.duration,yt.score,yt.magnitude, yt.lilac_like_count,yt.lilac_dislike_count,
+               (SELECT title FROM tbl_lecture WHERE id=pl.lecture_id) as lecture_title
         FROM ref_tbl_lecture_youtube pl INNER JOIN tbl_youtube yt
             ON pl.youtube_id=yt.id
-        WHERE pl.lecture_member_id=#{memberId} AND pl.youtube_playlist_id=#{youtubePlaylistId};
+        WHERE pl.lecture_member_id=#{memberId} AND pl.youtube_playlist_id=#{youtubePlaylistId}  AND pl.lecture_id=#{noteId}
     </select>
 
     <select id="findDuration" parameterType="java.lang.Long" resultType="java.lang.String">
         SELECT yt.duration
         FROM ref_tbl_lecture_youtube ref INNER JOIN tbl_youtube yt
             ON ref.youtube_id=yt.id
-        WHERE ref.id=#{lectureVideoId};
+        WHERE ref.id=#{lectureVideoId}
     </select>
 
     <select id="findPlayListByKeyword" parameterType="map"  resultType="YoutubePlayListDTO">
@@ -49,7 +50,7 @@
               FROM tbl_recommended_playlist rpl INNER JOIN tbl_youtube_playlist pl
                 ON rpl.youtube_playlist_id = pl.id) as tmp
         INNER JOIN tbl_youtube_channel chn
-            ON tmp.channel_id = chn.id;
+            ON tmp.channel_id = chn.id
     </select>
 
     <update id="updateVideoPlaytime" parameterType="map">

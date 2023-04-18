@@ -43,7 +43,7 @@ public class BookService implements IBookService{
 
 
     
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     @Override
     public LicenseBookListDTO getLicenseBookList(int licenseCode, short regionCode, int detailRegionCode, int pageNum, int bookCount){
         /*

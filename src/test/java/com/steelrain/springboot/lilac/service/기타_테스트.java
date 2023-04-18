@@ -50,4 +50,12 @@ public class 기타_테스트 {
         assertThat(Objects.isNull(id)).isTrue();
         log.debug("id : {}", id);
     }
+
+    @Test
+    public void rrrrrrrr(){
+        long val = 33325;
+        double tmp = val * 0.99;
+        log.debug("tmp : {}", tmp);
+        log.debug("long tmp : {}", (long)tmp);
+    }
 }

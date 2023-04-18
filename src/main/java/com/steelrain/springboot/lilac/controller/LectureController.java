@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Objects;
@@ -33,9 +32,9 @@ public class LectureController {
     private final ICacheService m_keywordCategoryCacheService;
 
 
-    @GetMapping("/lecture-note")
-    public String lectureNoteForm(HttpSession session, Model model){
-        MemberDTO memberDTO = m_memberService.getMemberInfo((Long) session.getAttribute(SESSION_KEY.MEMBER_ID));
+    @GetMapping("/lecture-note-member")
+    public String lectureNoteDetail(@RequestParam(value = "noteId", required = false) Long noteId, HttpSession session, Model model){
+        MemberDTO memberDTO = m_memberService.getMemberInfo((Long)session.getAttribute(SESSION_KEY.MEMBER_ID));
         List<LectureNoteDTO> noteDTOList = m_lectureService.getLectureListByMember(memberDTO.getId());
         model.addAttribute("lectureNoteList", noteDTOList);
         model.addAttribute("noteAdd", new LectureNoteAddDTO());
@@ -43,31 +42,19 @@ public class LectureController {
         model.addAttribute("memberEmail", memberDTO.getEmail());
         model.addAttribute("memberProfile", memberDTO.getProfileSave());
 
-        // 강의노트 상세정보 설정
-        LectureNoteDetailDTO noteDetailDTO = m_lectureService.getLectureNoteDetailInfoByMember(memberDTO.getId(), noteDTOList.get(0).getId());
-        model.addAttribute("noteDetail", noteDetailDTO);
-
         // 강의노트를 업데이트하기 위해 필요한 키워드정보들
         model.addAttribute("licenseCodes",m_keywordCategoryCacheService.getLicenseCodeList());
         model.addAttribute("subjectCodes",m_keywordCategoryCacheService.getSubjectCodeList());
-        return "/lecture/lecture-note";
-    }
-
-    @GetMapping("/lecture-note-member")
-    public String lectureNoteDetail(@RequestParam("noteId") Long noteId, HttpSession session, Model model){
-        MemberDTO memberDTO = m_memberService.getMemberInfo((Long)session.getAttribute(SESSION_KEY.MEMBER_ID));
-        List<LectureNoteDTO> noteDTOList = m_lectureService.getLectureListByMember(memberDTO.getId());
-        model.addAttribute("lectureNoteList", noteDTOList);
-        model.addAttribute("noteAdd", new LectureNoteAddDTO());
-        model.addAttribute("memberInfo", memberDTO);
 
         // 강의노트 상세정보 설정
-        LectureNoteDetailDTO noteDetailDTO = m_lectureService.getLectureNoteDetailInfoByMember(memberDTO.getId(), noteId);
-        model.addAttribute("noteDetail", noteDetailDTO);
-
-        // 강의노트를 업데이트하기 위해 필요한 키워드정보들
-        model.addAttribute("licenseCodes",m_keywordCategoryCacheService.getLicenseCodeList());
-        model.addAttribute("subjectCodes",m_keywordCategoryCacheService.getSubjectCodeList());
+        Long currentNoteId = null;
+        if(noteDTOList.size() == 0){
+            model.addAttribute("noteDetail", null);
+        }else{
+            currentNoteId = Objects.isNull(noteId) ? noteDTOList.get(0).getId() : noteId;
+            model.addAttribute("noteDetail", m_lectureService.getLectureNoteDetailInfoByMember(memberDTO.getId(), currentNoteId));
+        }
+        model.addAttribute("currentNoteId", currentNoteId);
         return "/lecture/lecture-note";
     }
 
@@ -95,10 +82,6 @@ public class LectureController {
     @GetMapping("/edit-note")
     public String editNoteTemplate(@RequestParam("noteId") Long noteId, HttpSession session, Model model){
         Long memberId = (Long) session.getAttribute(SESSION_KEY.MEMBER_ID);
-        if(memberId == null){
-            return "redirect:/member/login";
-        }
-
         LectureNoteDTO noteDTO = m_lectureService.getLectureNoteByMember(memberId, noteId);
         LectureNoteEditDTO editDTO = new LectureNoteEditDTO();
         editDTO.setNoteId(noteId);
@@ -120,13 +103,15 @@ public class LectureController {
                                         BindingResult bindingResult, RedirectAttributes attributes){
         if(bindingResult.hasErrors()){
             log.info("강의노트 수정에러 : {}", bindingResult);
-            return new RedirectView("/lecture/lecture-note");
+            attributes.addAttribute("noteId", noteEditDTO.getNoteId());
+            return new RedirectView("/lecture/lecture-note-member");
         }
-
         LectureNoteDTO noteDTO = new LectureNoteDTO();
         noteDTO.setId(noteEditDTO.getNoteId());
         noteDTO.setTitle(noteEditDTO.getNoteTitle());
         noteDTO.setDescription(noteEditDTO.getNoteDescription());
+        noteDTO.setLicenseId(noteEditDTO.getLectureId());
+        noteDTO.setSubjectId(noteEditDTO.getSubjectId());
 
         m_lectureService.editLectureNote(noteDTO);
         attributes.addAttribute("noteId", noteEditDTO.getNoteId());
@@ -138,7 +123,7 @@ public class LectureController {
     public String removeLectureNote(@RequestParam("noteId") Long noteId){
         m_lectureService.removeLectureNote(noteId);
 
-        return "redirect:/lecture/lecture-note";
+        return "redirect:/lecture/lecture-note-member";
     }
 
     @GetMapping("modal-playlist-template")

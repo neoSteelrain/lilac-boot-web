@@ -52,7 +52,7 @@ public class VideoServiceTests {
 
     @Test
     public void 강의노트에추가된재생목록가져오기(){
-        List<LectureNoteYoutubeVideoDTO> list = m_videoService.getPlayListDetailOfLectureNote(2L, 49L);
+        List<LectureNoteYoutubeVideoDTO> list = m_videoService.getPlayListDetailOfLectureNote(2L, 49L, 2L);
 
         assertThat(list != null).isTrue();
         list.stream().forEach(item -> log.debug(item.toString()));
@@ -60,8 +60,7 @@ public class VideoServiceTests {
 
     @Test
     public void 강의노트영상의Duration가져오기(){
-        boolean isUpdated = m_videoService.updateVideoPlaytime(1L, 1100L);
-        assertThat(isUpdated).isTrue();
+        m_videoService.updateVideoPlaytime(1L, 1100L);
     }
 
     @Test

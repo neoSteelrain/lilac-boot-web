@@ -108,22 +108,18 @@ public class VideoService implements IVideoService {
         영상의 재생시간을 처리한다
      */
     @Override
-    public boolean updateVideoPlaytime(Long lectureVideoId, Long playtime) {
-        /*
-            - 영상의 duration 값과 프런트에서 넘어온 재생시간을 비교해여 99% 까지는 100%로 인정한다.
-            - 강의노트영상의 기존 재생시간을 가져와서 99% 이상 재생된 영상이면 바로 리턴하고, 99%가 아니라면 재생시간을 업데이트한다
-         */
+    @Transactional
+    public void updateVideoPlaytime(Long lectureVideoId, Long playtime) {
         long progress = m_videoRepository.getProgress(lectureVideoId);
         long duration = m_videoRepository.getDuration(lectureVideoId);
-        if((int)Math.floor(((double)progress / duration) * 100) >= 99){
-            return true;
+        if(playtime > progress && playtime <= duration){
+            m_videoRepository.updateVideoPlaytime(lectureVideoId, playtime);
         }
-        return m_videoRepository.updateVideoPlaytime(lectureVideoId, playtime);
     }
 
     @Override
-    public List<LectureNoteYoutubeVideoDTO> getPlayListDetailOfLectureNote(Long memberId, Long youtubePlaylistId) {
-        return m_videoRepository.findPlayListDetailOfLectureNote(memberId, youtubePlaylistId);
+    public List<LectureNoteYoutubeVideoDTO> getPlayListDetailOfLectureNote(Long memberId, Long youtubePlaylistId, Long noteId) {
+        return m_videoRepository.findPlayListDetailOfLectureNote(memberId, youtubePlaylistId, noteId);
     }
 
     @Override

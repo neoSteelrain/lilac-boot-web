@@ -67,8 +67,8 @@ public class LectureNoteRepository implements ILectureNoteRepository {
     }
 
     @Override
-    public List<LectureNoteDetailDTO.LectureVideoPlayListInfo> findVideoInfoByLectureNote(Long memberId, Long noteId) {
-        List<LectureNoteDetailDTO.LectureVideoPlayListInfo> resultList = m_lectureNoteMapper.findVideoInfoByLectureNote(memberId, noteId);
+    public List<LectureNoteDetailDTO.LecturePlayListInfo> findPlayListInfoByLectureNote(Long memberId, Long noteId) {
+        List<LectureNoteDetailDTO.LecturePlayListInfo> resultList = m_lectureNoteMapper.findPlayListInfoByLectureNote(memberId, noteId);
         if(resultList.size() == 0){
             return resultList;
         }
@@ -77,9 +77,9 @@ public class LectureNoteRepository implements ILectureNoteRepository {
             join하지 않고 채널정보만 따로 쿼리를 날려서 repository 에서 채널정보를 설정해주는 방식으로 해보았다.
             - join 한번 더 하는것보다는 채널id로 바로 pk로 select 하는 것이 나중에 채널정보를 더 가져오는데 있어서 좀더 나은 생각이 들었다.
          */
-        List<Long> channelIds = resultList.stream().map(LectureNoteDetailDTO.LectureVideoPlayListInfo::getChannelId).distinct().collect(Collectors.toList());
+        List<Long> channelIds = resultList.stream().map(LectureNoteDetailDTO.LecturePlayListInfo::getChannelId).distinct().collect(Collectors.toList());
         List<ChannelTitleInfo> channelTitles = m_lectureNoteMapper.findChannelTitle(channelIds);
-        for(LectureNoteDetailDTO.LectureVideoPlayListInfo info : resultList){
+        for(LectureNoteDetailDTO.LecturePlayListInfo info : resultList){
             Long chnId = info.getChannelId();
             for (ChannelTitleInfo channelTitle : channelTitles){
                 if(Objects.equals(channelTitle.channelId, chnId)){
@@ -131,7 +131,7 @@ public class LectureNoteRepository implements ILectureNoteRepository {
     }
 
     @Override
-    public int findTotalProgress(Long memberId, Long noteId, Long playlistId) {
+    public long findTotalProgress(Long memberId, Long noteId, Long playlistId) {
         return m_lectureNoteMapper.findTotalProgress(memberId, noteId, playlistId);
     }
 

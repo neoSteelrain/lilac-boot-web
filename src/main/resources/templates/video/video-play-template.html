@@ -6,43 +6,37 @@
 </head>
 <body>
 <div id="video-info-template">
-    <div class="post-details">
-        <div class="detail-inner">
-            <h5 class="post-title" th:text="${videoInfo.title}"></h5>
-            <ul class="custom-flex post-meta">
-                <li>
-                    <i class="lni lni-calendar" th:text="' '+${{videoInfo.publishDate}}"></i>
-                </li>
-                <li>
-                    <i class="lni lni-comments" th:text="' '+${videoInfo.commentCount}"></i>
-                </li>
-                <li>
-                    <i class="lni lni-eye" th:text="' '+${videoInfo.viewCount}"></i>
-                </li>
-                <li>
-                    <i class="lni lni-star" th:text="' '+${videoInfo.likeCount}"></i>
-                </li>
-                <li>
-                    <a th:href="|javascript:likeVideo('${videoInfo.id}')|">
-                        <i id="img-like-count" class="lni lni-thumbs-up"
-                           th:style="${(isLikeVideo != null && isLikeVideo) ? 'color:red':''}"
-                           th:text="' '+${videoInfo.lilacLikeCount}"></i>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="|javascript:dislikeVideo('${videoInfo.id}')|">
-                        <i id="img-dislike-count" class="lni lni-thumbs-down"
-                           th:style="${(isLikeVideo != null && !isLikeVideo) ? 'color:red':''}"
-                           th:text="' '+${videoInfo.lilacDislikeCount}"></i>
-                    </a>
-                </li>
-                <li th:if="${memberId != null}">
-                    <a th:href="|javascript:showPlaylistAddModal('${playListId}')|"
-                       class="reply-link"><i class="lni lni-notepad"></i> 강의노트에 추가하기</a>
-                </li>
-            </ul>
-            <p th:utext="${videoInfo.description}"></p>
-        </div>
+    <div class="detail-inner">
+        <h5 class="post-title" th:text="${videoInfo.title}"></h5>
+        <ul class="custom-flex post-meta">
+            <li>
+                <i class="lni lni-calendar" th:text="' '+${{videoInfo.publishDate}}"></i>
+            </li>
+            <li>
+                <i class="lni lni-comments" th:text="' '+${videoInfo.commentCount}"></i>
+            </li>
+            <li>
+                <i class="lni lni-eye" th:text="' '+${videoInfo.viewCount}"></i>
+            </li>
+            <li>
+                <i class="lni lni-star" th:text="' '+${videoInfo.likeCount}" ></i>
+            </li>
+            <li>
+                <a th:href="|javascript:likeVideo('${videoInfo.id}')|">
+                    <i id="img-like-count" class="lni lni-thumbs-up" th:style="${(isLikeVideo != null && isLikeVideo) ? 'color:#ff0000':'color:#5830e0'}" th:text="' '+${videoInfo.lilacLikeCount}"></i>
+                </a>
+            </li>
+            <li>
+                <a th:href="|javascript:dislikeVideo('${videoInfo.id}')|">
+                    <i id="img-dislike-count" class="lni lni-thumbs-down" th:style="${(isLikeVideo != null && !isLikeVideo) ? 'color:#ff0000':'color:#5830e0'}" th:text="' '+${videoInfo.lilacDislikeCount}"></i>
+                </a>
+            </li>
+            <li th:if="${memberId != null && memberGrade > 1}">
+                <a th:href="|javascript:showPlaylistAddModal('${playListId}')|"
+                   class="reply-link"><i class="lni lni-notepad"></i> 강의노트에 추가하기</a>
+            </li>
+        </ul>
+        <p th:utext="${videoInfo.description}"></p>
     </div>
 </div>
 </body>

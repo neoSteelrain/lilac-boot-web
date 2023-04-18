@@ -49,7 +49,7 @@
             <div class="col-lg-6 col-md-6 col-12">
                 <ul class="breadcrumb-nav">
                     <li>노트제목</li>
-                    <li th:text="${'강의노트 제목 : '+videoList[0].lectureTitle}"></li>
+                    <li th:text="'강의노트 제목 : '+${videoList[0].lectureTitle}"></li>
                 </ul>
             </div>
         </div>
@@ -66,19 +66,42 @@
                     </div>
                     <div id="div-video-info" class="post-details">
                         <div class="detail-inner">
-                            <h5 class="post-title" th:text="${videoList[0].title}"></h5>
-                            <ul class="custom-flex post-meta">
-                                <li>
-                                    <i class="lni lni-calendar" th:text="' '+${{videoList[0].publishDate}}"></i>
-                                </li>
-                                <li>
-                                    <i class="lni lni-comments" th:text="' '+${videoList[0].commentCount}"></i>
-                                </li>
-                                <li>
-                                    <i class="lni lni-eye" th:text="' '+${videoList[0].viewCount}"></i>
-                                </li>
-                            </ul>
-                            <p th:utext="${videoList[0].description}"></p>
+                            <div class="detail-inner">
+                                <h5 class="post-title" th:text="${videoList[0].title}"></h5>
+                                <ul class="custom-flex post-meta">
+                                    <li>
+                                        <i class="lni lni-calendar" th:text="' '+${{videoList[0].publishDate}}"></i>
+                                    </li>
+                                    <li>
+                                        <i class="lni lni-comments" th:text="' '+${videoList[0].commentCount}"></i>
+                                    </li>
+                                    <li>
+                                        <i class="lni lni-eye" th:text="' '+${videoList[0].viewCount}"></i>
+                                    </li>
+                                    <li>
+                                        <i class="lni lni-star" th:text="' '+${videoList[0].likeCount}"></i>
+                                    </li>
+                                    <li>
+                                        <a th:href="|javascript:likeVideo('${videoList[0].id}')|">
+                                            <i id="img-like-count" class="lni lni-thumbs-up"
+                                               th:style="${(isLikeVideo != null && isLikeVideo) ? 'color:#ff0000':'color:#5830e0'}"
+                                               th:text="' '+${videoList[0].lilacLikeCount}"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a th:href="|javascript:dislikeVideo('${videoList[0].id}')|">
+                                            <i id="img-dislike-count" class="lni lni-thumbs-down"
+                                               th:style="${(isLikeVideo != null && !isLikeVideo) ? 'color:#ff0000':'color:#5830e0'}"
+                                               th:text="' '+${videoList[0].lilacDislikeCount}"></i>
+                                        </a>
+                                    </li>
+                                    <li th:if="${memberId != null && memberGrade > 1}">
+                                        <a th:href="|javascript:showPlaylistAddModal('${playListId}')|"
+                                           class="reply-link"><i class="lni lni-notepad"></i> 강의노트에 추가하기</a>
+                                    </li>
+                                </ul>
+                                <p th:utext="${videoList[0].description}"></p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -95,7 +118,7 @@
                                     <ul>
                                         <!-- 재생목록의 개별영상 시작 -->
                                         <li th:each="video : ${videoList}">
-                                            <a th:href="|javascript:playSelectedVideo('${video.videoId}', '${video.Id}', '${video.lectureVideoId}')|">
+                                            <a th:href="|javascript:playSelectedVideo('${video.videoId}','${video.Id}','${video.lectureVideoId}')|">
                                                 <div class="image">
                                                     <img th:src="${video.thumbnailDefault}" alt="#">
                                                 </div>
@@ -104,9 +127,6 @@
                                         </li>
                                         <!-- 재생목록의 개별영상 끝 -->
                                     </ul>
-                                    <form>
-
-                                    </form>
                                     <input id="memberIdHidden" type="hidden" th:value="${memberId}">
                                 </div>
                             </div>
@@ -130,16 +150,21 @@
 <script th:src="@{/js/glightbox.min.js}"></script>
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/lilac-common.js}"></script>
+<script th:src="@{/js/lecture-note.js}"></script>
 <script th:inline="javascript">
+    // 현재 선택된 영상의 lectureVideoId
+    const SESSION_STORAGE_KEY_VIDEO = 'lilac-play-videoId';
+
     let tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     let firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
+    initCurrentVideoId();
+
     let player;
     function onYouTubeIframeAPIReady() {
         const videoIdStr = [[${videoList[0].videoId}]];
-        console.log("videoId : "+videoIdStr);
         player = new YT.Player('player', {
             videoId: videoIdStr,
             events: {
@@ -159,11 +184,39 @@
         }
     }
 
+    // playlist-add-model.html 에서 호출하는 함수
+    function addPlayListToLectureNote() {
+        const paramPlayListId = [[${playListId}]];
+        const paramLectureNoteId = $("#lectureNoteSelect").val(); // playlist-add-model.html에 있는 셀렉트박스 태그
+        let param = {
+            "playListId": paramPlayListId,
+            "lectureNoteId": paramLectureNoteId
+        }
+        $.ajax({
+            type: "post",
+            url: "/lecture/api/addPlayList",
+            headers: {"Content-Type": "application/json"},
+            data: JSON.stringify(param),
+            success: function (resultJson) {
+                alert("재생목록을 강의노트에 추가하였습니다.");
+                $("#addNoteModal").modal("hide");
+                document.location.href = "/video/lec-playlist-detail?youtubePlaylistId=" + paramPlayListId;
+            },
+            error: function (jqXHR) {
+                if (jqXHR.status == 401) {
+                    alert("로그인 후 사용할 수 있습니다.");
+                }
+                alert("재생목록을 강의노트에 추가하는데 실패하였습니다.");
+            }
+        })
+    }
+
     // REST API 호출로 id에 해당하는 영상의 재생시간을 업데이트한다. id는 long 타입
-    const updateVideoPlaytime = (paramLectureVideoId, paramPlaytime) => {
+    function updateVideoPlaytime(paramLectureVideoId, paramPlaytime){
+        console.log("paramPlaytime : "+paramPlaytime);
         let param = {
             "lectureVideoId":paramLectureVideoId,
-            "playtime":(paramPlaytime).toFixed()
+            "playtime":Math.ceil(paramPlaytime) // 동영상 완료된 상태이어도 2735.1173789147374 같이 값이 넘어온다. 항상 올림처리 해준다
         }
         $.ajax({
             type:"post",
@@ -178,7 +231,10 @@
         })
     }
 
-    const playSelectedVideo = (paramVideoOriginId, paramVideoId, paramLectureVideoId) => {
+    /*
+        강의노트의 진행률업데이트를 위해서는 lectureVideoId가 필요하기 때문에 paramLecVideoId 값을 하나 더 받는다
+     */
+    function playSelectedVideo(paramVideoOriginId, paramVideoId, paramLecVideoId) {
         $.ajax({
             type: "get",
             url: "/video/video-template",
@@ -188,7 +244,7 @@
                 let html = jQuery('<div>').html(result);
                 let playlist = html.find("div#video-info-template").html();
                 $("#div-video-info").html(playlist);
-                updateCurrentVideoId(paramLectureVideoId);
+                updateCurrentVideoId(paramLecVideoId);
                 player.loadVideoById(paramVideoOriginId, 0);
             },
             error: function (error) {
@@ -197,12 +253,19 @@
         })
     }
 
-    const SESSION_STORAGE_KEY_VIDEO = 'lilac-play-videoId';
-    const updateCurrentVideoId = (paramLectureVideoId) => {
+    // 현재 재생중인 lectureVideoId를 저장한다
+    function updateCurrentVideoId(paramLectureVideoId){
         sessionStorage.setItem(SESSION_STORAGE_KEY_VIDEO,paramLectureVideoId);
     }
 
-    const getCurrentVideoId = () =>{
+    // 처음으로 재생중인 lectureVideoId를 저장한다
+    function initCurrentVideoId(){
+        let tmpVideoId = [[${videoList[0].lectureVideoId}]];
+        sessionStorage.setItem(SESSION_STORAGE_KEY_VIDEO, tmpVideoId.toString());
+    }
+
+    // 현재 재생중인 lectureVideoId를 저장한다
+    function getCurrentVideoId(){
         return sessionStorage.getItem(SESSION_STORAGE_KEY_VIDEO);
     }
 </script>

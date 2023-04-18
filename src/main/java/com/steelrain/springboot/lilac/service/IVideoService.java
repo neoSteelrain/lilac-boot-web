@@ -18,8 +18,8 @@ public interface IVideoService {
     List<Long> getAllVideoIdByPlayList(Long playListId);
     YoutubeVideoDTO getVideoDetail(Long videoId);
     boolean isExistYoutubePlayList(Long playListId);
-    boolean updateVideoPlaytime(Long id, Long playtime);
-    List<LectureNoteYoutubeVideoDTO> getPlayListDetailOfLectureNote(Long memberId, Long youtubePlaylistId);
+    void updateVideoPlaytime(Long id, Long playtime);
+    List<LectureNoteYoutubeVideoDTO> getPlayListDetailOfLectureNote(Long memberId, Long youtubePlaylistId, Long noteId);
 
     Map<String, Long> updateLikeVideo(Long videoId, Long memberId);
 

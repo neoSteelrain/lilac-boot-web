@@ -28,7 +28,7 @@ public interface ILectureNoteRepository {
 
     LectureNoteDTO findLectureNoteByMember(Long memberId, Long noteId);
 
-    List<LectureNoteDetailDTO.LectureVideoPlayListInfo> findVideoInfoByLectureNote(Long memberId, Long noteId);
+    List<LectureNoteDetailDTO.LecturePlayListInfo> findPlayListInfoByLectureNote(Long memberId, Long noteId);
 
     Duration findTotalDurationOfPlayList(Long playListId);
 
@@ -44,5 +44,5 @@ public interface ILectureNoteRepository {
 
     String[] findAllDuration(Long playlistId);
 
-    int findTotalProgress(Long memberId, Long noteId, Long playlistId);
+    long findTotalProgress(Long memberId, Long noteId, Long playlistId);
 }

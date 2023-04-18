@@ -29,7 +29,7 @@ public interface IVideoRepository {
 
     int selectTotalPlayListCountByKeyword(String keywordStr);
 
-    List<LectureNoteYoutubeVideoDTO> findPlayListDetailOfLectureNote(Long memberId, Long youtubePlaylistId);
+    List<LectureNoteYoutubeVideoDTO> findPlayListDetailOfLectureNote(Long memberId, Long youtubePlaylistId, Long noteId);
 
     long getDuration(Long lectureVideoId);
 

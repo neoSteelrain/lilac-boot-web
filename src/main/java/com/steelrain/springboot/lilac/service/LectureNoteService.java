@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.service;
 
+import com.steelrain.springboot.lilac.common.ICacheService;
 import com.steelrain.springboot.lilac.common.StringFormatter;
 import com.steelrain.springboot.lilac.datamodel.*;
 import com.steelrain.springboot.lilac.datamodel.view.BookAddModalDTO;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 강의노트 서비스
@@ -32,10 +34,11 @@ import java.util.*;
 public class LectureNoteService implements ILectureNoteService{
 
     private final ILectureNoteRepository m_lectureNoteRepository;
+    private final ICacheService m_cacheService;
     private final ApplicationEventPublisher m_appEventPublisher;
 
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     @Override
     public void createDefaultLectureNote(Long memberId, String nickname){
         try{
@@ -46,7 +49,7 @@ public class LectureNoteService implements ILectureNoteService{
         }
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     @Override
     public Long addLectureNote(Long memberId, String title, String description, Integer licenseId, Integer subjectId){
         Long noteId = null;
@@ -70,7 +73,7 @@ public class LectureNoteService implements ILectureNoteService{
         return m_lectureNoteRepository.checkDuplicatedLectureNoteByMember(memberId, title);
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     @Override
     public void removeLectureNote(Long noteId){
         try{
@@ -81,7 +84,7 @@ public class LectureNoteService implements ILectureNoteService{
         }
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     @Override
     public void editLectureNote(LectureNoteDTO lectureNoteDTO) {
         try {
@@ -97,8 +100,8 @@ public class LectureNoteService implements ILectureNoteService{
         return m_lectureNoteRepository.findNoteListByMember(memberId);
     }
 
-    @Transactional(rollbackFor = Exception.class)
     @Override
+    @Transactional
     public boolean addYoutubePlayListToLectureNote(Long lectureNoteId, Long playListId, Long memberId) {
         VideoListByPlayListEvent event = VideoListByPlayListEvent.builder()
                                                                  .playListId(playListId)
@@ -124,10 +127,8 @@ public class LectureNoteService implements ILectureNoteService{
         return  m_lectureNoteRepository.addVideoIdList(paramList);
     }
 
-
-
     /**
-     * 회원이 선택한 재생목록을 강의노트에 추가하기 위해 회원의 강의노트목록을 반환하는 서비스
+     * 회원이 선택한 재생목록을 강의노트에 추가하기 위해 회원의 강의노트목록을 반환하는 메서드
      * 회원이 가지고 있는 강의노트중에서 추가하려는 재생목록이 없는 강의노트만 모아서 보내준다
      * @param memberId 강의노트를 가져올 회원의 id
      * @param playListId 회원의 강의노트에 추가하려고 하는 재생목록의 id
@@ -146,14 +147,35 @@ public class LectureNoteService implements ILectureNoteService{
          */
         // 1. DB에서 회원의 모든 강의노트 및 강의노트에 있는 재생목록을 반환
         List<LectureNoteModalDTO> noteDTOList = m_lectureNoteRepository.findLectureNoteListByPlayList(memberId);
-        List<PlayListAddModalDTO> resultList = new ArrayList<>(noteDTOList.size());
-
         // 2. 전달인자로 넘어온 재생목록이 회원이 가지고 있는 전체재생목록에 있는지 검사를 해서 추가하려는 재생목록이 이미 있는 강의노트id를 뽑아낸다
-        Optional<Long> matchedNoteId = noteDTOList.stream().filter(note -> note.getPlayListId().equals(playListId))
+        List<Long> matchedNoteIdList = noteDTOList.stream().filter(note -> note.getPlayListId().equals(playListId))
                 .map(LectureNoteModalDTO::getNoteId)
-                .findFirst();
+                .collect(Collectors.toList());
+
         // 3. 2번에서 뽑아낸 강의노트를 강의노트목록에서 빼고 강의노트목록을 반환
-        if(matchedNoteId.isPresent()){
+        Iterator<LectureNoteModalDTO> iter = noteDTOList.iterator();
+        while(iter.hasNext()){
+            LectureNoteModalDTO note = iter.next();
+            for(Long id : matchedNoteIdList){
+                if(note.getNoteId().equals(id)){
+                    iter.remove();
+                }
+            }
+        }
+        List<PlayListAddModalDTO> resultList = new ArrayList<>(noteDTOList.size());
+        for(LectureNoteModalDTO note : noteDTOList){
+            resultList.add(PlayListAddModalDTO.builder()
+                    .id(note.getNoteId())
+                    .title(note.getNoteTitle())
+                    .build());
+        }
+        return resultList;
+        // 2. 전달인자로 넘어온 재생목록이 회원이 가지고 있는 전체재생목록에 있는지 검사를 해서 추가하려는 재생목록이 이미 있는 강의노트id를 뽑아낸다
+        /*List<Long> matchedNoteIdList = noteDTOList.stream().filter(note -> note.getPlayListId().equals(playListId))
+                .map(LectureNoteModalDTO::getNoteId)
+                .collect(Collectors.toList());*/
+        // 3. 2번에서 뽑아낸 강의노트를 강의노트목록에서 빼고 강의노트목록을 반환
+        /*if(matchedNoteId.isPresent()){
             noteDTOList.stream().filter(note -> !note.getNoteId().equals(matchedNoteId.get())).distinct().forEach(note -> {
                 resultList.add(PlayListAddModalDTO.builder()
                         .id(note.getNoteId())
@@ -168,11 +190,11 @@ public class LectureNoteService implements ILectureNoteService{
                      .build());
          });
         }
-        return resultList;
+        return resultList;*/
     }
 
     /**
-     * 회원이 선택한 도서르 강의노트에 추가하기 위해 회원의 강의노트목록을 반환하는 서비스
+     * 회원이 선택한 도서르 강의노트에 추가하기 위해 회원의 강의노트목록을 반환하는 메서드
      * 회원이 가지고 있는 강의노트중에서 추가하려는 도서가 없는 강의노트만 모아서 보내준다
      * @param memberId 강의노트의 회원 ID
      * @param bookId 강의노트에 추가하려는 도서 ID
@@ -191,6 +213,30 @@ public class LectureNoteService implements ILectureNoteService{
             3. 2번에서 뽑아낸 강의노트를 강의노트목록에서 빼고 강의노트목록을 반환
          */
         List<LectureNoteModalDTO> noteDTOList = m_lectureNoteRepository.findLectureNoteListByBook(memberId);
+        // 2. 전달인자로 넘어온 재생목록이 회원이 가지고 있는 전체재생목록에 있는지 검사를 해서 추가하려는 재생목록이 이미 있는 강의노트id를 뽑아낸다
+        List<Long> matchedNoteIdList = noteDTOList.stream().filter(note -> note.getBookId().equals(bookId))
+                .map(LectureNoteModalDTO::getNoteId)
+                .collect(Collectors.toList());
+
+        // 3. 2번에서 뽑아낸 강의노트를 강의노트목록에서 빼고 강의노트목록을 반환
+        Iterator<LectureNoteModalDTO> iter = noteDTOList.iterator();
+        while(iter.hasNext()){
+            LectureNoteModalDTO note = iter.next();
+            for(Long id : matchedNoteIdList){
+                if(note.getNoteId().equals(id)){
+                    iter.remove();
+                }
+            }
+        }
+        List<BookAddModalDTO> resultList = new ArrayList<>(noteDTOList.size());
+        for(LectureNoteModalDTO note : noteDTOList){
+            resultList.add(BookAddModalDTO.builder()
+                    .id(note.getNoteId())
+                    .title(note.getNoteTitle())
+                    .build());
+        }
+        return resultList;
+        /*List<LectureNoteModalDTO> noteDTOList = m_lectureNoteRepository.findLectureNoteListByBook(memberId);
         List<BookAddModalDTO> resultDTO = new ArrayList<>(noteDTOList.size());
         Optional<Long> matchedNoteId = noteDTOList.stream().filter(note -> note.getBookId().equals(bookId))
                 .map(LectureNoteModalDTO::getNoteId)
@@ -210,16 +256,17 @@ public class LectureNoteService implements ILectureNoteService{
                         .build());
             });
         }
-        return resultDTO;
+        return resultDTO;*/
     }
 
     @Override
+    @Transactional
     public void removeBook(Long refId) {
         m_lectureNoteRepository.deleteBook(refId);
     }
 
     /**
-     * 회원의 강의노트에 대한 정보를 화면에 출력하기 위한 정보를 반환하는 서비스
+     * 회원의 강의노트에 대한 정보를 화면에 출력하기 위한 정보를 반환하는 메서드
      * @param memberId 회원 ID
      * @param noteId 회원의 강의노트 ID
      * @return 회원의 강의노트의 화면출력정보
@@ -228,13 +275,13 @@ public class LectureNoteService implements ILectureNoteService{
     public LectureNoteDetailDTO getLectureNoteDetailInfoByMember(Long memberId, Long noteId) {
         // 회원의 강의노트 기본정보 초기화
         LectureNoteDetailDTO noteDetailDTO = new LectureNoteDetailDTO();
-        noteDetailDTO = initLectureNoteDetailInfoByMember(memberId, noteId, noteDetailDTO);
+        initLectureNoteDetailInfoByMember(memberId, noteId, noteDetailDTO);
         // 강의노트의 자격증정보 초기화
         initLicenseInfoByLectureNote(noteDetailDTO.getLicenseId(), noteDetailDTO.getSubjectId(), noteDetailDTO);
         // 강의노트에 등록된 도서목록 초기화
         initBookInfoByLectureNote(memberId, noteId, noteDetailDTO);
         // 강의노트에 등록된 재생목록 초기화
-        initVideoInfoByLectureNote(memberId, noteId, noteDetailDTO);
+        initPlayListInfoByLectureNote(memberId, noteId, noteDetailDTO);
         return noteDetailDTO;
     }
 
@@ -259,36 +306,51 @@ public class LectureNoteService implements ILectureNoteService{
         createDefaultLectureNote(event.getMemberId(), event.getMemberNickname());
     }
 
-    /*
-        강의노트에 등록된 도서정보목록을 LectureNoteDetailDTO에 설정한다.
-     */
+    // 강의노트에 등록된 도서정보목록을 LectureNoteDetailDTO에 설정한다.
     private void initBookInfoByLectureNote(Long memberId, Long noteId, final LectureNoteDetailDTO noteDetailDTO) {
         noteDetailDTO.setKakaoBookList( m_lectureNoteRepository.findBookListByLectureNote(memberId, noteId));
     }
 
     /*
         강의노트에 등록된 재생목록들을 LectureNoteDetailDTO에 설정한다.
+        재생목록에 대한 수치정보들을 설정한다
+        - 수치정보들
+        1. 총 재생시간
+        2. 학습시간
+        3. 진도율
      */
-    private LectureNoteDetailDTO initVideoInfoByLectureNote(Long memberId, Long noteId, final LectureNoteDetailDTO noteDetailDTO){
-        List<LectureNoteDetailDTO.LectureVideoPlayListInfo> playlist = m_lectureNoteRepository.findVideoInfoByLectureNote(memberId, noteId);
-        for (LectureNoteDetailDTO.LectureVideoPlayListInfo info : playlist) {
-            Duration totalDuration = m_lectureNoteRepository.findTotalDurationOfPlayList(info.getPlayListId());
-            info.setTotalDuration(totalDuration.toSeconds()); // 유튜브는 초단위 까지만 사용하기 때문에 전체재생시간은 초단위로 설정
-            info.setTotalDurationFormattedString(StringFormatter.toFormattedDuration(totalDuration));
-            long tmpTotalDuration = getTotalDuration(info);
+    private LectureNoteDetailDTO initPlayListInfoByLectureNote(Long memberId, Long noteId, final LectureNoteDetailDTO noteDetailDTO){
+        List<LectureNoteDetailDTO.LecturePlayListInfo> playlist = m_lectureNoteRepository.findPlayListInfoByLectureNote(memberId, noteId);
+        int inProgress = 0;
+        int completed = 0;
+        for (LectureNoteDetailDTO.LecturePlayListInfo info : playlist) {
+            // 총 재생시간 설정
+            long tmpTotalDuration = extractTotalDuration(info.getPlayListId());
             info.setTotalDuration(tmpTotalDuration);
-            info.setProgressStatus(calcTotalProgress(memberId, noteId, info.getPlayListId(), tmpTotalDuration));
+            info.setTotalDurationFormattedString(StringFormatter.toHM(tmpTotalDuration));
+            // 학습시간 설정
+            long tmpTotalPlaytime = extractTotalPlaytime(memberId,noteId,info.getPlayListId());
+            info.setTotalPlaytime(tmpTotalPlaytime);
+            info.setTotalPlaytimeFormattedString(StringFormatter.toHM(tmpTotalPlaytime));
+            // 진도율 설정
+            double progress = extractTotalProgress(tmpTotalDuration, tmpTotalPlaytime);
+            info.setProgressStatus(progress);
+
+            if(progress == 100.0){ // 완강 정보
+                completed++;
+            } else if (progress < 100.0) { // 학습중 정보
+                inProgress++;
+            }
         }
+        noteDetailDTO.setInProgressLectureCount(inProgress);
+        noteDetailDTO.setCompletedLectureCount(completed);
         noteDetailDTO.setVideoPlayList(playlist);
         return noteDetailDTO;
     }
 
-    private long getTotalDuration(LectureNoteDetailDTO.LectureVideoPlayListInfo listInfo){
-        /*
-            - 재생목록의 duration 합 구하기
-            - 강의노트영상목록의 progress 합 구하기
-         */
-        String[] durations = m_lectureNoteRepository.findAllDuration(listInfo.getPlayListId());
+    private long extractTotalDuration(Long playlistId){
+        // 재생목록의 duration 합 구하기
+        String[] durations = m_lectureNoteRepository.findAllDuration(playlistId);
         long result = 0L;
         for(String item : durations){
             result += Duration.parse(item).toSeconds();
@@ -296,10 +358,15 @@ public class LectureNoteService implements ILectureNoteService{
         return result;
     }
 
-    private double calcTotalProgress(Long memberId, Long noteId, Long playlistId, long totalDuration){
-        int totalProgress = m_lectureNoteRepository.findTotalProgress(memberId, noteId, playlistId);
-        return ((double)totalProgress / totalDuration) * 100;
+    private long extractTotalPlaytime(Long memberId, Long noteId, Long playlistId){
+        return m_lectureNoteRepository.findTotalProgress(memberId, noteId, playlistId);
     }
+
+    private double extractTotalProgress(long totalDuration, long totalPlaytime){
+        return ((double)totalPlaytime / totalDuration) * 100;
+    }
+
+
 
     /*
         회원의 자격증정보 초기화
@@ -310,15 +377,20 @@ public class LectureNoteService implements ILectureNoteService{
         if(Objects.isNull(licenseId) && Objects.isNull(subjectId)){
             return noteDetailDTO;
         }
-        // 자격증정보는 이벤트를 발행하여 LicenseService 에서 받아온다.
-        LicenseInfoByLectureNoteEvent noteEvent = LicenseInfoByLectureNoteEvent.builder()
-                .licenseId(licenseId)
-                .build();
-        m_appEventPublisher.publishEvent(noteEvent);
-        LicenseDTO licDTO = noteEvent.getLicenseDTO();
-        LectureNoteDetailDTO.LicenseInfo licInfo = createLicenseInfo(licDTO);
-        noteDetailDTO.setNoteLicenseName(licInfo.getLicenseName());
-        noteDetailDTO.setLicenseInfo(licInfo);
+        if(Objects.nonNull(licenseId)){
+            // 자격증정보는 이벤트를 발행하여 LicenseService 에서 받아온다.
+            LicenseInfoByLectureNoteEvent noteEvent = LicenseInfoByLectureNoteEvent.builder()
+                    .licenseId(licenseId)
+                    .build();
+            m_appEventPublisher.publishEvent(noteEvent);
+            LicenseDTO licDTO = noteEvent.getLicenseDTO();
+            LectureNoteDetailDTO.LicenseInfo licInfo = createLicenseInfo(licDTO);
+            noteDetailDTO.setNoteLicenseName(licInfo.getLicenseName());
+            noteDetailDTO.setLicenseInfo(licInfo);
+        }
+        if(Objects.nonNull(subjectId)){
+            noteDetailDTO.setNoteLicenseName(m_cacheService.getSubjectNameById(subjectId));
+        }
         return noteDetailDTO;
     }
 
@@ -367,7 +439,6 @@ public class LectureNoteService implements ILectureNoteService{
                 .build();
     }
 
-
     // 회원의 강의노트 기본정보 초기화
     private LectureNoteDetailDTO initLectureNoteDetailInfoByMember(Long memberId, Long noteId, final LectureNoteDetailDTO noteDetailDTO){
         // 회원의 강의노트 정보설정 시작
@@ -378,13 +449,6 @@ public class LectureNoteService implements ILectureNoteService{
         // licenseId, subjectId가 들다 null 이면 아직 주제설정이 안된 기본노트, licenseId, subjectId 는 둘중에 하나는 null이다.
         noteDetailDTO.setLicenseId(noteDTO.getLicenseId());
         noteDetailDTO.setSubjectId(noteDTO.getSubjectId());
-
-        List<LectureNoteDTO> noteDTOList = m_lectureNoteRepository.findNoteListByMember(memberId);
-        int totalNoteCnt = noteDTOList.size();
-        noteDetailDTO.setTotalNoteCount(totalNoteCnt); // 회원의 모든강의노트개수
-        noteDetailDTO.setInProgressNoteCount(-1); // 회원의 진행중인 강의노트개수 임시값 -1
-        noteDetailDTO.setCompletedNoteCount(-1); // 회원의 완료된 강의노트개수 임시값 -1
-
         return noteDetailDTO;
     }
 
@@ -393,6 +457,12 @@ public class LectureNoteService implements ILectureNoteService{
     }
 
     private void updateLectureNote(LectureNoteDTO lectureNoteDTO){
+        if(lectureNoteDTO.getLicenseId() <= -1){
+            lectureNoteDTO.setLicenseId(null);
+        }
+        if(lectureNoteDTO.getSubjectId() <= -1){
+            lectureNoteDTO.setSubjectId(null);
+        }
         m_lectureNoteRepository.updateLectureNote(lectureNoteDTO);
     }
 

@@ -15,7 +15,7 @@ public interface LectureNoteMapper {
 
     int saveDefaultLectureNote(LectureNoteDTO lectureNoteDTO);
     int saveLectureNote(LectureNoteDTO lectureNoteDTO);
-    int deleteLectureNote(Long noteId);
+    int deleteLectureNote(@Param("noteId") Long noteId);
     int updateLectureNote(LectureNoteDTO lectureNoteDTO);
 
 
@@ -38,12 +38,12 @@ public interface LectureNoteMapper {
 
     boolean addVideoIdList(List<PlayListVideoDTO> videoIdLis);
 
-    List<LectureNoteModalDTO> findLectureNoteListByPlayList(Long memberId);
+    List<LectureNoteModalDTO> findLectureNoteListByPlayList(@Param("memberId") Long memberId);
 
     @Select("SELECT id,member_id,license_id,subject_id,title,description,reg_date,progress FROM tbl_lecture WHERE member_id=#{memberId} AND id=#{noteId}")
     LectureNoteDTO findLectureNoteByMember(@Param("memberId") Long memberId, @Param("noteId")Long noteId);
 
-    List<LectureNoteDetailDTO.LectureVideoPlayListInfo> findVideoInfoByLectureNote(@Param("memberId")Long memberId, @Param("noteId") Long noteId);
+    List<LectureNoteDetailDTO.LecturePlayListInfo> findPlayListInfoByLectureNote(@Param("memberId")Long memberId, @Param("noteId") Long noteId);
 
     List<LectureNoteRepository.ChannelTitleInfo> findChannelTitle(List<Long> channelIdList);
 
@@ -61,8 +61,8 @@ public interface LectureNoteMapper {
     void deleteBook(@Param("refId") Long refId);
 
     @Select("SELECT duration FROM tbl_youtube WHERE youtube_playlist_id=#{playlistid}")
-    String[] findAllDuration(Long playlistId);
+    String[] findAllDuration(@Param("playlistid") Long playlistId);
 
     @Select("SELECT ifnull(sum(progress), 0) FROM ref_tbl_lecture_youtube WHERE lecture_member_id=#{memberId} AND lecture_id=#{noteId} AND youtube_playlist_id=#{playlistId}")
-    int findTotalProgress(@Param("memberId")Long memberId, @Param("noteId") Long noteId, @Param("playlistId") Long playlistId);
+    long findTotalProgress(@Param("memberId")Long memberId, @Param("noteId") Long noteId, @Param("playlistId") Long playlistId);
 }
