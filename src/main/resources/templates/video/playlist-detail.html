@@ -132,18 +132,6 @@
 <script th:src="@{/js/lilac-common.js}"></script>
 <script th:src="@{/js/lecture-note.js}"></script>
 <script th:inline="javascript">
-    /*window.onload = function(){
-        const videoCnt = [[${videoList.size()}]];
-        console.log("videoCnt : "+videoCnt);
-        // '${video.videoId}', '${video.Id}'
-        const videoIdStr = [[${videoList[0].videoId}]];
-        const videoId = [[${videoList[0].Id}]];
-        console.log("videoIdStr : " + videoIdStr);
-        console.log("videoId : " + videoId);
-        if(videoCnt >= 1){
-            playSelectedVideo(videoIdStr, videoId);
-        }
-    }*/
     let tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     let firstScriptTag = document.getElementsByTagName('script')[0];
@@ -164,29 +152,6 @@
         event.target.playVideo();
     }
 
-    // 강의노트 모달html을 서버로 부터 받아오고 모달창을 띄운다
-    /*function showPlaylistAddModal(paramPlayListId) {
-        const memberIdVal = $("#memberIdHidden").val();
-        $.ajax({
-            type: "get",
-            url: "/lecture/modal-playlist-template",
-            dataType: "text",
-            data: {
-                memberId: memberIdVal,
-                playListId: paramPlayListId
-            },
-            success: function (data) {
-                let html = jQuery('<div>').html(data);
-                let contents = html.find("div#playlist-add-modal").html();
-                $('#div-modal-lecture-note').html(contents);
-                $("#addNoteModal").modal("show");
-
-            }, error: function (error) {
-                alert("강의노트 입력창 호출에 실패하였습니다.");
-            }
-        })
-    }*/
-
     // playlist-add-model.html 에서 호출하는 함수
     function addPlayListToLectureNote() {
         const paramPlayListId = [[${playListId}]];
@@ -204,7 +169,7 @@
             success: function (resultJson) {
                 alert("재생목록을 강의노트에 추가하였습니다.");
                 $("#addNoteModal").modal("hide");
-                document.location.href = "/video/lec-playlist-detail?youtubePlaylistId=" + paramPlayListId;
+                document.location.href = "/video/lec-playlist-detail?youtubePlaylistId=" + paramPlayListId+"&noteId="+paramLectureNoteId;
             },
             error: function (jqXHR) {
                 if (jqXHR.status == 401) {
@@ -232,58 +197,6 @@
             }
         })
     }
-
-    /*function likeVideo(paramVideoId) {
-        let param = {
-            "videoId": paramVideoId
-        }
-        $.ajax({
-            type: "post",
-            url: "/video/api/like-video",
-            headers: {"Content-Type": "application/json"},
-            data: JSON.stringify(param),
-            success: function (result) {
-                let color = rgb2hex($("#img-like-count").css("color"));
-                if (color == "#ff0000") {
-                    $("#img-like-count").css("color", "#5830e0");
-                } else {
-                    $("#img-like-count").css("color", "#ff0000");
-                    $("#img-dislike-count").css("color", "#5830e0");
-                }
-                $("#img-like-count").text(' ' + result.likeCount);
-                $("#img-dislike-count").text(' ' + result.dislikeCount);
-            },
-            error: function (err) {
-                alert(err);
-            }
-        })
-    }
-
-    function dislikeVideo(paramVideoId) {
-        let param = {
-            "videoId": paramVideoId
-        }
-        $.ajax({
-            type: "post",
-            url: "/video/api/dislike-video",
-            headers: {"Content-Type": "application/json"},
-            data: JSON.stringify(param),
-            success: function (result) {
-                let color = rgb2hex($("#img-dislike-count").css("color"));
-                if (color == "#ff0000") {
-                    $("#img-dislike-count").css("color", "#5830e0");
-                } else {
-                    $("#img-like-count").css("color", "#5830e0");
-                    $("#img-dislike-count").css("color", "#ff0000");
-                }
-                $("#img-like-count").text(' ' + result.likeCount);
-                $("#img-dislike-count").text(' ' + result.dislikeCount);
-            },
-            error: function (err) {
-                alert(err);
-            }
-        })
-    }*/
 </script>
 </body>
 </html>

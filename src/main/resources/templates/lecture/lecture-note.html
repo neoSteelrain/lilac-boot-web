@@ -101,20 +101,20 @@
                             <div class="post-ad-tab">
                                 <nav>
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                        <button class="nav-link active" id="nav-item-info-tab" data-bs-toggle="tab"
+                                        <button class="nav-link active" id="nav-item-license-tab" data-bs-toggle="tab"
                                                 data-bs-target="#nav-item-info" type="button" role="tab"
                                                 aria-controls="nav-item-info" aria-selected="true">
                                             자격증 정보
                                             <span class="sub-title" th:text="${noteDetail.noteLicenseName}"></span>
                                         </button>
-                                        <button class="nav-link" id="nav-item-details-tab" data-bs-toggle="tab"
+                                        <button class="nav-link" id="nav-item-book-tab" data-bs-toggle="tab"
                                                 data-bs-target="#nav-item-details" type="button" role="tab"
                                                 aria-controls="nav-item-details" aria-selected="false">
                                             도서 정보
                                             <span class="sub-title"
                                                   th:text="${noteDetail.kakaoBookList.size()}+' 권'"></span>
                                         </button>
-                                        <button class="nav-link" id="nav-user-info-tab" data-bs-toggle="tab"
+                                        <button class="nav-link" id="nav-user-lecture-tab" data-bs-toggle="tab"
                                                 data-bs-target="#nav-user-info" type="button" role="tab"
                                                 aria-controls="nav-user-info" aria-selected="false">
                                             강의 정보
@@ -125,7 +125,7 @@
                                 </nav>
                                 <div class="tab-content" id="nav-tabContent">
                                     <div class="tab-pane fade show active" id="nav-item-info" role="tabpanel"
-                                         aria-labelledby="nav-item-info-tab">
+                                         aria-labelledby="nav-item-license-tab">
                                         <!-- 자격증 정보 탭 시작 -->
                                         <div class="step-one-content">
                                             <form class="default-form-style" method="post" action="#">
@@ -161,7 +161,7 @@
                                         </div> <!-- 자격증 정보 탭 끝 -->
                                     </div>
                                     <div class="tab-pane fade" id="nav-item-details" role="tabpanel"
-                                         aria-labelledby="nav-item-details-tab">
+                                         aria-labelledby="nav-item-book-tab">
                                         <!-- 도서 정보 탭 시작 -->
                                         <div class="step-two-content">
                                             <div class="alt-option">
@@ -218,7 +218,7 @@
                                         </div> <!-- 도서 정보 탭 끝 -->
                                     </div>
                                     <div class="tab-pane fade" id="nav-user-info" role="tabpanel"
-                                         aria-labelledby="nav-user-info-tab">
+                                         aria-labelledby="nav-user-lecture-tab">
                                         <!-- 영상정보 탭 시작 -->
                                         <div class="step-three-content">
                                             <div class="alt-option">
@@ -371,12 +371,6 @@
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/lilac-common.js}"></script>
 <script th:inline="javascript">
-    const SESSION_KEY_LEC_CURRENT_NOTE = "ss_lec_current_note";
-
-    function activeNote(liTag) {
-        console.log("liTag : " + liTag.className);
-    }
-
     function editLectureNoteModal(argNoteId) {
         $.ajax({
             type: "get",
