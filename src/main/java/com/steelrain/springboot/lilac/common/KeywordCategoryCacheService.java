@@ -158,6 +158,22 @@ public class KeywordCategoryCacheService implements ICacheService {
                 .get().intValue();
     }
 
+    @Override
+    public int getLicenseIdByCode(int licenseCode) {
+        return m_licenseCodeList.stream()
+                .filter(code -> code.getCode() == licenseCode)
+                .findAny()
+                .get().getId();
+    }
+
+    @Override
+    public int getSubjectIdByCode(int subjectCode) {
+        return m_subjectCodeList.stream()
+                .filter(code -> code.getCode() == subjectCode)
+                .findAny()
+                .get().getId();
+    }
+
     private void initKeywordMap(){
         // 주제분류 초기화
         m_subjectCodeList = m_searchMapper.getSubjectCodes();

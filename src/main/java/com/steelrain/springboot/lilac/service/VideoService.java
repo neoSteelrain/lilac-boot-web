@@ -31,7 +31,7 @@ import java.util.Optional;
 public class VideoService implements IVideoService {
 
     private final IVideoRepository m_videoRepository;
-    private final ICacheService m_keywordCategoryCacheService;
+    private final ICacheService m_cacheService;
 
 
     @Override
@@ -50,22 +50,60 @@ public class VideoService implements IVideoService {
     }
 
     @Override
-    public VideoPlayListSearchResultDTO searchPlayList(int keywordCode, String searchKeyword, int pageNum, int playlistCount, int keywordType) {
-        int pageStart = (pageNum - 1) * playlistCount;
-        String keywordStr = parseKeywordCode(keywordCode, searchKeyword, keywordType);
-        int totalPlaylistCount = m_videoRepository.selectTotalPlayListCountByKeyword(keywordStr);
+    public VideoPlayListSearchResultDTO searchPlayListByKeyword(String searchKeyword, int pageNum, int playlistCount) {
+        int pageStart = PagingUtils.calcStartPage(pageNum, playlistCount);
+        int totalPlaylistCount = m_videoRepository.selectTotalPlayListCountByKeyword(searchKeyword);
         return VideoPlayListSearchResultDTO.builder()
-                                        .requestKeywordCode(keywordCode)
-                                        .requestKeywordType(keywordType)
+                                        .requestKeywordCode(0)
+                                        .requestKeywordType(0)
                                         .searchKeyword(searchKeyword)
                                         .pageDTO(PagingUtils.createPagingInfo(totalPlaylistCount, pageNum, playlistCount))
-                                        .playList(m_videoRepository.findPlayListByKeyword(keywordStr, pageStart, playlistCount))
+                                        .playList(m_videoRepository.findPlayListByKeyword(searchKeyword, pageStart, playlistCount))
                                         .build();
     }
 
+    @Override
+    public VideoPlayListSearchResultDTO searchPlayListById(int code, int pageNum, int playlistCount, int codeType){
+        int pageStart = PagingUtils.calcStartPage(pageNum, playlistCount);
+        int id = extractIdType(code, codeType);
+        int totalPlaylistCount = m_videoRepository.selectTotalPlayListCount(id, codeType);
+        return VideoPlayListSearchResultDTO.builder()
+                .requestKeywordCode(code)
+                .requestKeywordType(codeType)
+                .searchKeyword(null)
+                .pageDTO(PagingUtils.createPagingInfo(totalPlaylistCount, pageNum, playlistCount))
+                .playList(m_videoRepository.findPlayListById(id, codeType, pageStart, playlistCount))
+                .build();
+    }
+
+    private int extractIdType(int id, int idType){
+        int result = 0;
+        if(idType == 1){
+            result = m_cacheService.getLicenseIdByCode(id);
+        }else if(idType == 2){
+            result = m_cacheService.getSubjectIdByCode(id);
+        }
+        return result;
+    }
+
+
     @EventListener(VideoPlayListSearchEvent.class)
     public void handleVideoPlayListSearchEvent(VideoPlayListSearchEvent event){
-        event.setSearchResultDTO(searchPlayList(event.getKeywordCode(), event.getKeyword(), event.getPageNum(), event.getPlaylistCount(), event.getKeywordType()));
+        VideoPlayListSearchResultDTO result = null;
+        switch (event.getKeywordType()) {
+            case 0:
+                result = searchPlayListByKeyword(event.getKeyword(), event.getPageNum(), event.getPlaylistCount());
+                break;
+            case 1:
+                result = searchPlayListById(event.getKeywordCode(), event.getPageNum(), event.getPlaylistCount(), event.getKeywordType());
+                break;
+            case 2:
+                result = searchPlayListById(event.getKeywordCode(), event.getPageNum(), event.getPlaylistCount(), event.getKeywordType());
+                break;
+            default:
+                throw new LilacException(String.format("확인할 수 없는 키워드 코드 입니다. 입력된 키워드 코드 : %d", event.getKeywordType()));
+        }
+        event.setSearchResultDTO(result);
     }
 
     @EventListener(VideoListByPlayListEvent.class)
@@ -80,10 +118,10 @@ public class VideoService implements IVideoService {
                 result = searchKeyword;
                 break;
             case 1:
-                result = m_keywordCategoryCacheService.getLicenseKeyword(keywordCode);
+                result = m_cacheService.getLicenseKeyword(keywordCode);
                 break;
             case 2:
-                result = m_keywordCategoryCacheService.getSubjectKeyword(keywordCode);
+                result = m_cacheService.getSubjectKeyword(keywordCode);
                 break;
             default:
                 throw new LilacException(String.format("확인할 수 없는 키워드 코드 입니다. 입력된 키워드 코드 : %d", keywordCode));

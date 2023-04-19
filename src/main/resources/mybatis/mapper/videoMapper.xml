@@ -86,4 +86,28 @@
     <select id="selectLikeCountMap" parameterType="long" resultType="map">
         SELECT lilac_like_count, lilac_dislike_count FROM tbl_youtube WHERE id=#{videoId}
     </select>
+
+    <select id="selectTotalPlayListCount" resultType="int">
+        SELECT count(id)
+        FROM tbl_youtube_playlist
+        <if test="idType == 1">
+            WHERE license_id=#{id}
+        </if>
+        <if test="idType == 2">
+            WHERE subject_id=#{id}
+        </if>
+    </select>
+
+    <select id="findPlayListById" resultType="YoutubePlayListDTO">
+        SELECT pl.id,playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,item_count,chn.title as channel_title
+        FROM tbl_youtube_playlist pl INNER JOIN tbl_youtube_channel chn
+            ON pl.channel_id=chn.id
+        <if test="idType == 1">
+            WHERE license_id=#{id}
+        </if>
+        <if test="idType == 2">
+            WHERE subject_id=#{id}
+        </if>
+        ORDER BY pl.publish_date LIMIT #{offset}, #{count}
+    </select>
 </mapper>

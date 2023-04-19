@@ -13,8 +13,8 @@ public interface IVideoService {
     List<RecommendedVideoDTO> getRecommendedVideoList();
     List<RecommendedPlayListDTO> getRecommendedPlayList();
     List<YoutubeVideoDTO> getPlayListDetail(Long youtubePlaylistId);
-    VideoPlayListSearchResultDTO searchPlayList(int keywordCode, String searchKeyword, int pageNum, int playlistCount, int keywordType);
-    //VideoPlayListSearchResultDTO searchPlayList(int keywordCode, String searchKeyword, int pageNum, int playlistCount, SEARCH_KEYWORD_TYPE keywordType);
+    VideoPlayListSearchResultDTO searchPlayListByKeyword(String searchKeyword, int pageNum, int playlistCount);
+    VideoPlayListSearchResultDTO searchPlayListById(int keywordCode, int pageNum, int playlistCount, int keywordType);
     List<Long> getAllVideoIdByPlayList(Long playListId);
     YoutubeVideoDTO getVideoDetail(Long videoId);
     boolean isExistYoutubePlayList(Long playListId);

@@ -19,8 +19,8 @@ public class SubjectCodeDTO {
     update_time	datetime	YES
      */
 
-    private int id;
-    private int code;
+    private Integer id;
+    private Integer code;
     private String name;
     private String keyWord;
     private String keyWordBook;

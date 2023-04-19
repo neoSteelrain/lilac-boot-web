@@ -52,4 +52,8 @@ public interface IVideoRepository {
     Map<String, Long> selectLikeCountMap(Long videoId);
 
     void deleteLikeVideo(Long memberId, Long videoId);
+
+    int selectTotalPlayListCount(int id, int idType);
+
+    List<YoutubePlayListDTO> findPlayListById(int id, int idType, int pageNum, int playlistCount);
 }

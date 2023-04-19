@@ -2,12 +2,14 @@ package com.steelrain.springboot.lilac.datamodel;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
 
 @Getter
 @Setter
+@ToString
 public class YoutubePlayListDTO {
     private Long id;
     private String playlistId;

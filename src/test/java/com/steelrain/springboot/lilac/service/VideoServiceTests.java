@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.service;
 
+import com.steelrain.springboot.lilac.datamodel.VideoPlayListSearchResultDTO;
 import com.steelrain.springboot.lilac.datamodel.YoutubeVideoDTO;
 import com.steelrain.springboot.lilac.datamodel.view.LectureNoteYoutubeVideoDTO;
 import lombok.extern.slf4j.Slf4j;
@@ -72,5 +73,21 @@ public class VideoServiceTests {
         System.out.println("lilac_like_count : "+res.get("lilac_like_count"));
         System.out.println("lilac_dislike_count : "+res.get("lilac_dislike_count"));
         assertThat(Objects.nonNull(res)).isTrue();
+    }
+
+    @Test
+    @DisplayName("자격증재생목록을_가져오기")
+    public void 자격증재생목록을_가져오기(){
+        VideoPlayListSearchResultDTO res = m_videoService.searchPlayListById(1320, 1, 5, 1);
+        assertThat(res.getPlayList().size() > 0).isTrue();
+        log.debug("list 정보 : {}", res.getPlayList());
+    }
+
+    @Test
+    @DisplayName("키워드재생목록을_가져오기")
+    public void 키워든재생목록을_가져오기(){
+        VideoPlayListSearchResultDTO res = m_videoService.searchPlayListById(100, 1, 5, 2);
+        assertThat(res.getPlayList().size() > 0).isTrue();
+        log.debug("list 정보 : {}", res.getPlayList());
     }
 }

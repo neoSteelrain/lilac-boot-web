@@ -62,4 +62,8 @@ public interface VideoMapper {
 
     @Delete("DELETE FROM tbl_youtube_like WHERE member_id=#{memberId} AND youtube_id=#{videoId}")
     void deleteLikeVideo(@Param("memberId") Long memberId,@Param("videoId") Long videoId);
+
+    int selectTotalPlayListCount(@Param("id")int id, @Param("idType") int idType);
+
+    List<YoutubePlayListDTO> findPlayListById(@Param("id")int id, @Param("idType") int idType, @Param("offset") int pageNum, @Param("count") int playlistCount);
 }

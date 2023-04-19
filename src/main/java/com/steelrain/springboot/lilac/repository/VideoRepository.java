@@ -37,6 +37,7 @@ public class VideoRepository implements IVideoRepository {
         return m_videoMapper.findPlayListByKeyword(keyword, offset, count);
     }
 
+    @Override
     public int selectTotalPlayListCountByKeyword(String keyword){
         return m_videoMapper.selectTotalPlayListCountByKeyword(keyword);
     }
@@ -96,14 +97,17 @@ public class VideoRepository implements IVideoRepository {
         return m_videoMapper.selectLikeCountMap(videoId);
     }
 
+    @Override
     public YoutubeVideoDTO findVideoDetail(Long videoId) {
         return m_videoMapper.findVideoDetail(videoId);
     }
 
+    @Override
     public List<Long> findAllVideoIdByPlayList(Long playListId) {
         return m_videoMapper.findAllVideoIdByPlayList(playListId);
     }
 
+    @Override
     public boolean isExistYoutubePlayList(Long playListId){
         return m_videoMapper.isExistYoutubePlayList(playListId);
     }
@@ -118,7 +122,18 @@ public class VideoRepository implements IVideoRepository {
         m_videoMapper.deleteLikeVideo(memberId, videoId);
     }
 
+    @Override
     public List<RecommendedPlayListDTO> findRecommendedPlayList() {
         return m_videoMapper.findRecommendedPlayList();
+    }
+
+    @Override
+    public int selectTotalPlayListCount(int id, int idType) {
+        return m_videoMapper.selectTotalPlayListCount(id, idType);
+    }
+
+    @Override
+    public List<YoutubePlayListDTO> findPlayListById(int id, int idType, int pageNum, int playlistCount) {
+        return m_videoMapper.findPlayListById(id, idType, pageNum, playlistCount);
     }
 }
