@@ -226,7 +226,9 @@
             success:function (result){
             },
             error:function (jqXHR){
-                alert(jqXHR.status);
+                if(jqXHR.status == 401){
+                    alert("로그인이 필요합니다");
+                }
             }
         })
     }

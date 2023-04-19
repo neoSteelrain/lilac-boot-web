@@ -13,10 +13,11 @@
     <select id="findPlayListDetail" parameterType="java.lang.Long" resultType="YoutubeVideoDTO">
         SELECT yt.id,yt.video_id,yt.channel_id,yt.youtube_playlist_id,yt.title,yt.description,yt.publish_date,
                yt.thumbnail_default,yt.thumbnail_high,yt.playlist_id,yt.view_count,yt.search_count,yt.like_count,yt.favorite_count,yt.comment_count,
-               yt.comment_disabled,yt.duration,yt.score,yt.magnitude,yt.lilac_like_count,yt.lilac_dislike_count
+               yt.comment_disabled,yt.duration,yt.score,yt.magnitude,yt.lilac_like_count,yt.lilac_dislike_count,yt.position
         FROM tbl_youtube yt INNER JOIN tbl_youtube_playlist pl
             ON yt.youtube_playlist_id=pl.id
         WHERE pl.id=#{playlistId}
+        ORDER BY yt.position ASC
     </select>
 
     <select id="findPlayListDetailOfLectureNote" parameterType="map" resultType="LectureNoteYoutubeVideoDTO">
@@ -27,6 +28,7 @@
         FROM ref_tbl_lecture_youtube pl INNER JOIN tbl_youtube yt
             ON pl.youtube_id=yt.id
         WHERE pl.lecture_member_id=#{memberId} AND pl.youtube_playlist_id=#{youtubePlaylistId}  AND pl.lecture_id=#{noteId}
+        ORDER BY yt.position ASC
     </select>
 
     <select id="findDuration" parameterType="java.lang.Long" resultType="java.lang.String">

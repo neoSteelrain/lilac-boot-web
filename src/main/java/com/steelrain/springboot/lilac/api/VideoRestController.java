@@ -1,7 +1,6 @@
 package com.steelrain.springboot.lilac.api;
 
 import com.steelrain.springboot.lilac.common.SESSION_KEY;
-import com.steelrain.springboot.lilac.datamodel.MemberDTO;
 import com.steelrain.springboot.lilac.datamodel.rest.BaseRestAPIResponse;
 import com.steelrain.springboot.lilac.service.IVideoService;
 import lombok.Getter;
@@ -31,7 +30,23 @@ public class VideoRestController {
      * @return
      */
     @PostMapping("/update-playtime")
-    public ResponseEntity<UpdateVideoPlaytimeResponse> updateVideoPlaytime(@RequestBody UpdateVideoPlaytimeRequest request){
+    public ResponseEntity<UpdateVideoPlaytimeResponse> updateVideoPlaytime(@RequestBody UpdateVideoPlaytimeRequest request, HttpSession session){
+        Long memberId = (Long) session.getAttribute(SESSION_KEY.MEMBER_ID);
+        Integer grade = (Integer) session.getAttribute(SESSION_KEY.MEMBER_GRADE);
+        if(memberId == null){
+            return new ResponseEntity<>(UpdateVideoPlaytimeResponse.builder()
+                    .requestParameter(request)
+                    .code(HttpStatus.UNAUTHORIZED.value())
+                    .message("로그인이 필요한 서비스 입니다")
+                    .build(), HttpStatus.UNAUTHORIZED);
+        }
+        if(memberId != null && grade == 1){
+            return new ResponseEntity<>(UpdateVideoPlaytimeResponse.builder()
+                    .requestParameter(request)
+                    .code(HttpStatus.METHOD_NOT_ALLOWED.value())
+                    .message("관리자는 사용할 수 없는  서비스 입니다")
+                    .build(), HttpStatus.METHOD_NOT_ALLOWED);
+        }
         m_videoService.updateVideoPlaytime(request.lectureVideoId, request.playtime);
         return new ResponseEntity<>(UpdateVideoPlaytimeResponse.builder()
                 .requestParameter(request)
@@ -43,12 +58,20 @@ public class VideoRestController {
     @PostMapping("/like-video")
     public ResponseEntity<LikeVideoResponse> updateLikeVideo(@RequestBody LikeVideoRequest request, HttpSession session){
         Long memberId = (Long) session.getAttribute(SESSION_KEY.MEMBER_ID);
+        Integer grade = (Integer) session.getAttribute(SESSION_KEY.MEMBER_GRADE);
         if(memberId == null){
             return new ResponseEntity<>(LikeVideoResponse.builder()
                     .requestParameter(request)
                     .code(HttpStatus.UNAUTHORIZED.value())
                     .message("로그인이 필요한 서비스 입니다")
                     .build(), HttpStatus.UNAUTHORIZED);
+        }
+        if(memberId != null && grade == 1){
+            return new ResponseEntity<>(LikeVideoResponse.builder()
+                    .requestParameter(request)
+                    .code(HttpStatus.METHOD_NOT_ALLOWED.value())
+                    .message("관리자는 사용할 수 없는  서비스 입니다")
+                    .build(), HttpStatus.METHOD_NOT_ALLOWED);
         }
         Map<String, Long> res = m_videoService.updateLikeVideo(request.videoId, memberId);
 
@@ -64,6 +87,7 @@ public class VideoRestController {
     @PostMapping("/dislike-video")
     public ResponseEntity<DisLikeVideoResponse> updateDislikeVideo(@RequestBody DislikeVideoRequest request, HttpSession session){
         Long memberId = (Long) session.getAttribute(SESSION_KEY.MEMBER_ID);
+        Integer grade = (Integer) session.getAttribute(SESSION_KEY.MEMBER_GRADE);
         if(memberId == null){
             return new ResponseEntity<>(DisLikeVideoResponse.builder()
                     .requestParameter(request)
@@ -71,6 +95,14 @@ public class VideoRestController {
                     .message("로그인이 필요한 서비스 입니다")
                     .build(), HttpStatus.UNAUTHORIZED);
         }
+        if(memberId != null && grade == 1){
+            return new ResponseEntity<>(DisLikeVideoResponse.builder()
+                    .requestParameter(request)
+                    .code(HttpStatus.METHOD_NOT_ALLOWED.value())
+                    .message("관리자는 사용할 수 없는  서비스 입니다")
+                    .build(), HttpStatus.METHOD_NOT_ALLOWED);
+        }
+
         Map<String, Long> res = m_videoService.updateDislikeVideo(request.videoId, memberId);
         return new ResponseEntity<>(DisLikeVideoResponse.builder()
                 .requestParameter(request)

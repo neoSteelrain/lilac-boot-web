@@ -174,8 +174,9 @@
             error: function (jqXHR) {
                 if (jqXHR.status == 401) {
                     alert("로그인 후 사용할 수 있습니다.");
+                }else{
+                    alert("재생목록을 강의노트에 추가하는데 실패하였습니다.");
                 }
-                alert("재생목록을 강의노트에 추가하는데 실패하였습니다.");
             }
         })
     }

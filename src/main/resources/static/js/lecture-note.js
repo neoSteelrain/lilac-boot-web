@@ -42,8 +42,14 @@ function likeVideo(paramVideoId) {
             $("#img-like-count").text(' ' + result.likeCount);
             $("#img-dislike-count").text(' ' + result.dislikeCount);
         },
-        error: function (err) {
-            alert(err);
+        error: function (jqXHR) {
+            if(jqXHR.status == 401){
+                alert("로그인이 필요합니다");
+            }else if(jqXHR.status == 405){
+                alert("관리자는 사용할 수 없습니다");
+            }else{
+                alert("좋아요를 처리하는데 실패했습니다");
+            }
         }
     })
 }
@@ -68,8 +74,14 @@ function dislikeVideo(paramVideoId) {
             $("#img-like-count").text(' ' + result.likeCount);
             $("#img-dislike-count").text(' ' + result.dislikeCount);
         },
-        error: function (err) {
-            alert(err);
+        error: function (jqXHR) {
+            if(jqXHR.status == 401){
+                alert("로그인이 필요합니다");
+            }else if(jqXHR.status == 405){
+                alert("관리자는 사용할 수 없습니다");
+            }else {
+                alert("싫어요를 처리하는데 실패했습니다");
+            }
         }
     })
 }
