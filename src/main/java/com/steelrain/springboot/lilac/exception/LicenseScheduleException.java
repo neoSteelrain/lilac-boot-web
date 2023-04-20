@@ -1,7 +1,7 @@
 package com.steelrain.springboot.lilac.exception;
 
 
-public class LicenseScheduleException extends LilacException{
+public class LicenseScheduleException extends RuntimeException {
 
     private int m_licenseCode;
 

@@ -4,6 +4,8 @@ import com.steelrain.springboot.lilac.common.SESSION_KEY;
 import com.steelrain.springboot.lilac.datamodel.MemberDTO;
 import com.steelrain.springboot.lilac.datamodel.view.MemberProfileEditDTO;
 import com.steelrain.springboot.lilac.event.MemberRegistrationEvent;
+import com.steelrain.springboot.lilac.exception.DuplicateLilacMemberException;
+import com.steelrain.springboot.lilac.exception.LilacRepositoryException;
 import com.steelrain.springboot.lilac.repository.IAwsS3Repository;
 import com.steelrain.springboot.lilac.repository.IMemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -52,14 +55,14 @@ public class MemberService implements IMemberService {
 
     @Transactional
     @Override
-    public boolean registerMember(MemberDTO memberDTO) {
-        boolean isRegistered = m_memberRepository.saveMember(memberDTO) > 0;
+    public boolean registerMember(MemberDTO memberDTO) throws DuplicateLilacMemberException, LilacRepositoryException {
+        Long id = m_memberRepository.saveMember(memberDTO);
         MemberRegistrationEvent registrationEvent = MemberRegistrationEvent.builder()
                 .memberNickname(memberDTO.getNickname())
                 .memberId(memberDTO.getId())
                 .build();
         m_appEventPublisher.publishEvent(registrationEvent);
-        return isRegistered;
+        return Objects.nonNull(id);
     }
 
     @Override

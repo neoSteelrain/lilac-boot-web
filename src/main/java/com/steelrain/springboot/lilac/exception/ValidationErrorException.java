@@ -5,7 +5,7 @@ import org.springframework.validation.Errors;
 
 import java.util.Optional;
 
-public class ValidationErrorException extends LilacException {
+public class ValidationErrorException extends RuntimeException {
 
     @Getter
     private Optional<Errors> errors;

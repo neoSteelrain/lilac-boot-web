@@ -1,6 +1,6 @@
 package com.steelrain.springboot.lilac.exception;
 
-public class AwsS3RepositoryException extends LilacException{
+public class AwsS3RepositoryException extends RuntimeException {
     private Object m_sourceObject;
 
     public AwsS3RepositoryException(String msg){

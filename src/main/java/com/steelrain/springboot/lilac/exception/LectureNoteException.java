@@ -3,7 +3,7 @@ package com.steelrain.springboot.lilac.exception;
 import com.steelrain.springboot.lilac.datamodel.LectureNoteDTO;
 import lombok.Getter;
 
-public class LectureNoteException extends LilacException{
+public class LectureNoteException extends RuntimeException {
     @Getter
     private Long lectureNoteId;
     @Getter

@@ -2,6 +2,8 @@ package com.steelrain.springboot.lilac.service;
 
 import com.steelrain.springboot.lilac.datamodel.MemberDTO;
 import com.steelrain.springboot.lilac.datamodel.view.MemberProfileEditDTO;
+import com.steelrain.springboot.lilac.exception.DuplicateLilacMemberException;
+import com.steelrain.springboot.lilac.exception.LilacRepositoryException;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
@@ -13,7 +15,7 @@ import java.util.List;
 public interface IMemberService {
     boolean checkDuplicatedEmail(String email);
     boolean checkDuplicatedNickName(String nickName);
-    boolean registerMember(MemberDTO memberDTO);
+    boolean registerMember(MemberDTO memberDTO) throws DuplicateLilacMemberException, LilacRepositoryException;
     MemberDTO loginMember(String email, String password);
     List<MemberDTO> getAllMembers();
     void updateMemberInfo(MemberDTO memberDTO, MemberProfileEditDTO editDTO, HttpSession session);

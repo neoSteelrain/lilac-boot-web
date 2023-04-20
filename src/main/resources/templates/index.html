@@ -59,13 +59,12 @@
                     <!-- Start Search Form -->
                     <div class="search-form style2 wow fadeInRight" data-wow-delay=".5s">
                         <h3 class="heading-title">검색</h3>
-<!--                        <p class="sub-heding-text">검색 안내문구</p>-->
-                        <p class="text-danger" id="searchInputNotice" ></p>
+                        <span class="text-danger" id="searchInputNotice"></span>
                         <div class="row">
                             <div class="col-12 ">
                                 <div class="search-input">
                                     <label for="keyword"><i class="lni lni-search-alt theme-color"></i></label>
-                                    <input type="text" name="keyword" id="keyword" placeholder="검색어" onchange="changeKeyword(this)">
+                                    <input type="text" name="keyword" id="keyword" placeholder="검색어" maxlength="20" onchange="changeKeyword(this)">
                                 </div>
                             </div>
                             <div class="col-12">
@@ -522,10 +521,8 @@
                 url:"/search/keyword-book-list",
                 data:{
                     keyword:argKeyword,
-                    // regionCode:argRegionCode,
-                    // detailRegionCode:argDetailRegionCode,
                     pageNum:argPageNum,
-                    bookCount:9 // 아직 화면이 없으므로 임시로 9
+                    bookCount:9 // 한페이지당 책의 개수는 9
                 },
                 dataType:"text",
                 success: function (result) {
@@ -572,5 +569,4 @@
         }
     </script>
 </body>
-
 </html>

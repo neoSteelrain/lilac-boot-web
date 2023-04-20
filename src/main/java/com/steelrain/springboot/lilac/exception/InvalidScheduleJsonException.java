@@ -1,6 +1,6 @@
 package com.steelrain.springboot.lilac.exception;
 
-public class InvalidScheduleJsonException extends LilacException{
+public class InvalidScheduleJsonException extends RuntimeException {
 
     private int m_licenseCode;
     private String m_jsonStr;

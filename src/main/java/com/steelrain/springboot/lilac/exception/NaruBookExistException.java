@@ -1,6 +1,6 @@
 package com.steelrain.springboot.lilac.exception;
 
-public class NaruBookExistException extends LilacException{
+public class NaruBookExistException extends RuntimeException {
     public NaruBookExistException(String msg){
         super(msg);
     }

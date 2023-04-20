@@ -8,7 +8,7 @@ import com.steelrain.springboot.lilac.datamodel.view.RecommendedPlayListDTO;
 import com.steelrain.springboot.lilac.datamodel.view.RecommendedVideoDTO;
 import com.steelrain.springboot.lilac.event.VideoListByPlayListEvent;
 import com.steelrain.springboot.lilac.event.VideoPlayListSearchEvent;
-import com.steelrain.springboot.lilac.exception.LilacException;
+import com.steelrain.springboot.lilac.exception.LilacServiceException;
 import com.steelrain.springboot.lilac.repository.IVideoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -99,7 +99,7 @@ public class VideoService implements IVideoService {
                 result = searchPlayListById(event.getKeywordCode(), event.getPageNum(), event.getPlaylistCount(), event.getKeywordType());
                 break;
             default:
-                throw new LilacException(String.format("확인할 수 없는 키워드 코드 입니다. 입력된 키워드 코드 : %d", event.getKeywordType()));
+                throw new LilacServiceException(String.format("확인할 수 없는 키워드 코드 입니다. 입력된 키워드 코드 : %d", event.getKeywordType()));
         }
         event.setSearchResultDTO(result);
     }
@@ -122,7 +122,7 @@ public class VideoService implements IVideoService {
                 result = m_cacheService.getSubjectKeyword(keywordCode);
                 break;
             default:
-                throw new LilacException(String.format("확인할 수 없는 키워드 코드 입니다. 입력된 키워드 코드 : %d", keywordCode));
+                throw new LilacServiceException(String.format("확인할 수 없는 키워드 코드 입니다. 입력된 키워드 코드 : %d", keywordCode));
         }
         return result;
     }

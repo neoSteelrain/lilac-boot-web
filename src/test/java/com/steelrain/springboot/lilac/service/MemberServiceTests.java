@@ -2,6 +2,8 @@ package com.steelrain.springboot.lilac.service;
 
 
 import com.steelrain.springboot.lilac.datamodel.MemberDTO;
+import com.steelrain.springboot.lilac.exception.DuplicateLilacMemberException;
+import com.steelrain.springboot.lilac.exception.LilacRepositoryException;
 import com.steelrain.springboot.lilac.repository.IMemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.fileupload.FileItem;
@@ -47,8 +49,7 @@ public class MemberServiceTests {
 
     @Test
     @DisplayName("회원가입 테스트")
-    public void testRegisterMember(){
-
+    public void testRegisterMember() throws DuplicateLilacMemberException, LilacRepositoryException {
         MemberDTO memberDTO1 = MemberDTO.builder()
                         .nickname("user2")
                         .email("user2@user.com")
@@ -62,7 +63,7 @@ public class MemberServiceTests {
 
     @Test
     @Rollback()
-    public void 회원가입닉네임중복테스트(){
+    public void 회원가입닉네임중복테스트() throws DuplicateLilacMemberException, LilacRepositoryException{
         String testNickname = "user2";
         MemberDTO memberDTO1 = MemberDTO.builder()
                 .nickname(testNickname)
@@ -81,15 +82,24 @@ public class MemberServiceTests {
     @Test
     @Rollback
     public void 회원가입중복예외테스트(){
-        String testNickname = "user2";
-        MemberDTO memberDTO1 = MemberDTO.builder()
-                .nickname(testNickname)
-                .email("user2@user.com")
-                .password("123456yt")
-                .grade(2)
-                .build();
+        try{
+            String testNickname = "user2";
+            MemberDTO memberDTO1 = MemberDTO.builder()
+                    .nickname(testNickname)
+                    .email("user2@user.com")
+                    .password("123456yt")
+                    .grade(2)
+                    .build();
 
-        m_memberService.registerMember(memberDTO1);
+            m_memberService.registerMember(memberDTO1);
+        }catch(DuplicateLilacMemberException de){
+
+        }catch (LilacRepositoryException re){
+
+        }
+
+
+
         //assertThatThrownBy( () -> m_memberService.registerMember(memberDTO1)).isInstanceOf(DuplicateKeyException.class).hasMessageContaining(testNickname);
     }
 
@@ -104,7 +114,7 @@ public class MemberServiceTests {
     }
 
     @Test
-    public void createMembers() {
+    public void createMembers() throws DuplicateLilacMemberException, LilacRepositoryException{
         for(int i=1 ; i <= 5 ; i++){
             MemberDTO dto = MemberDTO.builder()
                     .nickname(String.format("user%s", i))

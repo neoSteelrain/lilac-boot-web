@@ -9,6 +9,8 @@ import com.steelrain.springboot.lilac.datamodel.view.MemberLoginDTO;
 import com.steelrain.springboot.lilac.datamodel.MemberDTO;
 import com.steelrain.springboot.lilac.datamodel.view.MemberProfileEditDTO;
 import com.steelrain.springboot.lilac.datamodel.view.MemberRegDTO;
+import com.steelrain.springboot.lilac.exception.DuplicateLilacMemberException;
+import com.steelrain.springboot.lilac.exception.LilacRepositoryException;
 import com.steelrain.springboot.lilac.service.IMemberService;
 import com.steelrain.springboot.lilac.validate.LoginValidationSequence;
 import com.steelrain.springboot.lilac.validate.RegistrationValidateSequence;
@@ -19,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -98,7 +101,7 @@ public class MemberController {
     @PostMapping("/registration")
     public String registerMember(@Validated(RegistrationValidateSequence.class) @ModelAttribute("memberReg") MemberRegDTO memberRegDTO, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            log.info("회원가입 에러 : {}", bindingResult);
+            log.info("회원가입 입력정보 에러 : {}", bindingResult);
             return "/member/registration";
         }
 
@@ -110,7 +113,15 @@ public class MemberController {
                 .dtlRegion(Objects.isNull(m_keywordCategoryCacheService.getDetailRegionName(memberRegDTO.getRegion(), memberRegDTO.getDtlRegion())) ? null : memberRegDTO.getDtlRegion())
                 .grade(2) // 1번은 관리자, 2번은 일반회원이므로 기본값으로 2를 설정해준다
                 .build();
-        return  m_memberService.registerMember(memberDTO) ? "redirect:/member/login" : "redirect:/member/registration";
+        boolean isRegist = false;
+        try{
+            isRegist = m_memberService.registerMember(memberDTO);
+        }catch(DuplicateLilacMemberException dme){
+            bindingResult.addError(new ObjectError("memberReg", "이미 가입된 회원입니다. 다른 닉네임 또는 이메일을 입력해주세요"));
+        }catch(LilacRepositoryException lre){
+            bindingResult.addError(new ObjectError("memberReg", "회원가입에 오류가 발생하였습니다"));
+        }
+        return  isRegist ? "redirect:/member/login" : "/member/registration";
     }
 
     @GetMapping("/profile")

@@ -1,6 +1,6 @@
 package com.steelrain.springboot.lilac.exception;
 
-public class KakaoBookSearchException extends LilacException{
+public class KakaoBookSearchException extends RuntimeException {
 
     public KakaoBookSearchException(String msg){
         super(msg);
