@@ -1,9 +1,6 @@
 package com.steelrain.springboot.lilac.datamodel;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.NotEmpty;
@@ -74,9 +71,9 @@ public class NaruLibraryDTO {
 //    @NotNull
 //    private String isbn13;
     
-    // 소장가능여부 : DB와는 상관없는 필드
+    // 도서상세정보 페이지에서 필요함. 소장가능여부 : DB와는 상관없는 필드
     private boolean hasBook;
 
-    // 대출가능여부 : DB와는 상관없는 필드
+    // 도서상세정보 페이지에서 필요함. 대출가능여부 : DB와는 상관없는 필드
     private boolean isLoanAvailable;
 }

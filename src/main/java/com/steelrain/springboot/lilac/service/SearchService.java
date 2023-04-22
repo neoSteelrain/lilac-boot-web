@@ -24,6 +24,7 @@ public class SearchService implements ISearchService{
     private final ISearchRepository m_searchRepository;
     private final ApplicationEventPublisher m_appEventPublisher;
 
+    
     @Override
     public List<SubjectCodeDTO> getSubjectCodes() {
         return m_searchRepository.getSubjectCodes();
@@ -50,7 +51,7 @@ public class SearchService implements ISearchService{
      * @return 검색된 재생목록
      */
     @Override
-    public VideoPlayListSearchResultDTO searchPlayList(int keywordCode, String searchKeyword, int pageNum, int playlistCount, int keywordType) {
+    public VideoPlayListSearchResultDTO searchPlayList(int keywordCode, String searchKeyword, int pageNum, int playlistCount, KEYWORD_TYPE keywordType) {
         VideoPlayListSearchEvent searchEvent = VideoPlayListSearchEvent.builder()
                 .keywordCode(keywordCode)
                 .keyword(searchKeyword)
@@ -61,42 +62,17 @@ public class SearchService implements ISearchService{
         m_appEventPublisher.publishEvent(searchEvent);
         return searchEvent.getSearchResultDTO();
     }
-
-    /*@Override
-    public VideoPlayListSearchResultDTO searchPlayList(int keywordCode, String searchKeyword, int pageNum, int playlistCount, SEARCH_KEYWORD_TYPE keywordType) {
-        VideoPlayListSearchEvent searchEvent = VideoPlayListSearchEvent.builder()
-                .keywordCode(keywordCode)
-                .keyword(searchKeyword)
-                .pageNum(pageNum)
-                .playlistCount(playlistCount)
-                .keywordType(keywordType)
-                .build();
-        m_appEventPublisher.publishEvent(searchEvent);
-        return searchEvent.getSearchResultDTO();
-    }*/
-
 
     public VideoPlayListSearchResultDTO searchPlayList(String searchKeyword, int pageNum, int playlistCount){
         VideoPlayListSearchEvent searchEvent = VideoPlayListSearchEvent.builder()
                 .keyword(searchKeyword)
                 .pageNum(pageNum)
                 .playlistCount(playlistCount)
-                .keywordType(0)
+                .keywordType(KEYWORD_TYPE.KEYWORD)
                 .build();
         m_appEventPublisher.publishEvent(searchEvent);
         return searchEvent.getSearchResultDTO();
     }
-
-    /*public VideoPlayListSearchResultDTO searchPlayList(String searchKeyword, int pageNum, int playlistCount){
-        VideoPlayListSearchEvent searchEvent = VideoPlayListSearchEvent.builder()
-                .keyword(searchKeyword)
-                .pageNum(pageNum)
-                .playlistCount(playlistCount)
-                .keywordType(SEARCH_KEYWORD_TYPE.KEYWORD_SEARCH)
-                .build();
-        m_appEventPublisher.publishEvent(searchEvent);
-        return searchEvent.getSearchResultDTO();
-    }*/
 
     /**
      * 주제코드에 해당하는 도서정보를 가져온다

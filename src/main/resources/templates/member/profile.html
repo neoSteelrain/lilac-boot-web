@@ -137,11 +137,44 @@
                             </form>
                         </div>
                     </div>
+                    <div class="dashboard-block password-change-block" style="margin-top: 10px">
+                        <div class="inner-block">
+                            <form id="deleteMemberForm" class="default-form-style" method="" action="">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group button mb-0">
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteMemberModal">
+                                                회원탈퇴
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<div class="modal fade" id="deleteMemberModal" tabindex="-1" aria-labelledby="deleteMemberModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteMemberModalLabel">회원 탈퇴</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                회원을 탈퇴하시겠습니까?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                <button type="button" class="btn btn-primary" onclick="deleteMember()">확인</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Start Footer Area -->
 <th:block th:replace="~{common/footer::footer}"></th:block>
@@ -163,14 +196,14 @@
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/lilac-common.js}"></script>
 <script th:inline="javascript">
-    const FILE_SIZE = 1024 * 1024;
+    const FILE_SIZE = 1024 * 256;
     function changeProfileImg(){
         let files = $('#profileImage').prop('files');
         if(files == undefined && files.length == 0){
             return;
         }
         if(files[0].size > FILE_SIZE){
-            alert('이미지 용량은 1MB 이하여야 합니다');
+            alert('이미지 용량은 256KB 이하여야 합니다');
             $('#profileImage').val('');
             return;
         }
@@ -180,6 +213,13 @@
             $('#profileImgPreViewSm').attr('src', e.target.result);
         }
         reader.readAsDataURL(files[0]);
+    }
+
+    function deleteMember(){
+        const form = $("#deleteMemberForm");
+        form.attr("action", "/member/delete");
+        form.attr("method", "post")
+        $("#deleteMemberForm").submit();
     }
 </script>
 

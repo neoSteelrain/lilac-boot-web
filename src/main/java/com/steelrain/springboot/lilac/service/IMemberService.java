@@ -18,6 +18,7 @@ public interface IMemberService {
     boolean registerMember(MemberDTO memberDTO) throws DuplicateLilacMemberException, LilacRepositoryException;
     MemberDTO loginMember(String email, String password);
     List<MemberDTO> getAllMembers();
-    void updateMemberInfo(MemberDTO memberDTO, MemberProfileEditDTO editDTO, HttpSession session);
+    boolean updateMemberInfo(Long memberId, MemberProfileEditDTO editDTO) throws DuplicateLilacMemberException, LilacRepositoryException;
     MemberDTO getMemberInfo(Long memberId);
+    void deleteMember(Long memberId);
 }

@@ -50,7 +50,7 @@ public class VideoController {
         model.addAttribute("playListId", youtubePlaylistId);
         model.addAttribute("isLikeVideo", videoDTOList.size() > 0 ? m_videoService.getLikeStatus(memberId,  videoDTOList.get(0).getId()) : null);
         model.addAttribute("memberGrade", session.getAttribute(SESSION_KEY.MEMBER_GRADE));
-        return "/video/playlist-detail";
+        return "video/playlist-detail";
     }
 
     /**
@@ -67,7 +67,7 @@ public class VideoController {
         model.addAttribute("playListId", plId);
         model.addAttribute("isLikeVideo", null);
         model.addAttribute("memberGrade", session.getAttribute(SESSION_KEY.MEMBER_GRADE));
-        return "/video/playlist-detail";
+        return "video/playlist-detail";
     }
 
     /**
@@ -88,7 +88,7 @@ public class VideoController {
         model.addAttribute("playListId", youtubePlaylistId);
         model.addAttribute("isLikeVideo", videoDTOList.size() > 0 ? m_videoService.getLikeStatus(memberId,  videoDTOList.get(0).getId()) : null);
         model.addAttribute("memberGrade", session.getAttribute(SESSION_KEY.MEMBER_GRADE));
-        return "/video/lecture-note-play";
+        return "video/lecture-note-play";
     }
 
     /**
@@ -107,6 +107,6 @@ public class VideoController {
         model.addAttribute("playListId", videoDTO.getYoutubePlaylistId());
         model.addAttribute("isLikeVideo", m_videoService.getLikeStatus(memberId, videoId));
         model.addAttribute("memberGrade", session.getAttribute(SESSION_KEY.MEMBER_GRADE));
-        return "/video/video-play-template";
+        return "video/video-play-template";
     }
 }

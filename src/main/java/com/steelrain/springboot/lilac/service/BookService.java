@@ -1,5 +1,7 @@
 package com.steelrain.springboot.lilac.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.steelrain.springboot.lilac.common.ICacheService;
 import com.steelrain.springboot.lilac.common.PagingUtils;
 import com.steelrain.springboot.lilac.datamodel.KaKaoBookDTO;
@@ -12,6 +14,7 @@ import com.steelrain.springboot.lilac.repository.IKaKoBookRepository;
 import com.steelrain.springboot.lilac.repository.INaruRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.ognl.OgnlContext;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -21,9 +24,7 @@ import org.springframework.util.StringUtils;
 
 import java.sql.Timestamp;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * 참고도서 서비스
@@ -42,9 +43,8 @@ public class BookService implements IBookService{
     private final ApplicationEventPublisher m_applicationEventPublisher;
 
 
-    
-    @Transactional
     @Override
+    @Transactional
     public LicenseBookListDTO getLicenseBookList(int licenseCode, short regionCode, int detailRegionCode, int pageNum, int bookCount){
         /*
             1. 카카오 도서검색 API 를 통해 keyword 해당하는 도서목록을 가져온다
@@ -53,24 +53,21 @@ public class BookService implements IBookService{
          */
         String licenseSearchKeyword = m_cacheService.getLicenseKeyword(licenseCode);
         KakaoBookSearchResponseDTO responseDTO = m_kaKoBookRepository.searchBookFromKakao(licenseSearchKeyword, pageNum, bookCount);
-        List<KakaoSearchedBookDTO> bookList = responseDTO.getKakaoSearchedBookList();
+        List<KakaoSearchedBookDTO> responseBookList = responseDTO.getKakaoSearchedBookList();
         LicenseBookListDTO resultDTO = new LicenseBookListDTO();
-        List<KaKaoBookDTO> kaKaoBookDTOList = new ArrayList<>(bookList.size());
-        for(KakaoSearchedBookDTO book : bookList){
+        List<KaKaoBookDTO> kaKaoBookList = new ArrayList<>(responseBookList.size());
+        for(KakaoSearchedBookDTO book : responseBookList){
             if(book.getPrice() <= -1 || book.getSalePrice() <= -1){ // 간혹 책가격이 -1로 설정된 책이 있으므로 빼주어야 한다. 판매중지로 설정해줘야 할지 고민이다.
                 continue;
             }
             String tmpIsbn = book.getIsbn();
-            kaKaoBookDTOList.add(convertKakaoBookDTO(book,
+            kaKaoBookList.add(convertKakaoBookDTO(book,
                                  StringUtils.containsWhitespace(tmpIsbn.trim()) ? StringUtils.tokenizeToStringArray(tmpIsbn, " ")[1] : tmpIsbn));
-
-            /*resultDTO.setRegionName(m_cacheService.getRegionName(regionCode));
-            if(detailRegionCode > 0){
-                resultDTO.setDetailRegionName(m_cacheService.getDetailRegionName(regionCode, detailRegionCode));
-            }*/
         }
+        // NaruLibSearchByBookResponseDTO libSearchResponse = m_naruRepository.getLibraryByBook(isbn, regionCode, detailRegionCode);
+
         // 카카오책 검색결과를 DB에 저장하는 이벤트를 발생한다.
-        publishKaKaoBookSaveEvent(kaKaoBookDTOList);
+        publishKaKaoBookSaveEvent(kaKaoBookList);
 
         resultDTO.setKeyword(licenseSearchKeyword);
         resultDTO.setLicenseCode(licenseCode);
@@ -83,10 +80,41 @@ public class BookService implements IBookService{
         }
 
         resultDTO.setTotalBookCount(responseDTO.getMeta().getTotalCount());
-        resultDTO.setKakaoBookList(kaKaoBookDTOList);
-        resultDTO.setLibraryList(findLibraryByRegionList(regionCode, detailRegionCode));
+        resultDTO.setKakaoBookList(kaKaoBookList);
+
+        List<NaruLibraryDTO> libList = findLibraryByRegionList(regionCode, detailRegionCode);
+        resultDTO.setLibraryList(libList);
         resultDTO.setPageInfo(PagingUtils.createPagingInfo(responseDTO.getMeta().getTotalCount(), pageNum, bookCount));
+        resultDTO.setCatalogueMap(analyzeCatalogue(kaKaoBookList, libList));
+
         return resultDTO;
+    }
+    // NaruBookExistResposeDTO existDTO = m_naruRepository.checkBookExist(isbn13, Integer.valueOf(library.getLibcode()));
+    /*
+        bookList 에 있는 책이 libList 도서관에서 소장중인 인지 검사하고, 소장하고 있다면 도서관과 책목록을 연관시켜 준다
+     */
+    private Map<String, List<KaKaoBookDTO>> analyzeCatalogue(final List<KaKaoBookDTO> bookList, final List<NaruLibraryDTO> libList) {
+        Map<String, List<KaKaoBookDTO>> catalMap = new HashMap<>(libList.size());
+        for(NaruLibraryDTO lib : libList){
+            List<KaKaoBookDTO> existBookList = new ArrayList<>(4);
+            for(KaKaoBookDTO book : bookList){
+                NaruBookExistResposeDTO existInfo = m_naruRepository.checkBookExist(book.getIsbn13Long(), Integer.parseInt(lib.getLibCode()));
+
+                ObjectMapper om = new ObjectMapper();
+                try{
+                    String tmp = om.writeValueAsString(existInfo);
+                    log.debug("existInfo json 문자열 : {}", tmp);
+                }catch(JsonProcessingException ex){
+                    log.error("existInfo 에러 : {}", ex);
+                }
+
+                if("Y".equals(existInfo.getResponse().getResult().getHasbook())){
+                    existBookList.add(book);
+                }
+            }
+            catalMap.put(lib.getName(), existBookList);
+        }
+        return catalMap;
     }
 
     @Override
@@ -211,8 +239,6 @@ public class BookService implements IBookService{
         return convertNaruLibraryDTO(naruLibResult);
     }
 
-
-
     /*
         나루 도서관검색 API의 결과를 NaruLibraryDTO로 변환시켜준다
      */
@@ -249,7 +275,7 @@ public class BookService implements IBookService{
             NaruLibSearchByBookResponseDTO.Library library = lib.getLib();
 
             // 소장가능여부 가져오기
-            NaruBookExistResposeDTO existDTO = m_naruRepository.checkBookExist(isbn13, Integer.valueOf(library.getLibcode()));
+            NaruBookExistResposeDTO existDTO = m_naruRepository.checkBookExist(isbn13, Integer.parseInt(library.getLibcode()));
             NaruBookExistResposeDTO.Result existResult = existDTO.getResponse().getResult();
             resultDTOList.add(NaruLibraryDTO.builder()
                             .libCode(library.getLibcode())

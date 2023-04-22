@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.event;
 
+import com.steelrain.springboot.lilac.datamodel.KEYWORD_TYPE;
 import com.steelrain.springboot.lilac.datamodel.VideoPlayListSearchResultDTO;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +17,7 @@ public class VideoPlayListSearchEvent {
     private int keywordCode;
     private int pageNum;
     private int playlistCount;
-    private int keywordType;
+    private KEYWORD_TYPE keywordType;
     //private SEARCH_KEYWORD_TYPE keywordType;
 
     @Setter

@@ -12,8 +12,9 @@ public interface IMemberRepository {
     boolean deleteMember(Long memberId);
     MemberDTO findMemberByLoginInfo(String email, String password);
     List<MemberDTO> findAllMembers();
-    int updateMemberInfo(MemberDTO memberDTO);
+    boolean updateMemberInfo(MemberDTO memberDTO) throws DuplicateLilacMemberException, LilacRepositoryException;
     int findMemberByNickName(String nickName);
     int updateMemberProfile(Long memberId, String originalProfileName, String uploadedUrl);
     MemberDTO findMemberInfo(Long memberId);
+    String getMemberProfileSavePath(Long memberId);
 }

@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.service;
 
+import com.steelrain.springboot.lilac.datamodel.KEYWORD_TYPE;
 import com.steelrain.springboot.lilac.datamodel.VideoPlayListSearchResultDTO;
 import com.steelrain.springboot.lilac.datamodel.YoutubeVideoDTO;
 import com.steelrain.springboot.lilac.datamodel.view.LectureNoteYoutubeVideoDTO;
@@ -78,7 +79,7 @@ public class VideoServiceTests {
     @Test
     @DisplayName("자격증재생목록을_가져오기")
     public void 자격증재생목록을_가져오기(){
-        VideoPlayListSearchResultDTO res = m_videoService.searchPlayListById(1320, 1, 5, 1);
+        VideoPlayListSearchResultDTO res = m_videoService.searchPlayListById(1320, 1, 5, KEYWORD_TYPE.LICENSE);
         assertThat(res.getPlayList().size() > 0).isTrue();
         log.debug("list 정보 : {}", res.getPlayList());
     }
@@ -86,7 +87,7 @@ public class VideoServiceTests {
     @Test
     @DisplayName("키워드재생목록을_가져오기")
     public void 키워든재생목록을_가져오기(){
-        VideoPlayListSearchResultDTO res = m_videoService.searchPlayListById(100, 1, 5, 2);
+        VideoPlayListSearchResultDTO res = m_videoService.searchPlayListById(100, 1, 5, KEYWORD_TYPE.SUBJECT);
         assertThat(res.getPlayList().size() > 0).isTrue();
         log.debug("list 정보 : {}", res.getPlayList());
     }

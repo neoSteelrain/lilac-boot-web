@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 도서검색결과에 포함되는 기본정보를 나타내는 DTO
@@ -29,6 +30,9 @@ public class BookSearchResultDTO {
     private List<KaKaoBookDTO> kakaoBookList;
     // 도서와 연관된 도서관목록, 지역코드, 세부지역코드로 필터링된 도서관들.
     private List<NaruLibraryDTO> libraryList;
+
+    // 도서관별 도서소장목록을 연관시켜놓은 Map
+    private Map<String, List<KaKaoBookDTO>> catalogueMap;
     // 페이징 정보
     private PageDTO pageInfo;
 }

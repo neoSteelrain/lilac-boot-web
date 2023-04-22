@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- 사용자에게 alert 을 보여주고 다른 페이지로 리다이렉트 하기 위한 임시페이지 -->
+<script th:inline="javascript">
+    window.addEventListener("load", function(){
+        const msg = [[${alertDTO.message}]];
+        if(msg){
+            alert(msg);
+        }
+        const redirectURL = [[${alertDTO.redirectURL}]]
+        location.href=redirectURL;
+    })
+</script>
+</body>
+</html>

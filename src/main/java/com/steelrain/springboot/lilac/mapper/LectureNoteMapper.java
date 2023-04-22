@@ -30,7 +30,7 @@ public interface LectureNoteMapper {
             @Result(property = "regDate", column = "reg_date"),
             @Result(property = "progress", column = "progress")
     })
-    List<LectureNoteDTO> findAllNoteListByMember(Long memberId);
+    List<LectureNoteDTO> findAllNoteListByMember(@Param("memberId") Long memberId);
 
 
     @Select("SELECT count(id) FROM tbl_lecture WHERE member_id=#{memberId} AND title=#{title}")
@@ -60,8 +60,8 @@ public interface LectureNoteMapper {
 
     void deleteBook(@Param("refId") Long refId);
 
-    @Select("SELECT duration FROM tbl_youtube WHERE youtube_playlist_id=#{playlistid}")
-    String[] findAllDuration(@Param("playlistid") Long playlistId);
+    @Select("SELECT duration FROM tbl_youtube WHERE youtube_playlist_id=#{playlistId}")
+    String[] findAllDuration(@Param("playlistId") Long playlistId);
 
     @Select("SELECT ifnull(sum(progress), 0) FROM ref_tbl_lecture_youtube WHERE lecture_member_id=#{memberId} AND lecture_id=#{noteId} AND youtube_playlist_id=#{playlistId}")
     long findTotalProgress(@Param("memberId")Long memberId, @Param("noteId") Long noteId, @Param("playlistId") Long playlistId);

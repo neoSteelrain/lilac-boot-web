@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ApacheHttpClientConnectionPoolEvictor {
 
-    private static final int IDLE_TIMEOUT = 30000;
+    private static final int IDLE_TIMEOUT = 60000;
 
     private final PoolingHttpClientConnectionManager m_connectionManager;
 

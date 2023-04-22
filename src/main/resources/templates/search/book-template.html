@@ -12,7 +12,44 @@
             <div class="col-lg-3 col-md-4 col-12">
                 <div class="category-sidebar">
                     <!-- Start Single Widget -->
-                    <div class="single-widget">
+                    <div class="single-widget" style="padding: 0px">
+                        <th:block th:if="${licenseBookInfo.detailRegionName == null}">
+                            <div style="padding: 30px">
+                                <h3 th:text="${licenseBookInfo.regionName}+' 도서관목록'"></h3>
+                            </div>
+                        </th:block>
+                        <th:block th:unless="${licenseBookInfo.detailRegionName == null}">
+                            <div style="padding: 30px">
+                                <h3 th:text="${licenseBookInfo.regionName}+'-'+${licenseBookInfo.detailRegionName}+' 도서관목록'"></h3>
+                            </div>
+                        </th:block>
+
+                        <div class="flex-shrink-0 p-3">
+                            <ul class="list-unstyled ps-0">
+                                <li class="mb-1" th:each="lib : ${licenseBookInfo.libraryList}">
+                                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" th:attr="data-bs-target='#A'+${lib.libCode}" aria-expanded="true" th:text="${lib.name}+' ('+${licenseBookInfo.catalogueMap[lib.name] == null ? 0 : licenseBookInfo.catalogueMap[lib.name].size()}+')'"></button>
+                                    <div class="collapse show" th:attr="id='A'+${lib.libCode}">
+                                        <th:block th:if="${licenseBookInfo.catalogueMap[lib.name] != null}">
+                                            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                                <li th:each="book : ${licenseBookInfo.catalogueMap[lib.name]}">
+<!--                                                    <a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded" th:text="${book.title}"></a>-->
+                                                    <a th:href="@{/search/book-detail(isbn=${book.isbn13Long},region=${licenseBookInfo.regionCode},detailRegion=${licenseBookInfo.detailRegionCode})}" th:text="${book.title}"></a>
+                                                </li>
+                                            </ul>
+                                        </th:block>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <ul class="list">
+                            <li th:each="library : ${licenseBookInfo.libraryList}">
+                                <a href="javascript:void(0)" th:text="${library.name}"><i class="lni lni-library"></i><span>0</span></a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!--<div class="single-widget">
                         <th:block th:if="${licenseBookInfo.detailRegionName == null}">
                             <h3 th:text="${licenseBookInfo.regionName}+' 도서관목록'"></h3>
                         </th:block>
@@ -24,7 +61,7 @@
                                 <a href="javascript:void(0)" th:text="${library.name}"><i class="lni lni-library"></i><span>0</span></a>
                             </li>
                         </ul>
-                    </div>
+                    </div>-->
                     <!-- End Single Widget -->
                     <!-- Start Single Widget -->
                     <!--<div class="single-widget range">

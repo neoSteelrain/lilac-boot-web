@@ -2,11 +2,8 @@ package com.steelrain.springboot.lilac.controller;
 
 import com.steelrain.springboot.lilac.common.ICacheService;
 import com.steelrain.springboot.lilac.common.SESSION_KEY;
-import com.steelrain.springboot.lilac.datamodel.LibraryRegionCodeDTO;
-import com.steelrain.springboot.lilac.datamodel.LicenseCodeDTO;
-import com.steelrain.springboot.lilac.datamodel.SubjectCodeDTO;
+import com.steelrain.springboot.lilac.datamodel.*;
 import com.steelrain.springboot.lilac.datamodel.view.MemberLoginDTO;
-import com.steelrain.springboot.lilac.datamodel.MemberDTO;
 import com.steelrain.springboot.lilac.datamodel.view.MemberProfileEditDTO;
 import com.steelrain.springboot.lilac.datamodel.view.MemberRegDTO;
 import com.steelrain.springboot.lilac.exception.DuplicateLilacMemberException;
@@ -21,12 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -62,7 +56,7 @@ public class MemberController {
     public String loginForm(@RequestParam(value = "redirectURL", defaultValue = "/") String redirectURL, Model model){
         model.addAttribute("memberLogin", new MemberLoginDTO());
         model.addAttribute("redirectURL", redirectURL);
-        return "/member/login";
+        return "member/login";
     }
 
     @PostMapping("/login")
@@ -72,7 +66,7 @@ public class MemberController {
 
         if(bindingResult.hasErrors()){
             log.info("로그인 에러 : {}", bindingResult);
-            return "/member/login";
+            return "member/login";
         }
         MemberDTO memberDTO = m_memberService.loginMember(loginDTO.getEmail(), loginDTO.getPassword());
         if(memberDTO != null){
@@ -87,7 +81,7 @@ public class MemberController {
             return "redirect:" + redirectURL;
         }else{
             bindingResult.addError(new ObjectError("LOGIN-ERR","아이디 또는 비밀번호가 맞지않습니다."));
-            return "/member/login";
+            return "member/login";
         }
     }
 
@@ -95,14 +89,14 @@ public class MemberController {
     public String registerForm(Model model){
         model.addAttribute("memberReg", new MemberRegDTO());
         model.addAttribute("libRegionCodes", m_keywordCategoryCacheService.getLibraryRegionCodeList());
-        return "/member/registration";
+        return "member/registration";
     }
 
     @PostMapping("/registration")
     public String registerMember(@Validated(RegistrationValidateSequence.class) @ModelAttribute("memberReg") MemberRegDTO memberRegDTO, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             log.info("회원가입 입력정보 에러 : {}", bindingResult);
-            return "/member/registration";
+            return "member/registration";
         }
 
         MemberDTO memberDTO = MemberDTO.builder()
@@ -111,17 +105,19 @@ public class MemberController {
                 .password(memberRegDTO.getPassword())
                 .region(Objects.isNull(m_keywordCategoryCacheService.getRegionName(memberRegDTO.getRegion())) ? null : memberRegDTO.getRegion())
                 .dtlRegion(Objects.isNull(m_keywordCategoryCacheService.getDetailRegionName(memberRegDTO.getRegion(), memberRegDTO.getDtlRegion())) ? null : memberRegDTO.getDtlRegion())
-                .grade(2) // 1번은 관리자, 2번은 일반회원이므로 기본값으로 2를 설정해준다
+                .grade(USER_GRADE.NORMAL_MEMBER.getGrade()) // 1번은 관리자, 2번은 일반회원이므로 기본값으로 2를 설정해준다
                 .build();
         boolean isRegist = false;
         try{
             isRegist = m_memberService.registerMember(memberDTO);
         }catch(DuplicateLilacMemberException dme){
+            log.error("회원가입 중복 예외발생 : 회원정보 - {}, 예외정보 - {}", memberRegDTO, dme);
             bindingResult.addError(new ObjectError("memberReg", "이미 가입된 회원입니다. 다른 닉네임 또는 이메일을 입력해주세요"));
         }catch(LilacRepositoryException lre){
+            log.error("회원가입 DB 예외발생 : 회원정보 - {}, 예외정보 - {}", memberRegDTO, lre);
             bindingResult.addError(new ObjectError("memberReg", "회원가입에 오류가 발생하였습니다"));
         }
-        return  isRegist ? "redirect:/member/login" : "/member/registration";
+        return  isRegist ? "redirect:member/login" : "member/registration";
     }
 
     @GetMapping("/profile")
@@ -138,20 +134,63 @@ public class MemberController {
         memberEditDTO.setRegDate(memberDTO.getRegDate());
         model.addAttribute("memberInfo", memberEditDTO);
 
-        return "/member/profile";
+        return "member/profile";
     }
 
     @PostMapping("/profile")
-    public RedirectView editMemberProfile(@Validated @ModelAttribute("memberInfo") MemberProfileEditDTO editDTO, BindingResult bindingResult,
-                                          HttpSession session, RedirectAttributes attributes){
+    public String editMemberProfile(@Validated @ModelAttribute("memberInfo") MemberProfileEditDTO editDTO, BindingResult bindingResult,
+                                          HttpSession session){
         if(bindingResult.hasErrors()){
             log.error("회원정보 수정 에러 : {}", bindingResult);
-            return new RedirectView("/member/profile");
+            return "member/profile";
         }
-        MemberDTO memberDTO = m_memberService.getMemberInfo((Long)session.getAttribute(SESSION_KEY.MEMBER_ID));
-        m_memberService.updateMemberInfo(memberDTO, editDTO, session);
+        Long memberId = (Long)session.getAttribute(SESSION_KEY.MEMBER_ID);
+        boolean isUpdated = false;
+        try{
+             isUpdated = m_memberService.updateMemberInfo(memberId, editDTO);
+             if(isUpdated){
+                 // 세션정보도 같이 업데이트 해준다
+                 session.setAttribute(SESSION_KEY.MEMBER_NICKNAME, editDTO.getNickname());
+                 session.setAttribute(SESSION_KEY.MEMBER_EMAIL, editDTO.getEmail());
+             }else {
+                 log.error("회원정보 업데이트에 실패하였습니다");
+                 bindingResult.addError(new ObjectError("memberInfo","회원정보 업데이트 도중 문제가 발행했습니다. 관리자에게 문의하세요"));
+             }
+        }catch(DuplicateLilacMemberException dme){
+            log.error("회원정보수정 중복 예외 발생 : 회원정보 - {}, 예외정보 - {}", editDTO, dme);
+            bindingResult.addError(new ObjectError("memberInfo","이미 존재하는 닉네임 또는 이메일입니다. 다른 닉네임, 이메일을 입력해주세요"));
+        }catch(LilacRepositoryException lre){
+            log.error("회원정보수정 DB 예외 발생 : 회원정보 - {}, 예외정보 - {}", editDTO, lre);
+            bindingResult.addError(new ObjectError("memberInfo","회원정보 업데이트 도중 문제가 발행했습니다. 관리자에게 문의하세요"));
+        }
+        return "redirect:member/profile";
+    }
 
-        return new RedirectView("/member/profile");
+    @PostMapping("/delete")
+    public String deleteMember(HttpServletRequest servletRequest, Model model){
+        HttpSession session = servletRequest.getSession(false);
+        if(Objects.isNull(session)){
+            return "redirect:member/login";
+        }
+        Long memberId = (Long) session.getAttribute(SESSION_KEY.MEMBER_ID);
+        try{
+            m_memberService.deleteMember(memberId);
+            session.invalidate();
+        }catch(Exception ex){
+            log.error("회원탈퇴 처리중 예외발생 - 회원정보 : ID - {}, 예외정보 - {}", memberId, ex);
+            return alertRedirect("회원탈퇴중 예외가 발생했습니다", "member/profile", model);
+        }
+
+        return alertRedirect("회원탈퇴를 완료하였습니다", "/", model);
+    }
+
+    private String alertRedirect(String msg, String url, Model model){
+        AlertMessageDTO alertDTO = AlertMessageDTO.builder()
+                .message(msg)
+                .redirectURL(url)
+                .build();
+        model.addAttribute("alertDTO", alertDTO);
+        return "common/alertMessage";
     }
 
     @GetMapping("/duplicated-email/{email}")
@@ -177,7 +216,7 @@ public class MemberController {
     @PostMapping("/logout")
     public String logout(HttpServletRequest servletRequest){
         HttpSession session = servletRequest.getSession(false);
-        if(session != null){
+        if(Objects.nonNull(session)){
             session.invalidate();
         }
         return "redirect:/";

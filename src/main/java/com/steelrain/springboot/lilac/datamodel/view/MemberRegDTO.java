@@ -4,12 +4,14 @@ import com.steelrain.springboot.lilac.common.MEMBER_FILED_REGEXP;
 import com.steelrain.springboot.lilac.validate.RegistrationValidateGroups.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.*;
 
 @Getter
 @Setter
+@ToString
 public class MemberRegDTO {
 
     @NotBlank(groups = NickNameNotBlankCheck.class)

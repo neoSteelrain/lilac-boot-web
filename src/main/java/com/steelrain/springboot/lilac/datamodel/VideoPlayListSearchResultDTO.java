@@ -10,7 +10,7 @@ import java.util.List;
 @Builder
 public class VideoPlayListSearchResultDTO {
     private int requestKeywordCode;
-    private int requestKeywordType;
+    private KEYWORD_TYPE requestKeywordType;
     private String searchKeyword;
     private PageDTO pageDTO;
     private List<YoutubePlayListDTO> playList;

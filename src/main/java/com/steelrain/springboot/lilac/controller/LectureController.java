@@ -55,7 +55,7 @@ public class LectureController {
             model.addAttribute("noteDetail", m_lectureService.getLectureNoteDetailInfoByMember(memberDTO.getId(), currentNoteId));
         }
         model.addAttribute("currentNoteId", currentNoteId);
-        return "/lecture/lecture-note";
+        return "lecture/lecture-note";
     }
 
     @PostMapping("/remove-playlist")
@@ -66,7 +66,7 @@ public class LectureController {
         m_lectureService.removePlayList(memberId, noteId, playListId);
         attributes.addAttribute("noteId", noteId);
 
-        return new RedirectView("/lecture/lecture-note-member");
+        return new RedirectView("lecture/lecture-note-member");
     }
 
     @PostMapping("/remove-book")
@@ -76,7 +76,7 @@ public class LectureController {
         m_lectureService.removeBook(refId);
         attributes.addAttribute("noteId", noteId);
 
-        return new RedirectView("/lecture/lecture-note-member");
+        return new RedirectView("lecture/lecture-note-member");
     }
 
     @GetMapping("/edit-note")
@@ -95,7 +95,7 @@ public class LectureController {
         model.addAttribute("licenseCodes",m_keywordCategoryCacheService.getLicenseCodeList());
         model.addAttribute("subjectCodes",m_keywordCategoryCacheService.getSubjectCodeList());
 
-        return "/lecture/lecture-note-edit-modal";
+        return "lecture/lecture-note-edit-modal";
     }
 
     @PostMapping("/edit-note")
@@ -104,7 +104,7 @@ public class LectureController {
         if(bindingResult.hasErrors()){
             log.info("강의노트 수정에러 : {}", bindingResult);
             attributes.addAttribute("noteId", noteEditDTO.getNoteId());
-            return new RedirectView("/lecture/lecture-note-member");
+            return new RedirectView("lecture/lecture-note-member");
         }
         LectureNoteDTO noteDTO = new LectureNoteDTO();
         noteDTO.setId(noteEditDTO.getNoteId());
@@ -116,14 +116,14 @@ public class LectureController {
         m_lectureService.editLectureNote(noteDTO);
         attributes.addAttribute("noteId", noteEditDTO.getNoteId());
 
-        return new RedirectView("/lecture/lecture-note-member");
+        return new RedirectView("lecture/lecture-note-member");
     }
 
     @PostMapping("/remove-note")
     public String removeLectureNote(@RequestParam("noteId") Long noteId){
         m_lectureService.removeLectureNote(noteId);
 
-        return "redirect:/lecture/lecture-note-member";
+        return "redirect:lecture/lecture-note-member";
     }
 
     @GetMapping("modal-playlist-template")
@@ -131,7 +131,7 @@ public class LectureController {
                                                     @RequestParam("playListId") Long playListId, Model model){
         List<PlayListAddModalDTO> noteDTOList = m_lectureService.getLectureNoteListByPlayListModal(memberId, playListId);
         model.addAttribute("lectureNoteList", noteDTOList);
-        return "/lecture/playlist-add-modal";
+        return "lecture/playlist-add-modal";
     }
 
     @GetMapping("model-book-template")
@@ -139,6 +139,6 @@ public class LectureController {
         Long memberId = (Long)session.getAttribute(SESSION_KEY.MEMBER_ID);
         List<BookAddModalDTO> bookDTOList = m_lectureService.getLectureNoteListByBookModal(memberId, bookId);
         model.addAttribute("lectureNoteList", bookDTOList);
-        return "/lecture/book-add-modal";
+        return "lecture/book-add-modal";
     }
 }

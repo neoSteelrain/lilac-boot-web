@@ -100,7 +100,7 @@
                                         <li th:each="video : ${videoList}">
                                             <a th:href="|javascript:playSelectedVideo('${video.videoId}', '${video.Id}')|">
                                                 <div class="image">
-                                                    <img th:src="${video.thumbnailDefault}" alt="#">
+                                                    <img style="border-radius: 0%" th:src="${video.thumbnailDefault}" alt="#">
                                                 </div>
                                                 <span class="short-message" th:text="${video.title}"></span>
                                             </a>

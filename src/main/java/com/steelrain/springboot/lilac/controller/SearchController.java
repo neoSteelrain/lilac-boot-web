@@ -47,7 +47,7 @@ public class SearchController {
             return "redirect:/";
         }
         model.addAttribute("licenseInfo", m_searchService.getLicenseInfoByCode(licenseCode));
-        return "/search/license-template";
+        return "search/license-template";
     }
 
     @GetMapping("/license-book-list")
@@ -77,7 +77,7 @@ public class SearchController {
         model.addAttribute("licenseBookInfo", m_searchService.getLicenseBookList(licenseCode, regionCode, detailRegionCode, pageNum, bookCount));
         model.addAttribute("region", regionCode);
         model.addAttribute("detailRegion", detailRegionCode);
-        return "/search/book-template";
+        return "search/book-template";
     }
 
     @GetMapping("/subject-book-list")
@@ -88,7 +88,7 @@ public class SearchController {
         SubjectBookListDTO resultDTO = m_searchService.getSubjectBookList(subjectCode, pageNum,  bookCount);
 
         model.addAttribute("subjectBookInfo", resultDTO);
-        return "/search/subject-book-template";
+        return "search/subject-book-template";
     }
 
     @GetMapping("/book-detail")
@@ -110,21 +110,21 @@ public class SearchController {
             model.addAttribute("memberId", memberId);
         }
         model.addAttribute("bookDetailInfo", m_searchService.getBookDetailInfo(isbn, region, detailRegion));
-        return "/search/book-detail";
+        return "search/book-detail";
     }
 
     @GetMapping("/playlist")
     public String searchPlayList(@RequestParam("keywordCode") int keywordCode,
                                  @RequestParam(value = "searchKeyword", required = false) String searchKeyword,
                                  @RequestParam("pageNum") int pageNum,
-                                 @RequestParam("keywordType") int keywordType,
+                                 @RequestParam("keywordType") KEYWORD_TYPE keywordType,
                                  Model model){
         if(keywordCode < 0 || pageNum <= 0){
             log.error("유튜브검색 파라미터 입력 에러 : 입력된 keywordCode, pageNum, keywordType 값 = {},{},{]", keywordCode, pageNum, keywordType);
             return "redirect:/";
         }
         model.addAttribute("searchResult", m_searchService.searchPlayList(keywordCode, searchKeyword, pageNum, YOUTUBE_PAGING_INFO.YOUTUBE_COUNT_PER_PAGE, keywordType));
-        return "/search/playlist-template";
+        return "search/playlist-template";
     }
 
     @GetMapping("/keyword-book-list")
@@ -133,6 +133,6 @@ public class SearchController {
                                      @RequestParam("bookCount") int bookCount, Model model){
         SubjectBookListDTO bookListDTO = m_searchService.getSubjectBookList(keyword, pageNum, bookCount);
         model.addAttribute("subjectBookInfo", bookListDTO);
-        return "/search/subject-book-template";
+        return "search/subject-book-template";
     }
 }

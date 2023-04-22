@@ -1,6 +1,5 @@
 package com.steelrain.springboot.lilac.service;
 
-import com.steelrain.springboot.lilac.common.SESSION_KEY;
 import com.steelrain.springboot.lilac.datamodel.MemberDTO;
 import com.steelrain.springboot.lilac.datamodel.view.MemberProfileEditDTO;
 import com.steelrain.springboot.lilac.event.MemberRegistrationEvent;
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -53,8 +51,8 @@ public class MemberService implements IMemberService {
         return m_memberRepository.findMemberByNickName(nickName) > 0 ;
     }
 
-    @Transactional
     @Override
+    @Transactional
     public boolean registerMember(MemberDTO memberDTO) throws DuplicateLilacMemberException, LilacRepositoryException {
         Long id = m_memberRepository.saveMember(memberDTO);
         MemberRegistrationEvent registrationEvent = MemberRegistrationEvent.builder()
@@ -75,20 +73,27 @@ public class MemberService implements IMemberService {
         return m_memberRepository.findAllMembers();
     }
 
-    @Transactional
     @Override
-    public void updateMemberInfo(MemberDTO memberDTO, MemberProfileEditDTO editDTO, HttpSession session) {
-        memberDTO.setNickname(editDTO.getNickname());
-        memberDTO.setEmail(editDTO.getEmail());
-        memberDTO.setDescription(editDTO.getDescription());
-        memberDTO.setProfileOriginal(editDTO.getProfileImage().getOriginalFilename());
-        memberDTO.setProfileSave(updateMemberProfile(editDTO.getProfileImage(), memberDTO.getId(), memberDTO.getProfileSave()));
+    @Transactional
+    public boolean updateMemberInfo(Long memberId, MemberProfileEditDTO editDTO) throws DuplicateLilacMemberException, LilacRepositoryException {
+        MemberDTO dto = MemberDTO.builder()
+                                .id(memberId)
+                                .nickname(editDTO.getNickname())
+                                .email(editDTO.getEmail())
+                                .description(editDTO.getDescription()).build();
+        if(!editDTO.getProfileImage().isEmpty()){
+            dto.setProfileOriginal(editDTO.getProfileImage().getOriginalFilename());
+            dto.setProfileSave(updateMemberProfile(editDTO.getProfileImage(),
+                                                                    memberId,
+                                                                    m_memberRepository.getMemberProfileSavePath(memberId)));
+        }
+        return m_memberRepository.updateMemberInfo(dto);
+    }
 
-        // 세션정보도 같이 업데이트 해준다
-        session.setAttribute(SESSION_KEY.MEMBER_NICKNAME, editDTO.getNickname());
-        session.setAttribute(SESSION_KEY.MEMBER_EMAIL, editDTO.getEmail());
-
-        m_memberRepository.updateMemberInfo(memberDTO);
+    @Override
+    @Transactional
+    public void deleteMember(Long memberId) {
+        m_memberRepository.deleteMember(memberId);
     }
 
     /*

@@ -55,7 +55,7 @@ public class VideoService implements IVideoService {
         int totalPlaylistCount = m_videoRepository.selectTotalPlayListCountByKeyword(searchKeyword);
         return VideoPlayListSearchResultDTO.builder()
                                         .requestKeywordCode(0)
-                                        .requestKeywordType(0)
+                                        .requestKeywordType(KEYWORD_TYPE.NONE)
                                         .searchKeyword(searchKeyword)
                                         .pageDTO(PagingUtils.createPagingInfo(totalPlaylistCount, pageNum, playlistCount))
                                         .playList(m_videoRepository.findPlayListByKeyword(searchKeyword, pageStart, playlistCount))
@@ -63,24 +63,24 @@ public class VideoService implements IVideoService {
     }
 
     @Override
-    public VideoPlayListSearchResultDTO searchPlayListById(int code, int pageNum, int playlistCount, int codeType){
+    public VideoPlayListSearchResultDTO searchPlayListById(int code, int pageNum, int playlistCount, KEYWORD_TYPE codeType){
         int pageStart = PagingUtils.calcStartPage(pageNum, playlistCount);
         int id = extractIdType(code, codeType);
-        int totalPlaylistCount = m_videoRepository.selectTotalPlayListCount(id, codeType);
+        int totalPlaylistCount = m_videoRepository.selectTotalPlayListCount(id, codeType.getValue());
         return VideoPlayListSearchResultDTO.builder()
                 .requestKeywordCode(code)
                 .requestKeywordType(codeType)
                 .searchKeyword(null)
                 .pageDTO(PagingUtils.createPagingInfo(totalPlaylistCount, pageNum, playlistCount))
-                .playList(m_videoRepository.findPlayListById(id, codeType, pageStart, playlistCount))
+                .playList(m_videoRepository.findPlayListById(id, codeType.getValue(), pageStart, playlistCount))
                 .build();
     }
 
-    private int extractIdType(int id, int idType){
+    private int extractIdType(int id, KEYWORD_TYPE idType){
         int result = 0;
-        if(idType == 1){
+        if(idType.getValue() == KEYWORD_TYPE.LICENSE.getValue()){
             result = m_cacheService.getLicenseIdByCode(id);
-        }else if(idType == 2){
+        }else if(idType.getValue() == KEYWORD_TYPE.SUBJECT.getValue()){
             result = m_cacheService.getSubjectIdByCode(id);
         }
         return result;
@@ -90,17 +90,25 @@ public class VideoService implements IVideoService {
     @EventListener(VideoPlayListSearchEvent.class)
     public void handleVideoPlayListSearchEvent(VideoPlayListSearchEvent event){
         VideoPlayListSearchResultDTO result = null;
-        switch (event.getKeywordType()) {
-            case 0:
+        KEYWORD_TYPE src = event.getKeywordType();
+        if(src == KEYWORD_TYPE.KEYWORD){
+            result = searchPlayListByKeyword(event.getKeyword(), event.getPageNum(), event.getPlaylistCount());
+        }else if(src == KEYWORD_TYPE.LICENSE || src == KEYWORD_TYPE.SUBJECT){
+            result = searchPlayListById(event.getKeywordCode(), event.getPageNum(), event.getPlaylistCount(), event.getKeywordType());
+        }else{
+            throw new LilacServiceException(String.format("확인할 수 없는 키워드 코드 입니다. 입력된 키워드 코드 : %d", event.getKeywordType()));
+        }
+       /* switch (event.getKeywordType()) {
+            case KEYWORD_TYPE.KEYWORD:
                 result = searchPlayListByKeyword(event.getKeyword(), event.getPageNum(), event.getPlaylistCount());
                 break;
-            case 1:
-            case 2:
+            case KEYWORD_TYPE.LICENSE:
+            case KEYWORD_TYPE.SUBJECT:
                 result = searchPlayListById(event.getKeywordCode(), event.getPageNum(), event.getPlaylistCount(), event.getKeywordType());
                 break;
             default:
                 throw new LilacServiceException(String.format("확인할 수 없는 키워드 코드 입니다. 입력된 키워드 코드 : %d", event.getKeywordType()));
-        }
+        }*/
         event.setSearchResultDTO(result);
     }
 

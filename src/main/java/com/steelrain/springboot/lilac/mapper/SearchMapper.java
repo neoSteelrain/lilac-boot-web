@@ -4,10 +4,7 @@ import com.steelrain.springboot.lilac.datamodel.LibraryDetailRegionCodeDTO;
 import com.steelrain.springboot.lilac.datamodel.LibraryRegionCodeDTO;
 import com.steelrain.springboot.lilac.datamodel.LicenseCodeDTO;
 import com.steelrain.springboot.lilac.datamodel.SubjectCodeDTO;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -21,7 +18,7 @@ public interface SearchMapper {
     List<LibraryRegionCodeDTO> getLibRegionCodes();
 
     @Select("SELECT code,detail_name FROM tbl_lib_dtl_region WHERE region_code=#{regionCode}")
-    List<LibraryDetailRegionCodeDTO> getLibDetailRegionCodes(int regionCode);
+    List<LibraryDetailRegionCodeDTO> getLibDetailRegionCodes(@Param("regionCode") int regionCode);
 
     @Select("SELECT code,region_code,name,detail_name FROM tbl_lib_dtl_region")
     List<LibraryDetailRegionCodeDTO> getAllLibDetailRegionCodes();

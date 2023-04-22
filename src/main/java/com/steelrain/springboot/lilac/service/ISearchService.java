@@ -18,7 +18,7 @@ public interface ISearchService {
     List<LibraryDetailRegionCodeDTO> getLibDetailRegionCodes(int regionCode);
     LicenseDTO getLicenseInfoByCode(int licenseCode);
     LicenseBookListDTO getLicenseBookList(int licenseCode, short regionCode, int detailRegionCode, int pageNum, int bookCount);
-    VideoPlayListSearchResultDTO searchPlayList(int keywordCode, String searchKeyword, int pageNum, int playlistCount , int keywordType);
+    VideoPlayListSearchResultDTO searchPlayList(int keywordCode, String searchKeyword, int pageNum, int playlistCount , KEYWORD_TYPE keywordType);
     //VideoPlayListSearchResultDTO searchPlayList(int keywordCode, String searchKeyword, int pageNum, int playlistCount , SEARCH_KEYWORD_TYPE keywordType);
     VideoPlayListSearchResultDTO searchPlayList(String keyword, int pageNum, int playlistCount);
     SubjectBookListDTO getSubjectBookList(int subjectCode, int pageNum, int bookCount);

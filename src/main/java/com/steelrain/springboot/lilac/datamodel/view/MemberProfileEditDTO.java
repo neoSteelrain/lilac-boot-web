@@ -4,6 +4,7 @@ import com.steelrain.springboot.lilac.common.MEMBER_FILED_REGEXP;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +17,7 @@ import java.sql.Timestamp;
  */
 @Getter
 @Setter
+@ToString
 public class MemberProfileEditDTO {
 
     private Long Id;

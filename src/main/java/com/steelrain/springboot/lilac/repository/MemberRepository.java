@@ -39,7 +39,7 @@ public class MemberRepository implements IMemberRepository{
                 return null;
             }
         }catch(DuplicateKeyException de){
-            throw new DuplicateLilacMemberException("이미 가입된 회원입니다", de);
+            throw new DuplicateLilacMemberException(de);
         }catch (Exception ex){
             throw new LilacRepositoryException("회원가입 예외발생", ex);
         }
@@ -61,8 +61,21 @@ public class MemberRepository implements IMemberRepository{
     }
 
     @Override
-    public int updateMemberInfo(MemberDTO memberDTO) {
-        return m_memberMapper.updateMemberInfo(memberDTO);
+    public boolean updateMemberInfo(MemberDTO memberDTO) throws DuplicateLilacMemberException, LilacRepositoryException {
+        boolean isUpdated = false;
+        try{
+            isUpdated = m_memberMapper.updateMemberInfo(memberDTO) > 0;
+        }catch(DuplicateKeyException de){
+            throw new DuplicateLilacMemberException(de);
+        }catch(Exception ex){
+            throw new LilacRepositoryException("회원정보 업데이트 예외발생", ex);
+        }
+        return isUpdated;
+    }
+
+    @Override
+    public String getMemberProfileSavePath(Long memberId) {
+        return m_memberMapper.getMemberProfileSavePath(memberId);
     }
 
     @Override
