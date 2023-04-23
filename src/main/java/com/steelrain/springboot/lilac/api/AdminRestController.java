@@ -38,7 +38,7 @@ public class AdminRestController {
         return new ResponseEntity<>(AddCandiPlayListResponse.builder()
                 .requestParameter(request)
                 .code(HttpStatus.OK.value())
-                .message("추천재생목록 후보를 등로하였습니다")
+                .message("추천재생목록 후보를 등록하였습니다")
                 .build(), HttpStatus.OK);
     }
 

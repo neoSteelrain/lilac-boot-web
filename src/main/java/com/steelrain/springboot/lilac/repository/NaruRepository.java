@@ -5,12 +5,11 @@ import com.steelrain.springboot.lilac.config.APIConfig;
 import com.steelrain.springboot.lilac.datamodel.api.NaruBookExistResposeDTO;
 import com.steelrain.springboot.lilac.datamodel.api.NaruLibSearchByBookResponseDTO;
 import com.steelrain.springboot.lilac.datamodel.api.NaruLibSearchByRegionResponseDTO;
+import com.steelrain.springboot.lilac.exception.NaruAPIQuotaOverException;
 import com.steelrain.springboot.lilac.exception.NaruBookExistException;
 import com.steelrain.springboot.lilac.exception.NaruLibraryByBookException;
-import com.steelrain.springboot.lilac.mapper.LicenseBookMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
-import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.ClassicHttpResponse;
@@ -19,6 +18,7 @@ import org.apache.hc.core5.http.NameValuePair;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
 import org.apache.hc.core5.net.URIBuilder;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.net.URI;
@@ -70,7 +70,7 @@ public class NaruRepository implements INaruRepository{
         return result;
     }
 
-    public NaruLibSearchByRegionResponseDTO getLibraryByRegion(short region, int detailRegion){
+    public NaruLibSearchByRegionResponseDTO getLibraryByRegion(short region, int detailRegion) throws NaruAPIQuotaOverException{
         List<NameValuePair> params= new ArrayList<>(6);
         params.add(new BasicNameValuePair("authKey", m_apiConfig.getNaruLibraryByBookApiKey()));
         /*
@@ -100,6 +100,9 @@ public class NaruRepository implements INaruRepository{
             HttpEntity entity = response.getEntity();
             ObjectMapper objectMapper = new ObjectMapper();
             result = objectMapper.readValue(entity.getContent(), NaruLibSearchByRegionResponseDTO.class);
+            if(StringUtils.hasText(result.getResponse().getError())) {
+                throw new NaruAPIQuotaOverException("1일 할당량을 초과하였습니다");
+            }
         }catch (IOException ex){
             throw new NaruLibraryByBookException("나루 정보공개도서관 검색 예외", ex);
         }

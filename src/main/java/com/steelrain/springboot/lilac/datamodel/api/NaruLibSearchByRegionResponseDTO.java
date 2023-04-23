@@ -12,7 +12,7 @@ public class NaruLibSearchByRegionResponseDTO {
     private Response response;
 
     @Getter
-    public static class Response {
+    public static class Response extends NaruErrorBaseResponseDTO {
         @JsonProperty("libs")
         private List<Libs> libs;
         @JsonProperty("resultNum")

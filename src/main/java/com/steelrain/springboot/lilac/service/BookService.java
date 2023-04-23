@@ -9,12 +9,12 @@ import com.steelrain.springboot.lilac.datamodel.api.*;
 import com.steelrain.springboot.lilac.datamodel.view.*;
 import com.steelrain.springboot.lilac.datamodel.NaruLibraryDTO;
 import com.steelrain.springboot.lilac.event.*;
+import com.steelrain.springboot.lilac.exception.NaruAPIQuotaOverException;
 import com.steelrain.springboot.lilac.repository.BookRepository;
 import com.steelrain.springboot.lilac.repository.IKaKoBookRepository;
 import com.steelrain.springboot.lilac.repository.INaruRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.ognl.OgnlContext;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -45,7 +45,7 @@ public class BookService implements IBookService{
 
     @Override
     @Transactional
-    public LicenseBookListDTO getLicenseBookList(int licenseCode, short regionCode, int detailRegionCode, int pageNum, int bookCount){
+    public LicenseBookListDTO getLicenseBookList(int licenseCode, short regionCode, int detailRegionCode, int pageNum, int bookCount) throws NaruAPIQuotaOverException{
         /*
             1. 카카오 도서검색 API 를 통해 keyword 해당하는 도서목록을 가져온다
             2. 도서의 ISBN을 가지고 나루도서관 API 에 소장도서관목록을 가져온다
@@ -64,7 +64,6 @@ public class BookService implements IBookService{
             kaKaoBookList.add(convertKakaoBookDTO(book,
                                  StringUtils.containsWhitespace(tmpIsbn.trim()) ? StringUtils.tokenizeToStringArray(tmpIsbn, " ")[1] : tmpIsbn));
         }
-        // NaruLibSearchByBookResponseDTO libSearchResponse = m_naruRepository.getLibraryByBook(isbn, regionCode, detailRegionCode);
 
         // 카카오책 검색결과를 DB에 저장하는 이벤트를 발생한다.
         publishKaKaoBookSaveEvent(kaKaoBookList);
@@ -85,11 +84,13 @@ public class BookService implements IBookService{
         List<NaruLibraryDTO> libList = findLibraryByRegionList(regionCode, detailRegionCode);
         resultDTO.setLibraryList(libList);
         resultDTO.setPageInfo(PagingUtils.createPagingInfo(responseDTO.getMeta().getTotalCount(), pageNum, bookCount));
-        resultDTO.setCatalogueMap(analyzeCatalogue(kaKaoBookList, libList));
+        
+        // 소장도서 API 호출에 너무 많은 시간이 걸려서 관내도서관목록을 출력하는 것으로 대체
+        //resultDTO.setCatalogueMap(analyzeCatalogue(kaKaoBookList, libList));
 
         return resultDTO;
     }
-    // NaruBookExistResposeDTO existDTO = m_naruRepository.checkBookExist(isbn13, Integer.valueOf(library.getLibcode()));
+
     /*
         bookList 에 있는 책이 libList 도서관에서 소장중인 인지 검사하고, 소장하고 있다면 도서관과 책목록을 연관시켜 준다
      */
@@ -118,7 +119,7 @@ public class BookService implements IBookService{
     }
 
     @Override
-    public List<NaruLibraryDTO> getLibraryByRegionList(short region, int detailRegion) {
+    public List<NaruLibraryDTO> getLibraryByRegionList(short region, int detailRegion) throws NaruAPIQuotaOverException {
         return findLibraryByRegionList(region, detailRegion);
     }
 
@@ -200,7 +201,7 @@ public class BookService implements IBookService{
     }
 
     @EventListener(LicenseBookSearchEvent.class)
-    public void handleLicenseBookSearchEvent(LicenseBookSearchEvent event){
+    public void handleLicenseBookSearchEvent(LicenseBookSearchEvent event) throws NaruAPIQuotaOverException{
         event.setLicenseBookListDTO(getLicenseBookList(event.getLicenseCode(), event.getRegionCode(), event.getDetailRegionCode(), event.getPageNum(), event.getLicenseBookCount()));
     }
 
@@ -234,7 +235,7 @@ public class BookService implements IBookService{
     /*
         실제로 naru API를 호출해서 결과를 반환하는 helper 메서드
      */
-    private List<NaruLibraryDTO> findLibraryByRegionList(short region, int detailRegion){
+    private List<NaruLibraryDTO> findLibraryByRegionList(short region, int detailRegion) throws NaruAPIQuotaOverException {
         NaruLibSearchByRegionResponseDTO naruLibResult = m_naruRepository.getLibraryByRegion(region, detailRegion);
         return convertNaruLibraryDTO(naruLibResult);
     }

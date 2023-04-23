@@ -3,6 +3,7 @@ package com.steelrain.springboot.lilac.repository;
 import com.steelrain.springboot.lilac.datamodel.api.NaruBookExistResposeDTO;
 import com.steelrain.springboot.lilac.datamodel.api.NaruLibSearchByBookResponseDTO;
 import com.steelrain.springboot.lilac.datamodel.api.NaruLibSearchByRegionResponseDTO;
+import com.steelrain.springboot.lilac.exception.NaruAPIQuotaOverException;
 
 /**
  * 나루 도서관 API 연동을 담당한다.
@@ -31,5 +32,5 @@ public interface INaruRepository {
      * @param detailRegion 세부지역코드
      * @return 도서관 목록
      */
-    NaruLibSearchByRegionResponseDTO getLibraryByRegion(short region, int detailRegion);
+    NaruLibSearchByRegionResponseDTO getLibraryByRegion(short region, int detailRegion) throws NaruAPIQuotaOverException;
 }
