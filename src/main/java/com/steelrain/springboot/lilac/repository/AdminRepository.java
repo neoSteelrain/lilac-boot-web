@@ -81,18 +81,8 @@ public class AdminRepository implements IAdminRepository {
     }
 
     @Override
-    public int findTodayPlayListCount() {
-        return m_adminMapper.findPlayListCount(DateUtils.getYesterdayString(), DateUtils.getTodayDateString());
-    }
-
-    @Override
-    public int findMonthPlayListCount() {
-        return m_adminMapper.findPlayListCount(DateUtils.getFirstdayOfMonth(), DateUtils.getLastdayOfMonth());
-    }
-
-    @Override
-    public int findWeekPlayListCount() {
-        return m_adminMapper.findPlayListCount(DateUtils.getMondayOfWeekString(), DateUtils.getSundayOfWeekString());
+    public int findPlayListCountByRange(String fromDate, String toDate) {
+        return m_adminMapper.findPlayListCount(fromDate, toDate);
     }
 
     @Override

@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.steelrain.springboot.lilac.datamodel.KEYWORD_TYPE.LICENSE;
+import static com.steelrain.springboot.lilac.datamodel.KEYWORD_TYPE.SUBJECT;
+
 /**
  * 영상 서비스
  * - 영상의 비즈니스 로직을 구현
@@ -78,9 +81,9 @@ public class VideoService implements IVideoService {
 
     private int extractIdType(int id, KEYWORD_TYPE idType){
         int result = 0;
-        if(idType.getValue() == KEYWORD_TYPE.LICENSE.getValue()){
+        if(idType == LICENSE){
             result = m_cacheService.getLicenseIdByCode(id);
-        }else if(idType.getValue() == KEYWORD_TYPE.SUBJECT.getValue()){
+        }else if(idType == SUBJECT){
             result = m_cacheService.getSubjectIdByCode(id);
         }
         return result;
@@ -90,49 +93,23 @@ public class VideoService implements IVideoService {
     @EventListener(VideoPlayListSearchEvent.class)
     public void handleVideoPlayListSearchEvent(VideoPlayListSearchEvent event){
         VideoPlayListSearchResultDTO result = null;
-        KEYWORD_TYPE src = event.getKeywordType();
-        if(src == KEYWORD_TYPE.KEYWORD){
-            result = searchPlayListByKeyword(event.getKeyword(), event.getPageNum(), event.getPlaylistCount());
-        }else if(src == KEYWORD_TYPE.LICENSE || src == KEYWORD_TYPE.SUBJECT){
-            result = searchPlayListById(event.getKeywordCode(), event.getPageNum(), event.getPlaylistCount(), event.getKeywordType());
-        }else{
-            throw new LilacServiceException(String.format("확인할 수 없는 키워드 코드 입니다. 입력된 키워드 코드 : %d", event.getKeywordType()));
-        }
-       /* switch (event.getKeywordType()) {
-            case KEYWORD_TYPE.KEYWORD:
+        switch (event.getKeywordType()) {
+            case KEYWORD:
                 result = searchPlayListByKeyword(event.getKeyword(), event.getPageNum(), event.getPlaylistCount());
                 break;
-            case KEYWORD_TYPE.LICENSE:
-            case KEYWORD_TYPE.SUBJECT:
+            case LICENSE:
+            case SUBJECT:
                 result = searchPlayListById(event.getKeywordCode(), event.getPageNum(), event.getPlaylistCount(), event.getKeywordType());
                 break;
             default:
                 throw new LilacServiceException(String.format("확인할 수 없는 키워드 코드 입니다. 입력된 키워드 코드 : %d", event.getKeywordType()));
-        }*/
+        }
         event.setSearchResultDTO(result);
     }
 
     @EventListener(VideoListByPlayListEvent.class)
     public void handleVideoListByPlayListEvent(VideoListByPlayListEvent event){
         event.setVideoDTOList(getAllVideoIdByPlayList(event.getPlayListId()));
-    }
-
-    private String parseKeywordCode(int keywordCode, String searchKeyword, int keywordType){
-        String result = null;
-        switch (keywordType) {
-            case 0:
-                result = searchKeyword;
-                break;
-            case 1:
-                result = m_cacheService.getLicenseKeyword(keywordCode);
-                break;
-            case 2:
-                result = m_cacheService.getSubjectKeyword(keywordCode);
-                break;
-            default:
-                throw new LilacServiceException(String.format("확인할 수 없는 키워드 코드 입니다. 입력된 키워드 코드 : %d", keywordCode));
-        }
-        return result;
     }
 
     @Override

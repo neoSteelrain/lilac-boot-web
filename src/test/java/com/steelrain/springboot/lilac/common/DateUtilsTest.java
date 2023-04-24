@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -21,7 +20,7 @@ class DateUtilsTest {
 
     @Test
     public void 이번주의월요일일요일구하기(){
-        log.debug("월요일 : {}, 일요일 : {}", DateUtils.getMondayOfWeekString(), DateUtils.getSundayOfWeekString());
+        log.debug("월요일 : {}, 일요일 : {}", DateUtils.getMondayOfWeek(), DateUtils.getSundayOfWeek());
     }
 
     @Test

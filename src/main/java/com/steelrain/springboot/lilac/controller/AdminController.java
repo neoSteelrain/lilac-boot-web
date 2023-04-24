@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.controller;
 
+import com.steelrain.springboot.lilac.datamodel.ADMIN_PLAYLIST_TYPE;
 import com.steelrain.springboot.lilac.datamodel.AdminPlayListRequest;
 import com.steelrain.springboot.lilac.datamodel.AdminPlayListSearchResultDTO;
 import com.steelrain.springboot.lilac.service.IAdminService;
@@ -32,35 +33,8 @@ public class AdminController {
 
     @PostMapping("/admin-playlist-template")
     public String getAdminPlayListTemplate(@ModelAttribute AdminPlayListRequest request, Model model){
-        /*
-            - type 값 분류
-            1: 모든 재생목록
-            2: 오늘 추가된 재생목록
-            3: 1주일간 추가된 재생목록
-            4: 1달간 추가된 재생목록
-            5: 많이 추천된 재생목록
-            6: 가장 많이본 재생목록
-            7: 가장 적게본 재생목록
-         */
         prePatch(request);
-        AdminPlayListSearchResultDTO plInfo = null;
-        switch (request.getPlType()){
-            case 1:
-                plInfo = m_adminService.getAllPlayList(request.getPageNum(), PAGE_COUNT, request.getLicenseIds(), request.getSubjectIds());
-                break;
-            case 2:
-                plInfo = m_adminService.getTodayPlayList(request.getPageNum(), PAGE_COUNT, request.getLicenseIds(), request.getSubjectIds());
-                break;
-            case 3:
-                plInfo = m_adminService.getWeekPlayList(request.getPageNum(), PAGE_COUNT, request.getLicenseIds(), request.getSubjectIds());
-                break;
-            case 4:
-                plInfo = m_adminService.getMonthPlayList(request.getPageNum(), PAGE_COUNT, request.getLicenseIds(), request.getSubjectIds());
-                break;
-            default:
-                break;
-        }
-        model.addAttribute("plInfo", plInfo);
+        model.addAttribute("plInfo", m_adminService.getAdminPlayList(request.getPlType(), request.getPageNum(), PAGE_COUNT, request.getLicenseIds(), request.getSubjectIds()));
         return "admin/playlist-template";
     }
 

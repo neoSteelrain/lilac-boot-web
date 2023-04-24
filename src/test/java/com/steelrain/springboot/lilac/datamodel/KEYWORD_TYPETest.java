@@ -20,4 +20,5 @@ class KEYWORD_TYPETest {
         log.debug("res1 : "+res1);
         log.debug("res2 : "+res2);
     }
+
 }

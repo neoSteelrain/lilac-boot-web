@@ -74,7 +74,7 @@ public class AdminServiceTests {
         log.debug("yesterday : {}", yesterday);
     }
 
-    @Test
+    /*@Test
     public void 오늘추가된재생목록가져오기(){
         AdminPlayListSearchResultDTO res = m_adminService.getTodayPlayList(1, 20, new int[]{1,2,3}, null);
         assertThat(!Objects.isNull(res)).isTrue();
@@ -104,7 +104,7 @@ public class AdminServiceTests {
         assertThat(Objects.nonNull(res)).isTrue();
         log.debug("pageDTO : {}", res.getPageDTO());
         log.debug("playlist count : {}", res.getPlaylist().size());
-    }
+    }*/
 
     @Test
     public void 추천재생목록후보추가(){

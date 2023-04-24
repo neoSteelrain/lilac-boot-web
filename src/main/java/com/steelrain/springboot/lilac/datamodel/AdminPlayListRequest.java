@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AdminPlayListRequest {
-    private int plType;
+    private ADMIN_PLAYLIST_TYPE plType;
     private int pageNum;
     private int[] licenseIds;
     private int[] subjectIds;

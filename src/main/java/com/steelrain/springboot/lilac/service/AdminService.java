@@ -2,16 +2,20 @@ package com.steelrain.springboot.lilac.service;
 
 import com.steelrain.springboot.lilac.common.DateUtils;
 import com.steelrain.springboot.lilac.common.PagingUtils;
+import com.steelrain.springboot.lilac.common.PeriodDate;
+import com.steelrain.springboot.lilac.datamodel.ADMIN_PLAYLIST_TYPE;
 import com.steelrain.springboot.lilac.datamodel.AdminPlayListSearchResultDTO;
 import com.steelrain.springboot.lilac.datamodel.AdminYoutubePlayListDTO;
+import com.steelrain.springboot.lilac.repository.AdminRepository;
 import com.steelrain.springboot.lilac.repository.IAdminRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 관리자 서비스
@@ -19,209 +23,26 @@ import java.util.List;
  */
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class AdminService implements IAdminService {
 
     private final IAdminRepository m_adminRepository;
+    private final Map<ADMIN_PLAYLIST_TYPE, IPlayListFinder> m_plFinderMap;
 
 
-    @Override
-    public AdminPlayListSearchResultDTO getAllPlayList(int pageNum, int pageCount, int[] licenseIds, int[] subjectIds) {
-        List<AdminYoutubePlayListDTO> plList = null;
-        if((licenseIds != null && licenseIds.length > 0) && (subjectIds == null)){
-            // 자격증 재생목록
-            plList = checkRecommend(checkCandidate(m_adminRepository.findTotalLicPlayList(licenseIds, PagingUtils.calcStartPage(pageNum, pageCount), pageCount)));
-            return AdminPlayListSearchResultDTO.builder()
-                    .pageDTO(PagingUtils.createPagingInfo(m_adminRepository.findTotalLicPlCount(licenseIds), pageNum, pageCount))
-                    .playlist(plList)
-                    .build();
-        }
-        if((subjectIds != null && subjectIds.length > 0) && (licenseIds == null)){
-            // 키워드 재생목록
-            plList  = checkRecommend(checkCandidate(m_adminRepository.findTotalSubPlayList(subjectIds, PagingUtils.calcStartPage(pageNum, pageCount), pageCount)));
-            return AdminPlayListSearchResultDTO.builder()
-                    .pageDTO(PagingUtils.createPagingInfo(m_adminRepository.findTotalSubPlCount(subjectIds), pageNum, pageCount))
-                    .playlist(plList)
-                    .build();
-        }
-        if((licenseIds != null && subjectIds != null) && (licenseIds.length > 0 && subjectIds.length > 0)){
-            // 자격증+키워드 재생목록
-            plList = checkRecommend(checkCandidate(m_adminRepository.findTotalLicSubPlayList(licenseIds, subjectIds, PagingUtils.calcStartPage(pageNum, pageCount), pageCount)));
-            return AdminPlayListSearchResultDTO.builder()
-                    .pageDTO(PagingUtils.createPagingInfo(m_adminRepository.findTotalLicSubCount(licenseIds, subjectIds), pageNum, pageCount))
-                    .playlist(plList)
-                    .build();
-        }
-        // 아무조건도 없다면 모든 재생목록
-        plList = checkRecommend(checkCandidate(m_adminRepository.findAllPlayList(PagingUtils.calcStartPage(pageNum, pageCount), pageCount)));
-        return AdminPlayListSearchResultDTO.builder()
-                .pageDTO(PagingUtils.createPagingInfo(m_adminRepository.findTotalPlayListCount(), pageNum, pageCount))
-                .playlist(plList)
-                .build();
-    }
-    @Override
-    public AdminPlayListSearchResultDTO getTodayPlayList(int pageNum, int pageCount, int[] licenseIds, int[] subjectIds) {
-        List<AdminYoutubePlayListDTO> plList = null;
-        if((licenseIds != null && licenseIds.length > 0) && (subjectIds == null)){
-            // 자격증 재생목록
-            plList = checkRecommend(checkCandidate(m_adminRepository.findLicPlByRange(licenseIds,
-                                                                    DateUtils.getYesterdayString(),
-                                                                    DateUtils.getTodayDateString(),
-                                                                    PagingUtils.calcStartPage(pageNum, pageCount), pageCount)));
-            return AdminPlayListSearchResultDTO.builder()
-                    .pageDTO(PagingUtils.createPagingInfo(m_adminRepository.findLicPlCountByRange(licenseIds, DateUtils.getYesterdayString(), DateUtils.getTodayDateString()), pageNum, pageCount))
-                    .playlist(plList)
-                    .build();
-        }
-        if((subjectIds != null && subjectIds.length > 0) && (licenseIds == null)){
-            // 키워드 재생목록
-            plList = checkRecommend(checkCandidate(m_adminRepository.findSubPlByRange(subjectIds,
-                                                                    DateUtils.getYesterdayString(),
-                                                                    DateUtils.getTodayDateString(),
-                                                                    PagingUtils.calcStartPage(pageNum, pageCount), pageCount)));
-            return AdminPlayListSearchResultDTO.builder()
-                    .pageDTO(PagingUtils.createPagingInfo(m_adminRepository.findSubPlCountByRange(subjectIds, DateUtils.getYesterdayString(), DateUtils.getTodayDateString()), pageNum, pageCount))
-                    .playlist(plList)
-                    .build();
-        }
-        if((licenseIds != null && subjectIds != null) && (licenseIds.length > 0 && subjectIds.length > 0)){
-            // 자격증+키워드 재생목록
-            plList = checkRecommend(checkCandidate(m_adminRepository.findLicSubPlByRange(licenseIds,
-                                                                    subjectIds,
-                                                                    DateUtils.getYesterdayString(),
-                                                                    DateUtils.getTodayDateString(),
-                                                                    PagingUtils.calcStartPage(pageNum, pageCount), pageCount)));
-            return AdminPlayListSearchResultDTO.builder()
-                    .pageDTO(PagingUtils.createPagingInfo(m_adminRepository.findTotalLicSubPlCountByRange(licenseIds, subjectIds, DateUtils.getYesterdayString(), DateUtils.getTodayDateString()), pageNum, pageCount))
-                    .playlist(plList)
-                    .build();
-        }
-        // 아무조건도 없다면 오늘추가된 모든재생목록
-        plList = checkRecommend(checkCandidate(m_adminRepository.findPlayListByRange(DateUtils.getYesterdayString(),
-                                                                                    DateUtils.getTodayDateString(),
-                                                                                    PagingUtils.calcStartPage(pageNum, pageCount), pageCount)));
-        return AdminPlayListSearchResultDTO.builder()
-                .pageDTO(PagingUtils.createPagingInfo(m_adminRepository.findTodayPlayListCount(), pageNum, pageCount))
-                .playlist(plList)
-                .build();
+    @Autowired
+    public AdminService(AdminRepository repository){
+        this.m_adminRepository = repository;
+
+        m_plFinderMap = new HashMap<>(ADMIN_PLAYLIST_TYPE.values().length);
+        m_plFinderMap.put(ADMIN_PLAYLIST_TYPE.ALL, new AllPlayListFinder());
+        m_plFinderMap.put(ADMIN_PLAYLIST_TYPE.TODAY, new TodayPlayListFinder());
+        m_plFinderMap.put(ADMIN_PLAYLIST_TYPE.WEEK, new WeekPlayListFinder());
+        m_plFinderMap.put(ADMIN_PLAYLIST_TYPE.MONTH, new MonthPlayListFinder());
     }
 
     @Override
-    public AdminPlayListSearchResultDTO getWeekPlayList(int pageNum, int pageCount, int[] licenseIds, int[] subjectIds) {
-        List<AdminYoutubePlayListDTO> plList = null;
-        if((licenseIds != null && licenseIds.length > 0) && (subjectIds == null)){
-            // 자격증 재생목록
-            plList = checkRecommend(checkCandidate(m_adminRepository.findLicPlByRange(licenseIds,
-                                                                                    DateUtils.getMondayOfWeekString(),
-                                                                                    DateUtils.getSundayOfWeekString(),
-                                                                                    PagingUtils.calcStartPage(pageNum, pageCount), pageCount)));
-            return AdminPlayListSearchResultDTO.builder()
-                    .pageDTO(PagingUtils.createPagingInfo(m_adminRepository.findLicPlCountByRange(licenseIds, DateUtils.getMondayOfWeekString(), DateUtils.getSundayOfWeekString()), pageNum, pageCount))
-                    .playlist(plList)
-                    .build();
-        }
-        if((subjectIds != null && subjectIds.length > 0) && (licenseIds == null)){
-            // 키워드 재생목록
-            plList = checkRecommend(checkCandidate(m_adminRepository.findSubPlByRange(subjectIds,
-                                                                                    DateUtils.getMondayOfWeekString(),
-                                                                                    DateUtils.getSundayOfWeekString(),
-                                                                                    PagingUtils.calcStartPage(pageNum, pageCount), pageCount)));
-            return AdminPlayListSearchResultDTO.builder()
-                    .pageDTO(PagingUtils.createPagingInfo(m_adminRepository.findSubPlCountByRange(subjectIds, DateUtils.getMondayOfWeekString(), DateUtils.getSundayOfWeekString()), pageNum, pageCount))
-                    .playlist(plList)
-                    .build();
-        }
-        if((licenseIds != null && subjectIds != null) && (licenseIds.length > 0 && subjectIds.length > 0)){
-            // 자격증+키워드 재생목록
-            plList = checkRecommend(checkCandidate(m_adminRepository.findLicSubPlByRange(licenseIds,
-                                                                                        subjectIds,
-                                                                                        DateUtils.getMondayOfWeekString(),
-                                                                                        DateUtils.getSundayOfWeekString(),
-                                                                                        PagingUtils.calcStartPage(pageNum, pageCount), pageCount)));
-            return AdminPlayListSearchResultDTO.builder()
-                    .pageDTO(PagingUtils.createPagingInfo(m_adminRepository.findTotalLicSubPlCountByRange(licenseIds, subjectIds, DateUtils.getMondayOfWeekString(), DateUtils.getSundayOfWeekString()), pageNum, pageCount))
-                    .playlist(plList)
-                    .build();
-        }
-        plList = checkRecommend(checkCandidate(m_adminRepository.findPlayListByRange(DateUtils.getMondayOfWeekString(),
-                                                                                    DateUtils.getSundayOfWeekString(),
-                                                                                    PagingUtils.calcStartPage(pageNum, pageCount), pageCount)));
-        return AdminPlayListSearchResultDTO.builder()
-                .pageDTO(PagingUtils.createPagingInfo(m_adminRepository.findWeekPlayListCount(), pageNum, pageCount))
-                .playlist(plList)
-                .build();
-    }
-
-    @Override
-    public AdminPlayListSearchResultDTO getMonthPlayList(int pageNum, int pageCount, int[] licenseIds, int[] subjectIds) {
-        List<AdminYoutubePlayListDTO> plList = null;
-        if((licenseIds != null && licenseIds.length > 0) && (subjectIds == null)){
-            // 자격증 재생목록
-            plList = checkRecommend(checkCandidate(m_adminRepository.findLicPlByRange(licenseIds,
-                                                                                    DateUtils.getMondayOfWeekString(),
-                                                                                    DateUtils.getSundayOfWeekString(),
-                                                                                    PagingUtils.calcStartPage(pageNum, pageCount), pageCount)));
-            return AdminPlayListSearchResultDTO.builder()
-                    .pageDTO(PagingUtils.createPagingInfo(m_adminRepository.findLicPlCountByRange(licenseIds, DateUtils.getFirstdayOfMonth(), DateUtils.getLastdayOfMonth()), pageNum, pageCount))
-                    .playlist(plList)
-                    .build();
-        }
-        if((subjectIds != null && subjectIds.length > 0) && (licenseIds == null)){
-            // 키워드 재생목록
-            plList = checkRecommend(checkCandidate(m_adminRepository.findSubPlByRange(subjectIds,
-                                                                                    DateUtils.getFirstdayOfMonth(),
-                                                                                    DateUtils.getLastdayOfMonth(),
-                                                                                    PagingUtils.calcStartPage(pageNum, pageCount), pageCount)));
-            return AdminPlayListSearchResultDTO.builder()
-                    .pageDTO(PagingUtils.createPagingInfo(m_adminRepository.findSubPlCountByRange(subjectIds, DateUtils.getFirstdayOfMonth(), DateUtils.getLastdayOfMonth()), pageNum, pageCount))
-                    .playlist(plList)
-                    .build();
-        }
-        if((licenseIds != null && subjectIds != null) && (licenseIds.length > 0 && subjectIds.length > 0)){
-            // 자격증+키워드 재생목록
-            plList = checkRecommend(checkCandidate(m_adminRepository.findLicSubPlByRange(licenseIds,
-                                                                                        subjectIds,
-                                                                                        DateUtils.getFirstdayOfMonth(),
-                                                                                        DateUtils.getLastdayOfMonth(),
-                                                                                        PagingUtils.calcStartPage(pageNum, pageCount), pageCount)));
-            return AdminPlayListSearchResultDTO.builder()
-                    .pageDTO(PagingUtils.createPagingInfo(m_adminRepository.findTotalLicSubPlCountByRange(licenseIds, subjectIds, DateUtils.getFirstdayOfMonth(), DateUtils.getLastdayOfMonth()), pageNum, pageCount))
-                    .playlist(plList)
-                    .build();
-        }
-        plList = checkRecommend(checkCandidate(m_adminRepository.findPlayListByRange(DateUtils.getFirstdayOfMonth(),
-                                                                                    DateUtils.getLastdayOfMonth(),
-                                                                                    PagingUtils.calcStartPage(pageNum, pageCount), pageCount)));
-        return AdminPlayListSearchResultDTO.builder()
-                .pageDTO(PagingUtils.createPagingInfo(m_adminRepository.findMonthPlayListCount(), pageNum, pageCount))
-                .playlist(plList)
-                .build();
-    }
-
-    // 재생목록이 추천재생목록 후보에 속해있는지 검사하고, 속해있다면 isCandidate 를 true로 설정한다.
-    private List<AdminYoutubePlayListDTO> checkCandidate(List<AdminYoutubePlayListDTO> plList){
-        List<Long> candiIdList = m_adminRepository.findCandidateIdList();
-        for(AdminYoutubePlayListDTO pl : plList){
-            for(Long cId : candiIdList){
-                if(pl.getId().equals(cId)){
-                    pl.setCandidate(true);
-                }
-            }
-        }
-        return plList;
-    }
-
-    // 재생목록이 추천재생목록에 속해있는지 검사하고, 속해있다면 isRecommend 를 true로 설정한다.
-    private List<AdminYoutubePlayListDTO> checkRecommend(List<AdminYoutubePlayListDTO> plList){
-        List<Long> recommedIdList = m_adminRepository.findRecommendIdList();
-        for(AdminYoutubePlayListDTO pl : plList){
-            for(Long rId : recommedIdList){
-                if(pl.getId().equals(rId)){
-                    pl.setRecommend(true);
-                }
-            }
-        }
-        return plList;
+    public AdminPlayListSearchResultDTO getAdminPlayList(ADMIN_PLAYLIST_TYPE type, int pageNum, int pageCount, int[] licenseIds, int[] subjectIds) {
+        return m_plFinderMap.get(type).getPlayList(pageNum, pageCount, licenseIds, subjectIds, m_adminRepository);
     }
 
     @Override
@@ -231,17 +52,22 @@ public class AdminService implements IAdminService {
 
     @Override
     public int getTodayPlayListCount() {
-        return m_adminRepository.findTodayPlayListCount();
+        PeriodDate date = DateUtils.getToday();
+        return m_adminRepository.findPlayListCountByRange(date.getFromDate(), date.getToDate());
     }
 
     @Override
     public int getWeekPlayListCount() {
-        return m_adminRepository.findWeekPlayListCount();
+        PeriodDate fromDate = DateUtils.getMondayOfWeek();
+        PeriodDate toDate = DateUtils.getSundayOfWeek();
+        return m_adminRepository.findPlayListCountByRange(fromDate.getFromDate(), toDate.getToDate());
     }
 
     @Override
     public int getMonthPlayListCount() {
-        return m_adminRepository.findMonthPlayListCount();
+        PeriodDate fromDate = DateUtils.getFirstdayOfMonth();
+        PeriodDate toDate = DateUtils.getLastdayOfMonth();
+        return m_adminRepository.findPlayListCountByRange(fromDate.getFromDate(), toDate.getToDate());
     }
 
     @Override

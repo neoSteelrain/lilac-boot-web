@@ -16,7 +16,7 @@ public enum KEYWORD_TYPE {
     NONE(-1), KEYWORD(0), LICENSE(1), SUBJECT(2);
 
     private final int m_keywordType;
-    KEYWORD_TYPE(int codeType){
+    private KEYWORD_TYPE(int codeType){
         this.m_keywordType = codeType;
     }
 
@@ -26,7 +26,7 @@ public enum KEYWORD_TYPE {
 
     public static KEYWORD_TYPE of(String id){
         if(!StringUtils.isNumeric(id)){
-            throw new IllegalArgumentException(String.format("변환할 수 없는 ID값입니다. 입력된 ID값 - %s, ID가 자격증인 경우는 1, 키워드인 경우는 2의 값이어야 합니다", id));
+            throw new IllegalArgumentException(String.format("변환할 수 없는 id값입니다. 입력된 id값 - %s, id가 자격증인 경우는 1, 키워드인 경우는 2의 값이어야 합니다", id));
         }
         return Arrays.stream(KEYWORD_TYPE.values()).filter(val -> val.getValue() == Integer.parseInt(id)).findFirst().orElse(KEYWORD_TYPE.NONE);
     }

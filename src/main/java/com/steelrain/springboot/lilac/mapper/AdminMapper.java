@@ -18,7 +18,7 @@ public interface AdminMapper {
     @Select("SELECT count(id) FROM tbl_youtube_playlist")
     int findTotalPlayListCnt();
 
-    @Select("SELECT count(id) FROM tbl_youtube_playlist WHERE reg_date > #{fromDate} AND reg_date <= #{toDate}")
+    @Select("SELECT count(id) FROM tbl_youtube_playlist WHERE reg_date > #{fromDate} AND reg_date < #{toDate}")
     int findPlayListCount(@Param("fromDate")String fromDate, @Param("toDate")String toDate);
 
     List<AdminYoutubePlayListDTO> findPlayListByRange(@Param("start") String start, @Param("end") String end, @Param("pageNum") int pageNum, @Param("pageCount") int pageCount);

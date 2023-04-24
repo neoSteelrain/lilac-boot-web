@@ -105,7 +105,7 @@
     <select id="findTodayLicPlCount" parameterType="map" resultType="int">
         SELECT count(id)
         FROM tbl_youtube_playlist
-        <![CDATA[WHERE reg_date > #{startDay} AND reg_date <= #{endDay}]]>
+        <![CDATA[WHERE reg_date > #{startDay} AND reg_date < #{endDay}]]>
             AND license_id IN (
                 <foreach collection="licenseIds" item="item" index="index" separator=",">
                     #{item}
@@ -115,7 +115,7 @@
     <select id="findLicPlByRange" parameterType="map" resultType="AdminYoutubePlayListDTO">
         SELECT id,playlist_id,channel_id,license_id,subject_id,title,thumbnail_medium,item_count,reg_date
         FROM tbl_youtube_playlist
-        <![CDATA[WHERE reg_date > #{fromDate} AND reg_date <= #{toDate}]]>
+        <![CDATA[WHERE reg_date > #{fromDate} AND reg_date < #{toDate}]]>
             AND license_id IN (
                 <foreach collection="licenseIds" item="item" index="index" separator=",">
                     #{item}
@@ -126,7 +126,7 @@
     <select id="findSubPlByRange" parameterType="map" resultType="AdminYoutubePlayListDTO">
         SELECT id,playlist_id,channel_id,license_id,subject_id,title,thumbnail_medium,item_count,reg_date
         FROM tbl_youtube_playlist
-        <![CDATA[WHERE reg_date > #{fromDate} AND reg_date <= #{toDate}]]>
+        <![CDATA[WHERE reg_date > #{fromDate} AND reg_date < #{toDate}]]>
             AND subject_id IN (
             <foreach collection="subjectIds" item="item" index="index" separator=",">
                 #{item}
@@ -140,7 +140,7 @@
             SELECT pl.id,pl.playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,pl.item_count,pl.reg_date
             FROM tbl_youtube_playlist pl INNER JOIN tbl_license lic
                 ON pl.license_id = lic.id
-                <![CDATA[WHERE pl.reg_date > #{fromDate} AND pl.reg_date <= #{toDate}]]>
+                <![CDATA[WHERE pl.reg_date > #{fromDate} AND pl.reg_date < #{toDate}]]>
                 AND lic.id IN (
                 <foreach collection="licenseIds" item="item" index="index" separator=",">
                     #{item}
@@ -149,7 +149,7 @@
             SELECT pl.id,pl.playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,pl.item_count,pl.reg_date
             FROM tbl_youtube_playlist pl INNER JOIN tbl_subject sub
                 ON pl.subject_id = sub.id
-                <![CDATA[WHERE pl.reg_date > #{fromDate} AND pl.reg_date <= #{toDate}]]>
+                <![CDATA[WHERE pl.reg_date > #{fromDate} AND pl.reg_date < #{toDate}]]>
                 AND sub.id IN (
                 <foreach collection="subjectIds" item="item" index="index" separator=",">
                     #{item}
@@ -162,7 +162,7 @@
             SELECT pl.id
             FROM tbl_youtube_playlist pl INNER JOIN tbl_license lic
             ON pl.license_id = lic.id
-            <![CDATA[WHERE pl.reg_date > #{fromDate} AND pl.reg_date <= #{toDate}]]>
+            <![CDATA[WHERE pl.reg_date > #{fromDate} AND pl.reg_date < #{toDate}]]>
                 AND lic.id IN (
                 <foreach collection="licenseIds" item="item" index="index" separator=",">
                     #{item}
@@ -171,7 +171,7 @@
             SELECT pl.id
             FROM tbl_youtube_playlist pl INNER JOIN tbl_subject sub
             ON pl.subject_id = sub.id
-            <![CDATA[WHERE pl.reg_date > #{fromDate} AND pl.reg_date <= #{toDate}]]>
+            <![CDATA[WHERE pl.reg_date > #{fromDate} AND pl.reg_date < #{toDate}]]>
                 AND sub.id IN (
                 <foreach collection="subjectIds" item="item" index="index" separator=",">
                     #{item}
@@ -182,7 +182,7 @@
     <select id="findLicPlCountByRange" parameterType="map" resultType="int">
         SELECT count(id)
         FROM tbl_youtube_playlist
-        <![CDATA[WHERE reg_date > #{fromDate} AND reg_date <= #{toDate}]]>
+        <![CDATA[WHERE reg_date > #{fromDate} AND reg_date < #{toDate}]]>
         AND license_id IN (
             <foreach collection="licenseIds" item="item" index="index" separator=",">
                 #{item}
@@ -192,7 +192,7 @@
     <select id="findSubPlCountByRange" parameterType="map" resultType="int">
         SELECT count(id)
         FROM tbl_youtube_playlist
-        <![CDATA[WHERE reg_date > #{fromDate} AND reg_date <= #{toDate}]]>
+        <![CDATA[WHERE reg_date > #{fromDate} AND reg_date < #{toDate}]]>
         AND subject_id IN (
             <foreach collection="subjectIds" item="item" index="index" separator=",">
                 #{item}

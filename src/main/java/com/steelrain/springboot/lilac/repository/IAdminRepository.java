@@ -1,8 +1,6 @@
 package com.steelrain.springboot.lilac.repository;
 
-import com.steelrain.springboot.lilac.datamodel.AdminPlayListSearchResultDTO;
 import com.steelrain.springboot.lilac.datamodel.AdminYoutubePlayListDTO;
-import com.steelrain.springboot.lilac.datamodel.YoutubePlayListDTO;
 
 import java.util.List;
 
@@ -15,15 +13,11 @@ public interface IAdminRepository {
 
     int findTotalPlayListCount();
 
-    int findTodayPlayListCount();
+    int findPlayListCountByRange(String fromDate, String toDate);
 
     List<AdminYoutubePlayListDTO> findPlayListByRange(String start, String end, int pageNum, int pageCount);
 
     int findLicPlCountByRange(int[] licenseIds, String fromDate, String toDate);
-
-    int findWeekPlayListCount();
-
-    int findMonthPlayListCount();
 
     int findTotalLicPlCount(int[] licenseIds);
 

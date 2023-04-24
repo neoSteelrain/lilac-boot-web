@@ -12,6 +12,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new KeywordTypeConverter());
+        registry.addConverter(new AdminPlayListTypeConverter());
     }
 
     @Override

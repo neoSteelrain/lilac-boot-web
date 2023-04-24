@@ -296,7 +296,7 @@
   })
 
   window.addEventListener("load", function (event){
-    changePlayList(1); // 페이지의 첫시작은 모든재생목록으로 시작하기 위해 1을 준다
+    changePlayList(1); // 페이지의 첫시작은 모든재생목록으로 시작하기 위해 0을 준다
 
     $("#junbogisa").on("change", function(){chkBoxHandler()});
     $("#junbosangisa").on("change", function(){chkBoxHandler()});
@@ -310,7 +310,7 @@
     $("#cote").on("change", function(){chkBoxHandler()});
   });
 
-  // 표시할 재생목록 타입을 변경하고 시작페이지를 1로 설정한다
+  // 표시할 재생목록 타입을 변경하고 시작페이지를 0로 설정한다
   function changePlayList(plType){
     sessionStorage.setItem(SESSION_KEY_PL_TYPE, plType); // 현재 선택되어 있는 재생목록 타입을 기억하지 위해 저장하는 키값: 모든 재생목록, 오늘 추가된 재생목록... 같은 타입
     // TODO 하드코딩을 수정하자
