@@ -1,7 +1,5 @@
 function showPlaylistAddModal(paramPlayListId) {
     const memberIdVal = $("#memberIdHidden").val();
-    console.log("paramPlayListId : " + paramPlayListId);
-    console.log("memberIdVal : " + memberIdVal);
     $.ajax({
         type: "get",
         url: "/lecture/modal-playlist-template",

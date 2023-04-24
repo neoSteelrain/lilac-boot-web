@@ -2,6 +2,7 @@ package com.steelrain.springboot.lilac.service;
 
 import com.steelrain.springboot.lilac.common.ICacheService;
 import com.steelrain.springboot.lilac.common.PagingUtils;
+import com.steelrain.springboot.lilac.common.VideoUtils;
 import com.steelrain.springboot.lilac.datamodel.*;
 import com.steelrain.springboot.lilac.datamodel.view.LectureNoteYoutubeVideoDTO;
 import com.steelrain.springboot.lilac.datamodel.view.RecommendedPlayListDTO;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.steelrain.springboot.lilac.datamodel.KEYWORD_TYPE.LICENSE;
@@ -126,21 +128,38 @@ public class VideoService implements IVideoService {
     public boolean isExistYoutubePlayList(Long playListId){ return m_videoRepository.isExistYoutubePlayList(playListId);}
 
     /*
-        영상의 재생시간을 처리한다
+        영상의 재생시간을 처리하고 해당영상의 진행율을 반환한다
      */
     @Override
     @Transactional
-    public void updateVideoPlaytime(Long lectureVideoId, Long playtime) {
+    public YoutubeVideoProgressDTO updateVideoPlaytime(Long lectureVideoId, Long playtime) {
         long progress = m_videoRepository.getProgress(lectureVideoId);
         long duration = m_videoRepository.getDuration(lectureVideoId);
         if(playtime > progress && playtime <= duration){
             m_videoRepository.updateVideoPlaytime(lectureVideoId, playtime);
+            YoutubeVideoProgressDTO videoProgress = m_videoRepository.findVideoProgress(lectureVideoId);
+            videoProgress.setProgressRate(VideoUtils.calcProgressRate(videoProgress.getDuration(), videoProgress.getProgress()));
+            return videoProgress;
+        }else{
+            return null;
         }
     }
 
+
     @Override
     public List<LectureNoteYoutubeVideoDTO> getPlayListDetailOfLectureNote(Long memberId, Long youtubePlaylistId, Long noteId) {
-        return m_videoRepository.findPlayListDetailOfLectureNote(memberId, youtubePlaylistId, noteId);
+        List<LectureNoteYoutubeVideoDTO> videoList = m_videoRepository.findPlayListDetailOfLectureNote(memberId, youtubePlaylistId, noteId);
+        initProgressRate(videoList);
+        return videoList;
+    }
+
+    // 영상들의 진행율 %를 구하고 설정해준다
+    private void initProgressRate(List<LectureNoteYoutubeVideoDTO> videoList){
+        for(LectureNoteYoutubeVideoDTO video : videoList){
+            if(Objects.nonNull(video.getProgress())){
+                video.setProgressRate(VideoUtils.calcProgressRate(video.getDuration(), video.getProgress()));
+            }
+        }
     }
 
     @Override

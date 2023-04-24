@@ -1,6 +1,7 @@
 package com.steelrain.springboot.lilac.service;
 
 import com.steelrain.springboot.lilac.datamodel.KEYWORD_TYPE;
+import com.steelrain.springboot.lilac.datamodel.YoutubeVideoProgressDTO;
 import com.steelrain.springboot.lilac.datamodel.view.LectureNoteYoutubeVideoDTO;
 import com.steelrain.springboot.lilac.datamodel.view.RecommendedPlayListDTO;
 import com.steelrain.springboot.lilac.datamodel.view.RecommendedVideoDTO;
@@ -19,7 +20,7 @@ public interface IVideoService {
     List<Long> getAllVideoIdByPlayList(Long playListId);
     YoutubeVideoDTO getVideoDetail(Long videoId);
     boolean isExistYoutubePlayList(Long playListId);
-    void updateVideoPlaytime(Long id, Long playtime);
+    YoutubeVideoProgressDTO updateVideoPlaytime(Long id, Long playtime);
     List<LectureNoteYoutubeVideoDTO> getPlayListDetailOfLectureNote(Long memberId, Long youtubePlaylistId, Long noteId);
 
     Map<String, Long> updateLikeVideo(Long videoId, Long memberId);

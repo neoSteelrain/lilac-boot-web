@@ -2,6 +2,7 @@ package com.steelrain.springboot.lilac.mapper;
 
 import com.steelrain.springboot.lilac.datamodel.YoutubePlayListDTO;
 import com.steelrain.springboot.lilac.datamodel.YoutubeVideoDTO;
+import com.steelrain.springboot.lilac.datamodel.YoutubeVideoProgressDTO;
 import com.steelrain.springboot.lilac.datamodel.view.LectureNoteYoutubeVideoDTO;
 import com.steelrain.springboot.lilac.datamodel.view.RecommendedPlayListDTO;
 import com.steelrain.springboot.lilac.datamodel.view.RecommendedVideoDTO;
@@ -66,4 +67,6 @@ public interface VideoMapper {
     int selectTotalPlayListCount(@Param("id")int id, @Param("idType") int idType);
 
     List<YoutubePlayListDTO> findPlayListById(@Param("id")int id, @Param("idType") int idType, @Param("offset") int pageNum, @Param("count") int playlistCount);
+
+    YoutubeVideoProgressDTO findVideoProgress(@Param("lectureVideoId") Long lectureVideoId);
 }

@@ -1,6 +1,7 @@
 package com.steelrain.springboot.lilac.api;
 
 import com.steelrain.springboot.lilac.common.SESSION_KEY;
+import com.steelrain.springboot.lilac.datamodel.YoutubeVideoProgressDTO;
 import com.steelrain.springboot.lilac.datamodel.rest.BaseRestAPIResponse;
 import com.steelrain.springboot.lilac.service.IVideoService;
 import lombok.Getter;
@@ -47,11 +48,13 @@ public class VideoRestController {
                     .message("관리자는 사용할 수 없는  서비스 입니다")
                     .build(), HttpStatus.METHOD_NOT_ALLOWED);
         }
-        m_videoService.updateVideoPlaytime(request.lectureVideoId, request.playtime);
+        YoutubeVideoProgressDTO progressDTO = m_videoService.updateVideoPlaytime(request.lectureVideoId, request.playtime);
         return new ResponseEntity<>(UpdateVideoPlaytimeResponse.builder()
                 .requestParameter(request)
                 .code(HttpStatus.OK.value())
                 .message("재생시간을 업데이트하였습니다")
+                .progressRate(progressDTO.getProgressRate())
+                .videoId(progressDTO.getVideoId())
                 .build(), HttpStatus.OK);
     }
 
@@ -123,6 +126,8 @@ public class VideoRestController {
     @Getter
     @SuperBuilder
     static class UpdateVideoPlaytimeResponse extends BaseRestAPIResponse {
+        private String videoId;
+        private double progressRate;
     }
 
     @Getter

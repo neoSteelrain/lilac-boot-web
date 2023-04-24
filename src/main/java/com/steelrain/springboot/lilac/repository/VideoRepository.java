@@ -2,6 +2,7 @@ package com.steelrain.springboot.lilac.repository;
 
 import com.steelrain.springboot.lilac.datamodel.YoutubePlayListDTO;
 import com.steelrain.springboot.lilac.datamodel.YoutubeVideoDTO;
+import com.steelrain.springboot.lilac.datamodel.YoutubeVideoProgressDTO;
 import com.steelrain.springboot.lilac.datamodel.view.LectureNoteYoutubeVideoDTO;
 import com.steelrain.springboot.lilac.datamodel.view.RecommendedPlayListDTO;
 import com.steelrain.springboot.lilac.datamodel.view.RecommendedVideoDTO;
@@ -75,6 +76,11 @@ public class VideoRepository implements IVideoRepository {
     @Override
     public void updateLikeVideo(Long memberId, Long videoId, boolean likeStatus) {
         m_videoMapper.updateLikeVideo(memberId, videoId, likeStatus);
+    }
+
+    @Override
+    public YoutubeVideoProgressDTO findVideoProgress(Long lectureVideoId) {
+        return m_videoMapper.findVideoProgress(lectureVideoId);
     }
 
     @Override

@@ -24,7 +24,7 @@
         SELECT pl.id as lecture_video_id,pl.lecture_id,pl.lecture_member_id,yt.id,yt.video_id,yt.channel_id,yt.youtube_playlist_id,yt.title,yt.description,yt.publish_date,
                yt.thumbnail_default,yt.thumbnail_high,yt.playlist_id,yt.view_count,yt.search_count,yt.like_count,yt.favorite_count,yt.comment_count,
                yt.comment_disabled,yt.duration,yt.score,yt.magnitude, yt.lilac_like_count,yt.lilac_dislike_count,
-               (SELECT title FROM tbl_lecture WHERE id=pl.lecture_id) as lecture_title
+               (SELECT title FROM tbl_lecture WHERE id=pl.lecture_id) as lecture_title, pl.progress
         FROM ref_tbl_lecture_youtube pl INNER JOIN tbl_youtube yt
             ON pl.youtube_id=yt.id
         WHERE pl.lecture_member_id=#{memberId} AND pl.youtube_playlist_id=#{youtubePlaylistId}  AND pl.lecture_id=#{noteId}
@@ -109,5 +109,12 @@
             WHERE subject_id=#{id}
         </if>
         ORDER BY pl.publish_date LIMIT #{offset}, #{count}
+    </select>
+    
+    <select id="findVideoProgress" parameterType="long" resultType="YoutubeVideoProgressDTO">
+        SELECT yt.video_id, ref.progress, yt.duration
+        FROM ref_tbl_lecture_youtube ref INNER JOIN tbl_youtube yt
+            ON ref.youtube_id=yt.id
+        WHERE ref.id=#{lectureVideoId};
     </select>
 </mapper>

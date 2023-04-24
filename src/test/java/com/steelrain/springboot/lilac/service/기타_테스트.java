@@ -58,4 +58,12 @@ public class 기타_테스트 {
         log.debug("tmp : {}", tmp);
         log.debug("long tmp : {}", (long)tmp);
     }
+
+    @Test
+    public void ggggggg(){
+        double res = (double)43 / 89 * 100;
+        log.debug("res : {}", res);
+        log.debug("res2 : {}", Math.floor(res));
+        log.debug("res3 : {}", Math.round(res * 10) / 10.0);
+    }
 }

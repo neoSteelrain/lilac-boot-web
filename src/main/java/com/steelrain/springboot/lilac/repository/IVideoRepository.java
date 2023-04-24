@@ -2,6 +2,7 @@ package com.steelrain.springboot.lilac.repository;
 
 import com.steelrain.springboot.lilac.datamodel.YoutubePlayListDTO;
 import com.steelrain.springboot.lilac.datamodel.YoutubeVideoDTO;
+import com.steelrain.springboot.lilac.datamodel.YoutubeVideoProgressDTO;
 import com.steelrain.springboot.lilac.datamodel.view.LectureNoteYoutubeVideoDTO;
 import com.steelrain.springboot.lilac.datamodel.view.RecommendedPlayListDTO;
 import com.steelrain.springboot.lilac.datamodel.view.RecommendedVideoDTO;
@@ -56,4 +57,6 @@ public interface IVideoRepository {
     int selectTotalPlayListCount(int id, int idType);
 
     List<YoutubePlayListDTO> findPlayListById(int id, int idType, int pageNum, int playlistCount);
+
+    YoutubeVideoProgressDTO findVideoProgress(Long lectureVideoId);
 }

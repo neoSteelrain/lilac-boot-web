@@ -18,5 +18,8 @@ public class LectureNoteYoutubeVideoDTO extends YoutubeVideoDTO {
     private Long lectureId; // 강의노트 ID
     private String lectureTitle;
     private Long lectureMemberId; // 회원ID
-    private Long progress; // 영상의 진행률
+    private Long progress; // 영상의 시청시간
+
+    @Setter
+    private double progressRate; // 영상의 진행율 %값
 }

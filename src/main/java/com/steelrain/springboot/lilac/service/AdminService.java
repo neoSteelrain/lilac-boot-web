@@ -33,6 +33,10 @@ public class AdminService implements IAdminService {
     public AdminService(AdminRepository repository){
         this.m_adminRepository = repository;
 
+        /*
+            - ADMIN_PLAYLIST_TYPE 에 대한 조건문을 대신 IPlayListFinder 인터페이스를 구현해서 map 에 저장하도록 한다.
+            TODO 재생목록 조회조건이 변경되거나 추가되면 이부분을 수정해야 한다.
+         */
         m_plFinderMap = new HashMap<>(ADMIN_PLAYLIST_TYPE.values().length);
         m_plFinderMap.put(ADMIN_PLAYLIST_TYPE.ALL, new AllPlayListFinder());
         m_plFinderMap.put(ADMIN_PLAYLIST_TYPE.TODAY, new TodayPlayListFinder());
@@ -95,6 +99,7 @@ public class AdminService implements IAdminService {
                 .build();
     }
 
+    // 추천재생목록을 삭제한다
     @Override
     @Transactional
     public AdminPlayListSearchResultDTO removeRecommendPlayList(Long playListId) {
