@@ -7,7 +7,7 @@
   <title>에러 페이지</title>
   <meta name="description" content="" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.svg" />
+  <link rel="shortcut icon" type="image/x-icon" th:href="@{assets/images/favicon.svg}" />
   <!-- Place favicon.ico in the root directory -->
 
   <!-- Web Font -->
@@ -55,7 +55,7 @@
             <h2>이용에 불편을 드려 죄송합니다</h2>
             <p>좀더 나은 서비스를 위해 노력하겠습니다</p>
             <div class="button">
-              <a href="/" class="btn">첫화면으로 가기</a>
+              <a th:href="@{/}" class="btn">첫화면으로 가기</a>
             </div>
           </div>
         </div>

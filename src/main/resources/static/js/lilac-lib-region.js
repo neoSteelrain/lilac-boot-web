@@ -1,8 +1,9 @@
 function changeLibRegionCode(){
+    // 스크립트 전역에 ctxPath = [[${contextPath}]] 가 선언되어야 한다 
     const m_selectedRegion = $('#location-main').val();
     $.ajax({
         type:"get",
-        url:"/search/dtl-region-code",
+        url: ctxPath+"/search/dtl-region-code",
         dataType:"json",
         data:{ regionCode: m_selectedRegion },
         success:(result) => {

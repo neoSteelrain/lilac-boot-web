@@ -45,8 +45,8 @@
           </div>
           <div class="dashboard-menu">
             <ul>
-              <li><a class="active" href="dashboard.html"><i class="lni lni-youtube"></i> 추천재생목록</a></li>
-              <li><a href="profile-settings.html"><i class="lni lni-bookmark"></i> 추천도서</a></li>
+              <li><a class="active" th:href="@{/admin/admin-menu}"><i class="lni lni-youtube"></i> 추천재생목록</a></li>
+              <li><a href="javascript:void(0)"><i class="lni lni-bookmark"></i> 추천도서</a></li>
             </ul>
           </div>
         </div>
@@ -280,6 +280,7 @@
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/lilac-common.js}"></script>
 <script th:inline="javascript">
+  const ctxPath = [[${#request.contextPath}]];
   const SESSION_KEY_PL_TYPE = "ss_pl_type";
   const SESSION_KET_PAGE_NUM = "ss_page_num";
 
@@ -384,7 +385,7 @@
     }
     $.ajax({
       type:"post",
-      url:"/admin/admin-playlist-template",
+      url: ctxPath+"/admin/admin-playlist-template",
       traditional:true,
       data:{
         plType:paramPlType,
@@ -417,7 +418,7 @@
     }
     $.ajax({
       type:"post",
-      url:"/admin/api/add-pl",
+      url: ctxPath+"/admin/api/add-pl",
       headers:{"Content-Type":"application/json"},
       data:JSON.stringify(param),
       success:function(result){
@@ -434,7 +435,7 @@
   function showCandiPlaylist(){
     $.ajax({
       type:"get",
-      url:"/admin/candi-pl",
+      url:ctxPath+"/admin/candi-pl",
       success:function(result){
         let html = jQuery("<div>").html(result);
         let playlist = html.find("div#cpl-template").html();
@@ -450,7 +451,7 @@
   function showRecommendPlayList(){
     $.ajax({
       type:"get",
-      url:"/admin/recommend-pl",
+      url:ctxPath+"/admin/recommend-pl",
       success:function(result){
         let html = jQuery("<div>").html(result);
         let playlist = html.find("div#rpl-template").html();
@@ -466,7 +467,7 @@
   function removeCandiPlaylist(paramPlId){
     $.ajax({
       type:"post",
-      url:"/admin/remove-candi-pl",
+      url:ctxPath+"/admin/remove-candi-pl",
       data:{plId:paramPlId},
       success:function(result){
         let html = jQuery("<div>").html(result);
@@ -482,7 +483,7 @@
   function removeRecommendPlayList(paramPlId){
     $.ajax({
       type:"post",
-      url:"/admin/remove-recommend-pl",
+      url:ctxPath+"/admin/remove-recommend-pl",
       data:{plId:paramPlId},
       success:function(result){
         let html = jQuery("<div>").html(result);
@@ -520,7 +521,7 @@
     });
     $.ajax({
       type:"post",
-      url:"/admin/update-recommend-pl",
+      url:ctxPath+"/admin/update-recommend-pl",
       data:{cplArray:checkedCplArray},
       success:function(result){
         let html = jQuery("<div>").html(result);
@@ -546,7 +547,7 @@
   }
 
   function openPlayList(plId){
-    window.open("/video/admin-playlist-detail?plId="+plId, "_blank");
+    window.open(ctxPath+"/video/admin-playlist-detail?plId="+plId, "_blank");
   }
 </script>
 </body>

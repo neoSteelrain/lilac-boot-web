@@ -4,6 +4,7 @@ import com.steelrain.springboot.lilac.config.APIConfig;
 import com.steelrain.springboot.lilac.exception.AwsS3RepositoryException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.exception.SdkException;
@@ -80,7 +81,7 @@ public class AwsS3Repository implements IAwsS3Repository {
     public void deleteMemberProfile(String fileName){
         DeleteObjectRequest deleteObjRequest = DeleteObjectRequest.builder()
                 .bucket(m_apiConfig.getAwsS3Bucket())
-                .key(createS3ObjectKey(fileName))
+                .key(createS3ObjectKey(extractS3fileName(fileName)))
                 .build();
         try{
             DeleteObjectResponse deleteObjResponse = m_s3Client.deleteObject(deleteObjRequest);
@@ -91,6 +92,14 @@ public class AwsS3Repository implements IAwsS3Repository {
             log.error("AWS S3 삭제 미정의 예외 - 파일이름 : {} , 예외정보 {}", fileName, ex);
             throw new AwsS3RepositoryException(String.format("AWS S3 삭제 미정의 예외 - 파일이름 : %s , 예외정보 : %s", fileName, ex.toString()), ex);
         }
+    }
+
+    /*
+        profileSaveFile 의 예시 https://lilac-springboot-web.s3.ap-northeast-2.amazonaws.com/member-profile/f3c9a6a4-dfbd-4dba-abd1-76ce6a36a37e.png
+        위의 URL에서 파일이름이 AWS S3에 저장된 이미지의이름 이므로 파일이름만 추출한다.
+     */
+    private String extractS3fileName(String profileSavedFile){
+        return FilenameUtils.getName(profileSavedFile);
     }
 
     /*

@@ -30,7 +30,7 @@ import java.util.Objects;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/member")
+@RequestMapping("member")
 public class MemberController {
 
     private final IMemberService m_memberService;
@@ -75,6 +75,7 @@ public class MemberController {
             session.setAttribute(SESSION_KEY.MEMBER_NICKNAME, memberDTO.getNickname());
             session.setAttribute(SESSION_KEY.MEMBER_EMAIL, memberDTO.getEmail());
             session.setAttribute(SESSION_KEY.MEMBER_GRADE, memberDTO.getGrade());
+            session.setAttribute(SESSION_KEY.MEMBER_PROFILE, memberDTO.getProfileSave());
             if(memberDTO.getGrade() == 1){
                 return "redirect:/admin/admin-menu";
             }
@@ -95,10 +96,9 @@ public class MemberController {
     @PostMapping("/registration")
     public String registerMember(@Validated(RegistrationValidateSequence.class) @ModelAttribute("memberReg") MemberRegDTO memberRegDTO, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            log.info("회원가입 입력정보 에러 : {}", bindingResult);
+            log.info("회원가입 입력정보 에러 : 입력한 회원정보 - {}, 에러정보 - {}", memberRegDTO, bindingResult);
             return "member/registration";
         }
-
         MemberDTO memberDTO = MemberDTO.builder()
                 .nickname(memberRegDTO.getNickname())
                 .email(memberRegDTO.getEmail())
@@ -113,11 +113,13 @@ public class MemberController {
         }catch(DuplicateLilacMemberException dme){
             log.error("회원가입 중복 예외발생 : 회원정보 - {}, 예외정보 - {}", memberRegDTO, dme);
             bindingResult.addError(new ObjectError("memberReg", "이미 가입된 회원입니다. 다른 닉네임 또는 이메일을 입력해주세요"));
+            return "member/registration";
         }catch(LilacRepositoryException lre){
             log.error("회원가입 DB 예외발생 : 회원정보 - {}, 예외정보 - {}", memberRegDTO, lre);
             bindingResult.addError(new ObjectError("memberReg", "회원가입에 오류가 발생하였습니다"));
+            return "member/registration";
         }
-        return  isRegist ? "redirect:member/login" : "member/registration";
+        return  isRegist ? "redirect:login" : "redirect:registration";
     }
 
     @GetMapping("/profile")
@@ -137,40 +139,51 @@ public class MemberController {
         return "member/profile";
     }
 
+    // TODO 에러가 났을경우 프로필 이미지 처리를 프런트에서 처리할 방법을 알아보자
+
     @PostMapping("/profile")
     public String editMemberProfile(@Validated @ModelAttribute("memberInfo") MemberProfileEditDTO editDTO, BindingResult bindingResult,
-                                          HttpSession session){
+                                          HttpSession session, Model model){
         if(bindingResult.hasErrors()){
-            log.error("회원정보 수정 에러 : {}", bindingResult);
+            log.error("회원정보수정 입력값 에러 : 회원입력정보 - {}, 에러정보 - {}", editDTO, bindingResult);
+            // 에러가 발생해도 기존의 프로필 이미지는 보이도록 session에서 원래 프로필이미지가져와서 설정해준다
+            editDTO.setProfileSave( (String) session.getAttribute(SESSION_KEY.MEMBER_PROFILE));
             return "member/profile";
         }
         Long memberId = (Long)session.getAttribute(SESSION_KEY.MEMBER_ID);
-        boolean isUpdated = false;
         try{
-             isUpdated = m_memberService.updateMemberInfo(memberId, editDTO);
-             if(isUpdated){
-                 // 세션정보도 같이 업데이트 해준다
-                 session.setAttribute(SESSION_KEY.MEMBER_NICKNAME, editDTO.getNickname());
-                 session.setAttribute(SESSION_KEY.MEMBER_EMAIL, editDTO.getEmail());
-             }else {
-                 log.error("회원정보 업데이트에 실패하였습니다");
-                 bindingResult.addError(new ObjectError("memberInfo","회원정보 업데이트 도중 문제가 발행했습니다. 관리자에게 문의하세요"));
-             }
+            boolean isUpdated = m_memberService.updateMemberInfo(memberId, editDTO);
+            if(isUpdated){
+                MemberDTO updatedMember = m_memberService.getMemberInfo(memberId);
+                // 세션정보도 같이 업데이트 해준다
+                session.setAttribute(SESSION_KEY.MEMBER_NICKNAME, updatedMember.getNickname());
+                session.setAttribute(SESSION_KEY.MEMBER_EMAIL, updatedMember.getEmail());
+                session.setAttribute(SESSION_KEY.MEMBER_PROFILE, updatedMember.getProfileSave());
+            }else{
+                log.error("회원정보수정 업데이트 에러 : 회원입력정보 - {}, 현재로그인ID - {}", editDTO, memberId);
+                return alertRedirect("회원정보 수정에 문제가 발생했습니다.", "profile", model);
+            }
         }catch(DuplicateLilacMemberException dme){
             log.error("회원정보수정 중복 예외 발생 : 회원정보 - {}, 예외정보 - {}", editDTO, dme);
             bindingResult.addError(new ObjectError("memberInfo","이미 존재하는 닉네임 또는 이메일입니다. 다른 닉네임, 이메일을 입력해주세요"));
+            // 에러가 발생해도 기존의 프로필 이미지는 보이도록 하기 위해 설정해준다
+            editDTO.setProfileSave( (String)session.getAttribute(SESSION_KEY.MEMBER_PROFILE));
+            return "member/profile";
         }catch(LilacRepositoryException lre){
             log.error("회원정보수정 DB 예외 발생 : 회원정보 - {}, 예외정보 - {}", editDTO, lre);
+            // 에러가 발생해도 기존의 프로필 이미지는 보이도록 하기 위해 설정해준다
+            editDTO.setProfileSave( (String)session.getAttribute(SESSION_KEY.MEMBER_PROFILE));
             bindingResult.addError(new ObjectError("memberInfo","회원정보 업데이트 도중 문제가 발행했습니다. 관리자에게 문의하세요"));
+            return "member/profile";
         }
-        return "redirect:member/profile";
+        return "redirect:profile";
     }
 
     @PostMapping("/delete")
     public String deleteMember(HttpServletRequest servletRequest, Model model){
         HttpSession session = servletRequest.getSession(false);
         if(Objects.isNull(session)){
-            return "redirect:member/login";
+            return "redirect:login";
         }
         Long memberId = (Long) session.getAttribute(SESSION_KEY.MEMBER_ID);
         try{
@@ -178,12 +191,12 @@ public class MemberController {
             session.invalidate();
         }catch(Exception ex){
             log.error("회원탈퇴 처리중 예외발생 - 회원정보 : ID - {}, 예외정보 - {}", memberId, ex);
-            return alertRedirect("회원탈퇴중 예외가 발생했습니다", "member/profile", model);
+            return alertRedirect("회원탈퇴중 예외가 발생했습니다", "profile", model);
         }
-
-        return alertRedirect("회원탈퇴를 완료하였습니다", "/", model);
+        return alertRedirect("회원탈퇴를 완료하였습니다", servletRequest.getContextPath(), model);
     }
 
+    // url은 location.href 에 들어가기 때문에 첫화면으로 가려면 컨텍스트패스로 넣어줘야 한다
     private String alertRedirect(String msg, String url, Model model){
         AlertMessageDTO alertDTO = AlertMessageDTO.builder()
                 .message(msg)

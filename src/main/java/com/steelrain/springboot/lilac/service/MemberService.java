@@ -55,6 +55,7 @@ public class MemberService implements IMemberService {
     @Transactional
     public boolean registerMember(MemberDTO memberDTO) throws DuplicateLilacMemberException, LilacRepositoryException {
         Long id = m_memberRepository.saveMember(memberDTO);
+        // 회원가입할때 기본강의노트를 생성하도록 LectureNoteService 에서 처리한다
         MemberRegistrationEvent registrationEvent = MemberRegistrationEvent.builder()
                 .memberNickname(memberDTO.getNickname())
                 .memberId(memberDTO.getId())
@@ -81,6 +82,7 @@ public class MemberService implements IMemberService {
                                 .nickname(editDTO.getNickname())
                                 .email(editDTO.getEmail())
                                 .description(editDTO.getDescription()).build();
+        // 회원프로필 이미지 처리
         if(!editDTO.getProfileImage().isEmpty()){
             dto.setProfileOriginal(editDTO.getProfileImage().getOriginalFilename());
             dto.setProfileSave(updateMemberProfile(editDTO.getProfileImage(),
@@ -93,6 +95,10 @@ public class MemberService implements IMemberService {
     @Override
     @Transactional
     public void deleteMember(Long memberId) {
+        String profileSavedPath = m_memberRepository.getMemberProfileSavePath(memberId);
+        // AWS S3에 저장된 이미지파일 삭제
+        m_awsAwsS3Repository.deleteMemberProfile(profileSavedPath);
+        // DB에서 회원정보 삭제
         m_memberRepository.deleteMember(memberId);
     }
 

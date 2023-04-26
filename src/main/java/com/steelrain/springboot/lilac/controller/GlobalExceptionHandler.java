@@ -11,6 +11,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public String handleException(Exception ex){
         log.error("전역에러 발생 : {}", ex);
-        return "error";
+        return "error/error";
     }
 }

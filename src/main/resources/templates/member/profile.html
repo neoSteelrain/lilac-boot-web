@@ -52,8 +52,7 @@
                     <div class="dashboard-menu">
                         <ul>
                             <!--              <li><a href="/lecture/lecture-note"><i class="lni lni-dashboard"></i> 강의노트</a></li>-->
-                            <li><a class="active" href="/member/profile"><i class="lni lni-pencil-alt"></i> 회원정보</a>
-                            </li>
+                            <li><a class="active" href="profile"><i class="lni lni-pencil-alt"></i> 회원정보</a></li>
                             <!--              <li><a href="my-items.html"><i class="lni lni-bolt-alt"></i> 메뉴3</a></li>-->
                         </ul>
                     </div>
@@ -68,7 +67,7 @@
                             <div class="image">
                                 <img id="profileImgPreViewLg" th:src="${memberInfo.profileSave == null} ? '/images/default-profile.jpg' : ${memberInfo.profileSave}">
                             </div>
-                            <form class="profile-setting-form was-validated" method="post" action="/member/profile" enctype="multipart/form-data">
+                            <form th:object="${memberInfo}" class="profile-setting-form was-validated" method="post" action="profile" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-lg-6 col-12">
                                         <div class="form-group">
@@ -119,6 +118,8 @@
                                         <div class="form-group upload-image">
                                             <label>프로필 이미지</label>
                                             <input name="profileImage" id="profileImage" type="file" placeholder="Upload Image" onchange="changeProfileImg()">
+                                            <span id="emailNotice" th:each="err : ${#fields.errors('email')}" th:if="${errStat.first}" th:text="${err}"class="text-danger" ></span>
+                                            <span th:each="err : ${#fields.errors('profileImage')}" th:if="${errStat.first}" th:text="${err}" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-12">
@@ -129,6 +130,7 @@
                                         </div>
                                     </div>
                                     <div class="col-12">
+                                        <span th:each="err : ${#fields.globalErrors()}" th:if="${errStat.first}" th:text="${err}" class="text-danger"></span>
                                         <div class="form-group button mb-0">
                                             <button type="submit" class="btn ">회원정보 수정</button>
                                         </div>
@@ -196,7 +198,8 @@
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/lilac-common.js}"></script>
 <script th:inline="javascript">
-    const FILE_SIZE = 1024 * 256;
+    const ctxPath = [[${#request.contextPath}]];
+    const FILE_SIZE = 1024 * 4092;
     function changeProfileImg(){
         let files = $('#profileImage').prop('files');
         if(files == undefined && files.length == 0){
@@ -210,14 +213,16 @@
         let reader = new FileReader();
         reader.onload = (e) => {
             $('#profileImgPreViewLg').attr('src', e.target.result);
-            $('#profileImgPreViewSm').attr('src', e.target.result);
+            console.log("선택된 프로필 이미지 : "+e.target.result);
+            console.log("헤더 프로필 이미지 : "+$('#headerProfileImg').attr('src'));
+            //$('#headerProfileImg').attr('src', e.target.result);
         }
         reader.readAsDataURL(files[0]);
     }
 
     function deleteMember(){
         const form = $("#deleteMemberForm");
-        form.attr("action", "/member/delete");
+        form.attr("action", "delete");
         form.attr("method", "post")
         $("#deleteMemberForm").submit();
     }

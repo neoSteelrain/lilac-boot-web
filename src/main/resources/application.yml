@@ -8,10 +8,17 @@ spring:
   messages:
     basename: errors
 
+  servlet:
+    multipart:
+      max-file-size: 10485760
+
 server:
   servlet:
     session:
       tracking-modes: cookie
+    context-path: /lilac
+
+
 
 mybatis:
   config-location: classpath:/mybatis/mybatis-config.xml

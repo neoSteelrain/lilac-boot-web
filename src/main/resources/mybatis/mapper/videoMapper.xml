@@ -115,6 +115,6 @@
         SELECT yt.video_id, ref.progress, yt.duration
         FROM ref_tbl_lecture_youtube ref INNER JOIN tbl_youtube yt
             ON ref.youtube_id=yt.id
-        WHERE ref.id=#{lectureVideoId};
+        WHERE ref.id=#{lectureVideoId}
     </select>
 </mapper>

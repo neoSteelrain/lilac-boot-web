@@ -177,10 +177,11 @@
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/lilac-common.js}"></script>
 <script th:inline="javascript">
+    const ctxPath = [[${#request.contextPath}]];
     const showBookAddModal = (argBookId) => {
         $.ajax({
             type: "get",
-            url: "/lecture/model-book-template",
+            url: ctxPath+"/lecture/model-book-template",
             dataType: "text",
             data: {bookId: argBookId},
             success: function (data) {
@@ -198,14 +199,13 @@
     const addBookToLectureNote = () =>{
         const paramBookId = [[${bookDetailInfo.bookDTO.id}]];
         const paramLectureNoteId = $("#lectureNoteSelect").val(); // book-add-modal.html에 있는 셀렉트박스 태그
-        console.log("paramBookId : "+paramBookId);
         let param = {
             "bookId" : paramBookId,
             "lectureNoteId" : paramLectureNoteId
         }
         $.ajax({
             type:"post",
-            url:"/lecture/api/addBook",
+            url: ctxPath+"/lecture/api/addBook",
             headers: {"Content-Type": "application/json"},
             data: JSON.stringify(param),
             success: function (result){

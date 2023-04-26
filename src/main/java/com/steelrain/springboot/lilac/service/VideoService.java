@@ -141,7 +141,12 @@ public class VideoService implements IVideoService {
             videoProgress.setProgressRate(VideoUtils.calcProgressRate(videoProgress.getDuration(), videoProgress.getProgress()));
             return videoProgress;
         }else{
-            return null;
+            return YoutubeVideoProgressDTO.builder()
+                    .progress(0)
+                    .duration(null)
+                    .progressRate(0.0)
+                    .videoId(null)
+                    .build();
         }
     }
 

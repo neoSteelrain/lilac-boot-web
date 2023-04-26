@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Objects;
@@ -24,7 +25,7 @@ import java.util.Objects;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/lecture")
+@RequestMapping("lecture")
 public class LectureController {
 
     private final ILectureNoteService m_lectureService;
@@ -66,7 +67,7 @@ public class LectureController {
         m_lectureService.removePlayList(memberId, noteId, playListId);
         attributes.addAttribute("noteId", noteId);
 
-        return new RedirectView("lecture/lecture-note-member");
+        return new RedirectView("lecture-note-member");
     }
 
     @PostMapping("/remove-book")
@@ -76,7 +77,7 @@ public class LectureController {
         m_lectureService.removeBook(refId);
         attributes.addAttribute("noteId", noteId);
 
-        return new RedirectView("lecture/lecture-note-member");
+        return new RedirectView("lecture-note-member");
     }
 
     @GetMapping("/edit-note")
@@ -95,6 +96,11 @@ public class LectureController {
         model.addAttribute("licenseCodes",m_keywordCategoryCacheService.getLicenseCodeList());
         model.addAttribute("subjectCodes",m_keywordCategoryCacheService.getSubjectCodeList());
 
+        /*
+            1. 강의노트 수정하기 위해 모달창을 만드는 페이지로 forward
+            2. 모달창에서 수정을 마친다
+            3. 모달창에서는 수정정보를 edit-note 로 post 요청을 해서 수정을 완료 한다
+         */
         return "lecture/lecture-note-edit-modal";
     }
 
@@ -104,7 +110,7 @@ public class LectureController {
         if(bindingResult.hasErrors()){
             log.info("강의노트 수정에러 : {}", bindingResult);
             attributes.addAttribute("noteId", noteEditDTO.getNoteId());
-            return new RedirectView("lecture/lecture-note-member");
+            return new RedirectView("lecture-note-member");
         }
         LectureNoteDTO noteDTO = new LectureNoteDTO();
         noteDTO.setId(noteEditDTO.getNoteId());
@@ -116,14 +122,13 @@ public class LectureController {
         m_lectureService.editLectureNote(noteDTO);
         attributes.addAttribute("noteId", noteEditDTO.getNoteId());
 
-        return new RedirectView("lecture/lecture-note-member");
+        return new RedirectView("lecture-note-member");
     }
 
     @PostMapping("/remove-note")
     public String removeLectureNote(@RequestParam("noteId") Long noteId){
         m_lectureService.removeLectureNote(noteId);
-
-        return "redirect:lecture/lecture-note-member";
+        return "redirect:lecture-note-member";
     }
 
     @GetMapping("modal-playlist-template")

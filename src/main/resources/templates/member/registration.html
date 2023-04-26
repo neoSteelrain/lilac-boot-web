@@ -48,7 +48,7 @@
                 <div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-12">
                     <div class="form-head">
                         <h6 class="title">회원가입</h6>
-                        <form action="/member/registration" th:object="${memberReg}" method="post">
+                        <form action="registration" th:object="${memberReg}" method="post">
                             <span th:each="err: ${#fields.globalErrors()}" th:if="${errStat.first}" th:text="${err}" class="text-danger"></span>
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="ipt-nickname" th:field="*{nickname}" min="1" maxlength="20" placeholder="닉네임" onblur="checkDuplicatedId()" >
@@ -101,7 +101,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <p class="outer-link">이미 가입이 되어 있으신가요? <a href="/member/login"> 로그인</a>
+                            <p class="outer-link">이미 가입이 되어 있으신가요? <a href="login"> 로그인</a>
                             </p>
                         </form>
                     </div>
@@ -124,6 +124,7 @@
     <script th:src="@{/js/main.js}"></script>
     <script th:src="@{/js/lilac-lib-region.js}"></script>
     <script th:inline="javascript">
+        const ctxPath = [[${#request.contextPath}]];
         function checkDuplicatedId(){
             const nickNameInput = $('#ipt-nickname').val();
             const nickNameNotice = $('#nickNameNoticeJs');
@@ -141,7 +142,7 @@
             }
             $.ajax({
                 type: "get",
-                url: "/member/duplicated-nickname/" + nickNameInput,
+                url: ctxPath+"/member/duplicated-nickname/" + nickNameInput,
                 success: function (data) {
                     nickNameNotice.attr('class','text-success');
                     nickNameNotice.html('사용가능한 닉네임입니다.');
@@ -177,7 +178,7 @@
             }
             $.ajax({
                 type: "get",
-                url: "/member/duplicated-email/" + emailInput,
+                url: ctxPath+"/member/duplicated-email/" + emailInput,
                 success: function (data) {
                     emailNotice.attr('class','text-success');
                     emailNotice.html('사용가능한 이메일입니다.');

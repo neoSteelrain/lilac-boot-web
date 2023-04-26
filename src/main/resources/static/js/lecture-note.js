@@ -2,7 +2,7 @@ function showPlaylistAddModal(paramPlayListId) {
     const memberIdVal = $("#memberIdHidden").val();
     $.ajax({
         type: "get",
-        url: "/lecture/modal-playlist-template",
+        url: ctxPath+"/lecture/modal-playlist-template",
         dataType: "text",
         data: {
             memberId: memberIdVal,
@@ -26,7 +26,7 @@ function likeVideo(paramVideoId) {
     }
     $.ajax({
         type: "post",
-        url: "/video/api/like-video",
+        url: ctxPath+"/video/api/like-video",
         headers: {"Content-Type": "application/json"},
         data: JSON.stringify(param),
         success: function (result) {
@@ -56,9 +56,10 @@ function dislikeVideo(paramVideoId) {
     let param = {
         "videoId": paramVideoId
     }
+    console.log("dislikeVideo - ctxPath : "+ctxPath);
     $.ajax({
         type: "post",
-        url: "/video/api/dislike-video",
+        url: ctxPath+"/video/api/dislike-video",
         headers: {"Content-Type": "application/json"},
         data: JSON.stringify(param),
         success: function (result) {

@@ -3,8 +3,10 @@ package com.steelrain.springboot.lilac.repository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -66,5 +68,14 @@ public class AwsS3RepositoryTests {
     @Test
     public void AwsS3파일삭제_테스트(){
         awsS3Repository.deleteMemberProfile(testFileName);
+    }
+
+    @Test
+    @DisplayName("S3프로필경로에서파일이름추출테스트")
+    public void extractFileName(){
+        String src = "https://lilac-springboot-web.s3.ap-northeast-2.amazonaws.com/member-profile/f3c9a6a4-dfbd-4dba-abd1-76ce6a36a37e.png";
+        String name = FilenameUtils.getName(src);
+        log.debug("name : {}", name);
+        assertThat("f3c9a6a4-dfbd-4dba-abd1-76ce6a36a37e.png".equals(name)).isTrue();
     }
 }

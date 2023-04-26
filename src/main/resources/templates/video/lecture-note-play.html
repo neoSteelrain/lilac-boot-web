@@ -152,6 +152,7 @@
 <script th:src="@{/js/lilac-common.js}"></script>
 <script th:src="@{/js/lecture-note.js}"></script>
 <script th:inline="javascript">
+    const ctxPath = [[${#request.contextPath}]];
     // 현재 선택된 영상의 lectureVideoId
     const SESSION_STORAGE_KEY_VIDEO = 'lilac-play-videoId';
 
@@ -194,13 +195,13 @@
         }
         $.ajax({
             type: "post",
-            url: "/lecture/api/addPlayList",
+            url: ctxPath+"/lecture/api/addPlayList",
             headers: {"Content-Type": "application/json"},
             data: JSON.stringify(param),
             success: function (resultJson) {
                 alert("재생목록을 강의노트에 추가하였습니다.");
                 $("#addNoteModal").modal("hide");
-                document.location.href = "/video/lec-playlist-detail?youtubePlaylistId=" + paramPlayListId;
+                document.location.href = ctxPath+"/video/lec-playlist-detail?youtubePlaylistId=" + paramPlayListId;
             },
             error: function (jqXHR) {
                 if (jqXHR.status == 401) {
@@ -219,12 +220,14 @@
         }
         $.ajax({
             type:"post",
-            url:"/video/api/update-playtime",
+            url: ctxPath+"/video/api/update-playtime",
             headers: {"Content-Type": "application/json"},
             data: JSON.stringify(param),
             success:function (result){
                 let videoId = '#'+result.videoId;
-                $(videoId).text(result.progressRate + '%');
+                if(result.progressRate > 0){
+                    $(videoId).text(result.progressRate + '%');
+                }
             },
             error:function (jqXHR){
                 if(jqXHR.status == 401){
@@ -242,7 +245,7 @@
     function playSelectedVideo(paramVideoOriginId, paramVideoId, paramLecVideoId) {
         $.ajax({
             type: "get",
-            url: "/video/video-template",
+            url: ctxPath+"/video/video-template",
             dataType: "text",
             data: {videoId: paramVideoId},
             success: function (result) {

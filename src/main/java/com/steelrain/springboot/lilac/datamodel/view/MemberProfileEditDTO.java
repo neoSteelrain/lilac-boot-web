@@ -1,6 +1,7 @@
 package com.steelrain.springboot.lilac.datamodel.view;
 
 import com.steelrain.springboot.lilac.common.MEMBER_FILED_REGEXP;
+import com.steelrain.springboot.lilac.validate.ProfileImageFormat;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -46,6 +47,7 @@ public class MemberProfileEditDTO {
     @Length(min=0, max=255)
     private String profileOriginal;
 
+    @ProfileImageFormat
     private MultipartFile profileImage;
 
     @Nullable

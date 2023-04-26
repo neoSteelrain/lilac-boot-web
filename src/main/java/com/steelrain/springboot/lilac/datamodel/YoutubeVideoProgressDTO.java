@@ -1,8 +1,15 @@
 package com.steelrain.springboot.lilac.datamodel;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+import javax.validation.constraints.NotBlank;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
 public class YoutubeVideoProgressDTO {
     private String videoId;
     private long progress;

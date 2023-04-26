@@ -371,10 +371,11 @@
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/lilac-common.js}"></script>
 <script th:inline="javascript">
+    const ctxPath = [[${#request.contextPath}]];
     function editLectureNoteModal(argNoteId) {
         $.ajax({
             type: "get",
-            url: "/lecture/edit-note",
+            url: ctxPath+"/lecture/edit-note",
             data: {noteId: argNoteId},
             dataType: "text",
             success: function (data) {
@@ -448,13 +449,13 @@
         };
         $.ajax({
             type: "post",
-            url: "/lecture/api/addNote",
+            url: ctxPath+"/lecture/api/addNote",
             headers: {"Content-Type": "application/json"},
             data: JSON.stringify(jsonRequest),
             success: function (result) {
                 alert("강의노트를 추가하였습니다.");
                 $("#lectureNoteAddModal").modal("hide");
-                document.location.href = "/lecture/lecture-note-member?noteId="+[[${noteDetail.noteId}]];
+                document.location.href = ctxPath + "/lecture/lecture-note-member?noteId="+[[${noteDetail.noteId}]];
             },
             error: function (jqXHR) {
                 if (jqXHR.status == 409) {
@@ -475,7 +476,7 @@
         tmp.setAttribute("value", noteId);
         form.appendChild(tmp);
         form.setAttribute("method", "post");
-        form.setAttribute("action", "/lecture/remove-note");
+        form.setAttribute("action", "remove-note");
         document.body.appendChild(form);
         form.submit();
         document.body.removeChild(form);
@@ -494,7 +495,7 @@
         form.appendChild(tmp1);
         form.appendChild(tmp2);
         form.setAttribute("method", "post");
-        form.setAttribute("action", "/lecture/remove-book");
+        form.setAttribute("action", "remove-book");
         document.body.appendChild(form);
         form.submit();
         document.body.removeChild(form);
@@ -513,7 +514,7 @@
         form.appendChild(tmp1);
         form.appendChild(tmp2);
         form.setAttribute("method", "post");
-        form.setAttribute("action", "/lecture/remove-playlist");
+        form.setAttribute("action", "remove-playlist");
         document.body.appendChild(form);
         form.submit();
         document.body.removeChild(form);
