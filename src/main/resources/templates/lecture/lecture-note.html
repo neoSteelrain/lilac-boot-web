@@ -423,6 +423,7 @@
     function addLectureNote() {
         const m_licenseCode = $("#license option:selected").val();
         const m_subjectCode = $("#subject option:selected").val();
+        const noteId = [[${noteDetail.noteId}]];
         if(m_licenseCode == -1 && m_subjectCode == -1){
             $("#licenseNotice").text("자격증 또는 키워드를 선택하셔야 합니다");
             return;
@@ -455,7 +456,7 @@
             success: function (result) {
                 alert("강의노트를 추가하였습니다.");
                 $("#lectureNoteAddModal").modal("hide");
-                document.location.href = ctxPath + "/lecture/lecture-note-member?noteId="+[[${noteDetail.noteId}]];
+                document.location.href = ctxPath + "/lecture/lecture-note-member?noteId="+noteId;
             },
             error: function (jqXHR) {
                 if (jqXHR.status == 409) {

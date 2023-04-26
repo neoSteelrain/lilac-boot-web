@@ -70,7 +70,7 @@ public class LectureNoteServiceTests {
         Long noteId = lectureNoteService.addLectureNote(1L, "1번 강의노트", "첫번째 강의노트 입니다. 열심히 하겠습니다.", 1, 2);
         assertThat(noteId != null);
         log.info("noteId = {}", noteId);
-        lectureNoteService.removeLectureNote(noteId);
+        lectureNoteService.removeLectureNote(noteId, 2L);
     }
 
     @Test

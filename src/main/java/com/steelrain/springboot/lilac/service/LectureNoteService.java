@@ -5,6 +5,7 @@ import com.steelrain.springboot.lilac.common.StringFormatter;
 import com.steelrain.springboot.lilac.datamodel.*;
 import com.steelrain.springboot.lilac.datamodel.view.BookAddModalDTO;
 import com.steelrain.springboot.lilac.datamodel.view.LectureNoteDetailDTO;
+import com.steelrain.springboot.lilac.datamodel.view.LectureNoteStatus;
 import com.steelrain.springboot.lilac.datamodel.view.PlayListAddModalDTO;
 import com.steelrain.springboot.lilac.event.LicenseInfoByLectureNoteEvent;
 import com.steelrain.springboot.lilac.event.MemberRegistrationEvent;
@@ -75,11 +76,21 @@ public class LectureNoteService implements ILectureNoteService{
 
     @Transactional
     @Override
-    public void removeLectureNote(Long noteId){
+    public LectureNoteStatus removeLectureNote(Long noteId, Long memberId){
         try{
+            int noteCnt = m_lectureNoteRepository.findLectureNoteCount(memberId);
+            if(noteCnt == 1){
+                return LectureNoteStatus.builder()
+                        .isLast(true)
+                        .isDeleted(false)
+                        .build();
+            }
             deleteLectureNote(noteId);
+            return LectureNoteStatus.builder()
+                    .isLast(false)
+                    .isDeleted(true)
+                    .build();
         }catch(Exception ex){
-            log.error("강의노트 삭제 예외 - removeLectureNote() 예외 발생 - {}", ex);
             throw new LectureNoteException( String.format("강의노트 삭제 실패 - 강의노트 ID : %s", noteId), ex, noteId);
         }
     }
@@ -90,7 +101,6 @@ public class LectureNoteService implements ILectureNoteService{
         try {
             updateLectureNote(lectureNoteDTO);
         } catch (Exception ex) {
-            log.error("강의노트 수정 예외 - modifyLectureNote() 예외 발생 - {}", ex);
             throw new LectureNoteException(String.format("강의노트 삭제 실패 - 강의노트 정보 : %s", lectureNoteDTO.toString()), ex, lectureNoteDTO);
         }
     }
@@ -366,8 +376,6 @@ public class LectureNoteService implements ILectureNoteService{
         return ((double)totalPlaytime / totalDuration) * 100;
     }
 
-
-
     /*
         회원의 자격증정보 초기화
         - licenseCode, subjectCode 2개 둘다 null인 경우는 기본강의노트이므로, 자격증정보를 얻어오지 않고 곧바로 리턴한다.
@@ -469,7 +477,6 @@ public class LectureNoteService implements ILectureNoteService{
     private void deleteLectureNote(Long noteId){
         m_lectureNoteRepository.deleteLectureNote(noteId);
     }
-
 
     private Long createLectureNote(Long memberId, String title, Integer licenseId, Integer subjectId){
         LectureNoteDTO lectureNoteDTO = LectureNoteDTO.builder()

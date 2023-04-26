@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.controller;
 
+import com.steelrain.springboot.lilac.common.AlertRedirectUtil;
 import com.steelrain.springboot.lilac.common.ICacheService;
 import com.steelrain.springboot.lilac.common.SESSION_KEY;
 import com.steelrain.springboot.lilac.datamodel.*;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
@@ -110,6 +112,7 @@ public class MemberController {
         boolean isRegist = false;
         try{
             isRegist = m_memberService.registerMember(memberDTO);
+            return  isRegist ? "redirect:login" : "redirect:registration";
         }catch(DuplicateLilacMemberException dme){
             log.error("회원가입 중복 예외발생 : 회원정보 - {}, 예외정보 - {}", memberRegDTO, dme);
             bindingResult.addError(new ObjectError("memberReg", "이미 가입된 회원입니다. 다른 닉네임 또는 이메일을 입력해주세요"));
@@ -119,7 +122,6 @@ public class MemberController {
             bindingResult.addError(new ObjectError("memberReg", "회원가입에 오류가 발생하였습니다"));
             return "member/registration";
         }
-        return  isRegist ? "redirect:login" : "redirect:registration";
     }
 
     @GetMapping("/profile")
@@ -140,7 +142,6 @@ public class MemberController {
     }
 
     // TODO 에러가 났을경우 프로필 이미지 처리를 프런트에서 처리할 방법을 알아보자
-
     @PostMapping("/profile")
     public String editMemberProfile(@Validated @ModelAttribute("memberInfo") MemberProfileEditDTO editDTO, BindingResult bindingResult,
                                           HttpSession session, Model model){
@@ -161,8 +162,9 @@ public class MemberController {
                 session.setAttribute(SESSION_KEY.MEMBER_PROFILE, updatedMember.getProfileSave());
             }else{
                 log.error("회원정보수정 업데이트 에러 : 회원입력정보 - {}, 현재로그인ID - {}", editDTO, memberId);
-                return alertRedirect("회원정보 수정에 문제가 발생했습니다.", "profile", model);
+                return AlertRedirectUtil.alertRedirect("회원정보 수정에 문제가 발생했습니다.", "profile", model);
             }
+            return "redirect:profile";
         }catch(DuplicateLilacMemberException dme){
             log.error("회원정보수정 중복 예외 발생 : 회원정보 - {}, 예외정보 - {}", editDTO, dme);
             bindingResult.addError(new ObjectError("memberInfo","이미 존재하는 닉네임 또는 이메일입니다. 다른 닉네임, 이메일을 입력해주세요"));
@@ -176,7 +178,6 @@ public class MemberController {
             bindingResult.addError(new ObjectError("memberInfo","회원정보 업데이트 도중 문제가 발행했습니다. 관리자에게 문의하세요"));
             return "member/profile";
         }
-        return "redirect:profile";
     }
 
     @PostMapping("/delete")
@@ -189,22 +190,15 @@ public class MemberController {
         try{
             m_memberService.deleteMember(memberId);
             session.invalidate();
+            String ctxPath = servletRequest.getContextPath();
+            return AlertRedirectUtil.alertRedirect("회원탈퇴를 완료하였습니다", StringUtils.hasText(ctxPath) ? ctxPath : "/", model);
         }catch(Exception ex){
             log.error("회원탈퇴 처리중 예외발생 - 회원정보 : ID - {}, 예외정보 - {}", memberId, ex);
-            return alertRedirect("회원탈퇴중 예외가 발생했습니다", "profile", model);
+            return AlertRedirectUtil.alertRedirect("회원탈퇴중 예외가 발생했습니다", "profile", model);
         }
-        return alertRedirect("회원탈퇴를 완료하였습니다", servletRequest.getContextPath(), model);
     }
 
-    // url은 location.href 에 들어가기 때문에 첫화면으로 가려면 컨텍스트패스로 넣어줘야 한다
-    private String alertRedirect(String msg, String url, Model model){
-        AlertMessageDTO alertDTO = AlertMessageDTO.builder()
-                .message(msg)
-                .redirectURL(url)
-                .build();
-        model.addAttribute("alertDTO", alertDTO);
-        return "common/alertMessage";
-    }
+
 
     @GetMapping("/duplicated-email/{email}")
     public ResponseEntity<String> checkDuplicatedEmail(@PathVariable("email") String email){

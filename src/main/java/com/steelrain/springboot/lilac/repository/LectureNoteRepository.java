@@ -135,6 +135,11 @@ public class LectureNoteRepository implements ILectureNoteRepository {
         return m_lectureNoteMapper.findTotalProgress(memberId, noteId, playlistId);
     }
 
+    @Override
+    public int findLectureNoteCount(Long memberId) {
+        return m_lectureNoteMapper.findLectureNoteCount(memberId);
+    }
+
     /**
      * 채널정보를 가져오는데 사용하는 DTO
      * LectureNoteRepository, LectureNoteMapper 에서만 사용하기 때문에 따로 dto 패키지에서 선언하지 않았다

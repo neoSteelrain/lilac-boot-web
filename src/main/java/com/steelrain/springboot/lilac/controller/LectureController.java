@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.controller;
 
+import com.steelrain.springboot.lilac.common.AlertRedirectUtil;
 import com.steelrain.springboot.lilac.common.ICacheService;
 import com.steelrain.springboot.lilac.common.SESSION_KEY;
 import com.steelrain.springboot.lilac.datamodel.LectureNoteDTO;
@@ -50,7 +51,7 @@ public class LectureController {
         // 강의노트 상세정보 설정
         Long currentNoteId = null;
         if(noteDTOList.size() == 0){
-            model.addAttribute("noteDetail", null);
+            model.addAttribute("noteDetail", new LectureNoteDetailDTO() );
         }else{
             currentNoteId = Objects.isNull(noteId) ? noteDTOList.get(0).getId() : noteId;
             model.addAttribute("noteDetail", m_lectureService.getLectureNoteDetailInfoByMember(memberDTO.getId(), currentNoteId));
@@ -105,12 +106,12 @@ public class LectureController {
     }
 
     @PostMapping("/edit-note")
-    public RedirectView editLectureNote(@Validated @ModelAttribute("noteEditDTO")LectureNoteEditDTO noteEditDTO,
-                                        BindingResult bindingResult, RedirectAttributes attributes){
+    public String editLectureNote(@Validated @ModelAttribute("noteEditDTO")LectureNoteEditDTO noteEditDTO,
+                                        BindingResult bindingResult, RedirectAttributes attributes, Model model){
         if(bindingResult.hasErrors()){
             log.info("강의노트 수정에러 : {}", bindingResult);
             attributes.addAttribute("noteId", noteEditDTO.getNoteId());
-            return new RedirectView("lecture-note-member");
+            return "redirect:lecture-note-member";
         }
         LectureNoteDTO noteDTO = new LectureNoteDTO();
         noteDTO.setId(noteEditDTO.getNoteId());
@@ -119,16 +120,29 @@ public class LectureController {
         noteDTO.setLicenseId(noteEditDTO.getLectureId());
         noteDTO.setSubjectId(noteEditDTO.getSubjectId());
 
-        m_lectureService.editLectureNote(noteDTO);
-        attributes.addAttribute("noteId", noteEditDTO.getNoteId());
-
-        return new RedirectView("lecture-note-member");
+        try{
+            m_lectureService.editLectureNote(noteDTO);
+            attributes.addAttribute("noteId", noteEditDTO.getNoteId());
+            return "redirect:lecture-note-member";
+        }catch(Exception ex){
+            log.error("강의노트 수정 중 예외발생 - 강의노트정보 - {}, 예외정보 - {]", noteDTO, ex);
+            return AlertRedirectUtil.alertRedirect("강의노트 수정도중 오류가 발생했습니다", "lecture-note-member", model);
+        }
     }
 
     @PostMapping("/remove-note")
-    public String removeLectureNote(@RequestParam("noteId") Long noteId){
-        m_lectureService.removeLectureNote(noteId);
-        return "redirect:lecture-note-member";
+    public String removeLectureNote(@RequestParam("noteId") Long noteId, HttpSession session, Model model){
+        Long memberId = (Long) session.getAttribute(SESSION_KEY.MEMBER_ID);
+        try{
+            LectureNoteStatus lecStatus = m_lectureService.removeLectureNote(noteId, (Long) session.getAttribute(SESSION_KEY.MEMBER_ID));
+            if(lecStatus.isLast()){
+                return AlertRedirectUtil.alertRedirect("강의노트는 전부 삭제할 수 없습니다", "lecture-note-member", model);
+            }
+            return "redirect:lecture-note-member";
+        }catch(Exception ex){
+            log.error("강의노트 삭제중 예외 발생 : 강의노트ID - {}, 회원ID - {}, 예외정보 - {}", noteId, memberId, ex);
+            return AlertRedirectUtil.alertRedirect("강의노트 삭제도중 오류가 발생했습니다", "lecture-note-member", model);
+        }
     }
 
     @GetMapping("modal-playlist-template")

@@ -11,7 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 
 @Slf4j
-@RestControllerAdvice
+@RestControllerAdvice(assignableTypes = {AdminRestController.class, LectureRestController.class, VideoRestController.class})
 public class RestControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ValidationErrorException.class)

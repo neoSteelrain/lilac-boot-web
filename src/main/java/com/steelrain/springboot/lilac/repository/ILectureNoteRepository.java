@@ -45,4 +45,6 @@ public interface ILectureNoteRepository {
     String[] findAllDuration(Long playlistId);
 
     long findTotalProgress(Long memberId, Long noteId, Long playlistId);
+
+    int findLectureNoteCount(Long memberId);
 }

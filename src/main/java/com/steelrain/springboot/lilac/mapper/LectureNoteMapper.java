@@ -65,4 +65,7 @@ public interface LectureNoteMapper {
 
     @Select("SELECT ifnull(sum(progress), 0) FROM ref_tbl_lecture_youtube WHERE lecture_member_id=#{memberId} AND lecture_id=#{noteId} AND youtube_playlist_id=#{playlistId}")
     long findTotalProgress(@Param("memberId")Long memberId, @Param("noteId") Long noteId, @Param("playlistId") Long playlistId);
+
+    @Select("SELECT count(id) FROM tbl_lecture WHERE member_id=#{memberId}")
+    int findLectureNoteCount(@Param("memberId")Long memberId);
 }
