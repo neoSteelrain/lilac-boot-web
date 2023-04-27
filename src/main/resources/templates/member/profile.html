@@ -43,8 +43,7 @@
                 <!-- Start Dashboard Sidebar -->
                 <div class="dashboard-sidebar">
                     <div class="user-image">
-                        <img id="profileImgPreViewSm" th:src="${memberInfo.profileSave == null} ? '/images/default-profile.jpg' : ${memberInfo.profileSave}">
-<!--                        <img th:unless="${memberInfo.profileSave == null}" th:src="${memberInfo.profileSave}">-->
+                        <img id="profileImgPreViewSm" th:src="${memberInfo.profileSave == null} ? ${#request.contextPath}+'/images/default-profile.jpg' : ${memberInfo.profileSave}">
                         <h3 th:text="${memberInfo.nickname}">
                             <span th:text="${memberInfo.regDate}"></span>
                         </h3>
@@ -65,7 +64,7 @@
                         <h3 class="block-title">회원정보</h3>
                         <div class="inner-block">
                             <div class="image">
-                                <img id="profileImgPreViewLg" th:src="${memberInfo.profileSave == null} ? '/images/default-profile.jpg' : ${memberInfo.profileSave}">
+                                <img id="profileImgPreViewLg" th:src="${memberInfo.profileSave == null} ? ${#request.contextPath}+'/images/default-profile.jpg' : ${memberInfo.profileSave}">
                             </div>
                             <form th:object="${memberInfo}" class="profile-setting-form was-validated" method="post" action="profile" enctype="multipart/form-data">
                                 <div class="row">

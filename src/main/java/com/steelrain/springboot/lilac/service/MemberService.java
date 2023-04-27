@@ -96,10 +96,10 @@ public class MemberService implements IMemberService {
     @Transactional
     public void deleteMember(Long memberId) {
         String profileSavedPath = m_memberRepository.getMemberProfileSavePath(memberId);
-        // AWS S3에 저장된 이미지파일 삭제
-        m_awsAwsS3Repository.deleteMemberProfile(profileSavedPath);
         // DB에서 회원정보 삭제
         m_memberRepository.deleteMember(memberId);
+        // AWS S3에 저장된 이미지파일 삭제, S3삭제가 DB삭제 다음에 와야 DB에서 예외가 발생하면 실행하지 않는다
+        m_awsAwsS3Repository.deleteMemberProfile(profileSavedPath);
     }
 
     /*

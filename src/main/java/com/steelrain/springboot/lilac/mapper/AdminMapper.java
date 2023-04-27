@@ -68,5 +68,11 @@ public interface AdminMapper {
     void deleteFinalCandiPlayList(@Param("plList")List<Long> plList);
 
     @Delete("DELETE FROM tbl_recommended_playlist WHERE youtube_playlist_id=#{playlistId}")
-    void removeRecommendPlayList(Long playListId);
+    void removeRecommendPlayList(@Param("playlistId") Long playListId);
+
+    @Select("SELECT count(id) FROM tbl_book")
+    int findTotalBookCount();
+
+    @Select("SELECT count(id) FROM tbl_book WHERE reg_date > #{fromDate} AND reg_date < #{toDate}")
+    int findTodayBookCount(@Param("fromDate") String fromDate, @Param("toDate") String toDate);
 }

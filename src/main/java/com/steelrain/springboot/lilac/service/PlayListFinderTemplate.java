@@ -14,9 +14,21 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 public class PlayListFinderTemplate {
+
     private final IAdminRepository m_adminRepository;
 
 
+    /**
+     * 일정 기간동안 등록된 카테고리별 재생목록을 찾아온다
+     * 페이징 파라미터를 입력받아 페이징 처리까지 한다
+     * @param fromDate 시작 날짜, 등록일 기준 예) 2024-1-01 00:00:00 문자열 형식이어야 한다
+     * @param toDate 끝 날짜, 등록일 기준 예) 2024-01-02 59:59:59 문자열 형식이어야 한다
+     * @param pageNum 페이징 시작 페이지
+     * @param pageCount 한 페이지에 들어갈 항목 개수
+     * @param licenseIds 카테고리로 필터링할 자격증 종류, 코드가 아니고 자격증 DB 테이블의 ID 값
+     * @param subjectIds 카테고리로 필터링할 주제키워드 종류, 코드가 아니고 주제키워드 DB 테이블의 ID 값
+     * @return 기간, 카테고리로 필터링, 페이징 된 재생목록정보
+     */
     public AdminPlayListSearchResultDTO getPlayListByRange(String fromDate, String toDate, int pageNum, int pageCount, int[] licenseIds, int[] subjectIds){
         boolean isSelectAll = !(StringUtils.hasText(fromDate) || StringUtils.hasText(toDate));
         List<AdminYoutubePlayListDTO> plList = null;

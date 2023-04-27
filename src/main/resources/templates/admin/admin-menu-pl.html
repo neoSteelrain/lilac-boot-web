@@ -40,13 +40,13 @@
         <!-- Start Dashboard Sidebar -->
         <div class="dashboard-sidebar">
           <div class="user-image">
-            <img src="/images/default-profile.jpg" alt="#">
+            <img th:src="${#request.contextPath}+'/images/admin.png'" alt="#">
             <h3>관리자 메뉴</h3>
           </div>
           <div class="dashboard-menu">
             <ul>
-              <li><a class="active" th:href="@{/admin/admin-menu}"><i class="lni lni-youtube"></i> 추천재생목록</a></li>
-              <li><a href="javascript:void(0)"><i class="lni lni-bookmark"></i> 추천도서</a></li>
+              <li><a class="active" th:href="@{/admin/admin-menu-pl}"><i class="lni lni-youtube"></i> 추천재생목록</a></li>
+              <li><a th:href="@{/admin/admin-menu-book}"><i class="lni lni-bookmark"></i> 추천도서</a></li>
             </ul>
           </div>
         </div>

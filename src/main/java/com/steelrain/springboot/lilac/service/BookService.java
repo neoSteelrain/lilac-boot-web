@@ -62,7 +62,7 @@ public class BookService implements IBookService{
             }
             String tmpIsbn = book.getIsbn();
             kaKaoBookList.add(convertKakaoBookDTO(book,
-                                 StringUtils.containsWhitespace(tmpIsbn.trim()) ? StringUtils.tokenizeToStringArray(tmpIsbn, " ")[1] : tmpIsbn));
+                                 StringUtils.containsWhitespace(tmpIsbn.trim()) ? StringUtils.tokenizeToStringArray(tmpIsbn, " ")[1] : tmpIsbn, licenseCode, 0));
         }
 
         // 카카오책 검색결과를 DB에 저장하는 이벤트를 발생한다.
@@ -126,13 +126,14 @@ public class BookService implements IBookService{
     @Override
     public SubjectBookListDTO getSubjectBookList(int subjectCode, int pageNum, int bookCount) {
         String keyword = m_cacheService.getSubjectKeywordBook(subjectCode);
-        SubjectBookListDTO resultDTO = getBookListByKeyword(keyword, pageNum, bookCount);
+        SubjectBookListDTO resultDTO = getBookListByKeyword(subjectCode, keyword, pageNum, bookCount);
         resultDTO.setSubjectCode(subjectCode);
         resultDTO.setSubjectName(m_cacheService.getSubjectName(subjectCode));
         return resultDTO;
     }
 
-    private SubjectBookListDTO getBookListByKeyword(String keyword, int pageNum, int bookCount){
+    // 주제키워드 도서 검색을 처리한다,subjectCode는 주제키워드로 검색할때는 0 이상, 키워드로 검색할때는 0 이다
+    private SubjectBookListDTO getBookListByKeyword(int subjectCode, String keyword, int pageNum, int bookCount){
         KakaoBookSearchResponseDTO responseDTO = m_kaKoBookRepository.searchBookFromKakao(keyword, pageNum, bookCount);
         SubjectBookListDTO resultDTO = new SubjectBookListDTO();
         List<KakaoSearchedBookDTO> bookList = responseDTO.getKakaoSearchedBookList();
@@ -144,7 +145,7 @@ public class BookService implements IBookService{
             log.debug(String.format("===== > 카카오책 검색의 책1권의 KakaoSearchedBookDTO 정보 : %s", book.toString()));
             String tmpIsbn = book.getIsbn();
             kaKaoBookDTOList.add(convertKakaoBookDTO(book,
-                    StringUtils.containsWhitespace(tmpIsbn.trim()) ? StringUtils.tokenizeToStringArray(tmpIsbn, " ")[1] : tmpIsbn));
+                    StringUtils.containsWhitespace(tmpIsbn.trim()) ? StringUtils.tokenizeToStringArray(tmpIsbn, " ")[1] : tmpIsbn, 0, subjectCode));
         }
         resultDTO.setKeyword(keyword);
         resultDTO.setKakaoBookList(kaKaoBookDTOList);
@@ -195,7 +196,7 @@ public class BookService implements IBookService{
 
     @EventListener(KeywordBookSearchEvent.class)
     public void handleKeywordBookSearchEvent(KeywordBookSearchEvent event){
-        SubjectBookListDTO sbjBookListDTO = getBookListByKeyword(event.getKeyword(), event.getPageNum(), event.getBookCount());
+        SubjectBookListDTO sbjBookListDTO = getBookListByKeyword(0, event.getKeyword(), event.getPageNum(), event.getBookCount());
         sbjBookListDTO.setSubjectName(event.getKeyword());
         event.setKeywordBookListDTO(sbjBookListDTO);
     }
@@ -221,7 +222,12 @@ public class BookService implements IBookService{
         m_bookRepository.saveKakaoBookList(event.getKaKaoBookList());
     }
 
-    // 카카오 API로 검색된 결과를 DB에 저장하려고 할때 사용한다.
+    /*
+       카카오 API로 검색된 결과를 DB에 저장하려고 할때 사용한다
+       - 이벤트로 구현한 이유
+       1. 검색된 도서를 DB에 저장하는 기능은 별도의 스레드로 분리하기 쉽게 하지 위해 비동기 이벤트로 처리한다
+       2. 스스로 이벤트를 발행하고 스스로 이벤트를 비동기로 처리한다
+     */
     private void publishKaKaoBookSaveEvent(List<KaKaoBookDTO> bookList){
         if(bookList == null || bookList.size() == 0){
             return;
@@ -297,7 +303,7 @@ public class BookService implements IBookService{
         return resultDTOList;
     }
 
-    private KaKaoBookDTO convertKakaoBookDTO(KakaoSearchedBookDTO srcBook, String splitedIsbn){
+    private KaKaoBookDTO convertKakaoBookDTO(KakaoSearchedBookDTO srcBook, String splitedIsbn, int licenseCode, int subjectCode){
         return KaKaoBookDTO.builder()
                 .isbn13Long(Long.valueOf(splitedIsbn.trim()))
                 .isbn13(splitedIsbn)
@@ -312,6 +318,8 @@ public class BookService implements IBookService{
                 .salePrice(srcBook.getSalePrice())
                 .thumbnail(srcBook.getThumbnail())
                 .status(srcBook.getStatus())
+                .licenseId(licenseCode > 0 ? m_cacheService.getLicenseIdByCode(licenseCode) : null)
+                .subjectId(subjectCode > 0 ? m_cacheService.getSubjectIdByCode(subjectCode) : null)
                 .build();
     }
 }

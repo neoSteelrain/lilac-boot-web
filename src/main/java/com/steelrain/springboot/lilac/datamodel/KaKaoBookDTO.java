@@ -71,4 +71,8 @@ public class KaKaoBookDTO {
     private Timestamp updateDate;
 
     private Long isbn13Long;
+
+    private Integer licenseId;
+    private Integer subjectId;
+
 }

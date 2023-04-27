@@ -139,4 +139,17 @@ public class AdminService implements IAdminService {
                 .playlist(pl)
                 .build();
     }
+
+    // 도서 부분 처리 메서드들
+
+    @Override
+    public int getTotalBookCount() {
+        return m_adminRepository.findTotalBookCount();
+    }
+
+    @Override
+    public int getTodayBookCount() {
+        PeriodDate today = DateUtils.getToday();
+        return m_adminRepository.findTodayBookCount(today.getFromDate(), today.getToDate());
+    }
 }

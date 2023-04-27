@@ -58,4 +58,8 @@ public interface IAdminRepository {
     void deleteFinalCandiPlayList(List<Long> plList);
 
     void removeRecommendPlayList(Long playListId);
+
+    int findTotalBookCount();
+
+    int findTodayBookCount(String fromDate, String toDate);
 }

@@ -79,7 +79,7 @@ public class MemberController {
             session.setAttribute(SESSION_KEY.MEMBER_GRADE, memberDTO.getGrade());
             session.setAttribute(SESSION_KEY.MEMBER_PROFILE, memberDTO.getProfileSave());
             if(memberDTO.getGrade() == 1){
-                return "redirect:/admin/admin-menu";
+                return "redirect:/admin/admin-menu-pl";
             }
             return "redirect:" + redirectURL;
         }else{

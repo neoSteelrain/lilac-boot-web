@@ -11,6 +11,7 @@ import lombok.Setter;
 @Getter
 @Builder
 public class KeywordBookSearchEvent {
+    private int subjectCode;
     private String keyword;
     private short regionCode;
     private int detailRegionCode;

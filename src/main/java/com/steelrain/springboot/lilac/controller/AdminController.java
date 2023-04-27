@@ -20,13 +20,20 @@ public class AdminController {
     private final IAdminService m_adminService;
 
 
-    @GetMapping("/admin-menu")
+    @GetMapping("/admin-menu-pl")
     public String adminForm(Model model){
         model.addAttribute("totalPlcnt", m_adminService.getTotalPlayListCount());
         model.addAttribute("todayPlcnt", m_adminService.getTodayPlayListCount());
         model.addAttribute("weekPlcnt", m_adminService.getWeekPlayListCount());
         model.addAttribute("monthPlcnt", m_adminService.getMonthPlayListCount());
-        return "admin/admin-menu";
+        return "admin/admin-menu-pl";
+    }
+
+    @GetMapping("/admin-menu-book")
+    public String adminBookForm(Model model){
+        model.addAttribute("totalBookCnt", m_adminService.getTotalBookCount());
+        model.addAttribute("todayBookCnt", m_adminService.getTodayBookCount());
+        return "admin/admin-menu-book";
     }
 
     @PostMapping("/admin-playlist-template")

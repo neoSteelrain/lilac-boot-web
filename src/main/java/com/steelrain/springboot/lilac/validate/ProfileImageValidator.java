@@ -9,6 +9,8 @@ import javax.validation.ConstraintValidatorContext;
  * 회원의 프로필 이미지가 png, jpg, jpeg 형식인지 검증하는 검증기
  */
 public class ProfileImageValidator implements ConstraintValidator<ProfileImageFormat, MultipartFile> {
+
+    // TODO 이미지형식을 에노테이션 파라미터로 받도록 수정해야 한다
     private final static String PNG = "image/png";
     private final static String JPG = "image/jpg";
     private final static String JPEG = "image/jpeg";

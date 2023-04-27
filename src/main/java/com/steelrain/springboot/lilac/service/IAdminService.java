@@ -42,4 +42,9 @@ public interface IAdminService {
     AdminPlayListSearchResultDTO getRecommendPlayList();
 
     AdminPlayListSearchResultDTO removeRecommendPlayList(Long playListId);
+
+    int getTotalBookCount();
+
+    int getTodayBookCount();
+
 }

@@ -4,12 +4,12 @@
 <mapper namespace="com.steelrain.springboot.lilac.mapper.LicenseBookMapper">
 
     <insert id="saveKakaoBookList" parameterType="KaKaoBookDTO">
-        INSERT INTO tbl_book(isbn13,title,contents,url,publish_date,authors,publisher,translators,price,sale_price,thumbnail,status) VALUES
+        INSERT INTO tbl_book(isbn13,license_id,subject_id,title,contents,url,publish_date,authors,publisher,translators,price,sale_price,thumbnail,status) VALUES
         <foreach collection="list" item="item" separator=",">
-            (#{item.isbn13},#{item.title},#{item.contents},#{item.url},#{item.publishDate},
+            (#{item.isbn13},#{item.licenseId},#{item.subjectId},#{item.title},#{item.contents},#{item.url},#{item.publishDate},
              #{item.authors},#{item.publisher},#{item.translators},#{item.price},#{item.salePrice},#{item.thumbnail},#{item.status})
         </foreach>
-        ON DUPLICATE KEY UPDATE title=VALUES(title),contents=VALUES(contents),url=VALUES(url),publish_date=VALUES(publish_date),authors=VALUES(authors)
+        ON DUPLICATE KEY UPDATE title=VALUES(title),license_id=VALUES(license_id),subject_id=VALUES(subject_id),contents=VALUES(contents),url=VALUES(url),publish_date=VALUES(publish_date),authors=VALUES(authors)
                                 ,publisher=VALUES(publisher),translators=VALUES(title),price=VALUES(price),sale_price=VALUES(sale_price),thumbnail=VALUES(thumbnail)
                                 ,status=VALUES(status),update_date=NOW()
     </insert>

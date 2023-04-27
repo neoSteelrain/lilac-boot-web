@@ -16,9 +16,7 @@ server:
   servlet:
     session:
       tracking-modes: cookie
-#    context-path: /lilac
-
-
+    context-path: /lilac
 
 mybatis:
   config-location: classpath:/mybatis/mybatis-config.xml

@@ -149,4 +149,14 @@ public class AdminRepository implements IAdminRepository {
     public void deleteFinalCandiPlayList(List<Long> plList) {
         m_adminMapper.deleteFinalCandiPlayList(plList);
     }
+
+    @Override
+    public int findTotalBookCount() {
+        return m_adminMapper.findTotalBookCount();
+    }
+
+    @Override
+    public int findTodayBookCount(String fromDate, String toDate) {
+        return m_adminMapper.findTodayBookCount(fromDate, toDate);
+    }
 }

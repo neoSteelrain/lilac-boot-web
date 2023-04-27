@@ -44,8 +44,7 @@
                 <!-- 회원의 강의노트 제목목록 시작 -->
                 <div class="dashboard-sidebar">
                     <div class="user-image">
-                        <img th:if="${memberProfile == null}" src="/images/default-profile.jpg" alt="#">
-                        <img th:unless="${memberProfile == null}" th:src="${memberProfile}" alt="#">
+                        <img th:if="${memberProfile == null}" th:src="${memberProfile == null} ? ${#request.contextPath}+'/images/default-profile.jpg' : ${memberProfile}" alt="#">
                         <h3 th:text="${memberNickname}">
                             <span th:text="${memberEmail}"></span>
                         </h3>

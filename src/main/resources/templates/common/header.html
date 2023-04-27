@@ -30,7 +30,7 @@
                 <th:block th:unless="${session.MEMBER_ID == null}">
                   <th:block th:if="${session.MEMBER_GRADE == 1}">
                     <li class="nav-item">
-                      <a href="admin/admin-menu" aria-label="Toggle navigation">관리자</a>
+                      <a th:href="@{/admin/admin-menu-pl}" aria-label="Toggle navigation">관리자</a>
                     </li>
                   </th:block>
                   <th:block th:if="${session.MEMBER_GRADE == 2}">
@@ -61,12 +61,16 @@
                 <th:block th:unless="${session.MEMBER_ID == null}">
                   <li>
                     <div class="user-image">
-                      <img id="headerProfileImg" style="height: 50px;width: 50px" th:src="${session.MEMBER_PROFILE == null} ?  '/images/default-profile.jpg' : ${session.MEMBER_PROFILE}">
+                      <th:block th:if="${session.MEMBER_GRADE == 1}">
+                        <img style="height: 50px;width: 50px" th:src="${session.MEMBER_PROFILE == null} ?  ${#request.contextPath}+'/images/admin.png' : ${session.MEMBER_PROFILE}">
+                      </th:block>
+                      <th:block th:if="${session.MEMBER_GRADE == 2}">
+                        <img id="headerProfileImg" style="height: 50px;width: 50px" th:src="${session.MEMBER_PROFILE == null} ?  ${#request.contextPath}+'/images/default-profile.jpg' : ${session.MEMBER_PROFILE}">
+                      </th:block>
                     </div>
                   </li>
                   <li>
                     <i class="lni lni-user" th:text="' '+${session.MEMBER_NICKNAME}"></i>
-<!--                    <a href="javascript:logout()"><i class="lni lni-exit"> 로그아웃</i></a>-->
                   </li>
                   <li>
                     <form th:action="@{/member/logout}" method="post">
