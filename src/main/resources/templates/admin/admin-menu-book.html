@@ -49,6 +49,72 @@
             </ul>
           </div>
         </div>
+        <div class="category-sidebar" style="margin-top: 10px;">
+          <div class="single-widget condition">
+            <h3>자격증</h3>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="lic-1" id="junbogisa">
+              <label class="form-check-label" for="junbogisa">
+                정보처리기사
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="lic-2" id="junbosangisa">
+              <label class="form-check-label" for="junbosangisa">
+                정보처리산업기사
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="lic-3" id="junboginueng">
+              <label class="form-check-label" for="junboginueng">
+                정보처리기능사
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="category-sidebar" style="margin-top: 10px;">
+          <div class="single-widget condition">
+            <h3>키워드</h3>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="sub-1" id="java">
+              <label class="form-check-label" for="java">
+                자바
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="sub-2" id="js">
+              <label class="form-check-label" for="js">
+                자바스크립트
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="sub-3" id="springfw">
+              <label class="form-check-label" for="springfw">
+                스프링 프레임워크
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="sub-4" id="sql">
+              <label class="form-check-label" for="sql">
+                SQL
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="sub-5" id="db">
+              <label class="form-check-label" for="db">
+                데이터베이스
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="sub-6" id="cote">
+              <label class="form-check-label" for="cote">
+                코딩테스트
+              </label>
+            </div>
+          </div>
+        </div>
+
       </div>
       <div class="col-lg-9 col-md-12 col-12">
         <div class="main-content">
@@ -62,21 +128,21 @@
                             data-bs-target="#nav-item-info" type="button" role="tab"
                             aria-controls="nav-item-info" aria-selected="true">
                       <span class="serial">01</span>
-                      추전도서목록 선택
+                      추전도서 선택
                       <span class="sub-title">설명</span>
                     </button>
                     <button class="nav-link" id="nav-item-cani-tab" data-bs-toggle="tab"
                             data-bs-target="#nav-item-details" type="button" role="tab"
                             aria-controls="nav-item-details" aria-selected="false">
                       <span class="serial">02</span>
-                      추천도서목록 후보
+                      추천도서 후보
                       <span class="sub-title">설명</span>
                     </button>
                     <button class="nav-link" id="nav-user-recommend-tab" data-bs-toggle="tab"
                             data-bs-target="#nav-user-info" type="button" role="tab"
                             aria-controls="nav-user-info" aria-selected="false">
                       <span class="serial">03</span>
-                      완료된 추천도서목록
+                      완료된 추천도서
                       <span class="sub-title">User Information</span>
                     </button>
                   </div>
@@ -87,17 +153,11 @@
                       <form class="default-form-style" method="post" action="#">
                         <nav class="list-nav">
                           <ul>
-                            <li id="li-all" class="active"><a href="javascript:void(0)">모든 재생목록 <span th:text="${totalBookCnt}"></span></a>
-                            <li id="li-today"><a href="javascript:void(0)">오늘 추가된 재생목록<span th:text="${todayBookCnt}"></span></a></li>
-                            <li id="li-week"><a href="javascript:void(0)">1주일간 추가된 재생목록<span></span></a></li>
-                            <li id="li-month"><a href="javascript:void(0)">1달간 추가된 재생목록<span></span></a></li></li>
+                            <li id="li-all" class="active"><a href="javascript:changeBookList(1)">모든 도서목록 <span th:text="${totalBookCnt}"></span></a>
+                            <li id="li-today"><a href="javascript:changeBookList(2)">오늘 추가된 도서목록<span th:text="${todayBookCnt}"></span></a></li>
+                            <li id="li-week"><a href="javascript:changeBookList(3)">1주일간 추가된 도서목록<span th:text="${weekBookCnt}"></span></a></li>
+                            <li id="li-month"><a href="javascript:changeBookList(4)">1달간 추가된 도서목록<span th:text="${monthBookCnt}"></span></a></li></li>
                             </li>
-                          </ul>
-                        </nav>
-                        <nav class="list-nav">
-                          <ul>
-                            <li>선택된 도서 개수 : 0/8 </li>
-                            <li><a href="javascript:void(0)"><i class="lni lni-alarm"></i> 편집완료 </a></li>
                           </ul>
                         </nav>
                         <div class="my-items">
@@ -117,44 +177,8 @@
                               </div>
                             </div>
                           </div>
-                          <div class="single-item-list">
-                            <div class="row align-items-center">
-                              <div class="col-lg-7 col-md-7 col-12">
-                                <div class="item-image">
-                                  <img src="https://via.placeholder.com/100x100" alt="#">
-                                  <div class="content">
-                                    <h3 class="title"><a href="javascript:void(0)">도서제목</a>
-                                    </h3>
-                                    <span class="price">출판사...</span>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="col-lg-2 col-md-2 col-12">
-                                <p>아무개</p>
-                              </div>
-                              <div class="col-lg-2 col-md-2 col-12">
-                                <p>2021-03-02</p>
-                              </div>
-                              <div class="col-lg-1 col-md-1 col-12 align-right">
-                                <ul class="action-btn">
-                                  <li><a href="javascript:void(0)"><i class="lni lni-plus"></i></a></li>
-                                </ul>
-                              </div>
-                            </div>
+                          <div id="div-booklist">
                           </div>
-                          <!-- Pagination -->
-                          <div class="pagination left">
-                            <ul class="pagination-list">
-                              <li><a href="javascript:void(0)"><i class="lni lni-chevron-left"></i></a></li>
-                              <li><a href="javascript:void(0)">1</a></li>
-                              <li class="active"><a href="javascript:void(0)">2</a>
-                              </li>
-                              <li><a href="javascript:void(0)">3</a></li>
-                              <li><a href="javascript:void(0)">4</a></li>
-                              <li><a href="javascript:void(0)"><i class="lni lni-chevron-right"></i></a></li>
-                            </ul>
-                          </div>
-                          <!--/ End Pagination -->
                         </div>
                       </form>
                     </div>
@@ -163,6 +187,12 @@
                   <div class="tab-pane fade" id="nav-item-details" role="tabpanel" aria-labelledby="nav-item-candi-tab">
                     <div class="step-two-content">
                       <form class="default-form-style" method="post" action="#">
+                        <nav class="list-nav">
+                          <ul>
+                            <li><label>선택된 재생목록 개수 :</label><label id="lbl-selected-cpb">0/8</label></li>
+                            <li><a href="javascript:saveSelectedCbl()"><i class="lni lni-alarm"></i> 편집완료 </a></li>
+                          </ul>
+                        </nav>
                         <div class="row">
                           <div class="col-12">
                             <div class="my-items">
@@ -182,32 +212,7 @@
                                   </div>
                                 </div>
                               </div>
-                              <div class="single-item-list">
-                                <div class="row align-items-center">
-                                  <div class="col-lg-7 col-md-7 col-12">
-                                    <div class="item-image">
-                                      <img src="https://via.placeholder.com/100x100"
-                                           alt="#">
-                                      <div class="content">
-                                        <h3 class="title"><a href="javascript:void(0)">도서제목</a>
-                                        </h3>
-                                        <span class="price">출판사...</span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="col-lg-2 col-md-2 col-12">
-                                    <p>아무개</p>
-                                  </div>
-                                  <div class="col-lg-2 col-md-2 col-12">
-                                    <p>2021-03-02</p>
-                                  </div>
-                                  <div class="col-lg-1 col-md-1 col-12 align-right">
-                                    <ul class="action-btn">
-                                      <li><input type="checkbox"></li>
-                                      <li><a href="javascript:void(0)"><i class="lni lni-trash"></i></a></li>
-                                    </ul>
-                                  </div>
-                                </div>
+                              <div id="div-cbl-template">
                               </div>
                             </div>
                           </div>
@@ -238,31 +243,7 @@
                                   </div>
                                 </div>
                               </div>
-                              <div class="single-item-list">
-                                <div class="row align-items-center">
-                                  <div class="col-lg-7 col-md-7 col-12">
-                                    <div class="item-image">
-                                      <img src="https://via.placeholder.com/100x100"
-                                           alt="#">
-                                      <div class="content">
-                                        <h3 class="title"><a href="javascript:void(0)">도서제목</a></h3>
-                                        <span class="price">출판사...</span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="col-lg-2 col-md-2 col-12">
-                                    <p>아무개</p>
-                                  </div>
-                                  <div class="col-lg-2 col-md-2 col-12">
-                                    <p>2021-03-02</p>
-                                  </div>
-                                  <div class="col-lg-1 col-md-1 col-12 align-right">
-                                    <ul class="action-btn">
-                                      <li><a href="javascript:void(0)"><i class="lni lni-trash"></i></a>
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </div>
+                              <div id="div-rbl-template">
                               </div>
                             </div>
                           </div>
@@ -283,6 +264,10 @@
 
 <th:block th:replace="~{common/footer::footer}"></th:block>
 
+<a href="#" class="scroll-top btn-hover">
+  <i class="lni lni-chevron-up"></i>
+</a>
+
 <script th:src="@{/js/jquery.3.6.1.min.js}"></script>
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/js/wow.min.js}"></script>
@@ -291,7 +276,273 @@
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/lilac-common.js}"></script>
 <script th:inline="javascript">
+  const ctxPath = [[${#request.contextPath}]];
+  const SESSION_KEY_BL_TYPE = "ss_pl_type";
+  const SESSION_KET_BL_PAGE_NUM = "ss_page_num";
 
+  //  nav-item-cani-tab
+
+  $("#nav-item-book-tab").on("click", function(){
+    showAdminBooklist(null, "false");
+  });
+
+  $("#nav-item-cani-tab").on("click", function (){
+    showCandiBooklist();
+  });
+
+  $("#nav-user-recommend-tab").on("click", function(){
+    showRecommendBookist();
+  })
+
+  window.addEventListener("load", function (event){
+    changeBookList(1); // 페이지의 첫시작은 모든재생목록으로 시작하기 위해 0을 준다
+
+    $("#junbogisa").on("change", function(){chkBoxHandler()});
+    $("#junbosangisa").on("change", function(){chkBoxHandler()});
+    $("#junboginueng").on("change", function(){chkBoxHandler()});
+
+    $("#java").on("change", function(){chkBoxHandler()});
+    $("#js").on("change", function(){chkBoxHandler()});
+    $("#springfw").on("change", function(){chkBoxHandler()});
+    $("#sql").on("change", function(){chkBoxHandler()});
+    $("#db").on("change", function(){chkBoxHandler()});
+    $("#cote").on("change", function(){chkBoxHandler()});
+  });
+
+  function chkBoxHandler() {
+    // 검색조건 체크박스가 변경되면, 새로운조건이므로 무조건 1페이지 부터 시작한다
+    sessionStorage.setItem(SESSION_KET_BL_PAGE_NUM, "1");
+    showAdminBooklist(null, "false");
+  }
+
+  // 표시할 재생목록 타입을 변경하고 시작페이지를 1로 설정한다
+  function changeBookList(blType){
+    sessionStorage.setItem(SESSION_KEY_BL_TYPE, blType); // 현재 선택되어 있는 재생목록 타입을 기억하지 위해 저장하는 키값: 모든 재생목록, 오늘 추가된 재생목록... 같은 타입
+    // TODO 하드코딩을 수정하자
+    switch (blType){
+      case 1:
+        $("#li-all").addClass("active");
+        $("#li-today").removeClass("active");
+        $("#li-week").removeClass("active");
+        $("#li-month").removeClass("active");
+        break;
+      case 2:
+        $("#li-all").removeClass("active");
+        $("#li-today").addClass("active");
+        $("#li-week").removeClass("active");
+        $("#li-month").removeClass("active");
+        break;
+      case 3:
+        $("#li-all").removeClass("active");
+        $("#li-today").removeClass("active");
+        $("#li-week").addClass("active");
+        $("#li-month").removeClass("active");
+        break;
+      case 4:
+        $("#li-all").removeClass("active");
+        $("#li-today").removeClass("active");
+        $("#li-week").removeClass("active");
+        $("#li-month").addClass("active");
+        break;
+      default: break;
+    }
+    // ajax 호출로 재생목록리스트 갱신
+    sessionStorage.setItem(SESSION_KET_BL_PAGE_NUM, "1");
+    showAdminBooklist(null, "false"); // 시작페이지를 1로 시작
+  }
+
+  function showAdminBooklist(paramPageNum, isPaging){
+    if(isPaging != undefined && isPaging == "false"){
+      paramPageNum = sessionStorage.getItem(SESSION_KET_BL_PAGE_NUM);
+    }
+    sessionStorage.setItem(SESSION_KET_BL_PAGE_NUM, paramPageNum);
+    let paramblType = sessionStorage.getItem(SESSION_KEY_BL_TYPE);
+
+    let arrLic = new Array();
+    if($("#junbogisa").is(":checked")){
+      arrLic.push(1);
+    }
+    if($("#junbosangisa").is(":checked")){
+      arrLic.push(2);
+    }
+    if($("#junboginueng").is(":checked")){
+      arrLic.push(3);
+    }
+
+    let arrSub = new Array();
+    if($("#java").is(":checked")){
+      arrSub.push(1);
+    }
+    if($("#js").is(":checked")){
+      arrSub.push(2);
+    }
+    if($("#springfw").is(":checked")){
+      arrSub.push(3);
+    }
+    if($("#sql").is(":checked")){
+      arrSub.push(4);
+    }
+    if($("#db").is(":checked")){
+      arrSub.push(5);
+    }
+    if($("#cote").is(":checked")){
+      arrSub.push(6);
+    }
+    $.ajax({
+      type:"post", // 배열을 보내야 하기 때문에 조회기능을 호출하지만 post로 보내야 한다
+      url: ctxPath+"/admin/admin-booklsit-template",
+      traditional:true,
+      data:{
+        blType:paramblType,
+        pageNum:paramPageNum,
+        licenseIds:arrLic,
+        subjectIds:arrSub
+      },
+      dataType:"text",
+      success:function (result){
+        let html = jQuery("<div>").html(result);
+        let bl = html.find("div#booklist-template").html();
+        $("#div-booklist").html(bl);
+      },
+      error:function(err){
+        alert("도서 조회에 실패하였습니다.");
+      }
+    })
+  }
+
+  function addBookToCandi(paramBookId){
+    let param = {
+      "bookId": paramBookId
+    }
+    $.ajax({
+      type:"post",
+      url: ctxPath+"/admin/api/add-candi-book",
+      headers:{"Content-Type":"application/json"},
+      data:JSON.stringify(param),
+      success:function(result){
+        alert("등록하였습니다.");
+        showAdminBooklist(null, "false");
+      },
+      error:function(err){
+        alert("등록에 실패하였습니다.");
+      }
+    })
+  }
+
+  function showCandiBooklist(){
+    $.ajax({
+      type:"get",
+      url:ctxPath+"/admin/candi-book",
+      dataType: "text",
+      success:function(result){
+        let html = jQuery("<div>").html(result);
+        let cbl = html.find("div#cbl-template").html();
+        $("#div-cbl-template").html(cbl);
+        refreshSelectedCblCount();
+      },
+      error:function(err){
+        alert("추천도서 후보목록을 불러오지 못했습니다.");
+      }
+    })
+  }
+
+  function showRecommendBookist(){
+    $.ajax({
+      type:"get",
+      url:ctxPath+"/admin/recommend-book",
+      dataType:"text",
+      success:function (result){
+        let html = jQuery("<div>").html(result);
+        let rbl = html.find("div#rbl-template").html();
+        $("#div-rbl-template").html(rbl);
+      },
+      error:function(err){
+        alert("추천도서 목록을 불러오지 못했습니다.");
+      }
+    })
+  }
+
+  function refreshSelectedCblCount(){
+    let checkedCpbCnt = $("input:checkbox[name=cpb-checkbox]:checked").length;
+    $("#lbl-selected-cpb").text(checkedCpbCnt+"/8");
+  }
+
+  // 추천도서목록 후보를 체크시 선택목록 개수를 업데이트한다
+  function updateSelectedCpb(chkbox){
+    let checkedCpbCnt = $("input:checkbox[name=cpb-checkbox]:checked").length;
+    if(checkedCpbCnt > 8){
+      chkbox.checked = false;
+      alert("도서목록은 8개 까지만 선택할 수 있습니다.");
+      return;
+    }
+    $("#lbl-selected-cpb").text(checkedCpbCnt + "/8");
+  }
+
+  function saveSelectedCbl(){
+    if(!checkSelectedCbCount()){
+      alert("도서를 1개 이상 선택하셔야 합니다.");
+      return;
+    }
+    let checkedCblArray = new Array();
+    $("input:checkbox[name=cpb-checkbox]").each(function(){
+      if($(this).is(":checked") == true){
+        checkedCblArray.push($(this).val());
+      }
+    });
+    $.ajax({
+      type:"post",
+      url:ctxPath+"/admin/update-recommend-book",
+      data:{cblArray:checkedCblArray},
+      success:function(result){
+        let html = jQuery("<div>").html(result);
+        let rbl = html.find("div#rbl-template").html();
+        $("#div-rbl-template").html(rbl);
+        showCandiBooklist();
+        refreshSelectedCblCount();
+      },
+      error:function(err){
+        alert("추천도서목록를 불러오지 못했습니다.");
+      }
+    })
+  }
+
+  function removeCandiBooklist(paramBookId){
+    $.ajax({
+      type:"post",
+      url:ctxPath+"/admin/remove-candi-book",
+      data:{bookId:paramBookId},
+      dataType:"text",
+      success:function(result){
+        let html = jQuery("<div>").html(result);
+        let cbl = html.find("div#cbl-template").html();
+        $("#div-cbl-template").html(cbl);
+      },
+      error:function(err){
+        alert("추천도서목록 후보을 삭제하지 못했습니다.");
+      }
+    })
+  }
+
+  function removeRecommendBooklist(paramBookId){
+    $.ajax({
+      type:"post",
+      url:ctxPath+"/admin/remove-recommend-book",
+      data:{bookId:paramBookId},
+      dataType:"text",
+      success:function(result){
+        let html = jQuery("<div>").html(result);
+        let rbl = html.find("div#rbl-template").html();
+        $("#div-rbl-template").html(rbl);
+      },
+      error:function(err){
+        alert("추천도서를 삭제하지 못했습니다.");
+      }
+    })
+  }
+
+  function checkSelectedCbCount(){
+    return $("input:checkbox[name=cpb-checkbox]:checked").length > 0;
+  }
 </script>
 </body>
 </html>

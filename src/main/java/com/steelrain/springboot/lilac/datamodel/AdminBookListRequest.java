@@ -5,6 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AdminPlayListRequest extends AdminSearchRequest {
-    private ADMIN_PLAYLIST_TYPE plType;
+public class AdminBookListRequest extends AdminSearchRequest{
+    private ADMIN_BOOKLIST_TYPE blType;
 }

@@ -1,8 +1,7 @@
 package com.steelrain.springboot.lilac.repository;
 
-import com.steelrain.springboot.lilac.common.DateUtils;
+import com.steelrain.springboot.lilac.datamodel.AdminBookDTO;
 import com.steelrain.springboot.lilac.datamodel.AdminYoutubePlayListDTO;
-import com.steelrain.springboot.lilac.datamodel.YoutubePlayListDTO;
 import com.steelrain.springboot.lilac.mapper.AdminMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -116,13 +115,18 @@ public class AdminRepository implements IAdminRepository {
     }
 
     @Override
+    public void removeCandiBookList(Long bookId) {
+        m_adminMapper.deleteCandiBookList(bookId);
+    }
+
+    @Override
     public void removeCandiPlayList(Long playlistId) {
-        m_adminMapper.removeCandiPlayList(playlistId);
+        m_adminMapper.deleteCandiPlayList(playlistId);
     }
 
     @Override
     public void removeRecommendPlayList(Long playListId) {
-        m_adminMapper.removeRecommendPlayList(playListId);
+        m_adminMapper.deleteRecommendPlayList(playListId);
     }
 
     @Override
@@ -136,13 +140,13 @@ public class AdminRepository implements IAdminRepository {
     }
 
     @Override
-    public List<Long> findCandidateIdList() {
-        return m_adminMapper.findCandidateIdList();
+    public List<Long> findCandidatePlIdList() {
+        return m_adminMapper.findCandidatePlIdList();
     }
 
     @Override
-    public List<Long> findRecommendIdList() {
-        return m_adminMapper.findRecommendIdList();
+    public List<Long> findRecommendPlIdList() {
+        return m_adminMapper.findRecommendPlIdList();
     }
 
     @Override
@@ -156,7 +160,127 @@ public class AdminRepository implements IAdminRepository {
     }
 
     @Override
-    public int findTodayBookCount(String fromDate, String toDate) {
-        return m_adminMapper.findTodayBookCount(fromDate, toDate);
+    public int findBookCountRange(String fromDate, String toDate) {
+        return m_adminMapper.findBookCountByRange(fromDate, toDate);
+    }
+
+    @Override
+    public List<AdminBookDTO> findTotalLicBookList(int[] licenseIds, int pageNum, int pageCount) {
+        return m_adminMapper.findTotalLicBookList(licenseIds, pageNum, pageCount);
+    }
+
+    @Override
+    public int findTotalLicBookCount(int[] licenseIds) {
+        return m_adminMapper.findTotalLicBookCount(licenseIds);
+    }
+
+    @Override
+    public List<AdminBookDTO> findTotalBookList(int pageNum, int pageCount) {
+        return m_adminMapper.findTotalBookList(pageNum, pageCount);
+    }
+
+    @Override
+    public List<AdminBookDTO> findTotalSubBookList(int[] subjectIds, int pageNum, int pageCount) {
+        return m_adminMapper.findTotalSubBookList(subjectIds, pageNum, pageCount);
+    }
+
+    @Override
+    public int findTotalSubBookCount(int[] subjectIds) {
+        return m_adminMapper.findTotalSubBookCount(subjectIds);
+    }
+
+    @Override
+    public List<AdminBookDTO> findTotalLicSubBookList(int[] licenseIds, int[] subjectIds, int pageNum, int pageCount) {
+        return m_adminMapper.findTotalLicSubBookList(licenseIds, subjectIds, pageNum, pageCount);
+    }
+
+    @Override
+    public int findTotalLicSubBookCount(int[] licenseIds, int[] subjectIds) {
+        return m_adminMapper.findTotalLicSubBookCount(licenseIds, subjectIds);
+    }
+
+    @Override
+    public List<AdminBookDTO> findLicBookListByRange(int[] licenseIds, String fromDate, String toDate, int pageNum, int pageCount) {
+        return m_adminMapper.findLicBookListByRange(licenseIds, fromDate, toDate, pageNum, pageCount);
+    }
+
+    @Override
+    public int findLicBookCountByRange(int[] licenseIds, String fromDate, String toDate) {
+        return m_adminMapper.findLicBookCountByRange(licenseIds, fromDate, toDate);
+    }
+
+    @Override
+    public List<AdminBookDTO> findSubBookListByRange(int[] subjectIds, int pageNum, int pageCount) {
+        return m_adminMapper.findSubBookListByRange(subjectIds, pageNum, pageCount);
+    }
+
+    @Override
+    public int findSubBookCountByRange(int[] subjectIds, String fromDate, String toDate) {
+        return m_adminMapper.findSubBookCountByRange(subjectIds, fromDate, toDate);
+    }
+
+    @Override
+    public List<AdminBookDTO> findLicSubBookListByRange(int[] licenseIds, int[] subjectIds, String fromDate, String toDate, int pageNum, int pageCount) {
+        return m_adminMapper.findLicSubBookListByRange(licenseIds, subjectIds, fromDate, toDate, pageNum, pageCount);
+    }
+
+    @Override
+    public int findLicSubBookCountByRange(int[] licenseIds, int[] subjectIds, String fromDate, String toDate) {
+        return m_adminMapper.findLicSubBookCountByRange(licenseIds, subjectIds, fromDate, toDate);
+    }
+
+    @Override
+    public List<AdminBookDTO> findBookListByRange(String fromDate, String toDate, int pageNum, int pageCount) {
+        return m_adminMapper.findBookListByRange(fromDate, toDate, pageNum, pageCount);
+    }
+
+    @Override
+    public int findBookCountByRange(String fromDate, String toDate) {
+        return m_adminMapper.findBookCountByRange(fromDate, toDate);
+    }
+
+    @Override
+    public List<Long> findCandidateBookIdList() {
+        return m_adminMapper.findCandidateBookIdList();
+    }
+
+    @Override
+    public List<Long> findRecommendBookIdList() {
+        return m_adminMapper.findRecommendBookIdList();
+    }
+
+    @Override
+    public void addCandiBook(Long bookId) {
+        m_adminMapper.addCandiBook(bookId);
+    }
+
+    @Override
+    public List<AdminBookDTO> findCandiBookList() {
+        return m_adminMapper.findCandiBookList();
+    }
+
+    @Override
+    public void deleteFinalCandiBookList(List<Long> cblList) {
+        m_adminMapper.deleteFinalCandiBookList(cblList);
+    }
+
+    @Override
+    public void deleteAllRecommendBookList() {
+        m_adminMapper.deleteAllRecommendBookList();
+    }
+
+    @Override
+    public void insertRecommendedBookList(List<Long> cblList) {
+        m_adminMapper.insertRecommendedBookList(cblList);
+    }
+
+    @Override
+    public List<AdminBookDTO> findRecommendBookList() {
+        return m_adminMapper.findRecommendBookList();
+    }
+
+    @Override
+    public void deletRecommendBook(Long bookId) {
+        m_adminMapper.deleteRecommendBook(bookId);
     }
 }

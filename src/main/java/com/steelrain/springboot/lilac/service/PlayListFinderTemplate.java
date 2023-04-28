@@ -30,54 +30,63 @@ public class PlayListFinderTemplate {
      * @return 기간, 카테고리로 필터링, 페이징 된 재생목록정보
      */
     public AdminPlayListSearchResultDTO getPlayListByRange(String fromDate, String toDate, int pageNum, int pageCount, int[] licenseIds, int[] subjectIds){
+        // 등록일 기준으로 검색할지 결정하는 플래그, 범위검색,전체검색을 한번에 처리하기 위해 선언한다
         boolean isSelectAll = !(StringUtils.hasText(fromDate) || StringUtils.hasText(toDate));
         List<AdminYoutubePlayListDTO> plList = null;
         if((licenseIds != null && licenseIds.length > 0) && (subjectIds == null)){
             // 자격증 재생목록
-            plList = checkRecommend(checkCandidate(isSelectAll ? m_adminRepository.findTotalLicPlayList(licenseIds, pageNum, pageCount) : m_adminRepository.findLicPlByRange(licenseIds,
-                                                    fromDate,
-                                                    toDate,
-                                                    PagingUtils.calcStartPage(pageNum, pageCount), pageCount)));
+            plList = checkRecommend(checkCandidate(isSelectAll ? m_adminRepository.findTotalLicPlayList(licenseIds, PagingUtils.calcStartPage(pageNum, pageCount), pageCount) :
+                                                                 m_adminRepository.findLicPlByRange(licenseIds,
+                                                                                                    fromDate,
+                                                                                                    toDate,
+                                                                                                    PagingUtils.calcStartPage(pageNum, pageCount), pageCount)));
             return AdminPlayListSearchResultDTO.builder()
-                    .pageDTO(PagingUtils.createPagingInfo(isSelectAll ? m_adminRepository.findTotalLicPlCount(licenseIds) : m_adminRepository.findLicPlCountByRange(licenseIds, fromDate, toDate), pageNum, pageCount))
+                    .pageDTO(PagingUtils.createPagingInfo(isSelectAll ? m_adminRepository.findTotalLicPlCount(licenseIds) :
+                                                                        m_adminRepository.findLicPlCountByRange(licenseIds, fromDate, toDate), pageNum, pageCount))
                     .playlist(plList)
                     .build();
         }
         if((subjectIds != null && subjectIds.length > 0) && (licenseIds == null)){
             // 키워드 재생목록
-            plList = checkRecommend(checkCandidate(isSelectAll ? m_adminRepository.findTotalSubPlayList(subjectIds, pageNum, pageCount) : m_adminRepository.findSubPlByRange(subjectIds,
-                                                    fromDate,
-                                                    toDate,
-                                                    PagingUtils.calcStartPage(pageNum, pageCount), pageCount)));
+            plList = checkRecommend(checkCandidate(isSelectAll ? m_adminRepository.findTotalSubPlayList(subjectIds, PagingUtils.calcStartPage(pageNum, pageCount), pageCount) :
+                                                                 m_adminRepository.findSubPlByRange(subjectIds,
+                                                                                                    fromDate,
+                                                                                                    toDate,
+                                                                                                    PagingUtils.calcStartPage(pageNum, pageCount), pageCount)));
             return AdminPlayListSearchResultDTO.builder()
-                    .pageDTO(PagingUtils.createPagingInfo(isSelectAll ? m_adminRepository.findTotalSubPlCount(subjectIds) : m_adminRepository.findSubPlCountByRange(subjectIds, fromDate, toDate), pageNum, pageCount))
+                    .pageDTO(PagingUtils.createPagingInfo(isSelectAll ? m_adminRepository.findTotalSubPlCount(subjectIds) :
+                                                                        m_adminRepository.findSubPlCountByRange(subjectIds, fromDate, toDate), pageNum, pageCount))
                     .playlist(plList)
                     .build();
         }
         if((licenseIds != null && subjectIds != null) && (licenseIds.length > 0 && subjectIds.length > 0)){
             // 자격증+키워드 재생목록
-            plList = checkRecommend(checkCandidate(isSelectAll ? m_adminRepository.findTotalLicSubPlayList(licenseIds, subjectIds, pageNum, pageCount) : m_adminRepository.findLicSubPlByRange(licenseIds,
-                                                    subjectIds,
-                                                    fromDate,
-                                                    toDate,
-                                                    PagingUtils.calcStartPage(pageNum, pageCount), pageCount)));
+            plList = checkRecommend(checkCandidate(isSelectAll ? m_adminRepository.findTotalLicSubPlayList(licenseIds, subjectIds, PagingUtils.calcStartPage(pageNum, pageCount), pageCount) :
+                                                                 m_adminRepository.findLicSubPlByRange(licenseIds,
+                                                                                                        subjectIds,
+                                                                                                        fromDate,
+                                                                                                        toDate,
+                                                                                                        PagingUtils.calcStartPage(pageNum, pageCount), pageCount)));
             return AdminPlayListSearchResultDTO.builder()
-                    .pageDTO(PagingUtils.createPagingInfo(isSelectAll ? m_adminRepository.findTotalLicSubCount(licenseIds, subjectIds) : m_adminRepository.findTotalLicSubPlCountByRange(licenseIds, subjectIds, fromDate, toDate), pageNum, pageCount))
+                    .pageDTO(PagingUtils.createPagingInfo(isSelectAll ? m_adminRepository.findTotalLicSubCount(licenseIds, subjectIds) :
+                                                                        m_adminRepository.findTotalLicSubPlCountByRange(licenseIds, subjectIds, fromDate, toDate), pageNum, pageCount))
                     .playlist(plList)
                     .build();
         }
-        plList = checkRecommend(checkCandidate(isSelectAll ? m_adminRepository.findAllPlayList(pageNum, pageCount) : m_adminRepository.findPlayListByRange(fromDate,
-                toDate,
-                PagingUtils.calcStartPage(pageNum, pageCount), pageCount)));
+        plList = checkRecommend(checkCandidate(isSelectAll ? m_adminRepository.findAllPlayList(PagingUtils.calcStartPage(pageNum, pageCount), pageCount) :
+                                                             m_adminRepository.findPlayListByRange(fromDate,
+                                                                                                    toDate,
+                                                                                                    PagingUtils.calcStartPage(pageNum, pageCount), pageCount)));
         return AdminPlayListSearchResultDTO.builder()
-                .pageDTO(PagingUtils.createPagingInfo(isSelectAll ? m_adminRepository.findTotalPlayListCount() : m_adminRepository.findPlayListCountByRange(fromDate, toDate), pageNum, pageCount))
+                .pageDTO(PagingUtils.createPagingInfo(isSelectAll ? m_adminRepository.findTotalPlayListCount() :
+                                                                    m_adminRepository.findPlayListCountByRange(fromDate, toDate), pageNum, pageCount))
                 .playlist(plList)
                 .build();
     }
 
     // 재생목록이 추천재생목록 후보에 속해있는지 검사하고, 속해있다면 isCandidate 를 true로 설정한다.
     private List<AdminYoutubePlayListDTO> checkCandidate(List<AdminYoutubePlayListDTO> plList){
-        List<Long> candiIdList = m_adminRepository.findCandidateIdList();
+        List<Long> candiIdList = m_adminRepository.findCandidatePlIdList();
         for(AdminYoutubePlayListDTO pl : plList){
             for(Long cId : candiIdList){
                 if(pl.getId().equals(cId)){
@@ -90,7 +99,7 @@ public class PlayListFinderTemplate {
 
     // 재생목록이 추천재생목록에 속해있는지 검사하고, 속해있다면 isRecommend 를 true로 설정한다.
     private List<AdminYoutubePlayListDTO> checkRecommend(List<AdminYoutubePlayListDTO> plList){
-        List<Long> recommedIdList = m_adminRepository.findRecommendIdList();
+        List<Long> recommedIdList = m_adminRepository.findRecommendPlIdList();
         for(AdminYoutubePlayListDTO pl : plList){
             for(Long rId : recommedIdList){
                 if(pl.getId().equals(rId)){

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div id="booklist-template">
+  <div class="single-item-list" th:each="item : ${blInfo.bookList}">
+    <div class="row align-items-center">
+      <div class="col-lg-7 col-md-7 col-12">
+        <div class="item-image">
+          <img th:src="${item.thumbnail}" alt="#">
+          <div class="content">
+            <h3 class="title"><a href="javascript:void(0)" th:text="${item.title}"></a>
+            </h3>
+            <span class="price" th:text="${item.publisher}"></span>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-2 col-12">
+        <p th:text="${item.authors}"></p>
+      </div>
+      <div class="col-lg-2 col-md-2 col-12">
+        <p th:text="${{item.publishDate}}"></p>
+      </div>
+      <div class="col-lg-1 col-md-1 col-12 align-right">
+        <ul class="action-btn">
+          <th:block th:if="${item.candidate == true}">
+            <li><i class="lni lni-bookmark-alt"></i></li>
+          </th:block>
+          <th:block th:if="${item.recommend == true}">
+            <li><i class="lni lni-bookmark"></i></li>
+          </th:block>
+          <th:block th:if="${item.candidate == false && item.recommend == false}">
+            <li><a th:href="|javascript:addBookToCandi('${item.id}')|"><i class="lni lni-plus"></i></a></li>
+          </th:block>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <th:block th:if="${blInfo.bookList.size() > 0}">
+    <div class="pagination left" th:with="page=${blInfo.pageDTO.page}">
+      <ul class="pagination-list">
+        <li><a th:if="${page <= 1}"><i class="lni lni-chevron-left"></i></a></li>
+        <li><a th:unless="${page <= 1}" th:href="|javascript:showAdminBooklist('${page-1}', 'true')|"><i class="lni lni-chevron-left"></i></a></li>
+        <th:block th:each="idx : ${#numbers.sequence(blInfo.pageDTO.startPage, blInfo.pageDTO.endPage)}">
+          <li th:if="${idx == page}" class="active"><a th:href="|javascript:showAdminBooklist('${idx}', 'true')|" th:text="${idx}"></a></li>
+          <li th:unless="${idx == page}"><a th:href="|javascript:showAdminBooklist('${idx}', 'true')|" th:text="${idx}"></a></li>
+        </th:block>
+        <li><a th:if="${page >= blInfo.pageDTO.maxPage}"><i class="lni lni-chevron-right"></i></a></li>
+        <li><a th:unless="${page >= blInfo.pageDTO.maxPage}" th:href="|javascript:showAdminBooklist('${page+1}', 'true')|" ><i class="lni lni-chevron-right"></i></a></li>
+      </ul>
+    </div>
+  </th:block>
+</div>
+</body>
+</html>

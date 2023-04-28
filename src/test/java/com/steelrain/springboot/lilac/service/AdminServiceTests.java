@@ -1,20 +1,14 @@
 package com.steelrain.springboot.lilac.service;
 
-import com.steelrain.springboot.lilac.datamodel.AdminPlayListSearchResultDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -23,7 +17,7 @@ import static org.assertj.core.api.Assertions.*;
 public class AdminServiceTests {
 
     @Autowired
-    AdminService m_adminService;
+    AdminPlayListService m_adminService;
 
     @Autowired
     IVideoService m_videoService;

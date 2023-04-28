@@ -1,11 +1,8 @@
 package com.steelrain.springboot.lilac.service;
 
 import com.steelrain.springboot.lilac.common.DateUtils;
-import com.steelrain.springboot.lilac.common.PagingUtils;
 import com.steelrain.springboot.lilac.common.PeriodDate;
-import com.steelrain.springboot.lilac.datamodel.ADMIN_PLAYLIST_TYPE;
-import com.steelrain.springboot.lilac.datamodel.AdminPlayListSearchResultDTO;
-import com.steelrain.springboot.lilac.datamodel.AdminYoutubePlayListDTO;
+import com.steelrain.springboot.lilac.datamodel.*;
 import com.steelrain.springboot.lilac.repository.AdminRepository;
 import com.steelrain.springboot.lilac.repository.IAdminRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -23,14 +20,14 @@ import java.util.Map;
  */
 @Slf4j
 @Service
-public class AdminService implements IAdminService {
+public class AdminPlayListService implements IAdminPlayListService {
 
     private final IAdminRepository m_adminRepository;
     private final Map<ADMIN_PLAYLIST_TYPE, IPlayListFinder> m_plFinderMap;
 
 
     @Autowired
-    public AdminService(AdminRepository repository){
+    public AdminPlayListService(AdminRepository repository){
         this.m_adminRepository = repository;
 
         /*
@@ -138,18 +135,5 @@ public class AdminService implements IAdminService {
         return AdminPlayListSearchResultDTO.builder()
                 .playlist(pl)
                 .build();
-    }
-
-    // 도서 부분 처리 메서드들
-
-    @Override
-    public int getTotalBookCount() {
-        return m_adminRepository.findTotalBookCount();
-    }
-
-    @Override
-    public int getTodayBookCount() {
-        PeriodDate today = DateUtils.getToday();
-        return m_adminRepository.findTodayBookCount(today.getFromDate(), today.getToDate());
     }
 }

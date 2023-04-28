@@ -19,7 +19,7 @@ public enum ADMIN_PLAYLIST_TYPE {
 
     private int m_plType;
 
-    private ADMIN_PLAYLIST_TYPE(int plType){
+    ADMIN_PLAYLIST_TYPE(int plType){
         this.m_plType = plType;
     }
 

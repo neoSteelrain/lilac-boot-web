@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div id="cbl-template">
+  <div class="single-item-list" th:each="item : ${cbl.bookList}">
+    <div class="row align-items-center">
+      <div class="col-lg-7 col-md-7 col-12">
+        <div class="item-image">
+          <img th:src="${item.thumbnail}" alt="#">
+          <div class="content">
+            <h3 class="title"><a href="javascript:void(0)" th:text="${item.title}"></a>
+            </h3>
+            <span class="price" th:text="${item.publisher}"></span>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-2 col-12">
+        <p th:text="${item.authors}"></p>
+      </div>
+      <div class="col-lg-2 col-md-2 col-12">
+        <p th:text="${{item.publishDate}}"></p>
+      </div>
+      <div class="col-lg-1 col-md-1 col-12 align-right">
+        <ul class="action-btn">
+          <li><input name="cpb-checkbox" type="checkbox" onchange="updateSelectedCpb(this)" th:value="${item.id}"></li>
+          <li><a th:href="|javascript:removeCandiBooklist('${item.id}')|"><i class="lni lni-trash"></i></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

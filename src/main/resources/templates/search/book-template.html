@@ -118,14 +118,13 @@
                                             <div class="single-item-grid">
                                                 <div class="image">
                                                     <a th:href="@{/search/book-detail(isbn=${kakaoBook.isbn13Long},region=${licenseBookInfo.regionCode},detailRegion=${licenseBookInfo.detailRegionCode})}" ><img th:src="${kakaoBook.thumbnail}" alt="#"></a>
-                                                    <span th:if="${kakaoBook.salePrice > 0}" class="flat-badge sale">할인중</span>
+                                                    <span th:if="${kakaoBook.salePrice > 0}" class="flat-badge rent">할인중</span>
                                                 </div>
                                                 <div class="content text-wrap">
                                                     <h6 class="title" th:text="${kakaoBook.title}"></h6>
                                                     <ul class="info">
                                                         <li class="info" th:text="${{kakaoBook.price}} +' -> '+ ${{kakaoBook.salePrice}}+' 원'"></li>
-                                                        <li class="like"><a th:href="${kakaoBook.url}" target="_blank"><i
-                                                                class="lni lni-link"></i></a>
+                                                        <li class="like"><a th:href="${kakaoBook.url}" target="_blank"><i class="lni lni-link"></i></a>
                                                         </li>
                                                     </ul>
                                                 </div>

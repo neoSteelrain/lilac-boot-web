@@ -2,7 +2,8 @@ package com.steelrain.springboot.lilac.api;
 
 import com.steelrain.springboot.lilac.common.SESSION_KEY;
 import com.steelrain.springboot.lilac.datamodel.rest.BaseRestAPIResponse;
-import com.steelrain.springboot.lilac.service.IAdminService;
+import com.steelrain.springboot.lilac.service.IAdminBookService;
+import com.steelrain.springboot.lilac.service.IAdminPlayListService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -22,10 +23,10 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/admin/api")
 public class AdminRestController {
 
-    private final IAdminService m_adminService;
+    private final IAdminPlayListService m_adminPlService;
+    private final IAdminBookService m_adminBookService;
 
-
-    @PostMapping("/add-pl")
+    @PostMapping("/add-candi-pl")
     public ResponseEntity<AddCandiPlayListResponse> addCandiPlayList(@RequestBody AddCandiPlayListRequest request, HttpSession session){
         if(session.getAttribute(SESSION_KEY.MEMBER_ID) == null){
             return new ResponseEntity<>(AddCandiPlayListResponse.builder()
@@ -34,12 +35,41 @@ public class AdminRestController {
                     .message("로그인이 필요한 서비스 입니다")
                     .build(), HttpStatus.UNAUTHORIZED);
         }
-        m_adminService.addCandiPlayList(request.playListId);
+        m_adminPlService.addCandiPlayList(request.playListId);
         return new ResponseEntity<>(AddCandiPlayListResponse.builder()
                 .requestParameter(request)
                 .code(HttpStatus.OK.value())
                 .message("추천재생목록 후보를 등록하였습니다")
                 .build(), HttpStatus.OK);
+    }
+
+    @PostMapping("/add-candi-book")
+    public ResponseEntity<AddCandiBookResponse> addCandiBook(@RequestBody AddCandiBookRequest request, HttpSession session){
+        if(session.getAttribute(SESSION_KEY.MEMBER_ID) == null){
+            return new ResponseEntity<>(AddCandiBookResponse.builder()
+                    .requestParameter(request)
+                    .code(HttpStatus.UNAUTHORIZED.value())
+                    .message("로그인이 필요한 서비스 입니다")
+                    .build(), HttpStatus.UNAUTHORIZED);
+        }
+        m_adminBookService.addCandiBook(request.bookId);
+        return new ResponseEntity<>(AddCandiBookResponse.builder()
+                .requestParameter(request)
+                .code(HttpStatus.OK.value())
+                .message("추천재생목록 후보를 등록하였습니다")
+                .build(), HttpStatus.OK);
+    }
+
+
+    @SuperBuilder
+    public static class AddCandiBookResponse extends BaseRestAPIResponse{
+
+    }
+
+
+    @Getter
+    public static class AddCandiBookRequest{
+        private Long bookId;
     }
 
     @SuperBuilder

@@ -24,9 +24,6 @@
       </div>
       <div class="col-lg-1 col-md-1 col-12 align-right">
         <ul class="action-btn">
-          <th:blocl th:if="${pl.recommend == true}">
-            <li><i class="lni lni-bookmark"></i></li>
-          </th:blocl>
           <li><input name="cpl-checkbox" type="checkbox" onchange="updateSelectedCpl(this)" th:value="${pl.id}"></li>
           <li><a th:href="|javascript:removeCandiPlaylist('${pl.id}')|"><i class="lni lni-trash"></i></a></li>
         </ul>

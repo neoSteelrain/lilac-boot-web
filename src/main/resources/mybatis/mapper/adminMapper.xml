@@ -4,8 +4,8 @@
 <mapper namespace="com.steelrain.springboot.lilac.mapper.AdminMapper">
     <insert id="insertRecommendedPlayList" parameterType="Long">
         INSERT INTO tbl_recommended_playlist(youtube_playlist_id) VALUES
-        <foreach collection="plIdList" item="item" separator=",">
-        (#{item})
+        <foreach collection="plIdList" item="item" separator="," open="(" close=")">
+        #{item}
         </foreach>
     </insert>
 
@@ -26,40 +26,42 @@
         SELECT count(pl.id)
         FROM tbl_youtube_playlist pl INNER JOIN tbl_license lic
             ON pl.license_id = lic.id
-        WHERE lic.id IN (
-        <foreach collection="licenseIds" item="item" index="index" separator=",">
+        WHERE lic.id IN
+        <foreach collection="licenseIds" item="item" index="index" separator="," open="(" close=")">
             #{item}
-        </foreach>)
+        </foreach>
     </select>
 
     <select id="findTotalLicPlayList" parameterType="map" resultType="AdminYoutubePlayListDTO">
         SELECT pl.id,pl.playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,pl.item_count,pl.reg_date
         FROM tbl_youtube_playlist pl INNER JOIN tbl_license lic
             ON pl.license_id = lic.id
-        WHERE lic.id IN (
-        <foreach collection="licenseIds" item="item" index="index" separator=",">
+        WHERE lic.id IN
+        <foreach collection="licenseIds" item="item" index="index" separator="," open="(" close=")">
             #{item}
-        </foreach>) ORDER BY reg_date DESC LIMIT #{pageNum},#{pageCount}
+        </foreach>
+        ORDER BY reg_date DESC LIMIT #{pageNum},#{pageCount}
     </select>
 
     <select id="findTotalSubPlCount" parameterType="map" resultType="int">
         SELECT count(pl.id)
         FROM tbl_youtube_playlist pl INNER JOIN tbl_subject sub
             ON pl.subject_id = sub.id
-        WHERE sub.id IN (
-        <foreach collection="subjectIds" item="item" index="index" separator=",">
+        WHERE sub.id IN
+        <foreach collection="subjectIds" item="item" index="index" separator="," open="(" close=")">
             #{item}
-        </foreach>)
+        </foreach>
     </select>
 
     <select id="findTotalSubPlayList" parameterType="map" resultType="AdminYoutubePlayListDTO">
         SELECT pl.id,pl.playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,pl.item_count,pl.reg_date
         FROM tbl_youtube_playlist pl INNER JOIN tbl_subject sub
             ON pl.subject_id = sub.id
-        WHERE sub.id IN (
-        <foreach collection="subjectIds" item="item" index="index" separator=",">
+        WHERE sub.id IN
+        <foreach collection="subjectIds" item="item" index="index" separator="," open="(" close=")">
             #{item}
-        </foreach>) ORDER BY reg_date DESC LIMIT #{pageNum},#{pageCount}
+        </foreach>
+        ORDER BY reg_date DESC LIMIT #{pageNum},#{pageCount}
     </select>
 
     <select id="findTotalLicSubCount" parameterType="map" resultType="int">
@@ -67,18 +69,18 @@
           SELECT pl.id
           FROM tbl_youtube_playlist pl INNER JOIN tbl_license lic
             ON pl.license_id = lic.id
-          WHERE lic.id IN (
-              <foreach collection="licenseIds" item="item" index="index" separator=",">
+          WHERE lic.id IN
+              <foreach collection="licenseIds" item="item" index="index" separator="," open="(" close=")">
                 #{item}
-              </foreach>)
+              </foreach>
           UNION
           SELECT pl.id
           FROM tbl_youtube_playlist pl INNER JOIN tbl_subject sub
             ON pl.subject_id = sub.id
-          WHERE sub.id IN (
-            <foreach collection="subjectIds" item="item" index="index" separator=",">
+          WHERE sub.id IN
+            <foreach collection="subjectIds" item="item" index="index" separator="," open="(" close=")">
                 #{item}
-            </foreach>)) as tmp
+            </foreach>) as tmp
     </select>
 
     <select id="findTotalLicSubPlayList" parameterType="map" resultType="AdminYoutubePlayListDTO">
@@ -87,18 +89,18 @@
              SELECT pl.id,pl.playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,pl.item_count,pl.reg_date
              FROM tbl_youtube_playlist pl INNER JOIN tbl_license lic
                ON pl.license_id = lic.id
-             WHERE lic.id IN (
-                <foreach collection="licenseIds" item="item" index="index" separator=",">
+             WHERE lic.id IN
+                <foreach collection="licenseIds" item="item" index="index" separator="," open="(" close=")">
                     #{item}
-                </foreach>)
+                </foreach>
              UNION
              SELECT pl.id,pl.playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,pl.item_count,pl.reg_date
              FROM tbl_youtube_playlist pl INNER JOIN tbl_subject sub
                ON pl.subject_id = sub.id
-             WHERE sub.id IN (
-                <foreach collection="subjectIds" item="item" index="index" separator=",">
+             WHERE sub.id IN
+                <foreach collection="subjectIds" item="item" index="index" separator="," open="(" close=")">
                     #{item}
-                </foreach>)) as tmp
+                </foreach>) as tmp
         ORDER BY tmp.reg_date DESC LIMIT #{pageNum},#{pageCount}
     </select>
 
@@ -106,20 +108,20 @@
         SELECT count(id)
         FROM tbl_youtube_playlist
         <![CDATA[WHERE reg_date > #{startDay} AND reg_date < #{endDay}]]>
-            AND license_id IN (
-                <foreach collection="licenseIds" item="item" index="index" separator=",">
+            AND license_id IN
+                <foreach collection="licenseIds" item="item" index="index" separator="," open="(" close=")">
                     #{item}
-                </foreach>)
+                </foreach>
     </select>
 
     <select id="findLicPlByRange" parameterType="map" resultType="AdminYoutubePlayListDTO">
         SELECT id,playlist_id,channel_id,license_id,subject_id,title,thumbnail_medium,item_count,reg_date
         FROM tbl_youtube_playlist
         <![CDATA[WHERE reg_date > #{fromDate} AND reg_date < #{toDate}]]>
-            AND license_id IN (
-                <foreach collection="licenseIds" item="item" index="index" separator=",">
+            AND license_id IN
+                <foreach collection="licenseIds" item="item" index="index" separator="," open="(" close=")">
                     #{item}
-                </foreach>)
+                </foreach>
         ORDER BY reg_date DESC LIMIT #{pageNum}, #{pageCount}
     </select>
 
@@ -127,10 +129,10 @@
         SELECT id,playlist_id,channel_id,license_id,subject_id,title,thumbnail_medium,item_count,reg_date
         FROM tbl_youtube_playlist
         <![CDATA[WHERE reg_date > #{fromDate} AND reg_date < #{toDate}]]>
-            AND subject_id IN (
-            <foreach collection="subjectIds" item="item" index="index" separator=",">
+            AND subject_id IN
+            <foreach collection="subjectIds" item="item" index="index" separator="," open="(" close=")">
                 #{item}
-            </foreach>)
+            </foreach>
         ORDER BY reg_date DESC LIMIT #{pageNum}, #{pageCount}
     </select>
 
@@ -141,19 +143,19 @@
             FROM tbl_youtube_playlist pl INNER JOIN tbl_license lic
                 ON pl.license_id = lic.id
                 <![CDATA[WHERE pl.reg_date > #{fromDate} AND pl.reg_date < #{toDate}]]>
-                AND lic.id IN (
-                <foreach collection="licenseIds" item="item" index="index" separator=",">
+                AND lic.id IN
+                <foreach collection="licenseIds" item="item" index="index" separator="," open="(" close=")">
                     #{item}
-                </foreach>)
+                </foreach>
             UNION
             SELECT pl.id,pl.playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,pl.item_count,pl.reg_date
             FROM tbl_youtube_playlist pl INNER JOIN tbl_subject sub
                 ON pl.subject_id = sub.id
                 <![CDATA[WHERE pl.reg_date > #{fromDate} AND pl.reg_date < #{toDate}]]>
-                AND sub.id IN (
-                <foreach collection="subjectIds" item="item" index="index" separator=",">
+                AND sub.id IN
+                <foreach collection="subjectIds" item="item" index="index" separator="," open="(" close=")">
                     #{item}
-                </foreach>)) as tmp
+                </foreach>) as tmp
         ORDER BY tmp.reg_date DESC LIMIT #{pageNum}, #{pageCount}
     </select>
 
@@ -163,19 +165,19 @@
             FROM tbl_youtube_playlist pl INNER JOIN tbl_license lic
             ON pl.license_id = lic.id
             <![CDATA[WHERE pl.reg_date > #{fromDate} AND pl.reg_date < #{toDate}]]>
-                AND lic.id IN (
-                <foreach collection="licenseIds" item="item" index="index" separator=",">
+                AND lic.id IN
+                <foreach collection="licenseIds" item="item" index="index" separator="," open="(" close=")">
                     #{item}
-                </foreach>)
+                </foreach>
             UNION
             SELECT pl.id
             FROM tbl_youtube_playlist pl INNER JOIN tbl_subject sub
             ON pl.subject_id = sub.id
             <![CDATA[WHERE pl.reg_date > #{fromDate} AND pl.reg_date < #{toDate}]]>
-                AND sub.id IN (
-                <foreach collection="subjectIds" item="item" index="index" separator=",">
+                AND sub.id IN
+                <foreach collection="subjectIds" item="item" index="index" separator="," open="(" close=")">
                     #{item}
-                </foreach>)
+                </foreach>
         ) as tmp
     </select>
 
@@ -183,25 +185,21 @@
         SELECT count(id)
         FROM tbl_youtube_playlist
         <![CDATA[WHERE reg_date > #{fromDate} AND reg_date < #{toDate}]]>
-        AND license_id IN (
-            <foreach collection="licenseIds" item="item" index="index" separator=",">
+        AND license_id IN
+            <foreach collection="licenseIds" item="item" index="index" separator="," open="(" close=")">
                 #{item}
-            </foreach>)
+            </foreach>
     </select>
 
     <select id="findSubPlCountByRange" parameterType="map" resultType="int">
         SELECT count(id)
         FROM tbl_youtube_playlist
         <![CDATA[WHERE reg_date > #{fromDate} AND reg_date < #{toDate}]]>
-        AND subject_id IN (
-            <foreach collection="subjectIds" item="item" index="index" separator=",">
+        AND subject_id IN
+            <foreach collection="subjectIds" item="item" index="index" separator="," open="(" close=")">
                 #{item}
-            </foreach>)
+            </foreach>
     </select>
-
-    <insert id="addCandiPlayList" parameterType="long">
-        INSERT INTO tbl_candi_recommend_playlist(youtube_playlist_id) VALUE (#{playListId})
-    </insert>
 
     <select id="findCandiPlayList" resultType="AdminYoutubePlayListDTO">
         SELECT pl.id,pl.playlist_id,pl.channel_id,pl.title,pl.thumbnail_medium,pl.item_count,pl.reg_date
@@ -217,9 +215,212 @@
 
     <delete id="deleteFinalCandiPlayList" parameterType="list">
         DELETE FROM tbl_candi_recommend_playlist
-        WHERE youtube_playlist_id IN (
-            <foreach collection="plList" item="item" separator=",">
+        WHERE youtube_playlist_id IN
+            <foreach collection="plList" item="item" separator="," open="(" close=")">
                 #{item}
-            </foreach>)
+            </foreach>
     </delete>
+
+    <!-- 도서관련 SQL-->
+    <select id="findTotalLicBookList" parameterType="map" resultType="AdminBookDTO">
+        SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+        FROM tbl_book
+        WHERE license_id IN
+            <foreach collection="licenseIds" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+            ORDER BY reg_date DESC LIMIT #{pageNum}, #{pageCount}
+    </select>
+
+    <select id="findTotalLicBookCount" parameterType="list" resultType="int">
+        SELECT count(id)
+        FROM tbl_book
+        WHERE license_id IN
+        <foreach collection="licenseIds" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="findTotalBookList" parameterType="map" resultType="AdminBookDTO">
+        SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+        FROM tbl_book
+        ORDER BY reg_date DESC LIMIT #{pageNum}, #{pageCount}
+    </select>
+
+    <select id="findTotalSubBookList" parameterType="map" resultType="AdminBookDTO">
+        SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+        FROM tbl_book
+        WHERE subject_id IN
+        <foreach collection="subjectIds" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+            ORDER BY reg_date DESC LIMIT #{pageNum}, #{pageCount}
+    </select>
+
+    <select id="findTotalSubBookCount" parameterType="map" resultType="int">
+        SELECT count(id)
+        FROM tbl_book
+        WHERE subject_id IN
+        <foreach collection="subjectIds" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="findTotalLicSubBookList" parameterType="map" resultType="AdminBookDTO">
+        SELECT tmp.id, tmp.title, tmp.publish_date, tmp.authors, tmp.publisher, tmp.reg_date, tmp.thumbnail
+        FROM (
+            SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+            FROM tbl_book
+            WHERE license_id IN
+            <foreach collection="licenseIds" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+            UNION
+            SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+            FROM tbl_book
+            WHERE subject_id IN
+            <foreach collection="subjectIds" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        ) as tmp
+        ORDER BY tmp.reg_date DESC LIMIT #{pageNum}, #{pageCount}
+    </select>
+
+    <select id="findTotalLicSubBookCount" parameterType="map" resultType="int">
+        SELECT count(tmp.id)
+        FROM (
+        SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+        FROM tbl_book
+        WHERE license_id IN
+        <foreach collection="licenseIds" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+        UNION
+        SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+        FROM tbl_book
+        WHERE tb.subject_id IN
+        <foreach collection="subjectIds" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+        ) as tmp
+    </select>
+
+    <select id="findLicBookListByRange" parameterType="map" resultType="AdminBookDTO">
+        SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+        FROM tbl_book
+        <![CDATA[WHERE reg_date > #{fromDate} AND reg_date < #{toDate}]]>
+        AND license_id IN
+        <foreach collection="licenseIds" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+        ORDER BY reg_date DESC LIMIT #{pageNum}, #{pageCount}
+    </select>
+
+    <select id="findLicBookCountByRange" parameterType="map" resultType="int">
+        SELECT count(id)
+        FROM tbl_book
+        <![CDATA[WHERE reg_date > #{fromDate} AND reg_date < #{toDate}]]>
+        AND licenseId IN
+        <foreach collection="licenseIds" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="findSubBookListByRange" parameterType="map" resultType="AdminBookDTO">
+        SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+        FROM tbl_book
+        <![CDATA[WHERE reg_date > #{fromDate} AND reg_date < #{toDate}]]>
+        AND subject_id IN
+        <foreach collection="licenseIds" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+        ORDER BY reg_date DESC LIMIT #{pageNum}, #{pageCount}
+    </select>
+
+    <select id="findSubBookCountByRange" parameterType="map" resultType="int">
+        SELECT count(id)
+        FROM tbl_book
+        <![CDATA[WHERE reg_date > #{fromDate} AND reg_date < #{toDate}]]>
+        AND subject_id IN
+        <foreach collection="licenseIds" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="findLicSubBookListByRange" parameterType="map" resultType="AdminBookDTO">
+        SELECT tmp.id, tmp.title, tmp.publish_date, tmp.authors, tmp.publisher, tmp.reg_date, tmp.thumbnail
+        FROM (
+            SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+            FROM tbl_book
+            <![CDATA[WHERE reg_date > #{fromDate} AND reg_date < #{toDate}]]>
+            AND license_id IN
+            <foreach collection="licenseIds" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+            UNION
+            SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+            FROM tbl_book
+            <![CDATA[WHERE reg_date > #{fromDate} AND reg_date < #{toDate}]]>
+            AND subject_id IN
+            <foreach collection="subjectIds" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+            ) as tmp
+        ORDER BY tmp.reg_date DESC LIMIT #{pageNum}, #{pageCount}
+    </select>
+
+    <select id="findLicSubBookCountByRange" parameterType="map" resultType="int">
+        SELECT count(tmp.id)
+        FROM (
+            SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+            FROM tbl_book
+            <![CDATA[WHERE reg_date > #{fromDate} AND reg_date < #{toDate}]]>
+            AND license_id IN
+            <foreach collection="licenseIds" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+            UNION
+            SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+            FROM tbl_book
+            <![CDATA[WHERE reg_date > #{fromDate} AND reg_date < #{toDate}]]>
+            AND subject_id IN
+            <foreach collection="subjectIds" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        ) as tmp
+    </select>
+
+    <select id="findBookListByRange" parameterType="map" resultType="AdminBookDTO">
+        SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+        FROM tbl_book
+        <![CDATA[WHERE reg_date > #{fromDate} AND reg_date < #{toDate}]]>
+        ORDER BY reg_date DESC LIMIT #{pageNum}, #{pageCount}
+    </select>
+
+    <select id="findCandiBookList" resultType="AdminBookDTO">
+        SELECT tb.id, tb.title, tb.publish_date, tb.authors, tb.publisher, tb.reg_date, tb.thumbnail
+        FROM tbl_candi_recommend_book crb INNER JOIN tbl_book tb
+            ON crb.book_id=tb.id;
+    </select>
+
+    <delete id="deleteFinalCandiBookList" parameterType="list">
+        DELETE FROM tbl_candi_recommend_book
+        WHERE book_id IN
+        <foreach collection="cblList" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </delete>
+    
+    <insert id="insertRecommendedBookList" parameterType="Long">
+        INSERT INTO tbl_recommended_book(book_id) VALUES
+        <foreach collection="cblList" item="item" separator=",">
+            (#{item})
+        </foreach>
+    </insert>
+
+    <select id="findRecommendBookList" resultType="AdminBookDTO">
+        SELECT tb.id, tb.title, tb.publish_date, tb.authors, tb.publisher, tb.reg_date, tb.thumbnail
+        FROM tbl_recommended_book rb INNER JOIN tbl_book tb
+            ON rb.book_id=tb.id;
+    </select>
 </mapper>

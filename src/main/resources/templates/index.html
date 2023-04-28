@@ -200,11 +200,10 @@
                                 <div class="category-grid-topbar">
                                     <div class="row align-items-center">
                                         <div class="col-lg-6 col-md-6 col-12">
-                                            <h3 class="title">키워드로 검색된 책목록</h3>
+                                            <h3 class="title">추천도서 목록</h3>
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="tab-content" id="nav-tabContent">
                                     <div class="tab-pane fade show active" id="nav-grid" role="tabpanel"
                                          aria-labelledby="nav-grid-tab">
@@ -213,7 +212,7 @@
                                                 <div class="single-item-grid">
                                                     <div class="image">
                                                         <a href="javascript:void(0)"><img th:src="${kakaoBook.thumbnail}" alt="#"></a>
-                                                        <span th:if="${kakaoBook.salePrice > 0}" class="flat-badge sale">할인중</span>
+                                                        <span class="flat-badge sale">추천</span>
                                                     </div>
                                                     <div class="content text-wrap">
                                                         <h6 class="title" th:text="${kakaoBook.title}"></h6>
@@ -460,7 +459,6 @@
                 success:function (result){
                     let html = jQuery("<div>").html(result);
                     let contents = html.find("div#library-book-template").html();
-                    console.log("contents : " + contents);
                     $("#div-library-book").html(contents);
 
                     // 도서정보 태그로 스크롤 이동

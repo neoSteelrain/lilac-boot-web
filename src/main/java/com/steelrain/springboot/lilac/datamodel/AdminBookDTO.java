@@ -5,6 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AdminPlayListRequest extends AdminSearchRequest {
-    private ADMIN_PLAYLIST_TYPE plType;
+public class AdminBookDTO extends KaKaoBookDTO{
+    private boolean isRecommend;
+    private boolean isCandidate;
 }
