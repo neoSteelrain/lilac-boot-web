@@ -38,7 +38,7 @@ public class MemberController {
     private final IMemberService m_memberService;
     private final ICacheService m_keywordCategoryCacheService;
 
-
+/*
     @ModelAttribute("subjectCodes")
     public List<SubjectCodeDTO> getSubjectCodes(){
         return m_keywordCategoryCacheService.getSubjectCodeList();
@@ -52,7 +52,7 @@ public class MemberController {
     @ModelAttribute("licenseCodes")
     public List<LicenseCodeDTO> getLicenseCodes(){
         return m_keywordCategoryCacheService.getLicenseCodeList();
-    }
+    }*/
 
     @GetMapping("/login")
     public String loginForm(@RequestParam(value = "redirectURL", defaultValue = "/") String redirectURL, Model model){
@@ -136,7 +136,9 @@ public class MemberController {
         memberEditDTO.setProfileOriginal(memberDTO.getProfileOriginal());
         memberEditDTO.setProfileSave(memberDTO.getProfileSave());
         memberEditDTO.setRegDate(memberDTO.getRegDate());
+
         model.addAttribute("memberInfo", memberEditDTO);
+        model.addAttribute("libRegionCodes", m_keywordCategoryCacheService.getLibraryRegionCodeList());
 
         return "member/profile";
     }

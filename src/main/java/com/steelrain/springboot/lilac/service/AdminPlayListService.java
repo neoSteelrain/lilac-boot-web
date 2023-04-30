@@ -1,6 +1,7 @@
 package com.steelrain.springboot.lilac.service;
 
 import com.steelrain.springboot.lilac.common.DateUtils;
+import com.steelrain.springboot.lilac.common.ICacheService;
 import com.steelrain.springboot.lilac.common.PeriodDate;
 import com.steelrain.springboot.lilac.datamodel.*;
 import com.steelrain.springboot.lilac.repository.AdminRepository;
@@ -21,7 +22,6 @@ import java.util.Map;
 @Slf4j
 @Service
 public class AdminPlayListService implements IAdminPlayListService {
-
     private final IAdminRepository m_adminRepository;
     private final Map<ADMIN_PLAYLIST_TYPE, IPlayListFinder> m_plFinderMap;
 
@@ -39,8 +39,23 @@ public class AdminPlayListService implements IAdminPlayListService {
         m_plFinderMap.put(ADMIN_PLAYLIST_TYPE.TODAY, new TodayPlayListFinder());
         m_plFinderMap.put(ADMIN_PLAYLIST_TYPE.WEEK, new WeekPlayListFinder());
         m_plFinderMap.put(ADMIN_PLAYLIST_TYPE.MONTH, new MonthPlayListFinder());
+        m_plFinderMap.put(ADMIN_PLAYLIST_TYPE.LIKE_HIGH, new LikeCountPlayListFinder(true));
+        m_plFinderMap.put(ADMIN_PLAYLIST_TYPE.LIKE_LOW, new LikeCountPlayListFinder(false));
+        m_plFinderMap.put(ADMIN_PLAYLIST_TYPE.VIEW_HIGH, new ViewCountPlayListFinder(true));
+        m_plFinderMap.put(ADMIN_PLAYLIST_TYPE.VIEW_LOW, new ViewCountPlayListFinder(false));
     }
 
+    /**
+     * 재생목록에 대한 모든 기능은 ADMIN_PLAYLIST_TYPE 으로 정의해야 한다
+     * IPlayListFinder 인터페이스를 구현한 객체이어야 한다
+     * ADMIN_PLAYLIST_TYPE 으로 정의된
+     * @param type
+     * @param pageNum
+     * @param pageCount
+     * @param licenseIds
+     * @param subjectIds
+     * @return
+     */
     @Override
     public AdminPlayListSearchResultDTO getAdminPlayList(ADMIN_PLAYLIST_TYPE type, int pageNum, int pageCount, int[] licenseIds, int[] subjectIds) {
         return m_plFinderMap.get(type).getPlayList(pageNum, pageCount, licenseIds, subjectIds, m_adminRepository);

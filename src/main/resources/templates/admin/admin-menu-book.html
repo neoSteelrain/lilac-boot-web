@@ -119,8 +119,7 @@
       <div class="col-lg-9 col-md-12 col-12">
         <div class="main-content">
           <div class="dashboard-block mt-0">
-            <h3 class="block-title">추천도서 편집</h3>
-            <div class="inner-block">
+            <div class="inner-block" style="margin-top: 10px">
               <div class="post-ad-tab">
                 <nav>
                   <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -129,21 +128,21 @@
                             aria-controls="nav-item-info" aria-selected="true">
                       <span class="serial">01</span>
                       추전도서 선택
-                      <span class="sub-title">설명</span>
+                      <span class="sub-title">추천도서 후보선정</span>
                     </button>
                     <button class="nav-link" id="nav-item-cani-tab" data-bs-toggle="tab"
                             data-bs-target="#nav-item-details" type="button" role="tab"
                             aria-controls="nav-item-details" aria-selected="false">
                       <span class="serial">02</span>
                       추천도서 후보
-                      <span class="sub-title">설명</span>
+                      <span class="sub-title">9개를 선택</span>
                     </button>
                     <button class="nav-link" id="nav-user-recommend-tab" data-bs-toggle="tab"
                             data-bs-target="#nav-user-info" type="button" role="tab"
                             aria-controls="nav-user-info" aria-selected="false">
                       <span class="serial">03</span>
                       완료된 추천도서
-                      <span class="sub-title">User Information</span>
+                      <span class="sub-title">실제로 반영된 목록</span>
                     </button>
                   </div>
                 </nav>
@@ -189,7 +188,7 @@
                       <form class="default-form-style" method="post" action="#">
                         <nav class="list-nav">
                           <ul>
-                            <li><label>선택된 재생목록 개수 :</label><label id="lbl-selected-cpb">0/8</label></li>
+                            <li><label>선택된 추천도서 개수 :</label><label id="lbl-selected-cpb">0/9</label></li>
                             <li><a href="javascript:saveSelectedCbl()"><i class="lni lni-alarm"></i> 편집완료 </a></li>
                           </ul>
                         </nav>
@@ -470,9 +469,9 @@
   // 추천도서목록 후보를 체크시 선택목록 개수를 업데이트한다
   function updateSelectedCpb(chkbox){
     let checkedCpbCnt = $("input:checkbox[name=cpb-checkbox]:checked").length;
-    if(checkedCpbCnt > 8){
+    if(checkedCpbCnt > 9){
       chkbox.checked = false;
-      alert("도서목록은 8개 까지만 선택할 수 있습니다.");
+      alert("도서목록은 9개 까지만 선택할 수 있습니다.");
       return;
     }
     $("#lbl-selected-cpb").text(checkedCpbCnt + "/8");

@@ -13,7 +13,7 @@
     </select>
 
     <update id="updateMemberInfo" parameterType="MemberDTO">
-        UPDATE tbl_member SET nickname=#{nickname}, email=#{email}, description=#{description} WHERE id=#{id}
+        UPDATE tbl_member SET nickname=#{nickname}, email=#{email}, description=#{description}, region=#{region}, dtl_Region=#{dtlRegion} WHERE id=#{id}
     </update>
 
     <update id="updateMemberProfile" parameterType="map">

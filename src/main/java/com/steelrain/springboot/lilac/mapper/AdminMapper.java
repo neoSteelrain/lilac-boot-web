@@ -130,4 +130,8 @@ public interface AdminMapper {
 
     @Delete("DELETE FROM tbl_recommended_book WHERE book_id=#{bookId}")
     void deleteRecommendBook(@Param("bookId")Long bookId);
+
+    List<AdminYoutubePlayListDTO> findPlayListByLike(@Param("desc") boolean desc, @Param("licenseIds") int[] licenseIds, @Param("subjectIds") int[] subjectIds, @Param("pageNum") int pageNum, @Param("pageCount") int pageCount);
+
+    List<AdminYoutubePlayListDTO> findPlayListBViewCount(@Param("desc") boolean desc, @Param("licenseIds") int[] licenseIds, @Param("subjectIds") int[] subjectIds, @Param("pageNum") int pageNum, @Param("pageCount") int pageCount);
 }

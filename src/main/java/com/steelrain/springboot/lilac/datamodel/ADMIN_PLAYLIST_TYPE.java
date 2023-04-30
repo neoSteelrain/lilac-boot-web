@@ -11,11 +11,12 @@ public enum ADMIN_PLAYLIST_TYPE {
         2: 오늘 추가된 재생목록
         3: 1주일간 추가된 재생목록
         4: 1달간 추가된 재생목록
-        5: 많이 추천된 재생목록
-        6: 가장 많이본 재생목록
-        7: 가장 적게본 재생목록
+        5: 좋아요 많이 받은 재생목록
+        6: 좋아요 적게 받은 재생목록
+        7: 가장 많이본 재생목록
+        8: 가장 적게본 재생목록
     */
-    NONE(0),ALL(1), TODAY(2), WEEK(3), MONTH(4);
+    NONE(0),ALL(1), TODAY(2), WEEK(3), MONTH(4), LIKE_HIGH(5), LIKE_LOW(6), VIEW_HIGH(7), VIEW_LOW(8);
 
     private int m_plType;
 

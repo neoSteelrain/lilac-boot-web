@@ -42,10 +42,10 @@ public class SearchController {
 
     @GetMapping("/license-schedule")
     public String getLicenseInfo(@RequestParam("licenseCode") int licenseCode, Model model){
-        if(licenseCode <= 0){
+        /*if(licenseCode <= 0){
             log.error("유효하지 않은 자격증코드 : 입력된 자격증코드 = {}", licenseCode);
             return "redirect:/";
-        }
+        }*/
         model.addAttribute("licenseInfo", m_searchService.getLicenseInfoByCode(licenseCode));
         return "search/license-template";
     }

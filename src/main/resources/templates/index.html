@@ -211,15 +211,14 @@
                                             <div th:each="kakaoBook : ${recommendedBookList.kakaoBookList}" class="col-lg-4 col-md-6 col-12">
                                                 <div class="single-item-grid">
                                                     <div class="image">
-                                                        <a href="javascript:void(0)"><img th:src="${kakaoBook.thumbnail}" alt="#"></a>
+                                                        <a th:href="@{/search/book-detail(isbn=${kakaoBook.isbn13},region=0,detailRegion=0)}"><img th:src="${kakaoBook.thumbnail}" alt="#"></a>
                                                         <span class="flat-badge sale">추천</span>
                                                     </div>
                                                     <div class="content text-wrap">
                                                         <h6 class="title" th:text="${kakaoBook.title}"></h6>
                                                         <ul class="info">
                                                             <li class="info" th:text="${{kakaoBook.price}} +' -> '+ ${{kakaoBook.salePrice}}+' 원'"></li>
-                                                            <li class="like"><a th:href="${kakaoBook.url}" target="_blank"><i
-                                                                    class="lni lni-link"></i></a>
+                                                            <li class="like"><a th:href="${kakaoBook.url}" target="_blank"><i class="lni lni-link"></i></a>
                                                             </li>
                                                         </ul>
                                                     </div>

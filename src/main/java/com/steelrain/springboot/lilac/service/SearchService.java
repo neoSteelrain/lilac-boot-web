@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -131,11 +133,17 @@ public class SearchService implements ISearchService{
      */
     @Override
     public LicenseDTO getLicenseInfoByCode(int licenseCode) {
-        LicenseSearchEvent searchEvent = LicenseSearchEvent.builder()
-                .code(licenseCode)
-                .build();
-        m_appEventPublisher.publishEvent(searchEvent);
-        return searchEvent.getLicenseDTO();
+        if(licenseCode > 0){
+            LicenseSearchEvent searchEvent = LicenseSearchEvent.builder()
+                    .code(licenseCode)
+                    .build();
+            m_appEventPublisher.publishEvent(searchEvent);
+            return searchEvent.getLicenseDTO();
+        }
+        LicenseDTO result = new LicenseDTO();
+        result.setLicenseName("자격증 정보가 없습니다");
+        result.setScheduleList(new ArrayList<>(0));
+        return result;
     }
 
     /**

@@ -8,8 +8,8 @@ insert into tbl_license(code, name, key_word) values
 insert into tbl_subject(code, name, key_word, key_word_book) values
 (100,'자바', '자바 java', '자바 java'),
 (200,'자바스크립트', '자바스크립트 javascript', '자바스크립트 javascript'),
-(300,'스프링 프레임워크', '자바 스프링프레임워크', '자바 java 스프링프레임워크'),
-(400,'SQL', 'SQLD SQLP sql', 'sql'),
+(300,'스프링 프레임워크', 'spring spring boot 스프링 스프링부트', 'spring spring boot 스프링 스프링부트'),
+(400,'SQL', 'SQLD SQLP SQL', 'SQL'),
 (500,'데이터베이스', '데이터베이스 database', '데이터베이스 database'),
 (600,'코딩테스트', '코딩테스트', '코딩 테스트');
 

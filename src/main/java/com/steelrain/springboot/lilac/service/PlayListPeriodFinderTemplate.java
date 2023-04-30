@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.service;
 
+import com.steelrain.springboot.lilac.common.ICacheService;
 import com.steelrain.springboot.lilac.common.PagingUtils;
 import com.steelrain.springboot.lilac.datamodel.AdminPlayListSearchResultDTO;
 import com.steelrain.springboot.lilac.datamodel.AdminYoutubePlayListDTO;
@@ -13,7 +14,7 @@ import java.util.List;
  * 관리자 재생목록 보기에 필요한 재생목록을 조회하고 반환하는 기능을 구현한 템플릿 클래스
  */
 @RequiredArgsConstructor
-public class PlayListFinderTemplate {
+public class PlayListPeriodFinderTemplate {
 
     private final IAdminRepository m_adminRepository;
 

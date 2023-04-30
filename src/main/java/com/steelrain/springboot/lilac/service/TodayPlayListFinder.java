@@ -11,7 +11,7 @@ import com.steelrain.springboot.lilac.repository.IAdminRepository;
 public class TodayPlayListFinder implements IPlayListFinder{
     @Override
     public AdminPlayListSearchResultDTO getPlayList(int pageNum, int pageCount, int[] licenseIds, int[] subjectIds, IAdminRepository repository) {
-        PlayListFinderTemplate template = new PlayListFinderTemplate(repository);
+        PlayListPeriodFinderTemplate template = new PlayListPeriodFinderTemplate(repository);
         PeriodDate today = DateUtils.getToday();
         return template.getPlayListByRange(today.getFromDate(), today.getToDate(), pageNum, pageCount, licenseIds, subjectIds);
     }

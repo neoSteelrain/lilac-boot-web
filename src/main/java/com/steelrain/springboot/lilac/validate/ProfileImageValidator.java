@@ -10,10 +10,10 @@ import javax.validation.ConstraintValidatorContext;
  */
 public class ProfileImageValidator implements ConstraintValidator<ProfileImageFormat, MultipartFile> {
 
-    // TODO 이미지형식을 에노테이션 파라미터로 받도록 수정해야 한다
     private final static String PNG = "image/png";
     private final static String JPG = "image/jpg";
     private final static String JPEG = "image/jpeg";
+
 
     @Override
     public boolean isValid(MultipartFile value, ConstraintValidatorContext context) {
@@ -29,8 +29,10 @@ public class ProfileImageValidator implements ConstraintValidator<ProfileImageFo
      * @return
      */
     private boolean checkSupportedFileFormat(String contentType) {
+        // application/octet-stream
         return PNG.equals(contentType)
                 || JPG.equals(contentType)
-                || JPEG.equals(contentType);
+                || JPEG.equals(contentType)
+                || "application/octet-stream".equals(contentType);
     }
 }

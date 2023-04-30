@@ -11,7 +11,7 @@ import com.steelrain.springboot.lilac.repository.IAdminRepository;
 public class MonthPlayListFinder implements IPlayListFinder{
     @Override
     public AdminPlayListSearchResultDTO getPlayList(int pageNum, int pageCount, int[] licenseIds, int[] subjectIds, IAdminRepository repository) {
-        PlayListFinderTemplate template = new PlayListFinderTemplate(repository);
+        PlayListPeriodFinderTemplate template = new PlayListPeriodFinderTemplate(repository);
         PeriodDate firstDay = DateUtils.getFirstdayOfMonth();
         PeriodDate lastDay = DateUtils.getLastdayOfMonth();
         return template.getPlayListByRange(firstDay.getFromDate(), lastDay.getToDate(), pageNum, pageCount, licenseIds, subjectIds);

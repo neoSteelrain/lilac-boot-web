@@ -10,7 +10,7 @@ import com.steelrain.springboot.lilac.repository.IAdminRepository;
 public class AllPlayListFinder implements IPlayListFinder{
     @Override
     public AdminPlayListSearchResultDTO getPlayList(int pageNum, int pageCount, int[] licenseIds, int[] subjectIds, IAdminRepository repository) {
-        PlayListFinderTemplate template = new PlayListFinderTemplate(repository);
+        PlayListPeriodFinderTemplate template = new PlayListPeriodFinderTemplate(repository);
         return template.getPlayListByRange(null, null, pageNum, pageCount,licenseIds, subjectIds);
     }
 }

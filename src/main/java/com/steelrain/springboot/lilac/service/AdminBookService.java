@@ -105,7 +105,7 @@ public class AdminBookService implements IAdminBookService{
 
     @Override
     public AdminBookSearchResultDTO removeRecommendBook(Long bookId) {
-        m_adminRepository.deletRecommendBook(bookId);
+        m_adminRepository.deleteRecommendBook(bookId);
         return AdminBookSearchResultDTO.builder()
                 .bookList(m_adminRepository.findRecommendBookList())
                 .build();

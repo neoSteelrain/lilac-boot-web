@@ -4,8 +4,8 @@
 <mapper namespace="com.steelrain.springboot.lilac.mapper.AdminMapper">
     <insert id="insertRecommendedPlayList" parameterType="Long">
         INSERT INTO tbl_recommended_playlist(youtube_playlist_id) VALUES
-        <foreach collection="plIdList" item="item" separator="," open="(" close=")">
-        #{item}
+        <foreach collection="plIdList" item="item" separator=",">
+        (#{item})
         </foreach>
     </insert>
 
@@ -221,9 +221,83 @@
             </foreach>
     </delete>
 
+    <select id="findPlayListByLike" parameterType="map" resultType="AdminYoutubePlayListDTO">
+        SELECT pl.id, pl.playlist_id, pl.channel_id, pl.license_id, pl.subject_id, pl.title, pl.thumbnail_medium, pl.item_count, pl.reg_date, tmp.total_like
+        FROM (
+            SELECT yt.youtube_playlist_id, sum(like_count) as total_like
+            FROM tbl_youtube yt
+            GROUP BY yt.youtube_playlist_id ) AS tmp INNER JOIN tbl_youtube_playlist pl
+                ON tmp.youtube_playlist_id = pl.id
+        <if test="licenseIds != null and subjectIds == null">
+            WHERE pl.license_id IN
+            <foreach collection="licenseIds" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="subjectIds != null and licenseIds == null">
+            WHERE pl.subject_id IN
+            <foreach collection="subjectIds" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="licenseIds != null and subjectIds != null">
+            WHERE pl.license_id IN
+            <foreach collection="licenseIds" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach> OR pl.subject_id IN
+            <foreach collection="subjectIds" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY tmp.total_like
+        <if test="desc == true">
+            DESC LIMIT #{pageNum}, #{pageCount}
+        </if>
+        <if test="desc == false">
+            ASC LIMIT #{pageNum}, #{pageCount}
+        </if>
+    </select>
+
+    <select id="findPlayListBViewCount" parameterType="map" resultType="AdminYoutubePlayListDTO">
+        SELECT pl.id, pl.playlist_id, pl.channel_id, pl.license_id, pl.subject_id, pl.title, pl.thumbnail_medium, pl.item_count, pl.reg_date, tmp.view_count
+        FROM (
+        SELECT yt.youtube_playlist_id, sum(view_count) as view_count
+        FROM tbl_youtube yt
+        GROUP BY yt.youtube_playlist_id ) AS tmp INNER JOIN tbl_youtube_playlist pl
+        ON tmp.youtube_playlist_id = pl.id
+        <if test="licenseIds != null and subjectIds == null">
+            WHERE pl.license_id IN
+            <foreach collection="licenseIds" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="subjectIds != null and licenseIds == null">
+            WHERE pl.subject_id IN
+            <foreach collection="subjectIds" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="licenseIds != null and subjectIds != null">
+            WHERE pl.license_id IN
+            <foreach collection="licenseIds" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach> OR pl.subject_id IN
+            <foreach collection="subjectIds" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY tmp.view_count
+        <if test="desc == true">
+            DESC LIMIT #{pageNum}, #{pageCount}
+        </if>
+        <if test="desc == false">
+            ASC LIMIT #{pageNum}, #{pageCount}
+        </if>
+    </select>
+
     <!-- 도서관련 SQL-->
     <select id="findTotalLicBookList" parameterType="map" resultType="AdminBookDTO">
-        SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+        SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail, isbn13
         FROM tbl_book
         WHERE license_id IN
             <foreach collection="licenseIds" item="item" separator="," open="(" close=")">
@@ -242,13 +316,13 @@
     </select>
 
     <select id="findTotalBookList" parameterType="map" resultType="AdminBookDTO">
-        SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+        SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail, isbn13
         FROM tbl_book
         ORDER BY reg_date DESC LIMIT #{pageNum}, #{pageCount}
     </select>
 
     <select id="findTotalSubBookList" parameterType="map" resultType="AdminBookDTO">
-        SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+        SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail, isbn13
         FROM tbl_book
         WHERE subject_id IN
         <foreach collection="subjectIds" item="item" separator="," open="(" close=")">
@@ -267,16 +341,16 @@
     </select>
 
     <select id="findTotalLicSubBookList" parameterType="map" resultType="AdminBookDTO">
-        SELECT tmp.id, tmp.title, tmp.publish_date, tmp.authors, tmp.publisher, tmp.reg_date, tmp.thumbnail
+        SELECT tmp.id, tmp.title, tmp.publish_date, tmp.authors, tmp.publisher, tmp.reg_date, tmp.thumbnail, tmp.isbn13
         FROM (
-            SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+            SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail, isbn13
             FROM tbl_book
             WHERE license_id IN
             <foreach collection="licenseIds" item="item" separator="," open="(" close=")">
                 #{item}
             </foreach>
             UNION
-            SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+            SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail, isbn13
             FROM tbl_book
             WHERE subject_id IN
             <foreach collection="subjectIds" item="item" separator="," open="(" close=")">
@@ -289,14 +363,14 @@
     <select id="findTotalLicSubBookCount" parameterType="map" resultType="int">
         SELECT count(tmp.id)
         FROM (
-        SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+        SELECT id
         FROM tbl_book
         WHERE license_id IN
         <foreach collection="licenseIds" item="item" separator="," open="(" close=")">
             #{item}
         </foreach>
         UNION
-        SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+        SELECT id
         FROM tbl_book
         WHERE tb.subject_id IN
         <foreach collection="subjectIds" item="item" separator="," open="(" close=")">
@@ -306,7 +380,7 @@
     </select>
 
     <select id="findLicBookListByRange" parameterType="map" resultType="AdminBookDTO">
-        SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+        SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail, isbn13
         FROM tbl_book
         <![CDATA[WHERE reg_date > #{fromDate} AND reg_date < #{toDate}]]>
         AND license_id IN
@@ -327,7 +401,7 @@
     </select>
 
     <select id="findSubBookListByRange" parameterType="map" resultType="AdminBookDTO">
-        SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+        SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail, isbn13
         FROM tbl_book
         <![CDATA[WHERE reg_date > #{fromDate} AND reg_date < #{toDate}]]>
         AND subject_id IN
@@ -348,9 +422,9 @@
     </select>
 
     <select id="findLicSubBookListByRange" parameterType="map" resultType="AdminBookDTO">
-        SELECT tmp.id, tmp.title, tmp.publish_date, tmp.authors, tmp.publisher, tmp.reg_date, tmp.thumbnail
+        SELECT tmp.id, tmp.title, tmp.publish_date, tmp.authors, tmp.publisher, tmp.reg_date, tmp.thumbnail, tmp.isbn13
         FROM (
-            SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+            SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail, isbn13
             FROM tbl_book
             <![CDATA[WHERE reg_date > #{fromDate} AND reg_date < #{toDate}]]>
             AND license_id IN
@@ -358,7 +432,7 @@
                 #{item}
             </foreach>
             UNION
-            SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+            SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail, isbn13
             FROM tbl_book
             <![CDATA[WHERE reg_date > #{fromDate} AND reg_date < #{toDate}]]>
             AND subject_id IN
@@ -372,7 +446,7 @@
     <select id="findLicSubBookCountByRange" parameterType="map" resultType="int">
         SELECT count(tmp.id)
         FROM (
-            SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+            SELECT id
             FROM tbl_book
             <![CDATA[WHERE reg_date > #{fromDate} AND reg_date < #{toDate}]]>
             AND license_id IN
@@ -380,7 +454,7 @@
                 #{item}
             </foreach>
             UNION
-            SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+            SELECT id
             FROM tbl_book
             <![CDATA[WHERE reg_date > #{fromDate} AND reg_date < #{toDate}]]>
             AND subject_id IN
@@ -391,14 +465,14 @@
     </select>
 
     <select id="findBookListByRange" parameterType="map" resultType="AdminBookDTO">
-        SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail
+        SELECT id, title, publish_date, authors, publisher, reg_date, thumbnail, isbn13
         FROM tbl_book
         <![CDATA[WHERE reg_date > #{fromDate} AND reg_date < #{toDate}]]>
         ORDER BY reg_date DESC LIMIT #{pageNum}, #{pageCount}
     </select>
 
     <select id="findCandiBookList" resultType="AdminBookDTO">
-        SELECT tb.id, tb.title, tb.publish_date, tb.authors, tb.publisher, tb.reg_date, tb.thumbnail
+        SELECT tb.id, tb.title, tb.publish_date, tb.authors, tb.publisher, tb.reg_date, tb.thumbnail, tb.isbn13
         FROM tbl_candi_recommend_book crb INNER JOIN tbl_book tb
             ON crb.book_id=tb.id;
     </select>
@@ -419,7 +493,7 @@
     </insert>
 
     <select id="findRecommendBookList" resultType="AdminBookDTO">
-        SELECT tb.id, tb.title, tb.publish_date, tb.authors, tb.publisher, tb.reg_date, tb.thumbnail
+        SELECT tb.id, tb.title, tb.publish_date, tb.authors, tb.publisher, tb.reg_date, tb.thumbnail, isbn13
         FROM tbl_recommended_book rb INNER JOIN tbl_book tb
             ON rb.book_id=tb.id;
     </select>

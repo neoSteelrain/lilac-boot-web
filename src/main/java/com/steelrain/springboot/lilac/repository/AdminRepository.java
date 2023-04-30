@@ -280,7 +280,17 @@ public class AdminRepository implements IAdminRepository {
     }
 
     @Override
-    public void deletRecommendBook(Long bookId) {
+    public void deleteRecommendBook(Long bookId) {
         m_adminMapper.deleteRecommendBook(bookId);
+    }
+
+    @Override
+    public List<AdminYoutubePlayListDTO> findPlayListByLike(boolean desc, int[] licenseIds, int[] subjectIds, int pageNum, int pageCount) {
+        return m_adminMapper.findPlayListByLike(desc, licenseIds, subjectIds, pageNum, pageCount);
+    }
+
+    @Override
+    public List<AdminYoutubePlayListDTO> findPlayListByViewCount(boolean desc, int[] licenseIds, int[] subjectIds, int pageNum, int pageCount) {
+        return m_adminMapper.findPlayListBViewCount(desc, licenseIds, subjectIds, pageNum, pageCount);
     }
 }

@@ -81,13 +81,22 @@ public class MemberService implements IMemberService {
                                 .id(memberId)
                                 .nickname(editDTO.getNickname())
                                 .email(editDTO.getEmail())
-                                .description(editDTO.getDescription()).build();
-        // 회원프로필 이미지 처리
-        if(!editDTO.getProfileImage().isEmpty()){
-            dto.setProfileOriginal(editDTO.getProfileImage().getOriginalFilename());
-            dto.setProfileSave(updateMemberProfile(editDTO.getProfileImage(),
-                                                                    memberId,
-                                                                    m_memberRepository.getMemberProfileSavePath(memberId)));
+                                .description(editDTO.getDescription())
+                                .region(editDTO.getRegion())
+                                .dtlRegion(editDTO.getDtlRegion())
+                                .build();
+        /*
+           ProfileImageValidator 에서 'application/octet-stream' 을 처리해줘야 하지만, 아직 적당한 처리방법을 찾지 못하여 Service 에서 처리해준다
+           TODO : spring form validation 에서 자동으로 바인딩된 'application/octet-stream' 을 Validator에서 처리하는 방법을 찾아야 한다
+         */
+        if(!"application/octet-stream".equals(editDTO.getProfileImage().getContentType())){
+            // 회원프로필 이미지 처리
+            if(!editDTO.getProfileImage().isEmpty()){
+                dto.setProfileOriginal(editDTO.getProfileImage().getOriginalFilename());
+                dto.setProfileSave(updateMemberProfile(editDTO.getProfileImage(),
+                        memberId,
+                        m_memberRepository.getMemberProfileSavePath(memberId)));
+            }
         }
         return m_memberRepository.updateMemberInfo(dto);
     }

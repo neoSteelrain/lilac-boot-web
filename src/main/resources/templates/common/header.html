@@ -70,7 +70,8 @@
                     </div>
                   </li>
                   <li>
-                    <i class="lni lni-user" th:text="' '+${session.MEMBER_NICKNAME}"></i>
+<!--                    <i class="lni lni-user" th:text="' '+${session.MEMBER_NICKNAME}"></i>-->
+                    <i th:text="${session.MEMBER_NICKNAME}"></i>
                   </li>
                   <li>
                     <form th:action="@{/member/logout}" method="post">

@@ -32,19 +32,4 @@ public class HomeController {
         model.addAttribute("isLogin", Objects.isNull(request.getSession().getAttribute(SESSION_KEY.MEMBER_ID)) ? "0":"1");
         return "index";
     }
-
-  /*  @ModelAttribute("subjectCodes")
-    public List<SubjectCodeDTO> getSubjectCodes(){
-        return m_keywordCategoryCacheService.getSubjectCodeList();
-    }
-
-    @ModelAttribute("libRegionCodes")
-    public List<LibraryRegionCodeDTO> getLibRegionCodes(){
-        return m_keywordCategoryCacheService.getLibraryRegionCodeList();
-    }
-
-    @ModelAttribute("licenseCodes")
-    public List<LicenseCodeDTO> getLicenseCodes(){
-        return m_keywordCategoryCacheService.getLicenseCodeList();
-    }*/
 }

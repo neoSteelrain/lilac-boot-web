@@ -112,5 +112,9 @@ public interface IAdminRepository {
 
     List<AdminBookDTO> findRecommendBookList();
 
-    void deletRecommendBook(Long bookId);
+    void deleteRecommendBook(Long bookId);
+
+    List<AdminYoutubePlayListDTO> findPlayListByLike(boolean desc, int[] licenseIds, int[] subjectIds, int pageNum, int pageCount);
+
+    List<AdminYoutubePlayListDTO> findPlayListByViewCount(boolean desc, int[] licenseIds, int[] subjectIds, int pageNum, int pageCount);
 }

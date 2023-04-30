@@ -43,7 +43,8 @@
                 <!-- Start Dashboard Sidebar -->
                 <div class="dashboard-sidebar">
                     <div class="user-image">
-                        <img id="profileImgPreViewSm" th:src="${memberInfo.profileSave == null} ? ${#request.contextPath}+'/images/default-profile.jpg' : ${memberInfo.profileSave}">
+                        <img id="profileImgPreViewSm"
+                             th:src="${memberInfo.profileSave == null} ? ${#request.contextPath}+'/images/default-profile.jpg' : ${memberInfo.profileSave}">
                         <h3 th:text="${memberInfo.nickname}">
                             <span th:text="${memberInfo.regDate}"></span>
                         </h3>
@@ -64,9 +65,11 @@
                         <h3 class="block-title">회원정보</h3>
                         <div class="inner-block">
                             <div class="image">
-                                <img id="profileImgPreViewLg" th:src="${memberInfo.profileSave == null} ? ${#request.contextPath}+'/images/default-profile.jpg' : ${memberInfo.profileSave}">
+                                <img id="profileImgPreViewLg"
+                                     th:src="${memberInfo.profileSave == null} ? ${#request.contextPath}+'/images/default-profile.jpg' : ${memberInfo.profileSave}">
                             </div>
-                            <form th:object="${memberInfo}" class="profile-setting-form was-validated" method="post" action="profile" enctype="multipart/form-data">
+                            <form th:object="${memberInfo}" class="profile-setting-form was-validated" method="post"
+                                  action="profile" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-lg-6 col-12">
                                         <div class="form-group">
@@ -88,37 +91,39 @@
                                     <div class="col-lg-6 col-12">
                                         <div class="form-group">
                                             <div class="row">
-                                                <!--                        <div class="col-6">-->
-                                                <!--                          <div class="search-input">-->
-                                                <!--                             <label for="location-main"><i class="lni lni-map-marker theme-color"></i></label>-->
-                                                <!--                            <select name="location-main" id="location-main"-->
-                                                <!--                                    th:field="*{libRegionCodes}"-->
-                                                <!--                                    th:onchange="changeLibRegionCode()">-->
-                                                <!--                              <option value="">-&#45;&#45; 지역정보 -&#45;&#45;</option>-->
-                                                <!--                              <option th:each="libRegionCode : ${libRegionCodes}"-->
-                                                <!--                                      th:value="${libRegionCode.code}"-->
-                                                <!--                                      th:text="${libRegionCode.name}"></option>-->
-                                                <!--                            </select>-->
-                                                <!--                          </div>-->
-                                                <!--                        </div>-->
-                                                <!--                        <div class="col-6">-->
-                                                <!--                          <div class="search-input">-->
-                                                <!--                            &lt;!&ndash; <label for="location-sub"><i class="lni lni-map-marker theme-color"></i></label> &ndash;&gt;-->
-                                                <!--                            <select name="location-sub" id="location-sub"-->
-                                                <!--                                    onchange="changeDetailRegionCode()">-->
-                                                <!--                              <option value="">-&#45;&#45; 세부지역 -&#45;&#45;</option>-->
-                                                <!--                            </select>-->
-                                                <!--                          </div>-->
-                                                <!--                        </div>-->
+                                                <div class="col-6">
+                                                    <div class="search-input">
+                                                        <!--<span th:text="'지역코드 : '+${memberInfo.region}"></span>
+                                                        <span th:text="'세부지역코드 : '+${memberInfo.dtlRegion}"></span>-->
+                                                        <label for="location-main"><i class="lni lni-map-marker theme-color"></i></label>
+                                                        <select name="region" id="location-main" onchange="changeLibRegionCode()">
+                                                            <option value="-1">--- 지역정보 ---</option>
+                                                            <option th:each="libRegionCode : ${libRegionCodes}" th:value="${libRegionCode.code}" th:text="${libRegionCode.name}"></option>
+                                                        </select>
+                                                    </div>
+                                                    <span id="regionNotice" th:each="err : ${#fields.errors('region')}" th:if="${errStat.first}" th:text="${err}" class="text-danger"></span>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="search-input">
+                                                        <label for="location-sub"><i class="lni lni-map-marker theme-color"></i></label>
+                                                        <select name="dtlRegion" id="location-sub">
+                                                            <option value="-1">--- 세부지역 ---</option>
+                                                        </select>
+                                                    </div>
+                                                    <span id="dtlRegionNotice" th:each="err : ${#fields.errors('dtlRegion')}" th:if="${errStat.first}" th:text="${err}" class="text-danger"></span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-12">
                                         <div class="form-group upload-image">
                                             <label>프로필 이미지</label>
-                                            <input name="profileImage" id="profileImage" type="file" placeholder="Upload Image" onchange="changeProfileImg()">
-                                            <span id="emailNotice" th:each="err : ${#fields.errors('email')}" th:if="${errStat.first}" th:text="${err}"class="text-danger" ></span>
-                                            <span th:each="err : ${#fields.errors('profileImage')}" th:if="${errStat.first}" th:text="${err}" class="text-danger"></span>
+                                            <input name="profileImage" id="profileImage" type="file"
+                                                   placeholder="Upload Image" onchange="changeProfileImg()">
+                                            <span id="emailNotice" th:each="err : ${#fields.errors('email')}"
+                                                  th:if="${errStat.first}" th:text="${err}" class="text-danger"></span>
+                                            <span th:each="err : ${#fields.errors('profileImage')}"
+                                                  th:if="${errStat.first}" th:text="${err}" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-12">
@@ -129,7 +134,8 @@
                                         </div>
                                     </div>
                                     <div class="col-12">
-                                        <span th:each="err : ${#fields.globalErrors()}" th:if="${errStat.first}" th:text="${err}" class="text-danger"></span>
+                                        <span th:each="err : ${#fields.globalErrors()}" th:if="${errStat.first}"
+                                              th:text="${err}" class="text-danger"></span>
                                         <div class="form-group button mb-0">
                                             <button type="submit" class="btn ">회원정보 수정</button>
                                         </div>
@@ -144,7 +150,8 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="form-group button mb-0">
-                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteMemberModal">
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteMemberModal">
                                                 회원탈퇴
                                             </button>
                                         </div>
@@ -159,7 +166,8 @@
     </div>
 </section>
 
-<div class="modal fade" id="deleteMemberModal" tabindex="-1" aria-labelledby="deleteMemberModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteMemberModal" tabindex="-1" aria-labelledby="deleteMemberModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -196,15 +204,58 @@
 <script th:src="@{/js/count-up.min.js}"></script>
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/lilac-common.js}"></script>
+<script th:src="@{/js/lilac-lib-region.js}"></script>
 <script th:inline="javascript">
     const ctxPath = [[${#request.contextPath}]];
     const FILE_SIZE = 1024 * 4096;
-    function changeProfileImg(){
+
+    window.addEventListener("load", function(event){
+        const memberRegion = [[${memberInfo.region}]];
+        const memberDtlRegion = [[${memberInfo.dtlRegion}]];
+        initMemberLocationInfo(memberRegion);
+        initMemberDetailRegion(memberRegion, memberDtlRegion);
+    })
+
+    // 회원정보의 저장된 지역코드로 select 요소를 초기화한다
+    function initMemberLocationInfo(paramRegion){
+        // 지역코드는 페이지 로딩할때 세팅되어 있다
+        $("#location-main").find("option").map(function(){
+            if(parseInt($(this).val()) == paramRegion){
+                $(this).prop("selected", "selected");
+            }
+        })
+    }
+
+    // 지역코드에 다른 세부지역코드를 초기화한다
+    function initMemberDetailRegion(paramRegion, paramDtlRegion){
+        $.ajax({
+            type:"get",
+            url: ctxPath+"/search/dtl-region-code",
+            dataType:"json",
+            data:{ regionCode: paramRegion },
+            success:(result) => {
+                $("#location-sub").empty();
+                $("#location-sub").append('<option value="-1">--- 세부지역 ---</option>');
+                for(const region of result){
+                    if(parseInt(region.code) == paramDtlRegion){
+                        $("#location-sub").append(`<option selected value=${region.code}>${region.detailName}</option>`);
+                    }else{
+                        $("#location-sub").append(`<option value=${region.code}>${region.detailName}</option>`);
+                    }
+                }
+            },
+            error:(err) => {
+                alert("세부지역코드를 불러오지 못했습니다.");
+            }
+        });
+    }
+
+    function changeProfileImg() {
         let files = $('#profileImage').prop('files');
-        if(files == undefined && files.length == 0){
+        if (files == undefined && files.length == 0) {
             return;
         }
-        if(files[0].size > FILE_SIZE){
+        if (files[0].size > FILE_SIZE) {
             alert('이미지 용량은 256KB 이하여야 합니다');
             $('#profileImage').val('');
             return;
@@ -216,7 +267,7 @@
         reader.readAsDataURL(files[0]);
     }
 
-    function deleteMember(){
+    function deleteMember() {
         const form = $("#deleteMemberForm");
         form.attr("action", "delete");
         form.attr("method", "post")

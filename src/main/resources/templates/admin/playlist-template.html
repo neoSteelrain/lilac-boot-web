@@ -13,6 +13,8 @@
           <img th:src="${item.thumbnailMedium}" alt="#">
           <div class="content">
             <h3 class="title"><a th:href="|javascript:openPlayList('${item.id}')|" th:text="${item.title}"></a></h3>
+            <i class="lni lni-star" th:if="${item.totalLike != null}" th:text="' '+${item.totalLike}"></i>
+            <i class="lni lni-eye" th:if="${item.viewCount != null}" th:text="' '+${item.viewCount}"></i>
           </div>
         </div>
       </div>
