@@ -207,7 +207,7 @@
 <script th:src="@{/js/lilac-lib-region.js}"></script>
 <script th:inline="javascript">
     const ctxPath = [[${#request.contextPath}]];
-    const FILE_SIZE = 1024 * 4096;
+    const FILE_SIZE = 1024 * 256;
 
     window.addEventListener("load", function(event){
         const memberRegion = [[${memberInfo.region}]];
@@ -216,7 +216,7 @@
         initMemberDetailRegion(memberRegion, memberDtlRegion);
     })
 
-    // 회원정보의 저장된 지역코드로 select 요소를 초기화한다
+    // 회원정보의 저장된 지역코드에 맞는 select 요소를 선택상태로 한다
     function initMemberLocationInfo(paramRegion){
         // 지역코드는 페이지 로딩할때 세팅되어 있다
         $("#location-main").find("option").map(function(){

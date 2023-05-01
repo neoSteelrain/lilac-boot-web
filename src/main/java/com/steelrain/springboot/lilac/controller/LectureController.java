@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Objects;
@@ -89,7 +88,7 @@ public class LectureController {
         editDTO.setNoteId(noteId);
         editDTO.setNoteTitle(noteDTO.getTitle());
         editDTO.setNoteDescription(noteDTO.getDescription());
-        editDTO.setLectureId(Objects.isNull(noteDTO.getLicenseId()) ? -1 : noteDTO.getLicenseId());
+        editDTO.setLicenseId(Objects.isNull(noteDTO.getLicenseId()) ? -1 : noteDTO.getLicenseId());
         editDTO.setSubjectId(Objects.isNull(noteDTO.getSubjectId()) ? -1 : noteDTO.getSubjectId());
         model.addAttribute("noteInfo", editDTO);
 
@@ -117,7 +116,7 @@ public class LectureController {
         noteDTO.setId(noteEditDTO.getNoteId());
         noteDTO.setTitle(noteEditDTO.getNoteTitle());
         noteDTO.setDescription(noteEditDTO.getNoteDescription());
-        noteDTO.setLicenseId(noteEditDTO.getLectureId());
+        noteDTO.setLicenseId(noteEditDTO.getLicenseId());
         noteDTO.setSubjectId(noteEditDTO.getSubjectId());
 
         try{

@@ -374,6 +374,7 @@
 <script th:src="@{/js/lilac-common.js}"></script>
 <script th:inline="javascript">
     const ctxPath = [[${#request.contextPath}]];
+
     function editLectureNoteModal(argNoteId) {
         $.ajax({
             type: "get",
@@ -384,6 +385,8 @@
                 let html = jQuery('<div>').html(data);
                 let contents = html.find("div#lic-note-edit-template").html();
                 $('#editLectureNote-div').html(contents);
+                initProfileLicenseInfo(); // 모달창을 띄우기 전에 자격증정보를 초기화 한다
+                initProfileSubjectInfo();
                 $("#lectureNoteEditModal").modal("show");
             },
             error: function (error) {
@@ -392,26 +395,50 @@
         })
     }
 
-    function noteTitleClickArrow(aTag) {
-        aTag.classList.toggle('active');
+    // 강의노트정보의 저장된 자격증에 맞는 select 요소를 선택상태로 한다
+    function initProfileLicenseInfo(){
+        const memberLicenseId = [[${noteDetail.licenseId}]];
+        if(memberLicenseId == null){
+            return;
+        }
+        $("#licenseId").find("option").map(function(){
+            if(parseInt($(this).val()) == memberLicenseId){
+                $(this).prop("selected", "selected");
+            }
+        })
+        checkLicenseSelectBox();
+    }
+
+    // 강의노트정보의 저장된 주제키워드에 맞는 select 요소를 선택상태로 한다
+    function initProfileSubjectInfo(){
+        const memberSubjectId = [[${noteDetail.subjectId}]];
+        if(memberSubjectId == null){
+            return;
+        }
+        $("#subjectId").find("option").map(function(){
+            if(parseInt($(this).val()) == memberSubjectId){
+                $(this).prop("selected", "selected");
+            }
+        })
+        checkSubjectSelectBox();
     }
 
     function checkLicenseSelectBox() {
-        const selectedVal = $("#license").val();
+        const selectedVal = $("#licenseId").val();
         if (selectedVal == -1) {
-            $("#subject").attr("disabled", false);
+            $("#subjectId").attr("disabled", false);
         } else {
-            $("#subject").attr("disabled", "disabled");
+            $("#subjectId").attr("disabled", "disabled");
             $("#licenseNotice").text('');
         }
     }
 
     function checkSubjectSelectBox() {
-        const selectedVal = $("#subject").val();
+        const selectedVal = $("#subjectId").val();
         if (selectedVal == -1) {
-            $("#license").attr("disabled", false);
+            $("#licenseId").attr("disabled", false);
         } else {
-            $("#license").attr("disabled", "disabled");
+            $("#licenseId").attr("disabled", "disabled");
             $("#licenseNotice").text('');
         }
     }
@@ -433,8 +460,8 @@
 
         const noteTile = $("#noteTitle").val();
         const noteDesc = $("#noteDesc").val();
-        const licenseId = $("#license").val();
-        const subjectId = $("#subject").val();
+        const licenseId = $("#licenseId").val();
+        const subjectId = $("#subjectId").val();
         const isValidNoteTitle = validateString(noteTile);
         const isValidNoteDesc = validateString(noteDesc);
         $("#titleNotice").html(isValidNoteTitle ? '' : '강의노트 제목을 입력해주세요');

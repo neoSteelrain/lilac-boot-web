@@ -58,16 +58,9 @@ public class SearchController {
                                      @RequestParam("bookCount") int bookCount, Model model, HttpSession session){
         MemberDTO memberDTO = m_memberService.getMemberInfo((Long)session.getAttribute(SESSION_KEY.MEMBER_ID));
         boolean isLogin = Objects.nonNull(memberDTO);
-        if(regionCode <= -1){
+        if(regionCode <= -1 && detailRegionCode <= -1){
             if(isLogin){
                 regionCode = memberDTO.getRegion();
-            }else{
-                log.error("지역코드 입력에러 - 필수입력 지역코드 없음 : 입력된 지역코드 = {}", regionCode);
-                return "redirect:/";
-            }
-        }
-        if(regionCode <= -1 && detailRegionCode < -1){
-            if(isLogin){
                 detailRegionCode = memberDTO.getDtlRegion();
             }else{
                 log.error("지역코드 입력에러 - 지역코드,세부지역코드 없음 : 입력된 지역코드 = {} , 입력된 세부지역코드 = {}", regionCode, detailRegionCode);

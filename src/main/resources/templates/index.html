@@ -117,7 +117,14 @@
                     <div th:each="subject : ${subjectCodes}" class="col-lg-2 col-md-3 col-12">
                         <a th:href="|javascript:refreshPageBySubject('${subject.code}', 1)|" class="single-cat wow fadeInUp" data-wow-delay=".2s">
                             <div class="icon">
-                                <img th:src="@{/images/subject/java.png}" alt="#">
+                                <th:block th:switch="${subject.code}">
+                                    <img th:case="100" th:src="@{/images/subject/java-96.png}" alt="#">
+                                    <img th:case="200" th:src="@{/images/subject/js-96.png}" alt="#">
+                                    <img th:case="300" th:src="@{/images/subject/spring-96.png}" alt="#">
+                                    <img th:case="400" th:src="@{/images/subject/sql-96.png}" alt="#">
+                                    <img th:case="500" th:src="@{/images/subject/database-96.png}" alt="#">
+                                    <img th:case="600" th:src="@{/images/subject/codingtest-96.png}" alt="#">
+                                </th:block>
                             </div>
                             <h3 th:text="${subject.name}"></h3>
                         </a>
@@ -126,6 +133,22 @@
             </div>
         </div>
     </section>
+    <!--<section class="categories style2" style="padding-top: 40px;padding-bottom: 20px">
+        <div class="container">
+            <div class="cat-inner">
+                <div class="row">
+                    <div th:each="subject : ${subjectCodes}" class="col-lg-2 col-md-3 col-12">
+                        <a th:href="|javascript:refreshPageBySubject('${subject.code}', 1)|" class="single-cat wow fadeInUp" data-wow-delay=".2s">
+                            <div class="icon">
+                                <img th:src="@{/images/subject/java.png}" alt="#">
+                            </div>
+                            <h3 th:text="${subject.name}"></h3>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>-->
     <!-- 키워드 목록 끝 -->
 
     <!-- 자격증 일정 시작 -->

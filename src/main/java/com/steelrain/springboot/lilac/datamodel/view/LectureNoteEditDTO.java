@@ -20,6 +20,6 @@ public class LectureNoteEditDTO {
     @NotBlank
     @Length(min=1, max=500)
     private String noteDescription;
-    private int lectureId;
+    private int licenseId;
     private int subjectId;
 }
