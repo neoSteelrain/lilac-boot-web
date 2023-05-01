@@ -95,10 +95,11 @@
                         <div class="row">
                             <div class="col-lg-12 col-12">
                                 <div class="user-list">
-                                    <ul>
+                                    <ul class="list-group">
                                         <!-- 재생목록의 개별영상 시작 -->
-                                        <li th:each="video : ${videoList}">
+                                        <li class="border border-0 list-group-item list-group-item-action" th:each="video : ${videoList}">
                                             <a th:href="|javascript:playSelectedVideo('${video.videoId}', '${video.Id}')|">
+                                                <i name="i-videoChk" th:id="'video-'+${video.id}"></i>
                                                 <div class="image">
                                                     <img style="border-radius: 0%" th:src="${video.thumbnailDefault}" alt="#">
                                                 </div>
@@ -153,6 +154,8 @@
         event.target.playVideo();
     }
 
+
+
     // playlist-add-model.html 에서 호출하는 함수
     function addPlayListToLectureNote() {
         const paramPlayListId = [[${playListId}]];
@@ -192,9 +195,22 @@
                 let playlist = html.find("div#video-info-template").html();
                 $("#div-video-info").html(playlist);
                 player.loadVideoById(paramVideoOriginId, 0);
+                changeVideoCheck(paramVideoId);
             },
             error: function (error) {
                 alert("영상정보 조회중 에러");
+            }
+        })
+    }
+
+    // 사용자가 선택한 유튜브 영상에 선택표시를 한다
+    function changeVideoCheck(videoId){
+        const selectId = "video-"+videoId;
+        $("i[name=i-videoChk]").each(function(){
+            if($(this).prop("id") == selectId){
+                $(this).addClass("lni lni-checkmark");
+            }else{
+                $(this).removeClass("lni lni-checkmark");
             }
         })
     }

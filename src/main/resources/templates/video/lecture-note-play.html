@@ -48,7 +48,6 @@
             </div>
             <div class="col-lg-6 col-md-6 col-12">
                 <ul class="breadcrumb-nav">
-                    <li>노트제목</li>
                     <li th:text="'강의노트 제목 : '+${videoList[0].lectureTitle}"></li>
                 </ul>
             </div>
@@ -115,10 +114,11 @@
                         <div class="row">
                             <div class="col-lg-12 col-12">
                                 <div class="user-list">
-                                    <ul>
+                                    <ul class="list-group">
                                         <!-- 재생목록의 개별영상 시작 -->
-                                        <li th:each="video : ${videoList}">
+                                        <li class="border border-0 list-group-item list-group-item-action" th:each="video : ${videoList}">
                                             <a th:href="|javascript:playSelectedVideo('${video.videoId}','${video.Id}','${video.lectureVideoId}')|">
+                                                <i name="i-videoChk" th:id="'video-'+${video.id}"></i>
                                                 <div class="image">
                                                     <img style="border-radius: 0%" th:src="${video.thumbnailDefault}" alt="#">
                                                 </div>
@@ -254,9 +254,21 @@
                 $("#div-video-info").html(playlist);
                 updateCurrentVideoId(paramLecVideoId);
                 player.loadVideoById(paramVideoOriginId, 0);
+                changeVideoCheck(paramVideoId);
             },
             error: function (error) {
                 alert("영상정보 조회중 에러");
+            }
+        })
+    }
+
+    function changeVideoCheck(videoId){
+        const selectId = "video-"+videoId;
+        $("i[name=i-videoChk]").each(function(){
+            if($(this).prop("id") == selectId){
+                $(this).addClass("lni lni-checkmark");
+            }else{
+                $(this).removeClass("lni lni-checkmark");
             }
         })
     }
