@@ -316,6 +316,10 @@ public class LectureNoteService implements ILectureNoteService{
         createDefaultLectureNote(event.getMemberId(), event.getMemberNickname());
     }
 
+    public String getTotalDuration(Long playListId){
+        return StringFormatter.toHM(extractTotalDuration(playListId));
+    }
+
     // 강의노트에 등록된 도서정보목록을 LectureNoteDetailDTO에 설정한다.
     private void initBookInfoByLectureNote(Long memberId, Long noteId, final LectureNoteDetailDTO noteDetailDTO) {
         noteDetailDTO.setKakaoBookList( m_lectureNoteRepository.findBookListByLectureNote(memberId, noteId));
@@ -379,7 +383,7 @@ public class LectureNoteService implements ILectureNoteService{
     /*
         회원의 자격증정보 초기화
         - licenseCode, subjectCode 2개 둘다 null인 경우는 기본강의노트이므로, 자격증정보를 얻어오지 않고 곧바로 리턴한다.
-        - 강의노트 주제가 자격증이 아닌경우는 아직 미구현이다. TODO : 강의노트 주제가 자격증이 아닌 키워드인 경우를 구현해야 한다.
+        - 강의노트 주제가 자격증이 아닌경우는 특별한 정보를 넘기지 않는다
      */
     private LectureNoteDetailDTO initLicenseInfoByLectureNote(Integer licenseId, Integer subjectId, final LectureNoteDetailDTO noteDetailDTO){
         if(Objects.isNull(licenseId) && Objects.isNull(subjectId)){

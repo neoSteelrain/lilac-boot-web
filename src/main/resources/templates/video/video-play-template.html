@@ -33,7 +33,7 @@
             </li>
             <li th:if="${memberId != null && memberGrade > 1}">
                 <a th:href="|javascript:showPlaylistAddModal('${playListId}')|"
-                   class="reply-link"><i class="lni lni-notepad"></i> 강의노트에 추가하기</a>
+                   class="reply-link"><i class="lni lni-notepad"></i> 강의노트에 추가</a>
             </li>
         </ul>
         <p th:utext="${videoInfo.description}"></p>

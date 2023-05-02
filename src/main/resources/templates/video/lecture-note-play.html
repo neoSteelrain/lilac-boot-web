@@ -38,7 +38,7 @@
 
 <div th:replace="~{common/header::header}"></div>
 
-<div class="breadcrumbs">
+<div class="breadcrumbs" style="padding-top: 110px; padding-bottom: 15px">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 col-md-6 col-12">
@@ -49,13 +49,16 @@
             <div class="col-lg-6 col-md-6 col-12">
                 <ul class="breadcrumb-nav">
                     <li th:text="'강의노트 제목 : '+${videoList[0].lectureTitle}"></li>
+                    <li>
+                        <i class="lni lni-alarm-clock" th:text="'총 강의시간 : '+${totalDuration}"></i>
+                    </li>
                 </ul>
             </div>
         </div>
     </div>
 </div>
 
-<section class="section blog-single">
+<section class="section blog-single" style="padding-top: 20px; padding-bottom: 20px">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-12 col-12">
@@ -65,42 +68,40 @@
                     </div>
                     <div id="div-video-info" class="post-details">
                         <div class="detail-inner">
-                            <div class="detail-inner">
-                                <h5 class="post-title" th:text="${videoList[0].title}"></h5>
-                                <ul class="custom-flex post-meta">
-                                    <li>
-                                        <i class="lni lni-calendar" th:text="' '+${{videoList[0].publishDate}}"></i>
-                                    </li>
-                                    <li>
-                                        <i class="lni lni-comments" th:text="' '+${videoList[0].commentCount}"></i>
-                                    </li>
-                                    <li>
-                                        <i class="lni lni-eye" th:text="' '+${videoList[0].viewCount}"></i>
-                                    </li>
-                                    <li>
-                                        <i class="lni lni-star" th:text="' '+${videoList[0].likeCount}"></i>
-                                    </li>
-                                    <li>
-                                        <a th:href="|javascript:likeVideo('${videoList[0].id}')|">
-                                            <i id="img-like-count" class="lni lni-thumbs-up"
-                                               th:style="${(isLikeVideo != null && isLikeVideo) ? 'color:#ff0000':'color:#5830e0'}"
-                                               th:text="' '+${videoList[0].lilacLikeCount}"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a th:href="|javascript:dislikeVideo('${videoList[0].id}')|">
-                                            <i id="img-dislike-count" class="lni lni-thumbs-down"
-                                               th:style="${(isLikeVideo != null && !isLikeVideo) ? 'color:#ff0000':'color:#5830e0'}"
-                                               th:text="' '+${videoList[0].lilacDislikeCount}"></i>
-                                        </a>
-                                    </li>
-                                    <li th:if="${memberId != null && memberGrade > 1}">
-                                        <a th:href="|javascript:showPlaylistAddModal('${playListId}')|"
-                                           class="reply-link"><i class="lni lni-notepad"></i> 강의노트에 추가하기</a>
-                                    </li>
-                                </ul>
-                                <p th:utext="${videoList[0].description}"></p>
-                            </div>
+                            <h5 class="post-title" th:text="${videoList[0].title}"></h5>
+                            <ul class="custom-flex post-meta">
+                                <li>
+                                    <i class="lni lni-calendar" th:text="' '+${{videoList[0].publishDate}}"></i>
+                                </li>
+                                <li>
+                                    <i class="lni lni-comments" th:text="' '+${videoList[0].commentCount}"></i>
+                                </li>
+                                <li>
+                                    <i class="lni lni-eye" th:text="' '+${videoList[0].viewCount}"></i>
+                                </li>
+                                <li>
+                                    <i class="lni lni-star" th:text="' '+${videoList[0].likeCount}"></i>
+                                </li>
+                                <li>
+                                    <a th:href="|javascript:likeVideo('${videoList[0].id}')|">
+                                        <i id="img-like-count" class="lni lni-thumbs-up"
+                                           th:style="${(isLikeVideo != null && isLikeVideo) ? 'color:#ff0000':'color:#5830e0'}"
+                                           th:text="' '+${videoList[0].lilacLikeCount}"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a th:href="|javascript:dislikeVideo('${videoList[0].id}')|">
+                                        <i id="img-dislike-count" class="lni lni-thumbs-down"
+                                           th:style="${(isLikeVideo != null && !isLikeVideo) ? 'color:#ff0000':'color:#5830e0'}"
+                                           th:text="' '+${videoList[0].lilacDislikeCount}"></i>
+                                    </a>
+                                </li>
+                                <li th:if="${memberId != null && memberGrade > 1}">
+                                    <a th:href="|javascript:showPlaylistAddModal('${playListId}')|"
+                                       class="reply-link"><i class="lni lni-notepad"></i> 강의노트에 추가</a>
+                                </li>
+                            </ul>
+                            <p th:utext="${videoList[0].description}"></p>
                         </div>
                     </div>
                 </div>
@@ -123,7 +124,7 @@
                                                     <img style="border-radius: 0%" th:src="${video.thumbnailDefault}" alt="#">
                                                 </div>
                                                 <span class="username" th:text="${video.title}"></span>
-                                                <span class="time" th:attr="id=${video.videoId}" th:text="${video.progressRate}+'%'"></span>
+                                                <span class="time text-success" th:attr="id=${video.videoId}" th:text="${video.progressRate}+'%'"></span>
                                             </a>
                                         </li>
                                     </ul>

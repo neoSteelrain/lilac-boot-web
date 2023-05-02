@@ -167,7 +167,8 @@ public class LicenseService implements ILicenseService{
                 continue;
             }
             resultList.add(LicenseScheduleDTO.builder()
-                            .category(String.format("%s년 정기 %s", schedule.getImplyy(), getLicenseCategoryName(schedule.getDescription())))
+//                            .category(String.format("%s년 정기 %s", schedule.getImplyy(), getLicenseCategoryName(schedule.getDescription())))
+                            .category(String.format("%s년 %d회", schedule.getImplyy(), schedule.getImplSeq()))
                             .docRegPeriod(StringUtils.hasText(schedule.getDocRegStartDt()) ? StringFormatter.toFormattedDateString(schedule.getDocRegStartDt()).get() + " - " + StringFormatter.toFormattedDateString(schedule.getDocRegEndDt()).get() : "미정")
                             .docExam(StringUtils.hasText(schedule.getDocExamStartDt()) ? StringFormatter.toFormattedDateString(schedule.getDocExamStartDt()) .get()+ " - " + StringFormatter.toFormattedDateString(schedule.getDocExamEndDt()).get() : "미정")
                             .docPass(StringUtils.hasText(schedule.getDocPassDt()) ? StringFormatter.toFormattedDateString(schedule.getDocPassDt()).get() : "미정")

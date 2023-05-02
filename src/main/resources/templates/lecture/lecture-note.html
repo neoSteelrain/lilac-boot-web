@@ -37,7 +37,7 @@
 <!-- /End Preloader -->
 <div th:replace="~{common/header::header}"></div>
 
-<section class="dashboard section" style="margin-top:30px">
+<section class="dashboard section" style="margin-top:20px">
     <div class="container">
         <div class="row">
             <div class="col-lg-3 col-md-4 col-12">
@@ -129,7 +129,7 @@
                                         <div class="step-one-content">
                                             <div class="default-form-style" method="post" action="#">
                                                 <div th:if="${noteDetail.licenseInfo != null}" class="row form-group">
-                                                    <p><strong class="text-dark" th:text="${noteDetail.noteLicenseName}+' 일정 진행상황 : '+ ${noteDetail.licenseInfo.licStep}"></strong></p>
+                                                    <p><strong class="text-dark" th:text="${noteDetail.noteLicenseName}+' 시험일정 진행상황 : '+ ${noteDetail.licenseInfo.licStep}"></strong></p>
                                                 </div>
                                                 <div class="row">
                                                     <table class="table table-hover table-bordered" style="width:100%">

@@ -37,4 +37,6 @@ public interface ILectureNoteService {
     List<BookAddModalDTO> getLectureNoteListByBookModal(Long memberId, Long bookId);
 
     void removeBook(Long refId);
+
+    String getTotalDuration(Long playListId);
 }

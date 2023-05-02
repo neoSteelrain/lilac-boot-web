@@ -3,6 +3,7 @@ package com.steelrain.springboot.lilac.controller;
 import com.steelrain.springboot.lilac.common.SESSION_KEY;
 import com.steelrain.springboot.lilac.datamodel.YoutubeVideoDTO;
 import com.steelrain.springboot.lilac.datamodel.view.LectureNoteYoutubeVideoDTO;
+import com.steelrain.springboot.lilac.service.ILectureNoteService;
 import com.steelrain.springboot.lilac.service.VideoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ import java.util.List;
 public class VideoController {
 
     private final VideoService m_videoService;
+    private final ILectureNoteService m_lectureNoteService;
 
 
     /**
@@ -88,6 +90,7 @@ public class VideoController {
         model.addAttribute("playListId", youtubePlaylistId);
         model.addAttribute("isLikeVideo", videoDTOList.size() > 0 ? m_videoService.getLikeStatus(memberId,  videoDTOList.get(0).getId()) : null);
         model.addAttribute("memberGrade", session.getAttribute(SESSION_KEY.MEMBER_GRADE));
+        model.addAttribute("totalDuration", m_lectureNoteService.getTotalDuration(youtubePlaylistId));
         return "video/lecture-note-play";
     }
 

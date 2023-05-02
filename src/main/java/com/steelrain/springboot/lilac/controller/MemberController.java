@@ -96,9 +96,11 @@ public class MemberController {
     }
 
     @PostMapping("/registration")
-    public String registerMember(@Validated(RegistrationValidateSequence.class) @ModelAttribute("memberReg") MemberRegDTO memberRegDTO, BindingResult bindingResult){
+    public String registerMember(@Validated(RegistrationValidateSequence.class) @ModelAttribute("memberReg") MemberRegDTO memberRegDTO, BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()){
             log.info("회원가입 입력정보 에러 : 입력한 회원정보 - {}, 에러정보 - {}", memberRegDTO, bindingResult);
+            // 지역코드 입력에러가 발생해도 지역코드정보를 넘겨줘야 사용자가 지역코드를 선택할 수 있다
+            model.addAttribute("libRegionCodes", m_keywordCategoryCacheService.getLibraryRegionCodeList());
             return "member/registration";
         }
         MemberDTO memberDTO = MemberDTO.builder()
@@ -146,7 +148,7 @@ public class MemberController {
     // TODO 에러가 났을경우 프로필 이미지 처리를 프런트에서 처리할 방법을 알아보자
     @PostMapping("/profile")
     public String editMemberProfile(@Validated @ModelAttribute("memberInfo") MemberProfileEditDTO editDTO, BindingResult bindingResult,
-                                          HttpSession session, Model model){
+                                              HttpSession session, Model model){
         if(bindingResult.hasErrors()){
             log.error("회원정보수정 입력값 에러 : 회원입력정보 - {}, 에러정보 - {}", editDTO, bindingResult);
             // 에러가 발생해도 기존의 프로필 이미지는 보이도록 session에서 원래 프로필이미지가져와서 설정해준다

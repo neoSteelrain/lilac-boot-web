@@ -158,6 +158,8 @@ public class VideoService implements IVideoService {
         return videoList;
     }
 
+
+
     // 영상들의 진행율 %를 구하고 설정해준다
     private void initProgressRate(List<LectureNoteYoutubeVideoDTO> videoList){
         for(LectureNoteYoutubeVideoDTO video : videoList){
