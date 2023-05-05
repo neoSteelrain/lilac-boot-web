@@ -9,7 +9,7 @@
 
 ##### 제공하게 될 기능
     - 공공데이터에 기초한 정확한 자격증 시험 일정 및 관리
-    - 도서관데이터 기초한 교재의 종류 검색 및 대출가능 여부 판단
+    - 도서관데이터에 기초한 교재의 종류 검색 및 대출가능 여부 판단
     - Kakao 도서 검색 API를 이용한 도서 검색
     - 자격증에 관련된 유튜브 영상 검색 및 북마킹 관리
     - 자격증정보, 교재, 영상자료를 통합하여 관리
@@ -17,7 +17,6 @@
 ##### 회원
     - 회원가입
     - 회원프로필 이미지 지원
-    - 회원, 비회원 기능 차이
     - 회원과 비회원 모두 검색은 가능
     - 회원만 강의노트 생성 가능
 
@@ -42,6 +41,9 @@
     - 개인정보와 별도의 메뉴로 분리
     - 등록한 영상의 플레이 진행정도를 표시
     
+##### 도서와 도서관정보
+    사용자가 입력한 지역정보를 가지고 관내 도서관과 검색된 책들의 소장/대출 여부를 한번에 처리할 계획이었으나
+    API 호출 횟수 제한, API 호출시간이 오래 걸리는 문제로 도서1권에 대한 소장/대출 여부를 확인하도록 수정
     
 ##### 적용기술 및 라이브러리
     - Java 11
@@ -53,21 +55,25 @@
     - bootstrap
     - Apache HttpClient
     - AWS S3
-   
-##### 배포환경
-    - AWS EC2 : 운영서버
-    - AWS RDS : DB서버
+    
+##### 데이터 수집
+    - 영상정보 : Spring Batch 를 1일에 1번 실행해서 Youtube Data API를 이용하여 Youtube 데이터를 저장
+    - Spring Batch 를 이용한 이유 : Youtube Data API의 할당량 때문에 API 호출횟수 제한, 영상정보의 영속적인 저장을 위해 사용
+    - 도서정보 : KaKao API
+    - 도서관정보 : 도서관정보나루 API
+    - 자격증정보 : 공공데이터 API
+    
 ---
 ##### 시스템 구성
     - DB Server : AWS RDS - MySQL
-    - WEB Server : AWS EC2
-        - Spring boot : Sping MVC + thymeleaf
+    - WEB Server : AWS EC2 T2.micro
+        - Spring boot : Spring MVC + thymeleaf
         - Spring Batch : Youtube 데이터 수집용
         - Docker + Jenkins : 배치 스케쥴러
     - Image Server : AWS S3 
         - 회원프로필 이미지 저장
 
-![lilac-system](https://user-images.githubusercontent.com/113125088/235991541-46c87d33-99d7-4641-8f72-ccdc2715e55b.png)
+![lilac-system](https://user-images.githubusercontent.com/113125088/236558210-e894fea0-228f-408d-acc2-c5df752fdf81.png)
 
 ---
 ##### 유스케이스
