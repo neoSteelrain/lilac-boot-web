@@ -58,7 +58,7 @@
     
 ##### 데이터 수집
     - 영상정보 : Spring Batch 를 1일에 1번 실행해서 Youtube Data API를 이용하여 Youtube 데이터를 저장
-    - Spring Batch 를 이용한 이유 : Youtube Data API의 할당량 때문에 API 호출횟수 제한, 영상정보의 영속적인 저장을 위해 사용
+    - Spring Batch 사용이유 : Youtube Data API의 할당량 때문에 API 호출횟수 제한, 영상정보의 영속적인 저장을 위해 사용
     - 도서정보 : KaKao API
     - 도서관정보 : 도서관정보나루 API
     - 자격증정보 : 공공데이터 API
