@@ -103,7 +103,7 @@ public interface AdminMapper {
 
     int findLicSubBookCountByRange(@Param("licenseIds") int[] licenseIds, @Param("subjectIds") int[] subjectIds, @Param("fromDate") String fromDate, @Param("toDate") String toDate);
 
-    List<AdminBookDTO> findBookListByRange(@Param("formDate") String fromDate, @Param("toDate") String toDate, @Param("pageNum") int pageNum, @Param("pageCount") int pageCount);
+    List<AdminBookDTO> findBookListByRange(@Param("fromDate") String fromDate, @Param("toDate") String toDate, @Param("pageNum") int pageNum, @Param("pageCount") int pageCount);
 
     @Select("SELECT book_id FROM tbl_candi_recommend_book")
     List<Long> findCandidateBookIdList();

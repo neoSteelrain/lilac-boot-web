@@ -7,6 +7,8 @@ import lombok.Getter;
  */
 @Getter
 public class APIConfig {
+    private final static String ACTIVE_PROFILE_DEV = "dev";
+    private final static String ACTIVE_PROFILE_AWS = "aws";
 
     private String youtubeKey;
     private String kakaoRestKey;
@@ -22,6 +24,7 @@ public class APIConfig {
     private String awsS3accessKey;
     private String awsS3SecretKey;
     private String awsS3Bucket;
+    private String awsS3BucketDev;
     private String awsS3BaseDir;
 
 
@@ -39,7 +42,9 @@ public class APIConfig {
                      String awsS3accessKey,
                      String awsS3SecretKey,
                      String awsS3Bucket,
-                     String awsS3BaseDir){
+                     String awsS3BucketDev,
+                     String awsS3BaseDir,
+                     String activeProfile){
         this.youtubeKey = youtubeApikey;
         this.kakaoRestKey = kakaoRestApikey;
         this.licenseSchdApikey = licenseSchdApikey;
@@ -54,6 +59,21 @@ public class APIConfig {
         this.awsS3accessKey = awsS3accessKey;
         this.awsS3SecretKey = awsS3SecretKey;
         this.awsS3Bucket = awsS3Bucket;
+        this.awsS3BucketDev = awsS3BucketDev;
         this.awsS3BaseDir = awsS3BaseDir;
+
+
+        switch (activeProfile){
+            case ACTIVE_PROFILE_DEV:
+                this.awsS3Bucket = awsS3BucketDev;
+                break;
+
+            case ACTIVE_PROFILE_AWS:
+                this.awsS3Bucket = awsS3Bucket;
+                break;
+
+            default:
+                throw new IllegalArgumentException("spring.active.profile 값이 미리 정의되지 않은 값입니다");
+        }
     }
 }

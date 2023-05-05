@@ -39,9 +39,7 @@ public class LectureController {
         List<LectureNoteDTO> noteDTOList = m_lectureService.getLectureListByMember(memberDTO.getId());
         model.addAttribute("lectureNoteList", noteDTOList);
         model.addAttribute("noteAdd", new LectureNoteAddDTO());
-        model.addAttribute("memberNickname", memberDTO.getNickname());
-        model.addAttribute("memberEmail", memberDTO.getEmail());
-        model.addAttribute("memberProfile", memberDTO.getProfileSave());
+        model.addAttribute("memberInfo", memberDTO);
 
         // 강의노트를 업데이트하기 위해 필요한 키워드정보들
         model.addAttribute("licenseCodes",m_keywordCategoryCacheService.getLicenseCodeList());

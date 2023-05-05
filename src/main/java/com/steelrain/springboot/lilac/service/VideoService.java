@@ -60,7 +60,7 @@ public class VideoService implements IVideoService {
         int totalPlaylistCount = m_videoRepository.selectTotalPlayListCountByKeyword(searchKeyword);
         return VideoPlayListSearchResultDTO.builder()
                                         .requestKeywordCode(0)
-                                        .requestKeywordType(KEYWORD_TYPE.NONE)
+                                        .requestKeywordType(KEYWORD_TYPE.KEYWORD)
                                         .searchKeyword(searchKeyword)
                                         .pageDTO(PagingUtils.createPagingInfo(totalPlaylistCount, pageNum, playlistCount))
                                         .playList(m_videoRepository.findPlayListByKeyword(searchKeyword, pageStart, playlistCount))

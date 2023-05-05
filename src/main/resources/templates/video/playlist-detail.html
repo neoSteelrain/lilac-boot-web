@@ -138,12 +138,18 @@
     tag.src = "https://www.youtube.com/iframe_api";
     let firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
     let player;
 
+    window.addEventListener("load", function(event){
+        // 처음화면이 뜰때 재생목록의 0번째 영상을 선택상태로 만든다
+        const currentVideoId = [[${videoList[0].Id}]];
+        changeVideoCheck(currentVideoId);
+    })
+
     function onYouTubeIframeAPIReady() {
+        const currentVideoOriginId = [[${videoList[0].videoId}]];
         player = new YT.Player('player', {
-            videoId: [[${videoList[0].videoId}]],
+            videoId: currentVideoOriginId,
             events: {
                 'onReady': onPlayerReady
             }

@@ -1,10 +1,13 @@
 package com.steelrain.springboot.lilac.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.env.Environment;
 
 /**
  * API 설정정보를 읽어오는 구성클래스
@@ -57,6 +60,15 @@ public class APIConfiguration {
     @Value("${aws.s3.base.dir}")
     private String m_awsS3BaseDir;
 
+    @Value("${aws.s3.bucket.dev}")
+    private String m_awsS3BucketDev;
+
+    private String m_activeProfile;
+
+    @Autowired
+    public APIConfiguration(ApplicationConfig applicationConfig){
+        m_activeProfile = applicationConfig.getActiveProfile();
+    }
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer(){
@@ -78,6 +90,8 @@ public class APIConfiguration {
                              m_awsS2AccessKey,
                              m_awsS3SecretKey,
                              m_awsS3Bucket,
-                             m_awsS3BaseDir);
+                             m_awsS3BucketDev,
+                             m_awsS3BaseDir,
+                             m_activeProfile);
     }
 }

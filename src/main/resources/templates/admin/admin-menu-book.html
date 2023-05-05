@@ -152,10 +152,10 @@
                       <form class="default-form-style" method="post" action="#">
                         <nav class="list-nav">
                           <ul>
-                            <li id="li-all" class="active"><a href="javascript:changeBookList(1)">모든 도서목록 <span th:text="${totalBookCnt}"></span></a>
-                            <li id="li-today"><a href="javascript:changeBookList(2)">오늘 추가된 도서목록<span th:text="${todayBookCnt}"></span></a></li>
-                            <li id="li-week"><a href="javascript:changeBookList(3)">1주일간 추가된 도서목록<span th:text="${weekBookCnt}"></span></a></li>
-                            <li id="li-month"><a href="javascript:changeBookList(4)">1달간 추가된 도서목록<span th:text="${monthBookCnt}"></span></a></li></li>
+                            <li name="bl-type" id="li-bl-cmd-1" class="active"><a href="javascript:changeBookList(1)">모든 도서목록 <span th:text="${totalBookCnt}"></span></a>
+                            <li name="bl-type" id="li-bl-cmd-2"><a href="javascript:changeBookList(2)">오늘 추가된 도서목록<span th:text="${todayBookCnt}"></span></a></li>
+                            <li name="bl-type" id="li-bl-cmd-3"><a href="javascript:changeBookList(3)">1주일간 추가된 도서목록<span th:text="${weekBookCnt}"></span></a></li>
+                            <li name="bl-type" id="li-bl-cmd-4"><a href="javascript:changeBookList(4)">1달간 추가된 도서목록<span th:text="${monthBookCnt}"></span></a></li></li>
                             </li>
                           </ul>
                         </nav>
@@ -317,37 +317,21 @@
   // 표시할 재생목록 타입을 변경하고 시작페이지를 1로 설정한다
   function changeBookList(blType){
     sessionStorage.setItem(SESSION_KEY_BL_TYPE, blType); // 현재 선택되어 있는 재생목록 타입을 기억하지 위해 저장하는 키값: 모든 재생목록, 오늘 추가된 재생목록... 같은 타입
-    // TODO 하드코딩을 수정하자
-    switch (blType){
-      case 1:
-        $("#li-all").addClass("active");
-        $("#li-today").removeClass("active");
-        $("#li-week").removeClass("active");
-        $("#li-month").removeClass("active");
-        break;
-      case 2:
-        $("#li-all").removeClass("active");
-        $("#li-today").addClass("active");
-        $("#li-week").removeClass("active");
-        $("#li-month").removeClass("active");
-        break;
-      case 3:
-        $("#li-all").removeClass("active");
-        $("#li-today").removeClass("active");
-        $("#li-week").addClass("active");
-        $("#li-month").removeClass("active");
-        break;
-      case 4:
-        $("#li-all").removeClass("active");
-        $("#li-today").removeClass("active");
-        $("#li-week").removeClass("active");
-        $("#li-month").addClass("active");
-        break;
-      default: break;
-    }
+    changeBookListCmd(blType);
     // ajax 호출로 재생목록리스트 갱신
     sessionStorage.setItem(SESSION_KET_BL_PAGE_NUM, "1");
     showAdminBooklist(null, "false"); // 시작페이지를 1로 시작
+  }
+
+  // 사용자가 선택한 재생목록 항목의 CSS를 active로 바꿔주고 다른 항목은 active를 해제한다
+  function changeBookListCmd(blType){
+    $("li[name=bl-type]").each(function(){
+      if($(this).prop("id") == "li-bl-cmd-"+blType){
+        $(this).addClass("active");
+      }else{
+        $(this).removeClass("active");
+      }
+    })
   }
 
   function showAdminBooklist(paramPageNum, isPaging){
@@ -474,7 +458,7 @@
       alert("도서목록은 9개 까지만 선택할 수 있습니다.");
       return;
     }
-    $("#lbl-selected-cpb").text(checkedCpbCnt + "/8");
+    $("#lbl-selected-cpb").text(checkedCpbCnt + "/9");
   }
 
   function saveSelectedCbl(){

@@ -372,7 +372,7 @@
         UNION
         SELECT id
         FROM tbl_book
-        WHERE tb.subject_id IN
+        WHERE subject_id IN
         <foreach collection="subjectIds" item="item" separator="," open="(" close=")">
             #{item}
         </foreach>

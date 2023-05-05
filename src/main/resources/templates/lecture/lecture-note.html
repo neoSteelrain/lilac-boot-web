@@ -44,9 +44,10 @@
                 <!-- 회원의 강의노트 제목목록 시작 -->
                 <div class="dashboard-sidebar">
                     <div class="user-image">
-                        <img th:if="${memberProfile == null}" th:src="${memberProfile == null} ? ${#request.contextPath}+'/images/default-profile.jpg' : ${memberProfile}" alt="#">
-                        <h3 th:text="${memberNickname}">
-                            <span th:text="${memberEmail}"></span>
+<!--                        <img th:if="${memberProfile == null}" th:src="${memberProfile == null} ? ${#request.contextPath}+'/images/default-profile.jpg' : ${memberProfile}" alt="#">-->
+                        <img th:src="${memberInfo.profileSave == null} ? ${#request.contextPath}+'/images/default-profile.jpg' : ${memberInfo.profileSave}" alt="#">
+                        <h3 th:text="${memberInfo.nickname}">
+                            <span th:text="${memberInfo.email}"></span>
                         </h3>
                     </div>
                     <div class="dashboard-menu">
@@ -398,6 +399,7 @@
     // 강의노트정보의 저장된 자격증에 맞는 select 요소를 선택상태로 한다
     function initProfileLicenseInfo(){
         const memberLicenseId = [[${noteDetail.licenseId}]];
+        console.log("memberLicenseId : " +memberLicenseId);
         if(memberLicenseId == null){
             return;
         }

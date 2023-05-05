@@ -109,7 +109,7 @@
         </div>
     </section>
 
-    <!-- 키워드 목록 시작 -->
+    <!-- 주제키워드 목록 시작 -->
     <section class="categories style2" style="padding-top: 40px;padding-bottom: 20px">
         <div class="container">
             <div class="cat-inner">
@@ -133,7 +133,7 @@
             </div>
         </div>
     </section>
-    <!-- 키워드 목록 끝 -->
+    <!-- 주제키워드 목록 끝 -->
 
     <!-- 자격증 일정 시작 -->
     <section class="dashboard section" id="section-license" style="padding-top: 20px;padding-bottom: 20px">
@@ -398,7 +398,8 @@
                 $("#searchInputNotice").text("검색어를 입력하시거나, 자격증선택을 하셔야 합니다");
                 return;
             }
-            // 키워드 검색 처리
+
+            // 검색어 처리
             if(m_keyword != ""){
                 refreshSearchBookList(m_keyword, 1);
                 refreshPlayList(0, m_keyword, 1, 0);

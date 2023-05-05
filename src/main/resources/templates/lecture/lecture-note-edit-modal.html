@@ -49,8 +49,8 @@
                         </div>
                         <div class="mb-3">
                             <label for="noteDesc" class="col-form-label">강의노트 설명:</label>
-                            <textarea id="noteDesc" class="form-control" row="5" maxlength="500" required th:field="*{noteDescription}"></textarea>
-                            <div class="invalid-feedback">강의노트 설명을 입력하셔야 합니다.</div>
+                            <textarea id="noteDesc" class="form-control" row="5" maxlength="500" th:field="*{noteDescription}"></textarea>
+<!--                            <div class="invalid-feedback">강의노트 설명을 입력하셔야 합니다.</div>-->
 <!--                            <span id="descNotice" class="text-danger" th:errors="*{noteDescription}"></span>-->
                         </div>
                     </div>
