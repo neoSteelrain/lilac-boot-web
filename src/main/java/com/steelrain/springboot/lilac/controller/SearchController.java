@@ -19,6 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * 검색기능을 담당하는 컨트롤러
+ * 첫회면에서 자격증, 주제키워드, 자격증 검색을 처리한다
+ */
 @Slf4j
 @Controller
 @RequiredArgsConstructor

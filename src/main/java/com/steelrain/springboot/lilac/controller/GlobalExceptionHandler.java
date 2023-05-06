@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+/**
+ * 글로벌 예외 핸들러
+ */
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {

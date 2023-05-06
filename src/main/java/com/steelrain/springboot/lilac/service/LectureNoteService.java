@@ -310,6 +310,10 @@ public class LectureNoteService implements ILectureNoteService{
         m_lectureNoteRepository.addBook(bookId, lectureNoteId, memberId);
     }
 
+    /**
+     * MemberService에서 발행한 회원등록이벤트를 받아서 회원의 기본강의노트를 생성하는 핸들러
+     * @param event 회원등록이벤트
+     */
     @Async
     @EventListener(MemberRegistrationEvent.class)
     public void createDefaultLectureNoteByNewMember(MemberRegistrationEvent event){

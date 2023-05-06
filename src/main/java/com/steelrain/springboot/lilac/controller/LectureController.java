@@ -22,6 +22,10 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * 강의노트 컨트롤러
+ * 회원의 강의노트에 관한 기능을 담당하는 컨트롤러
+ */
 @Slf4j
 @Controller
 @RequiredArgsConstructor
@@ -150,7 +154,7 @@ public class LectureController {
         return "lecture/playlist-add-modal";
     }
 
-    @GetMapping("model-book-template")
+    @GetMapping("modal-book-template")
     public String getLectureNoteListByBookModal(@RequestParam("bookId") Long bookId, Model model, HttpSession session){
         Long memberId = (Long)session.getAttribute(SESSION_KEY.MEMBER_ID);
         List<BookAddModalDTO> bookDTOList = m_lectureService.getLectureNoteListByBookModal(memberId, bookId);

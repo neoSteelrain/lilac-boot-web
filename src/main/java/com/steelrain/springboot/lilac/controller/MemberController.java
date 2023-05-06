@@ -67,7 +67,7 @@ public class MemberController {
                         HttpServletRequest servletRequest){
 
         if(bindingResult.hasErrors()){
-            log.info("로그인 에러 : {}", bindingResult);
+            log.error("로그인 에러 : {}", bindingResult);
             return "member/login";
         }
         MemberDTO memberDTO = m_memberService.loginMember(loginDTO.getEmail(), loginDTO.getPassword());
@@ -98,7 +98,7 @@ public class MemberController {
     @PostMapping("/registration")
     public String registerMember(@Validated(RegistrationValidateSequence.class) @ModelAttribute("memberReg") MemberRegDTO memberRegDTO, BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()){
-            log.info("회원가입 입력정보 에러 : 입력한 회원정보 - {}, 에러정보 - {}", memberRegDTO, bindingResult);
+            log.error("회원가입 입력정보 에러 : 입력한 회원정보 - {}, 에러정보 - {}", memberRegDTO, bindingResult);
             // 지역코드 입력에러가 발생해도 지역코드정보를 넘겨줘야 사용자가 지역코드를 선택할 수 있다
             model.addAttribute("libRegionCodes", m_keywordCategoryCacheService.getLibraryRegionCodeList());
             return "member/registration";

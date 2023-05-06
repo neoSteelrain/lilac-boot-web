@@ -13,13 +13,21 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+/**
+ * 관리자 화면 컨트롤러
+ */
 @Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin")
 public class AdminController {
+
+    /*
+        관리자 화면에 보여지는 페이징은 모두 기본적으로 10페이지씩 보이도록 하기 위해 고정시켜 놓는다
+        TODO 관리자 화면에서 페이지 개수를 변경하기 기능을 추가하면 필요없는 필드
+     */
     private final static int PAGE_COUNT = 10;
+    
     private final IAdminPlayListService m_adminPlayListService;
     private final IAdminBookService m_adminBookService;
 

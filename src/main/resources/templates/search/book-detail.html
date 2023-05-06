@@ -45,12 +45,12 @@
     <div class="container">
         <div class="top-area">
             <div class="row">
-                <div class="col-lg-6 col-md-12 col-12">
+                <div class="col-lg-5 col-md-5 col-12">
                     <div class="product-images">
                         <img th:src="${bookDetailInfo.bookDTO.thumbnail}" class="mx-auto d-block" style="width: 220px" alt="#">
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-12 col-12">
+                <div class="col-lg-7 col-md-7 col-12">
                     <div class="product-info">
                         <div class="list-info">
                             <h4 th:text="${bookDetailInfo.bookDTO.title}"></h4>
@@ -174,7 +174,7 @@
     const showBookAddModal = (argBookId) => {
         $.ajax({
             type: "get",
-            url: ctxPath+"/lecture/model-book-template",
+            url: ctxPath+"/lecture/modal-book-template",
             dataType: "text",
             data: {bookId: argBookId},
             success: function (data) {

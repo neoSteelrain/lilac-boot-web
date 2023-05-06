@@ -9,6 +9,7 @@ import com.steelrain.springboot.lilac.datamodel.api.*;
 import com.steelrain.springboot.lilac.datamodel.view.*;
 import com.steelrain.springboot.lilac.datamodel.NaruLibraryDTO;
 import com.steelrain.springboot.lilac.event.*;
+import com.steelrain.springboot.lilac.exception.LilacServiceException;
 import com.steelrain.springboot.lilac.exception.NaruAPIQuotaOverException;
 import com.steelrain.springboot.lilac.repository.BookRepository;
 import com.steelrain.springboot.lilac.repository.IKaKoBookRepository;
@@ -95,18 +96,18 @@ public class BookService implements IBookService{
         bookList 에 있는 책이 libList 도서관에서 소장중인 인지 검사하고, 소장하고 있다면 도서관과 책목록을 연관시켜 준다
      */
     private Map<String, List<KaKaoBookDTO>> analyzeCatalogue(final List<KaKaoBookDTO> bookList, final List<NaruLibraryDTO> libList) {
+        ObjectMapper om = new ObjectMapper();
         Map<String, List<KaKaoBookDTO>> catalMap = new HashMap<>(libList.size());
         for(NaruLibraryDTO lib : libList){
             List<KaKaoBookDTO> existBookList = new ArrayList<>(4);
             for(KaKaoBookDTO book : bookList){
                 NaruBookExistResposeDTO existInfo = m_naruRepository.checkBookExist(book.getIsbn13Long(), Integer.parseInt(lib.getLibCode()));
-
-                ObjectMapper om = new ObjectMapper();
                 try{
                     String tmp = om.writeValueAsString(existInfo);
                     log.debug("existInfo json 문자열 : {}", tmp);
                 }catch(JsonProcessingException ex){
                     log.error("existInfo 에러 : {}", ex);
+                    throw new LilacServiceException("도서관 소장여부 확인 중 예외발생 : 예외정보 - {}", ex);
                 }
 
                 if("Y".equals(existInfo.getResponse().getResult().getHasbook())){
@@ -152,6 +153,7 @@ public class BookService implements IBookService{
         resultDTO.setTotalBookCount(responseDTO.getMeta().getTotalCount());
         // 카카오책 검색결과를 DB에 저장하는 이벤트를 발생한다.
         publishKaKaoBookSaveEvent(kaKaoBookDTOList);
+
         resultDTO.setPageInfo(PagingUtils.createPagingInfo(responseDTO.getMeta().getTotalCount(), pageNum, bookCount));
         return resultDTO;
     }
