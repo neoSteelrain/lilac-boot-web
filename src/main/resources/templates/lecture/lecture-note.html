@@ -130,7 +130,9 @@
                                         <div class="step-one-content">
                                             <div class="default-form-style" method="post" action="#">
                                                 <div th:if="${noteDetail.licenseInfo != null}" class="row form-group">
-                                                    <p><strong class="text-dark" th:text="${noteDetail.noteLicenseName}+' 시험일정 진행상황 : '+ ${noteDetail.licenseInfo.licStep}"></strong></p>
+                                                    <th:block th:each="step : ${noteDetail.licenseInfo.licenseStepList}">
+                                                        <p><strong class="text-dark" th:text="${step.licStep}+' - 종료날짜 : '+${step.licEndDate}"></strong></p>
+                                                    </th:block>
                                                 </div>
                                                 <div class="row">
                                                     <table class="table table-hover table-bordered" style="width:100%">

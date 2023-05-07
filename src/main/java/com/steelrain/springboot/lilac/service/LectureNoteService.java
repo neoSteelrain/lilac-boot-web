@@ -426,9 +426,6 @@ public class LectureNoteService implements ILectureNoteService{
             return LectureNoteDetailDTO.LicenseInfo.builder()
                     .licenseCode(-1)
                     .licenseName("-")
-                    .licenseDesc("-")
-                    .licStep("-")
-                    .licEndDate("-")
                     .licenseScheduleList(schInfoList)
                     .build();
         }
@@ -448,9 +445,7 @@ public class LectureNoteService implements ILectureNoteService{
         return LectureNoteDetailDTO.LicenseInfo.builder()
                 .licenseCode(dto.getLicenseCode())
                 .licenseName(dto.getLicenseName())
-                .licenseDesc(dto.getLicenseDesc())
-                .licStep(dto.getLicStep())
-                .licEndDate(dto.getLicEndDate())
+                .licenseStepList(dto.getLicenseStepList())
                 .licenseScheduleList(schInfoList)
                 .build();
     }

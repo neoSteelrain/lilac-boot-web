@@ -7,21 +7,21 @@
 <body>
 <div id="lic-schedule-template">
   <div class="single-item-list">
-    <div class="row align-items-center">
+    <div th:each="step : ${licenseInfo.licenseStepList}" class="row align-items-center">
       <div class="col-lg-7 col-md-5 col-12">
         <div class="item-image">
           <img th:src="@{/images/qnet.png}" alt="#">
           <div class="content">
             <h3 class="title"><a href="#all-license-collase" data-bs-toggle="collapse" aria-expanded="false" aria-controls="all-license-collase" th:text="${licenseInfo.licenseName}"></a></h3>
-            <span class="price" th:text="${licenseInfo.licenseDesc}"></span>
+            <span class="price" th:text="${step.licenseDesc}"></span>
           </div>
         </div>
       </div>
       <div class="col-lg-2 col-md-3 col-12">
-        <p th:text="${licenseInfo.licStep}"></p>
+        <p th:text="${step.licStep}"></p>
       </div>
       <div class="col-lg-2 col-md-2 col-12">
-        <p th:text="${licenseInfo.licEndDate}"></p>
+        <p th:text="${step.licEndDate}"></p>
       </div>
       <div th:if="${session.LOGIN_MEMBER != null}" class="col-lg-1 col-md-2 col-12 align-right">
         <ul class="action-btn">

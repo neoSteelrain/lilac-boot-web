@@ -1,6 +1,7 @@
 package com.steelrain.springboot.lilac.datamodel.view;
 
 import com.steelrain.springboot.lilac.datamodel.KaKaoBookDTO;
+import com.steelrain.springboot.lilac.datamodel.LicenseDTO;
 import com.steelrain.springboot.lilac.datamodel.LicenseScheduleDTO;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -53,12 +54,9 @@ public class LectureNoteDetailDTO {
         private int licenseCode;
         // 자격증 이름
         private String licenseName;
-        // 자격증 설명
-        private String licenseDesc;
-        // 진행단계
-        private String licStep;
-        // 종료일자
-        private String licEndDate;
+        // 자격증일정 진행 단계
+        private List<LicenseDTO.LicenseStep> licenseStepList;
+
         // 자격증시험일정
         List<LicenseScheduleDTO> licenseScheduleList;
     }

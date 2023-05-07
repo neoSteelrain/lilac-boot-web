@@ -398,12 +398,12 @@
                 $("#searchInputNotice").text("검색어를 입력하시거나, 자격증선택을 하셔야 합니다");
                 return;
             }
-
             // 검색어 처리
             if(m_keyword != ""){
                 refreshSearchBookList(m_keyword, 1);
                 refreshPlayList(0, m_keyword, 1, 0);
                 moveScrollToBookList();
+                $("#searchInputNotice").text("");
                 return;
             }
             // 카테고리 선택으로 검색처리

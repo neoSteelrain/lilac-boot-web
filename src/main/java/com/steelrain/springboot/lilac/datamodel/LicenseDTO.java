@@ -1,5 +1,6 @@
 package com.steelrain.springboot.lilac.datamodel;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,13 +16,7 @@ public class LicenseDTO {
     // 자격증 이름
     private String licenseName;
 
-    // 자격증 설명
-    private String licenseDesc;
-
-    // 진행단계
-    private String licStep;
-    // 종료일자
-    private String licEndDate;
+    private List<LicenseStep> licenseStepList;
 
     private List<LicenseScheduleDTO> scheduleList;
  
@@ -29,15 +24,14 @@ public class LicenseDTO {
     //private LicenseScheduleResponseDTO.LicenseSchedule licenseSchedule;
 
 
-    @Override
-    public String toString() {
-        return "LicenseDTO{" +
-                "licenseCode=" + licenseCode +
-                ", licenseName='" + licenseName + '\'' +
-                ", licenseDesc='" + licenseDesc + '\'' +
-                ", licStep='" + licStep + '\'' +
-                ", licEndDate='" + licEndDate + '\'' +
-                ", scheduleList=" + scheduleList +
-                '}';
+    @Getter
+    @Setter
+    public static class LicenseStep{
+        // 진행단계
+        private String licStep;
+        // 종료일자
+        private String licEndDate;
+        // 자격증 설명 : 예) XX 기사 (2023년도 제 1회)
+        private String licenseDesc;
     }
 }

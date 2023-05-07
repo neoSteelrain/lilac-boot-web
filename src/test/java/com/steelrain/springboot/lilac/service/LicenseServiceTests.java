@@ -27,7 +27,7 @@ public class LicenseServiceTests {
     public void testSetCurrentStep(){
         LicenseDTO res = m_licILicenseService.getLicenseSchedulesByCode(2290);
 
-        assertThat(res != null && StringUtils.hasText(res.getLicStep()));
+        assertThat(res).isNotNull();
 
         System.out.println(res.toString());
     }

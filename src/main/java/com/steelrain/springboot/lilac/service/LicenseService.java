@@ -14,9 +14,7 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * 자격증 서비스
@@ -68,19 +66,89 @@ public class LicenseService implements ILicenseService{
         LicenseDTO licenseDTO = new LicenseDTO();
         licenseDTO.setLicenseCode(licenseCode);
         licenseDTO.setLicenseName(licenseName.get());
-        setCurrentStep(responseDTO, licenseDTO);
+        initCurrentStep(responseDTO, licenseDTO);
         licenseDTO.setScheduleList(parseLicenseScheduleJsonString(responseDTO));
 
         return licenseDTO;
     }
 
+    private void initCurrentStep(LicenseScheduleResponseDTO responseDTO, final LicenseDTO licenseDTO){
+        List<LicenseScheduleResponseDTO.LicenseSchedule> scheduleList = responseDTO.getBody().getScheduleList();
+        if(scheduleList == null && scheduleList.size() == 0){
+            licenseDTO.setLicenseStepList(new ArrayList<>(0));
+            return;
+        }
+
+        /*
+            - 자격증스케쥴 리스트를 순회하면서 오늘날짜가 어느 진행단계에 속하는 지 알아낸다
+            - 진행단계는 2개 이상일 수도 있다
+         */
+        int now = Integer.parseInt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+        Map<Integer, LicenseDTO.LicenseStep> stepMap = new HashMap<>(2);
+        for(LicenseScheduleResponseDTO.LicenseSchedule schedule : scheduleList) {
+            if(schedule.getImplSeq() <= 0){ // 공공데이터 API에서 진행단계가 0으로 가끔 넘어오는 경우가 있다
+                continue;
+            }
+            if(StringUtils.hasText(schedule.getDocRegStartDt()) && StringUtils.hasText(schedule.getDocRegEndDt()) &&
+                    Integer.parseInt(schedule.getDocRegStartDt()) <= now && Integer.parseInt(schedule.getDocRegEndDt()) >= now ){
+                extractScheduleStep(licenseDTO, stepMap, schedule.getDocRegEndDt(), "회차 필기시험 접수중", schedule.getImplSeq(), schedule.getDescription());
+                continue;
+            }
+            if(StringUtils.hasText(schedule.getDocExamStartDt()) && StringUtils.hasText(schedule.getDocExamEndDt()) &&
+                    Integer.parseInt(schedule.getDocExamStartDt()) <= now && Integer.parseInt(schedule.getDocExamEndDt()) >= now ){
+                extractScheduleStep(licenseDTO, stepMap, schedule.getDocExamEndDt(), "회차 필기시험 진행중", schedule.getImplSeq(), schedule.getDescription());
+                continue;
+            }
+            if(StringUtils.hasText(schedule.getDocPassDt()) && Integer.parseInt(schedule.getDocPassDt()) == now){
+                extractScheduleStep(licenseDTO, stepMap, schedule.getDocPassDt(), "회차 필기시험 결과발표", schedule.getImplSeq(), schedule.getDescription());
+                continue;
+            }
+            if(StringUtils.hasText(schedule.getPracRegStartDt()) && StringUtils.hasText(schedule.getPracRegEndDt()) &&
+                    Integer.parseInt(schedule.getPracRegStartDt()) <= now && Integer.parseInt(schedule.getPracRegEndDt()) >= now ){
+                extractScheduleStep(licenseDTO, stepMap, schedule.getPracRegEndDt(), "회차 실기시험 접수중", schedule.getImplSeq(), schedule.getDescription());
+                continue;
+            }
+            if(StringUtils.hasText(schedule.getPracExamStartDt()) && StringUtils.hasText(schedule.getPracExamEndDt()) &&
+                    Integer.parseInt(schedule.getPracExamStartDt()) <= now && Integer.parseInt(schedule.getPracExamEndDt()) >= now ){
+                extractScheduleStep(licenseDTO, stepMap, schedule.getPracExamEndDt(), "회차 실기시험 진행중", schedule.getImplSeq(), schedule.getDescription());
+                continue;
+            }
+            if(StringUtils.hasText(schedule.getPracPassDt()) && Integer.parseInt(schedule.getPracPassDt()) == now){
+                extractScheduleStep(licenseDTO, stepMap, schedule.getPracPassDt(), "회차 실기시험 결과발표", schedule.getImplSeq(), schedule.getDescription());
+            }
+        }
+        if(stepMap.size() == 0){
+            LicenseDTO.LicenseStep nonApplyStep = new LicenseDTO.LicenseStep();
+            nonApplyStep.setLicStep("해당사항 없음");
+            nonApplyStep.setLicEndDate("---");
+            nonApplyStep.setLicenseDesc("---");
+            // 0 은 스텝맵에 넣기 위한 더미값
+            stepMap.put(Integer.valueOf(0), nonApplyStep);
+        }
+        licenseDTO.setLicenseStepList(new ArrayList<>(stepMap.values()));
+    }
+
+    private void extractScheduleStep(LicenseDTO licDTO, Map<Integer, LicenseDTO.LicenseStep> stepMap, String endDate, String stepState, int implSeq, String desc){
+        LicenseDTO.LicenseStep step = null;
+        Integer seq = Integer.valueOf(implSeq);
+        if(stepMap.containsKey(seq)){
+            step = stepMap.get(seq);
+        }else{
+            step = new LicenseDTO.LicenseStep();
+            stepMap.put(implSeq, step);
+        }
+        step.setLicStep(implSeq + stepState);
+        step.setLicEndDate(convertDateFormat(endDate));
+        step.setLicenseDesc(desc);
+    }
+
     // 시험일정의 현재 진행단계 알아내기
-    private void setCurrentStep(LicenseScheduleResponseDTO responseDTO, final LicenseDTO licenseDTO){
+    /*private void setCurrentStep(LicenseScheduleResponseDTO responseDTO, final LicenseDTO licenseDTO){
         List<LicenseScheduleResponseDTO.LicenseSchedule> scheduleList = responseDTO.getBody().getScheduleList();
         if(scheduleList == null && scheduleList.size() == 0){
             return;
         }
-
+        List<LicenseDTO.LicenseStep> stepList = new ArrayList<>(2);
         // 문자열 보다는 숫자로 하는 비교가 더 확실하므로 자격증날짜와 비교할 현재날짜를 int값으로 구한다.
         int now = Integer.parseInt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         //int now = 0102; 테스트용 날짜값
@@ -94,6 +162,7 @@ public class LicenseService implements ILicenseService{
                     Integer.parseInt(schedule.getDocRegStartDt()) <= now && Integer.parseInt(schedule.getDocRegEndDt()) >= now ){
                 licenseDTO.setLicStep(schedule.getImplSeq() + "회차 필기시험 접수중");
                 licenseDTO.setLicEndDate(convertDateFormat(schedule.getDocRegEndDt()));
+
                 licenseDTO.setLicenseDesc(schedule.getDescription());
                 continue;
             }
@@ -131,15 +200,15 @@ public class LicenseService implements ILicenseService{
                 licenseDTO.setLicenseDesc(schedule.getDescription());
                 continue;
             }
-            /*
+            *//*
             여기까지 오면 현재날짜가 시험일정에 해당하지않는 것이므로 해당사항 없음으로 설정
-             */
+             *//*
             if(!StringUtils.hasText(licenseDTO.getLicStep())){
                 licenseDTO.setLicStep("해당사항 없음");
                 licenseDTO.setLicEndDate("-");
             }
         }
-    }
+    }*/
 
     private String convertDateFormat(String src){
         Optional<String> result = StringFormatter.toFormattedDateString(src);

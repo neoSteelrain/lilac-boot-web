@@ -61,8 +61,12 @@ public class APIConfig {
         this.awsS3Bucket = awsS3Bucket;
         this.awsS3BucketDev = awsS3BucketDev;
         this.awsS3BaseDir = awsS3BaseDir;
-
-
+        
+        /*
+            스프링 설정파일에서 active.profile 값에 따라 AWS 버킷이 달라지기 때문에 추가됨
+            - 개발환경과 배포환경에서 버킷을 분리하였기 때문에 필요
+            TODO 좀더 세련되게 profile 설정처리를 할 필요가 있다
+         */
         switch (activeProfile){
             case ACTIVE_PROFILE_DEV:
                 this.awsS3Bucket = awsS3BucketDev;
