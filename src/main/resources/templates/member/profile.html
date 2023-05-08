@@ -69,7 +69,7 @@
                                      th:src="${memberInfo.profileSave == null} ? ${#request.contextPath}+'/images/default-profile.jpg' : ${memberInfo.profileSave}">
                             </div>
                             <form th:object="${memberInfo}" class="profile-setting-form was-validated" method="post"
-                                  action="profile" enctype="multipart/form-data">
+                                  th:action="@{/lecture/profle}" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-lg-6 col-12">
                                         <div class="form-group">

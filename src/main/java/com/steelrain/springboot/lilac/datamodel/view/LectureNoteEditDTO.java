@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotBlank;
 
@@ -17,8 +18,8 @@ public class LectureNoteEditDTO {
     @Length(min=1, max=100)
     private String noteTitle;
 
-    @NotBlank
-    @Length(min=1, max=500)
+    @Nullable
+    @Length(min=0, max=500)
     private String noteDescription;
     private int licenseId;
     private int subjectId;

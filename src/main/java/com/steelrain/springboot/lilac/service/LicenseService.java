@@ -74,7 +74,7 @@ public class LicenseService implements ILicenseService{
 
     private void initCurrentStep(LicenseScheduleResponseDTO responseDTO, final LicenseDTO licenseDTO){
         List<LicenseScheduleResponseDTO.LicenseSchedule> scheduleList = responseDTO.getBody().getScheduleList();
-        if(scheduleList == null && scheduleList.size() == 0){
+        if(scheduleList == null || scheduleList.size() == 0){
             licenseDTO.setLicenseStepList(new ArrayList<>(0));
             return;
         }
@@ -86,7 +86,7 @@ public class LicenseService implements ILicenseService{
         int now = Integer.parseInt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         Map<Integer, LicenseDTO.LicenseStep> stepMap = new HashMap<>(2);
         for(LicenseScheduleResponseDTO.LicenseSchedule schedule : scheduleList) {
-            if(schedule.getImplSeq() <= 0){ // 공공데이터 API에서 진행단계가 0으로 가끔 넘어오는 경우가 있다
+            if(schedule.getImplSeq() <= 0){ // 공공데이터 API에서 회차가 0으로 가끔 넘어오는 경우가 있다
                 continue;
             }
             if(StringUtils.hasText(schedule.getDocRegStartDt()) && StringUtils.hasText(schedule.getDocRegEndDt()) &&
@@ -128,6 +128,10 @@ public class LicenseService implements ILicenseService{
         licenseDTO.setLicenseStepList(new ArrayList<>(stepMap.values()));
     }
 
+    /*
+        자격증일정에 현재날짜가 해당된다면 실행되는 메서드
+        회차에 해당하는 진행단계를 설정하여 현재진행단계 객체에 정보를 설정한다
+     */
     private void extractScheduleStep(LicenseDTO licDTO, Map<Integer, LicenseDTO.LicenseStep> stepMap, String endDate, String stepState, int implSeq, String desc){
         LicenseDTO.LicenseStep step = null;
         Integer seq = Integer.valueOf(implSeq);
@@ -141,74 +145,6 @@ public class LicenseService implements ILicenseService{
         step.setLicEndDate(convertDateFormat(endDate));
         step.setLicenseDesc(desc);
     }
-
-    // 시험일정의 현재 진행단계 알아내기
-    /*private void setCurrentStep(LicenseScheduleResponseDTO responseDTO, final LicenseDTO licenseDTO){
-        List<LicenseScheduleResponseDTO.LicenseSchedule> scheduleList = responseDTO.getBody().getScheduleList();
-        if(scheduleList == null && scheduleList.size() == 0){
-            return;
-        }
-        List<LicenseDTO.LicenseStep> stepList = new ArrayList<>(2);
-        // 문자열 보다는 숫자로 하는 비교가 더 확실하므로 자격증날짜와 비교할 현재날짜를 int값으로 구한다.
-        int now = Integer.parseInt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
-        //int now = 0102; 테스트용 날짜값
-        for(LicenseScheduleResponseDTO.LicenseSchedule schedule : scheduleList){
-            if(schedule.getImplSeq() <= 0){
-                continue;
-            }
-            // 필기시험 단계 검사 0110, 0113, now 0112, 0116, 0119
-            // 간혹 날짜 데이터가 들어있지 않고 ""으로 들어있는 경우가 있으므로 체크해준다
-            if(StringUtils.hasText(schedule.getDocRegStartDt()) && StringUtils.hasText(schedule.getDocRegEndDt()) &&
-                    Integer.parseInt(schedule.getDocRegStartDt()) <= now && Integer.parseInt(schedule.getDocRegEndDt()) >= now ){
-                licenseDTO.setLicStep(schedule.getImplSeq() + "회차 필기시험 접수중");
-                licenseDTO.setLicEndDate(convertDateFormat(schedule.getDocRegEndDt()));
-
-                licenseDTO.setLicenseDesc(schedule.getDescription());
-                continue;
-            }
-            if(StringUtils.hasText(schedule.getDocExamStartDt()) && StringUtils.hasText(schedule.getDocExamEndDt()) &&
-                    Integer.parseInt(schedule.getDocExamStartDt()) <= now && Integer.parseInt(schedule.getDocExamEndDt()) >= now ){
-                licenseDTO.setLicStep(schedule.getImplSeq() + "회차 필기시험 진행중");
-                licenseDTO.setLicEndDate(convertDateFormat(schedule.getDocExamEndDt()));
-                licenseDTO.setLicenseDesc(schedule.getDescription());
-                continue;
-            }
-            if(StringUtils.hasText(schedule.getDocPassDt()) && Integer.parseInt(schedule.getDocPassDt()) == now){
-                licenseDTO.setLicStep(schedule.getImplSeq() + "회차 필기시험 결과발표");
-                licenseDTO.setLicEndDate(convertDateFormat(schedule.getDocPassDt()));
-                licenseDTO.setLicenseDesc(schedule.getDescription());
-                continue;
-            }
-            // 실기시험 단계 검사
-            if(StringUtils.hasText(schedule.getPracRegStartDt()) && StringUtils.hasText(schedule.getPracRegEndDt()) &&
-                    Integer.parseInt(schedule.getPracRegStartDt()) <= now && Integer.parseInt(schedule.getPracRegEndDt()) >= now ){
-                licenseDTO.setLicStep(schedule.getImplSeq() + "회차 실기시험 접수중");
-                licenseDTO.setLicEndDate(convertDateFormat(schedule.getPracRegEndDt()));
-                licenseDTO.setLicenseDesc(schedule.getDescription());
-                continue;
-            }
-            if(StringUtils.hasText(schedule.getPracExamStartDt()) && StringUtils.hasText(schedule.getPracExamEndDt()) &&
-                    Integer.parseInt(schedule.getPracExamStartDt()) <= now && Integer.parseInt(schedule.getPracExamEndDt()) >= now ){
-                licenseDTO.setLicStep(schedule.getImplSeq() + "회차 실기시험 진행중");
-                licenseDTO.setLicEndDate(convertDateFormat(schedule.getPracExamEndDt()));
-                licenseDTO.setLicenseDesc(schedule.getDescription());
-                continue;
-            }
-            if(StringUtils.hasText(schedule.getPracPassDt()) && Integer.parseInt(schedule.getPracPassDt()) == now){
-                licenseDTO.setLicStep(schedule.getImplSeq() + "회차 실기시험 결과발표");
-                licenseDTO.setLicEndDate(convertDateFormat(schedule.getPracPassDt()));
-                licenseDTO.setLicenseDesc(schedule.getDescription());
-                continue;
-            }
-            *//*
-            여기까지 오면 현재날짜가 시험일정에 해당하지않는 것이므로 해당사항 없음으로 설정
-             *//*
-            if(!StringUtils.hasText(licenseDTO.getLicStep())){
-                licenseDTO.setLicStep("해당사항 없음");
-                licenseDTO.setLicEndDate("-");
-            }
-        }
-    }*/
 
     private String convertDateFormat(String src){
         Optional<String> result = StringFormatter.toFormattedDateString(src);

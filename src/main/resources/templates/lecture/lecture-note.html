@@ -196,7 +196,7 @@
                                                             <div class="item-image">
                                                                 <img th:src="${bookInfo.thumbnail}" alt="#">
                                                                 <div class="content">
-                                                                    <h3 class="title"><a href="javascript:void(0)"
+                                                                    <h3 class="title"><a th:href="@{/search/book-detail(isbn=${bookInfo.isbn13},region=${memberInfo.region},detailRegion=${memberInfo.dtlRegion})}" target="_blank"
                                                                                          th:text="${bookInfo.title}"></a>
                                                                     </h3>
                                                                     <span class="price"

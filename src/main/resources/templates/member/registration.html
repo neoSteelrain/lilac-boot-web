@@ -48,7 +48,7 @@
                 <div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-12">
                     <div class="form-head">
                         <h6 class="title">회원가입</h6>
-                        <form action="registration" th:object="${memberReg}" method="post">
+                        <form th:action="@{/member/registration}" th:object="${memberReg}" method="post">
                             <span th:each="err: ${#fields.globalErrors()}" th:if="${errStat.first}" th:text="${err}" class="text-danger"></span>
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="ipt-nickname" th:field="*{nickname}" min="1" maxlength="20" placeholder="닉네임" onblur="checkDuplicatedId()" >
