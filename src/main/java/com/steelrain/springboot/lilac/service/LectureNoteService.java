@@ -246,27 +246,6 @@ public class LectureNoteService implements ILectureNoteService{
                     .build());
         }
         return resultList;
-        /*List<LectureNoteModalDTO> noteDTOList = m_lectureNoteRepository.findLectureNoteListByBook(memberId);
-        List<BookAddModalDTO> resultDTO = new ArrayList<>(noteDTOList.size());
-        Optional<Long> matchedNoteId = noteDTOList.stream().filter(note -> note.getBookId().equals(bookId))
-                .map(LectureNoteModalDTO::getNoteId)
-                .findFirst();
-        if(matchedNoteId.isPresent()){
-            noteDTOList.stream().filter(note -> !note.getNoteId().equals(matchedNoteId.get())).distinct().forEach(note -> {
-                resultDTO.add(BookAddModalDTO.builder()
-                        .id(note.getNoteId())
-                        .title(note.getNoteTitle())
-                        .build());
-            });
-        }else{
-            noteDTOList.stream().distinct().forEach(note -> {
-                resultDTO.add(BookAddModalDTO.builder()
-                        .id(note.getNoteId())
-                        .title(note.getNoteTitle())
-                        .build());
-            });
-        }
-        return resultDTO;*/
     }
 
     @Override
@@ -314,7 +293,6 @@ public class LectureNoteService implements ILectureNoteService{
      * MemberService에서 발행한 회원등록이벤트를 받아서 회원의 기본강의노트를 생성하는 핸들러
      * @param event 회원등록이벤트
      */
-    @Async
     @EventListener(MemberRegistrationEvent.class)
     public void createDefaultLectureNoteByNewMember(MemberRegistrationEvent event){
         createDefaultLectureNote(event.getMemberId(), event.getMemberNickname());
