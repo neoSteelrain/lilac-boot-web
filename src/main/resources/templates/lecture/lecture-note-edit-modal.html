@@ -22,7 +22,7 @@
                                 <div class="col-6">
                                     <div class="search-input">
                                         <label for="licenseId"><i class="lni lni-grid-alt theme-color"></i></label>
-                                        <select name="licenseId" id="licenseId" onchange="checkLicenseSelectBox()">
+                                        <select name="licenseId" id="licenseId" onchange="checkEditLicenseSelectBox()">
                                             <option value="-1">--- 자격증 선택 ---</option>
                                             <option th:each="licenseCode : ${licenseCodes}" th:value="${licenseCode.id}"
                                                     th:text="${licenseCode.name}"></option>
@@ -32,7 +32,7 @@
                                 <div class="col-6">
                                     <div class="search-input">
                                         <label for="subjectId"><i class="lni lni-grid-alt theme-color"></i></label>
-                                        <select name="subjectId" id="subjectId" onchange="checkSubjectSelectBox()">
+                                        <select name="subjectId" id="subjectId" onchange="checkEditSubjectSelectBox()">
                                             <option value="-1">--- 키워드 선택 ---</option>
                                             <option th:each="subjectCode : ${subjectCodes}" th:value="${subjectCode.id}"
                                                     th:text="${subjectCode.name}"></option>
@@ -59,8 +59,8 @@
                         <button id="btn-add" type="submit" class="btn btn-primary">수정</button>
                     </div>
                     <input name="noteId" type="hidden" th:value="${noteInfo.noteId}">
-                    <input name="lectureId" type="hidden" th:value="${noteInfo.getLicenseId}">
-                    <input name="subjectId" type="hidden" th:value="${noteInfo.subjectId}">
+                    <!--<input name="licenseId" type="hidden" th:value="${noteInfo.getLicenseId}">
+                    <input name="subjectId" type="hidden" th:value="${noteInfo.subjectId}">-->
                 </form>
             </div>
         </div>

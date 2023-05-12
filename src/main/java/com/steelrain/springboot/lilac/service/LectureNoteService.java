@@ -101,7 +101,7 @@ public class LectureNoteService implements ILectureNoteService{
         try {
             updateLectureNote(lectureNoteDTO);
         } catch (Exception ex) {
-            throw new LectureNoteException(String.format("강의노트 삭제 실패 - 강의노트 정보 : %s", lectureNoteDTO.toString()), ex, lectureNoteDTO);
+            throw new LectureNoteException(String.format("강의노트 수정 실패 - 강의노트 정보 : %s", lectureNoteDTO.toString()), ex, lectureNoteDTO);
         }
     }
 
@@ -446,10 +446,10 @@ public class LectureNoteService implements ILectureNoteService{
     }
 
     private void updateLectureNote(LectureNoteDTO lectureNoteDTO){
-        if(lectureNoteDTO.getLicenseId() <= -1){
+        if(lectureNoteDTO.getLicenseId() <= 0){
             lectureNoteDTO.setLicenseId(null);
         }
-        if(lectureNoteDTO.getSubjectId() <= -1){
+        if(lectureNoteDTO.getSubjectId() <= 0){
             lectureNoteDTO.setSubjectId(null);
         }
         m_lectureNoteRepository.updateLectureNote(lectureNoteDTO);

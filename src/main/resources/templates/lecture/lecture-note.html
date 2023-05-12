@@ -315,9 +315,9 @@
                     <div class="row">
                         <div class="col-6">
                             <div class="search-input">
-                                <label for="license"><i class="lni lni-grid-alt theme-color"></i></label>
-                                <select name="license" id="license" th:field="*{licenseCodes}"
-                                        onchange="checkLicenseSelectBox()">
+                                <label for="licenseAdd"><i class="lni lni-grid-alt theme-color"></i></label>
+                                <select name="license" id="licenseAdd" th:field="*{licenseCodes}"
+                                        onchange="checkAddLicenseSelectBox()">
                                     <option value="-1">--- 자격증 선택 ---</option>
                                     <option th:each="licenseCode : ${licenseCodes}" th:value="${licenseCode.id}"
                                             th:text="${licenseCode.name}"></option>
@@ -326,9 +326,9 @@
                         </div>
                         <div class="col-6">
                             <div class="search-input">
-                                <label for="subject"><i class="lni lni-grid-alt theme-color"></i></label>
-                                <select name="subject" id="subject" th:field="*{subjectCodes}"
-                                        onchange="checkSubjectSelectBox()">
+                                <label for="subjectAdd"><i class="lni lni-grid-alt theme-color"></i></label>
+                                <select name="subject" id="subjectAdd" th:field="*{subjectCodes}"
+                                        onchange="checkAddSubjectSelectBox()">
                                     <option value="-1">--- 키워드 선택 ---</option>
                                     <option th:each="subjectCode : ${subjectCodes}" th:value="${subjectCode.id}"
                                             th:text="${subjectCode.name}"></option>
@@ -400,51 +400,54 @@
 
     // 강의노트정보의 저장된 자격증에 맞는 select 요소를 선택상태로 한다
     function initProfileLicenseInfo(){
-        const memberLicenseId = [[${noteDetail.licenseId}]];
-        console.log("memberLicenseId : " +memberLicenseId);
-        if(memberLicenseId == null){
+        const licenseId = [[${noteDetail.licenseId}]];
+        if(licenseId == null){
             return;
         }
         $("#licenseId").find("option").map(function(){
-            if(parseInt($(this).val()) == memberLicenseId){
+            if(parseInt($(this).val()) == licenseId){
                 $(this).prop("selected", "selected");
             }
         })
-        checkLicenseSelectBox();
+        checkEditLicenseSelectBox();
     }
 
     // 강의노트정보의 저장된 주제키워드에 맞는 select 요소를 선택상태로 한다
     function initProfileSubjectInfo(){
-        const memberSubjectId = [[${noteDetail.subjectId}]];
-        if(memberSubjectId == null){
+        const subjectId = [[${noteDetail.subjectId}]];
+        if(subjectId == null){
             return;
         }
         $("#subjectId").find("option").map(function(){
-            if(parseInt($(this).val()) == memberSubjectId){
+            if(parseInt($(this).val()) == subjectId){
                 $(this).prop("selected", "selected");
             }
         })
-        checkSubjectSelectBox();
+        checkEditSubjectSelectBox();
     }
 
-    function checkLicenseSelectBox() {
-        const selectedVal = $("#licenseId").val();
-        if (selectedVal == -1) {
-            $("#subjectId").attr("disabled", false);
-        } else {
-            $("#subjectId").attr("disabled", "disabled");
-            $("#licenseNotice").text('');
-        }
+    function checkAddLicenseSelectBox() {
+        const addLicVal = $("#licenseAdd").val();
+        $("#subjectAdd").attr("disabled", !(addLicVal != undefined && addLicVal == -1));
+        $("#licenseNotice").text('');
     }
 
-    function checkSubjectSelectBox() {
-        const selectedVal = $("#subjectId").val();
-        if (selectedVal == -1) {
-            $("#licenseId").attr("disabled", false);
-        } else {
-            $("#licenseId").attr("disabled", "disabled");
-            $("#licenseNotice").text('');
-        }
+    function checkEditLicenseSelectBox() {
+        const addLicVal = $("#licenseId").val();
+        $("#subjectId").attr("disabled", !(addLicVal != undefined && addLicVal == -1));
+        $("#licenseNotice").text('');
+    }
+
+    function checkAddSubjectSelectBox() {
+        const addSubVal = $("#subjectAdd").val();
+        $("#licenseAdd").attr("disabled", !(addSubVal != undefined && addSubVal == -1));
+        $("#licenseNotice").text('');
+    }
+
+    function checkEditSubjectSelectBox() {
+        const addSubVal = $("#subjectId").val();
+        $("#licenseId").attr("disabled", !(addSubVal != undefined && addSubVal == -1));
+        $("#licenseNotice").text('');
     }
 
     function showAddLectureNoteModal() {
@@ -454,8 +457,8 @@
     }
 
     function addLectureNote() {
-        const m_licenseCode = $("#license option:selected").val();
-        const m_subjectCode = $("#subject option:selected").val();
+        const m_licenseCode = $("#licenseAdd option:selected").val();
+        const m_subjectCode = $("#subjectAdd option:selected").val();
         const noteId = [[${noteDetail.noteId}]];
         if(m_licenseCode == -1 && m_subjectCode == -1){
             $("#licenseNotice").text("자격증 또는 키워드를 선택하셔야 합니다");
@@ -464,8 +467,6 @@
 
         const noteTile = $("#noteTitle").val();
         const noteDesc = $("#noteDesc").val();
-        const licenseId = $("#licenseId").val();
-        const subjectId = $("#subjectId").val();
         const isValidNoteTitle = validateString(noteTile);
         const isValidNoteDesc = validateString(noteDesc);
         $("#titleNotice").html(isValidNoteTitle ? '' : '강의노트 제목을 입력해주세요');
@@ -478,8 +479,8 @@
             "memberId": null,
             "title": noteTile,
             "description": noteDesc,
-            "licenseId": (licenseId == undefined || licenseId == -1) ? null : licenseId,
-            "subjectId": (subjectId == undefined || subjectId == -1) ? null : subjectId
+            "licenseId": (m_licenseCode == undefined || m_licenseCode == -1) ? null : m_licenseCode,
+            "subjectId": (m_subjectCode == undefined || m_subjectCode == -1) ? null : m_subjectCode
         };
         $.ajax({
             type: "post",
